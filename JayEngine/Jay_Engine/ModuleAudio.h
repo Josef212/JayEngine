@@ -1,5 +1,5 @@
-#ifndef __ModuleAudio_H__
-#define __ModuleAudio_H__
+#ifndef __MODULEAUDIO_H__
+#define __MODULEAUDIO_H__
 
 #include "Module.h"
 //#include "SDL_mixer\include\SDL_mixer.h"
@@ -13,17 +13,17 @@ public:
 	ModuleAudio(Application* app, bool start_enabled = true);
 	~ModuleAudio();
 
-	bool Init();
-	bool CleanUp();
+	bool init();
+	bool cleanUp();
 
 	// Play a music file
-	bool PlayMusic(const char* path, float fade_time = DEFAULT_MUSIC_FADE_TIME);
+	bool playMusic(const char* path, float fade_time = DEFAULT_MUSIC_FADE_TIME);
 
 	// Load a WAV in memory
-	unsigned int LoadFx(const char* path);
+	unsigned int loadFx(const char* path);
 
 	// Play a previously loaded WAV
-	bool PlayFx(unsigned int fx, int repeat = 0);
+	bool playFx(unsigned int fx, int repeat = 0);
 
 private:
 
@@ -31,4 +31,4 @@ private:
 //	p2List<Mix_Chunk*>	fx;
 };
 
-#endif // __ModuleAudio_H__
+#endif // __MODULEAUDIO_H__

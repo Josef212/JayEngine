@@ -10,24 +10,22 @@ class ModuleWindow : public Module
 {
 public:
 
-	ModuleWindow(Application* app, bool start_enabled = true);
-
-	// Destructor
+	ModuleWindow(Application* app, bool startEnabled = true);
 	virtual ~ModuleWindow();
 
-	bool Init();
-	bool CleanUp();
+	bool init();
+	bool cleanUp();
 
-	void SetTitle(const char* title);
+	void setTitle(const char* title);
 
-	SDL_Window* GetWindow() { return window; }
+	SDL_Window* getWindow() { return window; }
 
-public:
+private:
 	//The window we'll be rendering to
 	SDL_Window* window;
 
 	//The surface contained by the window
-	SDL_Surface* screen_surface;
+	SDL_Surface* screenSurface;
 };
 
 #endif // __ModuleWindow_H__

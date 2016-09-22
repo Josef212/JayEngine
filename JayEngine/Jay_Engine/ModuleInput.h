@@ -1,4 +1,6 @@
-#pragma once
+#ifndef __MODULEINPUT_H__
+#define __MODULEINPUT_H__
+
 #include "Module.h"
 #include "Globals.h"
 
@@ -16,55 +18,57 @@ class ModuleInput : public Module
 {
 public:
 	
-	ModuleInput(Application* app, bool start_enabled = true);
+	ModuleInput(Application* app, bool startEnabled = true);
 	~ModuleInput();
 
-	bool Init();
-	update_status PreUpdate(float dt);
-	bool CleanUp();
+	bool init();
+	update_status preUpdate(float dt);
+	bool cleanUp();
 
-	KEY_STATE GetKey(int id) const
+	KEY_STATE getKey(int id) const
 	{
 		return keyboard[id];
 	}
 
-	KEY_STATE GetMouseButton(int id) const
+	KEY_STATE getMouseButton(int id) const
 	{
 		return mouse_buttons[id];
 	}
 
-	int GetMouseX() const
+	int getMouseX() const
 	{
-		return mouse_x;
+		return mouseX;
 	}
 
-	int GetMouseY() const
+	int getMouseY() const
 	{
-		return mouse_y;
+		return mouseY;
 	}
 
-	int GetMouseZ() const
+	int getMouseZ() const
 	{
-		return mouse_z;
+		return mouseZ;
 	}
 
-	int GetMouseXMotion() const
+	int getMouseXMotion() const
 	{
-		return mouse_x_motion;
+		return mouseXMotion;
 	}
 
-	int GetMouseYMotion() const
+	int getMouseYMotion() const
 	{
-		return mouse_y_motion;
+		return mouseYMotion;
 	}
 
 private:
 	KEY_STATE* keyboard;
 	KEY_STATE mouse_buttons[MAX_MOUSE_BUTTONS];
-	int mouse_x;
-	int mouse_y;
-	int mouse_z;
-	int mouse_x_motion;
-	int mouse_y_motion;
-	//int mouse_z_motion;
+	int mouseX;
+	int mouseY;
+	int mouseZ;
+	int mouseXMotion;
+	int mouseYMotion;
+	//int mouseZMotion;
 };
+
+#endif // !__MODULEINPUT_H__

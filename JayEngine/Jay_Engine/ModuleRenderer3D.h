@@ -1,4 +1,6 @@
-#pragma once
+#ifndef __MODULERENDERER3D_H__
+#define __MODULERENDERER3D_H__
+
 #include "Module.h"
 #include "Globals.h"
 #include "glmath.h"
@@ -9,20 +11,21 @@
 class ModuleRenderer3D : public Module
 {
 public:
-	ModuleRenderer3D(Application* app, bool start_enabled = true);
+	ModuleRenderer3D(Application* app, bool startEnabled = true);
 	~ModuleRenderer3D();
 
-	bool Init();
-	update_status PreUpdate(float dt);
-	update_status PostUpdate(float dt);
-	bool CleanUp();
+	bool init();
+	update_status preUpdate(float dt);
+	update_status postUpdate(float dt);
+	bool cleanUp();
 
-	void OnResize(int width, int height);
+	void onResize(int width, int height);
 
 public:
-
 	Light lights[MAX_LIGHTS];
 	SDL_GLContext context;
-	mat3x3 NormalMatrix;
-	mat4x4 ModelMatrix, ViewMatrix, ProjectionMatrix;
+	mat3x3 normalMatrix;
+	mat4x4 modelMatrix, viewMatrix, projectionMatrix;
 };
+
+#endif // !__MODULERENDERER3D_H__

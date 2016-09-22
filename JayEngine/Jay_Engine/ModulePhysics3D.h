@@ -1,4 +1,7 @@
-/*#pragma once
+/*
+#ifndef __MODULEPHYSICS3D_H__
+#define __MODULEPHYSICS3D_H__
+
 #include "Module.h"
 #include "Globals.h"
 #include "p2List.h"
@@ -73,4 +76,6 @@ public:
 	DebugDrawModes mode;
 	P_Line line;
 	Primitive point;
-};*/
+};
+
+#endif //__MODULEPHYSICS3D_H__ */

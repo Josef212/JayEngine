@@ -1,12 +1,40 @@
-#pragma once
+#ifndef __GLOBALS_H__
+#define __GLOBALS_H__
+
 #include <windows.h>
 #include <stdio.h>
 
-#define LOG(format, ...) log(__FILE__, __LINE__, format, __VA_ARGS__);
+#define LOG(format, ...) _log(__FILE__, __LINE__, format, __VA_ARGS__);
 
-void log(const char file[], int line, const char* format, ...);
+void _log(const char file[], int line, const char* format, ...);
+
+#ifdef NULL
+#undef NULL
+#endif
+#define NULL  0
+
+#define RELEASE( x )\
+    {\
+       if( x != nullptr )\
+       {\
+         delete x;\
+	     x = nullptr;\
+       }\
+    }
+
+// Deletes an array of buffers
+#define RELEASE_ARRAY( x )\
+	{\
+       if( x != nullptr )\
+       {\
+           delete[] x;\
+	       x = nullptr;\
+		 }\
+	 }
 
 #define CAP(n) ((n <= 0.0f) ? n=0.0f : (n >= 1.0f) ? n=1.0f : n=n)
+#define MIN(a,b) ((a)<(b)) ? (a) : (b)
+#define MAX(a,b) ((a)>(b)) ? (a) : (b)
 
 #define DEGTORAD 0.0174532925199432957f
 #define RADTODEG 57.295779513082320876f
@@ -16,6 +44,9 @@ void log(const char file[], int line, const char* format, ...);
 
 
 typedef unsigned int uint;
+typedef unsigned __int32 uint32;
+typedef unsigned __int64 uint64;
+typedef unsigned char uchar;
 
 enum update_status
 {
@@ -33,5 +64,7 @@ enum update_status
 #define WIN_BORDERLESS false
 #define WIN_FULLSCREEN_DESKTOP false
 #define VSYNC true
-#define TITLE "3D Physics Playground"
+#define TITLE "JayEngine"
 #define LIFES 5
+
+#endif

@@ -1,4 +1,7 @@
-#pragma once
+#ifndef __MODULE_H__
+#define __MODULE_H__
+
+#include <string>
 
 class Application;
 struct PhysBody3D;
@@ -9,71 +12,73 @@ private :
 	bool enabled;
 
 public:
-	Application* App;
+	Application* app;
+	std::string name;
 
-	Module(Application* parent, bool start_enabled = true) : App(parent)
+	Module(Application* parent, bool startEnabled = true) : app(parent), enabled(startEnabled)
 	{
-		enabled = start_enabled;
 	}
 
 	virtual ~Module()
 	{}
 
-	bool IsEnabled() const
+	bool isEnabled() const
 	{
 		return enabled;
 	}
 
-	void Enable()
+	void enable()
 	{
 		if (enabled == false)
 		{
 			enabled = true;
-			Start();
+			start();
 		}
 	}
 
-	bool Disable()
+	bool disable()
 	{
 		bool ret = true;
 		if (enabled == true)
 		{
 			enabled = false;
-			ret = CleanUp();
+			ret = cleanUp();
 		}
 		return ret;
 	}
 
-	virtual bool Init() 
+	virtual bool init() 
 	{
 		return true; 
 	}
 
-	virtual bool Start()
+	virtual bool start()
 	{
 		return true;
 	}
 
-	virtual update_status PreUpdate(float dt)
+	virtual update_status preUpdate(float dt)
 	{
 		return UPDATE_CONTINUE;
 	}
 
-	virtual update_status Update(float dt)
+	virtual update_status update(float dt)
 	{
 		return UPDATE_CONTINUE;
 	}
 
-	virtual update_status PostUpdate(float dt)
+	virtual update_status postUpdate(float dt)
 	{
 		return UPDATE_CONTINUE;
 	}
 
-	virtual bool CleanUp() 
+	virtual bool cleanUp() 
 	{ 
 		return true; 
 	}
 
-	virtual void OnCollision(PhysBody3D* body1, PhysBody3D* body2)
+	virtual void onCollision(PhysBody3D* body1, PhysBody3D* body2)
 	{}
 };
+
+#endif // !__MODULE_H__

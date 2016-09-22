@@ -24,161 +24,121 @@ Application::Application()
 	// They will CleanUp() in reverse order
 
 	// Main Modules
-	AddModule(window);
-	AddModule(camera);
-	AddModule(input);
-	AddModule(audio);
-	//AddModule(physics);
-	AddModule(editor);
+	addModule(window);
+	addModule(camera);
+	addModule(input);
+	addModule(audio);
+	//addModule(physics);
+	addModule(editor);
 	
 	// Scenes
 
 
 	// Renderer last!
-	AddModule(renderer3D);
-
-	for (int n = 0; n < EDITOR_FRAME_SAMPLES; n++)
-	{
-		ms_frame[n] = 0;
-		framerate[n] = 0;
-	}
-	FrameTime = -1.0f;
+	addModule(renderer3D);
 }
 
 Application::~Application()
 {
-	p2List_item<Module*>* item = list_modules.getLast();
-
-	while(item != NULL)
+	for(std::list<Module*>::reverse_iterator it = modules.rbegin(); it!=modules.rbegin(); ++it)
 	{
-		delete item->data;
-		item = item->prev;
+		RELEASE(*it);
 	}
 }
 
-bool Application::Init()
+bool Application::init()
 {
 	bool ret = true;
-	totalTimer.Start();
-	// Call Init() in all modules
-	p2List_item<Module*>* item = list_modules.getFirst();
 
-	while(item != NULL && ret == true)
+	organitzation.assign("Josef21296");
+	title.assign("JayEngine");
+
+	// Call Init() in all modules
+	std::list<Module*>::iterator it = modules.begin();
+
+	for(; it != modules.end() && ret == true; ++it)
 	{
-		if (item->data->IsEnabled())
-			ret = item->data->Init();
-		item = item->next;
+		ret = (*it)->init();
 	}
 
 	// After all Init calls we call Start() in all modules
 	LOG("Application Start --------------");
-	item = list_modules.getFirst();
+	it = modules.begin();
 
-	while(item != NULL && ret == true)
+	for (; it != modules.end() && ret == true; ++it)
 	{
-		if (item->data->IsEnabled())
-			ret = item->data->Start();
-		item = item->next;
+		if ((*it)->isEnabled())
+			ret = (*it)->start();
 	}
-	maxFPS = 0;
 
-	ms_timer.Start();
-	FPS_Timer.Start();
 	return ret;
 }
 
 // ---------------------------------------------
-void Application::PrepareUpdate()
+void Application::prepareUpdate()
 {
 	frameCount++;
-	dt = (float)ms_timer.Read() / 1000.0f;
-	ms_timer.Start();
+	lasSecFrameCount++;
 
-	for (int n = 0; n < EDITOR_FRAME_SAMPLES - 1; n++)
-	{
-		ms_frame[n] = ms_frame[n + 1];
-	}
-	ms_frame[EDITOR_FRAME_SAMPLES - 1] = dt;
-
-	float tmp = FPS_Timer.Read();
-	if (FPS_Timer.Read() > 1000.0f)
-	{
-		for (int n = 0; n < EDITOR_FRAME_SAMPLES - 1; n++)
-		{
-			framerate[n] = framerate[n + 1];
-		}
-		framerate[EDITOR_FRAME_SAMPLES-1] = frameCount;
-		frameCount = 0;
-		FPS_Timer.Start();
-	}
-	
-	if (maxFPS != previous_maxFPS)
-	{
-		if (maxFPS < 5)
-		{
-			FrameTime = -1.0f;
-		}
-		else
-		{
-			FrameTime = 1000.0f / maxFPS;
-		}
-		previous_maxFPS = maxFPS;
-	}
-
+	dt = frameTime.ReadSec();
+	frameTime.Start();
 }
 
 // ---------------------------------------------
-void Application::FinishUpdate()
+void Application::finishUpdate()
 {
+	float avgFps = float(frameCount) / startUp.ReadSec();
+	float secondsSinceStartup = startUp.ReadSec();
+	uint32 lastFrameMs = frameTime.Read();
+	uint32 framesOnLastUpdate = prevSecFrameCount;
+
+	static char title[256];
+
+	sprintf_s(title, 256, "Av.FPS: %.2f Last Frame Ms: %u Last sec frames: %i Last dt: %.3f Time since startup: %.3f Frame Count: %lu",
+		avgFps, lastFrameMs, framesOnLastUpdate, dt, secondsSinceStartup, frameCount);
+	window->setTitle(title);
+
+	if (cappedMs > 0 && lastFrameMs < cappedMs)
+	{
+		SDL_Delay(cappedMs - lastFrameMs);
+	}
 }
 
 // Call PreUpdate, Update and PostUpdate on all modules
-update_status Application::Update()
+update_status Application::update()
 {
 	update_status ret = UPDATE_CONTINUE;
-	PrepareUpdate();
+
+	if (input->getKey(SDL_SCANCODE_F1) == KEY_DOWN)
+		debug = !debug;
+
+	prepareUpdate();
 	
-	p2List_item<Module*>* item = list_modules.getFirst();
+	std::list<Module*>::iterator it = modules.begin();
 	
-	while(item != NULL && ret == UPDATE_CONTINUE)
+	for(; it != modules.end() && ret == UPDATE_CONTINUE; ++it)
 	{
-		if (item->data->IsEnabled())
-		{
-			ret = item->data->PreUpdate(dt);
-		}
-		item = item->next;
+		if ((*it)->isEnabled())
+			ret = (*it)->preUpdate(dt);
 	}
 
-	item = list_modules.getFirst();
+	it = modules.begin();
 
-	while(item != NULL && ret == UPDATE_CONTINUE)
+	for (; it != modules.end() && ret == UPDATE_CONTINUE; ++it)
 	{
-		if (item->data->IsEnabled())
-		{
-			ret = item->data->Update(dt);
-		}
-		item = item->next;
+		if ((*it)->isEnabled())
+			ret = (*it)->update(dt);
 	}
 
-	item = list_modules.getFirst();
+	it = modules.begin();
 
-	while(item != NULL && ret == UPDATE_CONTINUE)
+	for (; it != modules.end() && ret == UPDATE_CONTINUE; ++it)
 	{
-		if (item->data->IsEnabled())
-		{
-			ret = item->data->PostUpdate(dt);
-		}
-		item = item->next;
+		if ((*it)->isEnabled())
+			ret = (*it)->postUpdate(dt);
 	}
 
-	FinishUpdate();
-
-	if (FrameTime > 0.0001f)
-	{
-		while (ms_timer.Read() < FrameTime)
-		{
-		}
-	}
+	finishUpdate();
 
 	if (quit)
 		ret = UPDATE_STOP;
@@ -186,20 +146,45 @@ update_status Application::Update()
 	return ret;
 }
 
-bool Application::CleanUp()
+bool Application::cleanUp()
 {
 	bool ret = true;
-	p2List_item<Module*>* item = list_modules.getLast();
 
-	while(item != NULL && ret == true)
+	for (std::list<Module*>::reverse_iterator it = modules.rbegin(); it != modules.rbegin(); ++it)
 	{
-		ret = item->data->CleanUp();
-		item = item->prev;
+		ret = (*it)->cleanUp();
 	}
+
 	return ret;
 }
 
-void Application::AddModule(Module* mod)
+void Application::addModule(Module* mod)
 {
-	list_modules.add(mod);
+	modules.push_back(mod);
+}
+
+const char* Application::getOrganitzation()
+{
+	return organitzation.c_str();
+}
+
+const char* Application::getTitle()
+{
+	return title.c_str();
+}
+
+void Application::setOrganitzation(const char* org)
+{
+	organitzation.assign(org);
+}
+
+void Application::setTitle(const char* titl)
+{
+	title.assign(titl);
+}
+
+void Application::log(const char* str)
+{
+	logs.append(str);
+	//TODO: log in editor
 }

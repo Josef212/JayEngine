@@ -9,11 +9,14 @@ public:
 	ModuleEditor(Application* app, bool startEnabled = true);
 	~ModuleEditor();
 
-	bool Init();
-	bool Start();
-	update_status PreUpdate(float dt);
-	update_status Update(float dt);
-	bool CleanUp();
+	bool init();
+	bool start();
+	update_status preUpdate(float dt);
+	update_status update(float dt);
+	bool cleanUp();
+
+	void drawEditor();
+	void passInput(SDL_Event* inputEvent);
 
 private:
 	bool showImGuiDemo = false;

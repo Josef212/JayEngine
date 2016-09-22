@@ -64,9 +64,6 @@
     <ClCompile Include="Primitive.cpp">
       <Filter>Core\Helpers</Filter>
     </ClCompile>
-    <ClCompile Include="log.cpp">
-      <Filter>Core\Tools</Filter>
-    </ClCompile>
     <ClCompile Include="Timer.cpp">
       <Filter>Core\Tools</Filter>
     </ClCompile>
@@ -87,6 +84,9 @@
     </ClCompile>
     <ClCompile Include="ModuleEditor.cpp">
       <Filter>Core\Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="Globals.cpp">
+      <Filter>Core\Tools</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -162,9 +162,6 @@
     <ClInclude Include="Application.h">
       <Filter>Core</Filter>
     </ClInclude>
-    <ClInclude Include="Globals.h">
-      <Filter>Core</Filter>
-    </ClInclude>
     <ClInclude Include="Math.h">
       <Filter>Core\Math</Filter>
     </ClInclude>
@@ -173,6 +170,9 @@
     </ClInclude>
     <ClInclude Include="ModuleEditor.h">
       <Filter>Core\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Globals.h">
+      <Filter>Core\Tools</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

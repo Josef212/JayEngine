@@ -2,14 +2,11 @@
 #include "Application.h"
 #include "ModuleInput.h"
 #include "ModuleRenderer3D.h"
-
-
-#include "imGUI\imgui.h"
-#include "Imgui/imgui_impl_sdl_gl3.h"
+#include "ModuleEditor.h"
 
 #define MAX_KEYS 300
 
-ModuleInput::ModuleInput(Application* app, bool start_enabled) : Module(app, start_enabled)
+ModuleInput::ModuleInput(Application* app, bool startEnabled) : Module(app, startEnabled)
 {
 	keyboard = new KEY_STATE[MAX_KEYS];
 	memset(keyboard, KEY_IDLE, sizeof(KEY_STATE) * MAX_KEYS);
@@ -19,14 +16,15 @@ ModuleInput::ModuleInput(Application* app, bool start_enabled) : Module(app, sta
 // Destructor
 ModuleInput::~ModuleInput()
 {
-	delete[] keyboard;
+	RELEASE_ARRAY(keyboard);
 }
 
 // Called before render is available
-bool ModuleInput::Init()
+bool ModuleInput::init()
 {
 	LOG("Init SDL input event system");
 	bool ret = true;
+
 	SDL_Init(0);
 
 	//SDL_ShowCursor(0);
@@ -41,7 +39,7 @@ bool ModuleInput::Init()
 }
 
 // Called every draw update
-update_status ModuleInput::PreUpdate(float dt)
+update_status ModuleInput::preUpdate(float dt)
 {
 	SDL_PumpEvents();
 
@@ -65,11 +63,11 @@ update_status ModuleInput::PreUpdate(float dt)
 		}
 	}
 
-	Uint32 buttons = SDL_GetMouseState(&mouse_x, &mouse_y);
+	Uint32 buttons = SDL_GetMouseState(&mouseX, &mouseY);
 
-	mouse_x /= SCREEN_SIZE;
-	mouse_y /= SCREEN_SIZE;
-	mouse_z = 0;
+	mouseX /= SCREEN_SIZE;
+	mouseY /= SCREEN_SIZE;
+	mouseZ = 0;
 
 	for(int i = 0; i < 5; ++i)
 	{
@@ -89,50 +87,46 @@ update_status ModuleInput::PreUpdate(float dt)
 		}
 	}
 
-	mouse_x_motion = mouse_y_motion = 0;
-
-	bool quit = false;
+	mouseXMotion = mouseYMotion = 0;
 
 	SDL_Event e;
 	while(SDL_PollEvent(&e))
 	{
-		ImGui_ImplSdlGL3_ProcessEvent(&e);
+		app->editor->passInput(&e);
+
 		switch(e.type)
 		{
 			case SDL_MOUSEWHEEL:
-			mouse_z = e.wheel.y;
+			mouseZ = e.wheel.y;
 			break;
 
 			case SDL_MOUSEMOTION:
-			mouse_x = e.motion.x / SCREEN_SIZE;
-			mouse_y = e.motion.y / SCREEN_SIZE;
+			mouseX = e.motion.x / SCREEN_SIZE;
+			mouseY = e.motion.y / SCREEN_SIZE;
 
-			mouse_x_motion = e.motion.xrel / SCREEN_SIZE;
-			mouse_y_motion = e.motion.yrel / SCREEN_SIZE;
+			mouseXMotion = e.motion.xrel / SCREEN_SIZE;
+			mouseYMotion = e.motion.yrel / SCREEN_SIZE;
 			break;
 
 			case SDL_QUIT:
-			quit = true;
+				app->quit = true;
 			break;
 
 			case SDL_WINDOWEVENT:
 			{
 				if(e.window.event == SDL_WINDOWEVENT_RESIZED)
-					App->renderer3D->OnResize(e.window.data1, e.window.data2);
+					app->renderer3D->onResize(e.window.data1, e.window.data2);
 			}
 		}
 	}
 
 	SDL_PollEvent(&e);
 
-	if(quit == true || keyboard[SDL_SCANCODE_ESCAPE] == KEY_UP)
-		return UPDATE_STOP;
-
 	return UPDATE_CONTINUE;
 }
 
 // Called before quitting
-bool ModuleInput::CleanUp()
+bool ModuleInput::cleanUp()
 {
 	LOG("Quitting SDL input event subsystem");
 	SDL_QuitSubSystem(SDL_INIT_EVENTS);

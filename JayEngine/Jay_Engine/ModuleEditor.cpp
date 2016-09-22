@@ -19,27 +19,27 @@ ModuleEditor::~ModuleEditor()
 }
 
 
-bool ModuleEditor::Init()
+bool ModuleEditor::init()
 {
-	ImGui_ImplSdlGL3_Init(App->window->GetWindow());
+	ImGui_ImplSdlGL3_Init(app->window->getWindow());
 	return true;
 }
 
-bool ModuleEditor::Start()
+bool ModuleEditor::start()
 {
 	return true;
 }
 
-update_status ModuleEditor::PreUpdate(float dt)
+update_status ModuleEditor::preUpdate(float dt)
 {
 	update_status ret = UPDATE_CONTINUE;
 
-	ImGui_ImplSdlGL3_NewFrame(App->window->GetWindow());
+	ImGui_ImplSdlGL3_NewFrame(app->window->getWindow());
 
 	return ret;
 }
 
-update_status ModuleEditor::Update(float dt)
+update_status ModuleEditor::update(float dt)
 {
 	update_status ret = UPDATE_CONTINUE;
 
@@ -47,7 +47,7 @@ update_status ModuleEditor::Update(float dt)
 	{
 		if (ImGui::BeginMenu("File"))
 		{
-			if (ImGui::MenuItem("Quit")) App->quit = true;
+			if (ImGui::MenuItem("Quit")) app->quit = true;
 			ImGui::EndMenu();
 		}
 		if (ImGui::BeginMenu("Examples"))
@@ -78,8 +78,18 @@ update_status ModuleEditor::Update(float dt)
 	return ret;
 }
 
-bool ModuleEditor::CleanUp()
+bool ModuleEditor::cleanUp()
 {
 	ImGui_ImplSdlGL3_Shutdown();
 	return true;
+}
+
+void ModuleEditor::drawEditor()
+{
+	ImGui::Render();
+}
+
+void ModuleEditor::passInput(SDL_Event* inputEvent)
+{
+	ImGui_ImplSdlGL3_ProcessEvent(inputEvent);
 }

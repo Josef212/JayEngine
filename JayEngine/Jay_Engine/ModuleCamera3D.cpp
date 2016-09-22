@@ -4,23 +4,23 @@
 #include "ModuleCamera3D.h"
 #include "ModuleInput.h"
 
-ModuleCamera3D::ModuleCamera3D(Application* app, bool start_enabled) : Module(app, start_enabled)
+ModuleCamera3D::ModuleCamera3D(Application* app, bool startEnabled) : Module(app, startEnabled)
 {
-	CalculateViewMatrix();
+	calculateViewMatrix();
 
 	X = vec3(1.0f, 0.0f, 0.0f);
 	Y = vec3(0.0f, 1.0f, 0.0f);
 	Z = vec3(0.0f, 0.0f, 1.0f);
 
-	Position = vec3(10.0f, 20.0f, 10.0f);
-	Reference = vec3(0.0f, 0.0f, 0.0f);
+	position = vec3(10.0f, 20.0f, 10.0f);
+	reference = vec3(0.0f, 0.0f, 0.0f);
 }
 
 ModuleCamera3D::~ModuleCamera3D()
 {}
 
 // -----------------------------------------------------------------
-bool ModuleCamera3D::Start()
+bool ModuleCamera3D::start()
 {
 	LOG("Setting up the camera");
 	bool ret = true;
@@ -28,13 +28,18 @@ bool ModuleCamera3D::Start()
 	Y = vec3(0.0f, 1.0f, 0.0f);
 	Z = vec3(0.0f, 0.0f, 1.0f);
 
-	Position = vec3(2.0f, 3.0f, 2.0f);
-	Reference = vec3(0.0f, 0.0f, 0.0f);
+	position = vec3(2.0f, 3.0f, 2.0f);
+	reference = vec3(0.0f, 0.0f, 0.0f);
+
+	//TMP
+	app->camera->move(vec3(1.0f, 1.0f, 0.0f));
+	app->camera->lookAt(vec3(0, 0, 0));
+
 	return ret;
 }
 
 // -----------------------------------------------------------------
-bool ModuleCamera3D::CleanUp()
+bool ModuleCamera3D::cleanUp()
 {
 	LOG("Cleaning camera");
 
@@ -42,107 +47,128 @@ bool ModuleCamera3D::CleanUp()
 }
 
 // -----------------------------------------------------------------
-update_status ModuleCamera3D::Update(float dt)
+update_status ModuleCamera3D::update(float dt)
 {
-	// Mouse motion ----------------
-
-	if (App->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
+	if (app->debug)
 	{
-		int dx = -App->input->GetMouseXMotion();
-		int dy = -App->input->GetMouseYMotion();
+		vec3 newPos(0, 0, 0);
+		float speed = 25.0f * dt;
+		if (app->input->getKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
+			speed = 8.0f * dt;
 
-		float Sensitivity = 0.15f;
+		if (app->input->getKey(SDL_SCANCODE_R) == KEY_REPEAT) newPos.y += speed;
+		if (app->input->getKey(SDL_SCANCODE_F) == KEY_REPEAT) newPos.y -= speed;
 
-		//Position -= Reference;
+		if (app->input->getKey(SDL_SCANCODE_W) == KEY_REPEAT) newPos -= Z * speed;
+		if (app->input->getKey(SDL_SCANCODE_S) == KEY_REPEAT) newPos += Z * speed;
 
-		if (dx != 0)
+
+		if (app->input->getKey(SDL_SCANCODE_A) == KEY_REPEAT) newPos -= X * speed;
+		if (app->input->getKey(SDL_SCANCODE_D) == KEY_REPEAT) newPos += X * speed;
+
+		position += newPos;
+		reference += newPos;
+
+		// Mouse motion ----------------
+
+		if (app->input->getMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
 		{
-			float DeltaX = (float)dx * Sensitivity;
+			int dx = -app->input->getMouseXMotion();
+			int dy = -app->input->getMouseYMotion();
 
-			X = rotate(X, DeltaX, vec3(0.0f, 1.0f, 0.0f));
-			Y = rotate(Y, DeltaX, vec3(0.0f, 1.0f, 0.0f));
-			Z = rotate(Z, DeltaX, vec3(0.0f, 1.0f, 0.0f));
-		}
+			float Sensitivity = 0.25f;
 
-		if (dy != 0)
-		{
-			float DeltaY = (float)dy * Sensitivity;
+			position -= reference;
 
-			Y = rotate(Y, DeltaY, X);
-			Z = rotate(Z, DeltaY, X);
-
-			if (Y.y < 0.0f)
+			if (dx != 0)
 			{
-				Z = vec3(0.0f, Z.y > 0.0f ? 1.0f : -1.0f, 0.0f);
-				Y = cross(Z, X);
-			}
-		}
+				float DeltaX = (float)dx * Sensitivity;
 
-		//Position = Reference + Z * length(Position);
+				X = rotate(X, DeltaX, vec3(0.0f, 1.0f, 0.0f));
+				Y = rotate(Y, DeltaX, vec3(0.0f, 1.0f, 0.0f));
+				Z = rotate(Z, DeltaX, vec3(0.0f, 1.0f, 0.0f));
+			}
+
+			if (dy != 0)
+			{
+				float DeltaY = (float)dy * Sensitivity;
+
+				Y = rotate(Y, DeltaY, X);
+				Z = rotate(Z, DeltaY, X);
+
+				if (Y.y < 0.0f)
+				{
+					Z = vec3(0.0f, Z.y > 0.0f ? 1.0f : -1.0f, 0.0f);
+					Y = cross(Z, X);
+				}
+			}
+
+			position = reference + Z * length(position);
+		}
 	}
 
 	// Recalculate matrix -------------
-	CalculateViewMatrix();
+	calculateViewMatrix();
 
 	return UPDATE_CONTINUE;
 }
 
 // -----------------------------------------------------------------
-void ModuleCamera3D::Look(const vec3 &Position, const vec3 &Reference, bool RotateAroundReference)
+void ModuleCamera3D::look(const vec3 &_position, const vec3 &_reference, bool rotateAroundReference)
 {
-	this->Position = Position;
-	this->Reference = Reference;
+	this->position = _position;
+	this->reference = _reference;
 
-	Z = normalize(Position - Reference);
+	Z = normalize(_position - _reference);
 	X = normalize(cross(vec3(0.0f, 1.0f, 0.0f), Z));
 	Y = cross(Z, X);
 
-	if (!RotateAroundReference)
+	if (!rotateAroundReference)
 	{
-		this->Reference = this->Position;
-		this->Position += Z * 0.05f;
+		this->reference = this->position;
+		this->position += Z * 0.05f;
 	}
 
-	CalculateViewMatrix();
+	calculateViewMatrix();
 }
 
 // -----------------------------------------------------------------
-void ModuleCamera3D::LookAt( const vec3 &Spot)
+void ModuleCamera3D::lookAt( const vec3 &_spot)
 {
-	Reference = Spot;
+	reference = _spot;
 
-	Z = normalize(Position - Reference);
+	Z = normalize(position - reference);
 	X = normalize(cross(vec3(0.0f, 1.0f, 0.0f), Z));
 	Y = cross(Z, X);
 
-	CalculateViewMatrix();
+	calculateViewMatrix();
 }
 
 
 // -----------------------------------------------------------------
-void ModuleCamera3D::Move(const vec3 &Movement)
+void ModuleCamera3D::move(const vec3 &_movement)
 {
-	Position += Movement;
-	Reference += Movement;
+	position += _movement;
+	reference += _movement;
 
-	CalculateViewMatrix();
+	calculateViewMatrix();
 }
 
-void ModuleCamera3D::SetPos(const vec3 &Pos)
+void ModuleCamera3D::setPos(const vec3 &_pos)
 {
-	Position = Pos;
-	LookAt(Reference);
-}
-
-// -----------------------------------------------------------------
-float* ModuleCamera3D::GetViewMatrix()
-{
-	return &ViewMatrix;
+	position = _pos;
+	lookAt(reference);
 }
 
 // -----------------------------------------------------------------
-void ModuleCamera3D::CalculateViewMatrix()
+float* ModuleCamera3D::getViewMatrix()
 {
-	ViewMatrix = mat4x4(X.x, Y.x, Z.x, 0.0f, X.y, Y.y, Z.y, 0.0f, X.z, Y.z, Z.z, 0.0f, -dot(X, Position), -dot(Y, Position), -dot(Z, Position), 1.0f);
-	ViewMatrixInverse = inverse(ViewMatrix);
+	return &viewMatrix;
+}
+
+// -----------------------------------------------------------------
+void ModuleCamera3D::calculateViewMatrix()
+{
+	viewMatrix = mat4x4(X.x, Y.x, Z.x, 0.0f, X.y, Y.y, Z.y, 0.0f, X.z, Y.z, Z.z, 0.0f, -dot(X, position), -dot(Y, position), -dot(Z, position), 1.0f);
+	viewMatrixInverse = inverse(viewMatrix);
 }
