@@ -12,19 +12,21 @@
 #pragma comment (lib, "Glew/libx86/glew32.lib") /* link Microsoft OpenGL lib   */
 
 
-
-
 ModuleRenderer3D::ModuleRenderer3D(Application* app, bool startEnabled) : Module(app, startEnabled)
 {
+	LOG("Renderer3D: Creation.");
 }
 
 // Destructor
 ModuleRenderer3D::~ModuleRenderer3D()
-{}
+{
+	LOG("Renderer3D: Destroying.");
+}
 
 // Called before render is available
 bool ModuleRenderer3D::init()
 {
+	LOG("Renderer3D: Init.");
 	LOG("Creating 3D Renderer context");
 	bool ret = true;
 
@@ -162,6 +164,7 @@ update_status ModuleRenderer3D::postUpdate(float dt)
 // Called before quitting
 bool ModuleRenderer3D::cleanUp()
 {
+	LOG("Renderer3D: CleanUp.");
 	LOG("Destroying 3D Renderer");
 
 	SDL_GL_DeleteContext(context);

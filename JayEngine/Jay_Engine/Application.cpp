@@ -11,6 +11,7 @@
 
 Application::Application()
 {
+	LOG("Application Constructor --------------");
 	window = new ModuleWindow(this);
 	input = new ModuleInput(this);
 	audio = new ModuleAudio(this, true);
@@ -40,6 +41,7 @@ Application::Application()
 
 Application::~Application()
 {
+	LOG("Application Destroctor --------------");
 	for(std::list<Module*>::reverse_iterator it = modules.rbegin(); it!=modules.rbegin(); ++it)
 	{
 		RELEASE(*it);
@@ -55,7 +57,7 @@ bool Application::init()
 
 	// Call Init() in all modules
 	std::list<Module*>::iterator it = modules.begin();
-
+	LOG("Application Init --------------");
 	for(; it != modules.end() && ret == true; ++it)
 	{
 		ret = (*it)->init();
@@ -150,6 +152,7 @@ bool Application::cleanUp()
 {
 	bool ret = true;
 
+	LOG("Application CleaUp --------------");
 	for (std::list<Module*>::reverse_iterator it = modules.rbegin(); it != modules.rbegin(); ++it)
 	{
 		ret = (*it)->cleanUp();

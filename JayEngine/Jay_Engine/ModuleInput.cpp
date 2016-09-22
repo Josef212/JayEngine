@@ -8,6 +8,7 @@
 
 ModuleInput::ModuleInput(Application* app, bool startEnabled) : Module(app, startEnabled)
 {
+	LOG("Input: Creation.");
 	keyboard = new KEY_STATE[MAX_KEYS];
 	memset(keyboard, KEY_IDLE, sizeof(KEY_STATE) * MAX_KEYS);
 	memset(mouse_buttons, KEY_IDLE, sizeof(KEY_STATE) * MAX_MOUSE_BUTTONS);
@@ -16,12 +17,14 @@ ModuleInput::ModuleInput(Application* app, bool startEnabled) : Module(app, star
 // Destructor
 ModuleInput::~ModuleInput()
 {
+	LOG("Input: Destroying.");
 	RELEASE_ARRAY(keyboard);
 }
 
 // Called before render is available
 bool ModuleInput::init()
 {
+	LOG("Input: Init.");
 	LOG("Init SDL input event system");
 	bool ret = true;
 
@@ -128,6 +131,7 @@ update_status ModuleInput::preUpdate(float dt)
 // Called before quitting
 bool ModuleInput::cleanUp()
 {
+	LOG("Input: CleanUp.");
 	LOG("Quitting SDL input event subsystem");
 	SDL_QuitSubSystem(SDL_INIT_EVENTS);
 	return true;

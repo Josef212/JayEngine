@@ -11,22 +11,26 @@
 
 ModuleEditor::ModuleEditor(Application* app, bool startEnabled) : Module(app, startEnabled)
 {
+	LOG("Editor: Creation.");
 }
 
 
 ModuleEditor::~ModuleEditor()
 {
+	LOG("Editor: Destroying.");
 }
 
 
 bool ModuleEditor::init()
 {
+	LOG("Editor: Init.");
 	ImGui_ImplSdlGL3_Init(app->window->getWindow());
 	return true;
 }
 
 bool ModuleEditor::start()
 {
+	LOG("Editor: Start.");
 	return true;
 }
 
@@ -80,6 +84,7 @@ update_status ModuleEditor::update(float dt)
 
 bool ModuleEditor::cleanUp()
 {
+	LOG("Editor: CleanUp.");
 	ImGui_ImplSdlGL3_Shutdown();
 	return true;
 }

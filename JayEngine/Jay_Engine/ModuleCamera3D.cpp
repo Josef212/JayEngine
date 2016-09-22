@@ -6,6 +6,7 @@
 
 ModuleCamera3D::ModuleCamera3D(Application* app, bool startEnabled) : Module(app, startEnabled)
 {
+	LOG("Camera3D: Creation.");
 	calculateViewMatrix();
 
 	X = vec3(1.0f, 0.0f, 0.0f);
@@ -17,11 +18,14 @@ ModuleCamera3D::ModuleCamera3D(Application* app, bool startEnabled) : Module(app
 }
 
 ModuleCamera3D::~ModuleCamera3D()
-{}
+{
+	LOG("Camera3D: Destroying.");
+}
 
 // -----------------------------------------------------------------
 bool ModuleCamera3D::start()
 {
+	LOG("Camera3D: Start.");
 	LOG("Setting up the camera");
 	bool ret = true;
 	X = vec3(1.0f, 0.0f, 0.0f);
@@ -41,7 +45,7 @@ bool ModuleCamera3D::start()
 // -----------------------------------------------------------------
 bool ModuleCamera3D::cleanUp()
 {
-	LOG("Cleaning camera");
+	LOG("Camera3D: CleanUp.");
 
 	return true;
 }

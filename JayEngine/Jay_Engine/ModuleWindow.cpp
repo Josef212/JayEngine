@@ -4,6 +4,7 @@
 
 ModuleWindow::ModuleWindow(Application* app, bool startEnabled) : Module(app, startEnabled)
 {
+	LOG("Window: Creation.");
 	window = NULL;
 	screenSurface = NULL;
 }
@@ -11,12 +12,13 @@ ModuleWindow::ModuleWindow(Application* app, bool startEnabled) : Module(app, st
 // Destructor
 ModuleWindow::~ModuleWindow()
 {
+	LOG("Window: Destroying.");
 }
 
 // Called before render is available
 bool ModuleWindow::init()
 {
-	LOG("Init SDL window & surface");
+	LOG("Window: Init.");
 	bool ret = true;
 
 	if(SDL_Init(SDL_INIT_VIDEO) < 0)
@@ -75,7 +77,7 @@ bool ModuleWindow::init()
 // Called before quitting
 bool ModuleWindow::cleanUp()
 {
-	LOG("Destroying SDL window and quitting all SDL systems");
+	LOG("Window: CleanUp.");
 
 	//Destroy window
 	if(window != NULL)

@@ -6,16 +6,20 @@
 #pragma comment( lib, "SDL_mixer/libx86/SDL2_mixer.lib" )
 
 ModuleAudio::ModuleAudio(Application* app, bool start_enabled) : Module(app, start_enabled)//, music(NULL)
-{}
+{
+	LOG("Audio: Creation.");
+}
 
 // Destructor
 ModuleAudio::~ModuleAudio()
-{}
+{
+	LOG("Audio: Destroying.");
+}
 
 // Called before render is available
 bool ModuleAudio::init()
 {
-	LOG("Loading Audio Mixer");
+	LOG("Audio: Init.");
 	bool ret = true;
 	/*SDL_Init(0);
 
@@ -48,6 +52,7 @@ bool ModuleAudio::init()
 // Called before quitting
 bool ModuleAudio::cleanUp()
 {
+	LOG("Audio: CleanUp.");
 	/*LOG("Freeing sound FX, closing Mixer and Audio subsystem");
 
 	if(music != NULL)
