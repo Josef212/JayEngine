@@ -2,6 +2,10 @@
 #define __MODULEEDITOR_H__
 
 #include "Module.h"
+#include <list>
+
+class UI_Comp;
+class UI_Conf;
 
 class ModuleEditor : public Module
 {
@@ -17,6 +21,9 @@ public:
 
 	void drawEditor();
 	void passInput(SDL_Event* inputEvent);
+
+public:
+	std::list<UI_Comp*> uiList;
 
 private:
 	bool showImGuiDemo = false;

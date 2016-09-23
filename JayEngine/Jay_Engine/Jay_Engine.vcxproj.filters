@@ -26,6 +26,9 @@
     <Filter Include="Core\Math">
       <UniqueIdentifier>{e3e74c8b-7a51-4724-8e74-7f27965643db}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core\UI">
+      <UniqueIdentifier>{5b7ab48d-03d8-44ca-b2f5-9a9541651abc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -87,6 +90,12 @@
     </ClCompile>
     <ClCompile Include="Globals.cpp">
       <Filter>Core\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_Comp.cpp">
+      <Filter>Core\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_Conf.cpp">
+      <Filter>Core\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -174,5 +183,9 @@
     <ClInclude Include="Globals.h">
       <Filter>Core\Tools</Filter>
     </ClInclude>
+    <ClInclude Include="UI_Comp.h">
+      <Filter>Core\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Conf.h" />
   </ItemGroup>
 </Project>
