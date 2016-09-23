@@ -21,11 +21,17 @@ public:
 
 	void onResize(int width, int height);
 
+	bool getVSync()const;
+	void setVSync(bool vsync);
+
 public:
 	Light lights[MAX_LIGHTS];
 	SDL_GLContext context;
 	mat3x3 normalMatrix;
 	mat4x4 modelMatrix, viewMatrix, projectionMatrix;
+
+private:
+	bool vsync;
 };
 
 #endif // !__MODULERENDERER3D_H__

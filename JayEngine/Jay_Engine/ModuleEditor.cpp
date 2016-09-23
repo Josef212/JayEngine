@@ -3,6 +3,9 @@
 #include "ModuleEditor.h"
 #include "ModuleWindow.h"
 
+#include "UI_Comp.h"
+#include "UI_Conf.h"
+
 #include "Primitive.h"
 
 #include "ImGui/imgui.h"
@@ -12,6 +15,9 @@
 ModuleEditor::ModuleEditor(Application* app, bool startEnabled) : Module(app, startEnabled)
 {
 	LOG("Editor: Creation.");
+	conf = new UI_Conf(app);
+
+	uiList.push_back(conf);
 }
 
 
@@ -54,13 +60,28 @@ update_status ModuleEditor::update(float dt)
 			if (ImGui::MenuItem("Quit")) app->quit = true;
 			ImGui::EndMenu();
 		}
-		if (ImGui::BeginMenu("Examples"))
+
+		if (ImGui::BeginMenu("View"))
 		{
-			if (ImGui::MenuItem("Show")) showImGuiDemo = true;
-			if (ImGui::MenuItem("Hide")) showImGuiDemo = false;
+			if (ImGui::MenuItem("Config")) conf->active = !conf->active;
 			ImGui::EndMenu();
 		}
+
+		if (ImGui::BeginMenu("Help"))
+		{
+			if (ImGui::MenuItem("ImGui Demo")) showImGuiDemo = !showImGuiDemo;
+			ImGui::EndMenu();
+		}
+		
+
 		ImGui::EndMainMenuBar();
+	}
+
+	std::list<UI_Comp*>::iterator it = uiList.begin();
+	for (; it != uiList.end(); ++it)
+	{
+		if ((*it)->isActive())
+			(*it)->draw();
 	}
 
 	if (showImGuiDemo)
@@ -97,4 +118,10 @@ void ModuleEditor::drawEditor()
 void ModuleEditor::passInput(SDL_Event* inputEvent)
 {
 	ImGui_ImplSdlGL3_ProcessEvent(inputEvent);
+}
+
+void ModuleEditor::logFPS(float fps, float ms)
+{
+	if (conf)
+		conf->pushFpsMs(fps, ms);
 }

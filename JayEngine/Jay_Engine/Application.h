@@ -33,14 +33,14 @@ public:
 	bool quit = false;
 
 private:
-	uint64					frameCount = 0;
-	Timer					startUp;
-	Timer					frameTime;
-	Timer					lasSecFrameTime;
-	uint32					lasSecFrameCount = 0;
-	uint32					prevSecFrameCount = 0;
-	int						cappedMs = -1;
-	float					dt = 0.0f;
+	Timer	msTimer;
+	Timer	fpsTimer;
+	Uint32	frames = 0;
+	float	dt;
+	int		fpsCounter = 0;
+	int		lastFrameMs = -1;
+	int		lastFps = -1;
+	int		cappedMs = 0;
 
 	std::list<Module*> modules;
 	std::string			title;
@@ -61,6 +61,9 @@ public:
 	void setOrganitzation(const char* org);
 	void setTitle(const char* titl);
 
+	uint getMaxFPS();
+	void setMaxFPS(int maxFPS);
+
 	void log(const char* str);
 
 private:
@@ -68,5 +71,7 @@ private:
 	void prepareUpdate();
 	void finishUpdate();
 };
+
+//extern Application* app;
 
 #endif // !__APPLICATION_H_

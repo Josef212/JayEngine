@@ -79,31 +79,36 @@ bool Application::init()
 // ---------------------------------------------
 void Application::prepareUpdate()
 {
-	frameCount++;
-	lasSecFrameCount++;
-
-	dt = frameTime.ReadSec();
-	frameTime.Start();
+	dt = (float)msTimer.ReadSec();
+	msTimer.Start();
 }
 
 // ---------------------------------------------
 void Application::finishUpdate()
 {
-	float avgFps = float(frameCount) / startUp.ReadSec();
-	float secondsSinceStartup = startUp.ReadSec();
-	uint32 lastFrameMs = frameTime.Read();
-	uint32 framesOnLastUpdate = prevSecFrameCount;
+	++frames;
+	++fpsCounter;
 
-	static char title[256];
+	if (fpsTimer.Read() >= 1000)
+	{
+		lastFps = fpsCounter;
+		fpsCounter = 0;
+		fpsTimer.Start();
+	}
 
-	sprintf_s(title, 256, "Av.FPS: %.2f Last Frame Ms: %u Last sec frames: %i Last dt: %.3f Time since startup: %.3f Frame Count: %lu",
-		avgFps, lastFrameMs, framesOnLastUpdate, dt, secondsSinceStartup, frameCount);
-	window->setTitle(title);
+	lastFrameMs = msTimer.Read();
+
+	// cap fps
+	if (cappedMs > 0 && (lastFrameMs < cappedMs))
+		SDL_Delay(cappedMs - lastFrameMs);
 
 	if (cappedMs > 0 && lastFrameMs < cappedMs)
 	{
 		SDL_Delay(cappedMs - lastFrameMs);
 	}
+
+	if (editor)
+		editor->logFPS((float)lastFps, (float)lastFrameMs);
 }
 
 // Call PreUpdate, Update and PostUpdate on all modules
@@ -178,16 +183,39 @@ const char* Application::getTitle()
 
 void Application::setOrganitzation(const char* org)
 {
-	organitzation.assign(org);
+	if(org && org != organitzation)
+		organitzation.assign(org);
+	//TODO: filesystem should ajust
 }
 
 void Application::setTitle(const char* titl)
 {
-	title.assign(titl);
+	if (titl && titl != title)
+	{
+		title.assign(titl);
+		window->setTitle(titl);
+		//TODO: filesystem should ajust
+	}
 }
 
 void Application::log(const char* str)
 {
 	logs.append(str);
 	//TODO: log in editor
+}
+
+uint Application::getMaxFPS()
+{
+	if (cappedMs > 0)
+		return (uint)((1.0f / (float)cappedMs) * 1000.0f);
+	else
+		return 0;
+}
+
+void Application::setMaxFPS(int maxFPS)
+{
+	if (maxFPS > 0)
+		cappedMs = 1000 / maxFPS;
+	else
+		cappedMs = 0;
 }

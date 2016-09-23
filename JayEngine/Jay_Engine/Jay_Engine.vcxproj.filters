@@ -186,6 +186,8 @@
     <ClInclude Include="UI_Comp.h">
       <Filter>Core\UI</Filter>
     </ClInclude>
-    <ClInclude Include="UI_Conf.h" />
+    <ClInclude Include="UI_Conf.h">
+      <Filter>Core\UI</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

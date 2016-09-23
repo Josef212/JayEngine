@@ -15,6 +15,7 @@
 ModuleRenderer3D::ModuleRenderer3D(Application* app, bool startEnabled) : Module(app, startEnabled)
 {
 	LOG("Renderer3D: Creation.");
+	vsync = VSYNC;
 }
 
 // Destructor
@@ -59,9 +60,7 @@ bool ModuleRenderer3D::init()
 		LOG("GLSL: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
 
 		//Use Vsync
-		//bool set_vsync = config->GetBool("Vertical Sync", false);
-		//vsync = !set_vsync; // force change
-		//SetVSync(set_vsync);
+		setVSync(vsync);
 
 		//Initialize Projection Matrix
 		glMatrixMode(GL_PROJECTION);
@@ -184,4 +183,19 @@ void ModuleRenderer3D::onResize(int width, int height)
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+}
+
+bool ModuleRenderer3D::getVSync() const
+{
+	return vsync;
+}
+
+void ModuleRenderer3D::setVSync(bool vsync)
+{
+	if (this->vsync != vsync)
+	{
+		this->vsync = vsync;
+		if (SDL_GL_SetSwapInterval(vsync ? 1 : 0) < 0)
+			LOG("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
+	}
 }

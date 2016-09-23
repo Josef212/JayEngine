@@ -2,7 +2,7 @@
 
 
 
-UI_Comp::UI_Comp()
+UI_Comp::UI_Comp(Application* app) : app(app)
 {
 }
 

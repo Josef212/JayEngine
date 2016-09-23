@@ -22,12 +22,17 @@ public:
 	void drawEditor();
 	void passInput(SDL_Event* inputEvent);
 
+	void logFPS(float fps, float ms);
+
 public:
 	std::list<UI_Comp*> uiList;
+
+	UI_Conf* conf = NULL;
 
 private:
 	bool showImGuiDemo = false;
 	bool showGrid = true;
+	bool showConfig = false;
 
 };
 
