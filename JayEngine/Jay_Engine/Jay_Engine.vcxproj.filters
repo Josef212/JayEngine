@@ -103,6 +103,9 @@
     <ClCompile Include="UI_Console.cpp">
       <Filter>Core\UI</Filter>
     </ClCompile>
+    <ClCompile Include="DrawDebug.cpp">
+      <Filter>Core\Helpers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.h">
@@ -200,6 +203,9 @@
     </ClInclude>
     <ClInclude Include="UI_Console.h">
       <Filter>Core\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="DrawDebug.h">
+      <Filter>Core\Helpers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
