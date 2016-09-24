@@ -5,15 +5,15 @@
 #include "ModuleFileSystem.h"
 #include "ModuleInput.h"
 
-#define MAX_FPS_LOG 100
-
-UI_Conf::UI_Conf(Application* app) : UI_Comp(app), fps(MAX_FPS_LOG), ms(MAX_FPS_LOG)
+UI_Conf::UI_Conf(Application* app) : UI_Comp(app)//, fps(MAX_FPS_LOG), ms(MAX_FPS_LOG)
 {
 }
 
 
 UI_Conf::~UI_Conf()
 {
+	delete[] fps;
+	delete[] ms;
 }
 
 void UI_Conf::draw()
@@ -38,10 +38,10 @@ void UI_Conf::draw()
 			ImGui::TextColored(ImVec4(1, 1, 0, 1), "%i", maxFPS);//app->getMaxFPS());
 
 			char title[25];
-			sprintf_s(title, 25, "Framerate %.1f", fps[fps.size() - 1]);
-			ImGui::PlotHistogram("##framerate", &fps[0], fps.size(), 0, title, 0.0f, 100.0f, ImVec2(310, 100));
-			sprintf_s(title, 25, "Milliseconds %0.1f", ms[ms.size() - 1]);
-			ImGui::PlotHistogram("##milliseconds", &ms[0], ms.size(), 0, title, 0.0f, 40.0f, ImVec2(310, 100));
+			sprintf_s(title, 25, "Framerate %.1f", fps[arraySize - 1]);
+			ImGui::PlotHistogram("##framerate", &fps[0], arraySize, 0, title, 0.0f, 100.0f, ImVec2(310, 100));
+			sprintf_s(title, 25, "Milliseconds %0.1f", ms[arraySize - 1]);
+			ImGui::PlotHistogram("##milliseconds", &ms[0], arraySize, 0, title, 0.0f, 40.0f, ImVec2(310, 100));
 
 		}
 
@@ -126,9 +126,7 @@ void UI_Conf::draw()
 
 void UI_Conf::pushFpsMs(float _fps, float _ms)
 {
-	static uint c = 0;
-
-	if (c == MAX_FPS_LOG)
+	if (arraySize == MAX_FPS_LOG)
 	{
 		for (uint i = 0; i < MAX_FPS_LOG - 1; ++i)
 		{
@@ -137,8 +135,8 @@ void UI_Conf::pushFpsMs(float _fps, float _ms)
 		}
 	}
 	else
-		++c;
+		++arraySize;
 
-	fps[c - 1] = _fps;
-	ms[c - 1] = _ms;
+	fps[arraySize - 1] = _fps;
+	ms[arraySize - 1] = _ms;
 }

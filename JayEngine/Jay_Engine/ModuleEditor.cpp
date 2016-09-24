@@ -132,6 +132,11 @@ update_status ModuleEditor::update(float dt)
 bool ModuleEditor::cleanUp()
 {
 	LOG("Editor: CleanUp.");
+
+	std::list<UI_Comp*>::iterator it = uiList.begin();
+	for (; it != uiList.end(); ++it)
+		RELEASE((*it));
+
 	ImGui_ImplSdlGL3_Shutdown();
 	return true;
 }

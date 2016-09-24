@@ -2,7 +2,8 @@
 #define __UICONF_H__
 
 #include "UI_Comp.h"
-#include <vector>
+
+#define MAX_FPS_LOG 100
 
 class UI_Conf : public UI_Comp
 {
@@ -16,8 +17,9 @@ public:
 public:
 
 private:
-	std::vector<float> fps;
-	std::vector<float> ms;
+	float fps[MAX_FPS_LOG];
+	float ms[MAX_FPS_LOG];
+	int arraySize = 0;
 };
 
 #endif //__UICONF_H__
