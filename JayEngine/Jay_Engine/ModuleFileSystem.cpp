@@ -7,7 +7,7 @@
 
 #pragma comment( lib, "PhysFS/libx86/physfs.lib")
 
-ModuleFileSystem::ModuleFileSystem(Application* app, bool startEnabled) : Module(app, startEnabled)
+ModuleFileSystem::ModuleFileSystem(bool startEnabled) : Module(startEnabled)
 {
 	name.assign("file_system");
 

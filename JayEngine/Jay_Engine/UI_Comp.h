@@ -8,7 +8,7 @@ class Application;
 class UI_Comp
 {
 public:
-	UI_Comp(Application* app);
+	UI_Comp();
 	~UI_Comp();
 
 	virtual void draw();
@@ -18,7 +18,6 @@ public:
 	bool active = false;
 
 protected:
-	Application* app = NULL;
 };
 
 

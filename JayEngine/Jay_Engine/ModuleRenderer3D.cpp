@@ -12,7 +12,7 @@
 #pragma comment (lib, "Glew/libx86/glew32.lib") /* link Microsoft OpenGL lib   */
 
 
-ModuleRenderer3D::ModuleRenderer3D(Application* app, bool startEnabled) : Module(app, startEnabled)
+ModuleRenderer3D::ModuleRenderer3D(bool startEnabled) : Module(startEnabled)
 {
 	LOG("Renderer3D: Creation.");
 	vsync = VSYNC;

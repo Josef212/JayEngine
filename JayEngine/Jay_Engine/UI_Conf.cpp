@@ -5,7 +5,7 @@
 #include "ModuleFileSystem.h"
 #include "ModuleInput.h"
 
-UI_Conf::UI_Conf(Application* app) : UI_Comp(app)//, fps(MAX_FPS_LOG), ms(MAX_FPS_LOG)
+UI_Conf::UI_Conf() : UI_Comp()
 {
 }
 

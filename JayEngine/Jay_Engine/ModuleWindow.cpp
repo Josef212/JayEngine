@@ -2,7 +2,7 @@
 #include "Application.h"
 #include "ModuleWindow.h"
 
-ModuleWindow::ModuleWindow(Application* app, bool startEnabled) : Module(app, startEnabled)
+ModuleWindow::ModuleWindow(bool startEnabled) : Module(startEnabled)
 {
 	LOG("Window: Creation.");
 	window = NULL;

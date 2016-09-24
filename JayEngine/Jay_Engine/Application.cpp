@@ -13,14 +13,14 @@
 Application::Application()
 {
 	LOG("Application Constructor --------------");
-	fs = new ModuleFileSystem(this);
-	window = new ModuleWindow(this);
-	input = new ModuleInput(this);
-	audio = new ModuleAudio(this, true);
-	camera = new ModuleCamera3D(this);
-	renderer3D = new ModuleRenderer3D(this);
-	//physics = new ModulePhysics3D(this);
-	editor = new ModuleEditor(this);
+	fs = new ModuleFileSystem();
+	window = new ModuleWindow();
+	input = new ModuleInput();
+	audio = new ModuleAudio();
+	camera = new ModuleCamera3D();
+	renderer3D = new ModuleRenderer3D();
+	//physics = new ModulePhysics3D();
+	editor = new ModuleEditor();
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order

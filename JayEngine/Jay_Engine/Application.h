@@ -75,6 +75,6 @@ private:
 	void finishUpdate();
 };
 
-//extern Application* app;
+extern Application* app;
 
 #endif // !__APPLICATION_H_

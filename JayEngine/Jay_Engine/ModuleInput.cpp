@@ -6,7 +6,7 @@
 
 #define MAX_KEYS 300
 
-ModuleInput::ModuleInput(Application* app, bool startEnabled) : Module(app, startEnabled)
+ModuleInput::ModuleInput(bool startEnabled) : Module(startEnabled)
 {
 	LOG("Input: Creation.");
 	keyboard = new KEY_STATE[MAX_KEYS];

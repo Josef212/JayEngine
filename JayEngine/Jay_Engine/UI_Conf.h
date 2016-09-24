@@ -8,7 +8,7 @@
 class UI_Conf : public UI_Comp
 {
 public:
-	UI_Conf(Application* app);
+	UI_Conf();
 	~UI_Conf();
 
 	void draw();

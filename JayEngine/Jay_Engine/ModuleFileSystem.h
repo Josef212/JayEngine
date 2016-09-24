@@ -8,7 +8,7 @@ struct SDL_RWops;
 class ModuleFileSystem : public Module
 {
 public:
-	ModuleFileSystem(Application* app, bool startEnabled = true);
+	ModuleFileSystem(bool startEnabled = true);
 	~ModuleFileSystem();
 
 	bool awake();

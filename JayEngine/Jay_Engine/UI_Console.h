@@ -6,7 +6,7 @@
 class UI_Console : public UI_Comp
 {
 public:
-	UI_Console(Application* app);
+	UI_Console();
 	~UI_Console();
 
 	void draw();
@@ -14,6 +14,7 @@ public:
 
 private:
 	ImGuiTextBuffer logs;
+	bool scrollDown = false;
 };
 
 

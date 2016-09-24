@@ -11,7 +11,7 @@ class UI_Console;
 class ModuleEditor : public Module
 {
 public:
-	ModuleEditor(Application* app, bool startEnabled = true);
+	ModuleEditor(bool startEnabled = true);
 	~ModuleEditor();
 
 	bool init();

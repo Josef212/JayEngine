@@ -17,9 +17,9 @@ void _log(const char file[], int line, const char* format, ...)
 
 	SDL_Log(tmp_string2);
 
-	/*if(app)
+	if(app)
 	{
-		//sprintf_s(tmp_string2, 4096, "\n%s", tmp_string);
+		sprintf_s(tmp_string2, 4096, "\n%s", tmp_string);
 		app->log(tmp_string2);
-	}*/
+	}
 }

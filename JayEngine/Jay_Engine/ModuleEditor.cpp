@@ -13,11 +13,11 @@
 #include "ImGui\imgui_impl_sdl_gl3.h"
 
 
-ModuleEditor::ModuleEditor(Application* app, bool startEnabled) : Module(app, startEnabled)
+ModuleEditor::ModuleEditor(bool startEnabled) : Module(startEnabled)
 {
 	LOG("Editor: Creation.");
-	conf = new UI_Conf(app);
-	console = new UI_Console(app);
+	conf = new UI_Conf();
+	console = new UI_Console();
 
 	uiList.push_back(conf);
 	uiList.push_back(console);
