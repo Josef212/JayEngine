@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __UICONF_H__
+#define __UICONF_H__
 
 #include "UI_Comp.h"
 #include <vector>
@@ -19,3 +20,4 @@ private:
 	std::vector<float> ms;
 };
 
+#endif //__UICONF_H__

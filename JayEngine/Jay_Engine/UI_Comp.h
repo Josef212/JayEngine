@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __UICOMP_H__
+#define __UICOMP_H__
 
 #include "imGUI\imgui.h"
 
@@ -20,3 +21,5 @@ protected:
 	Application* app = NULL;
 };
 
+
+#endif //__UICOMP_H__

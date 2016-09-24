@@ -5,6 +5,7 @@
 
 #include "UI_Comp.h"
 #include "UI_Conf.h"
+#include "UI_Console.h"
 
 #include "Primitive.h"
 
@@ -16,8 +17,10 @@ ModuleEditor::ModuleEditor(Application* app, bool startEnabled) : Module(app, st
 {
 	LOG("Editor: Creation.");
 	conf = new UI_Conf(app);
+	console = new UI_Console(app);
 
 	uiList.push_back(conf);
+	uiList.push_back(console);
 }
 
 
@@ -63,7 +66,8 @@ update_status ModuleEditor::update(float dt)
 
 		if (ImGui::BeginMenu("View"))
 		{
-			if (ImGui::MenuItem("Config")) conf->active = !conf->active;
+			if (ImGui::MenuItem("Console")) console->active = !console->active;
+			if (ImGui::MenuItem("Configuration")) conf->active = !conf->active;
 			ImGui::EndMenu();
 		}
 
@@ -146,4 +150,10 @@ void ModuleEditor::logFPS(float fps, float ms)
 {
 	if (conf)
 		conf->pushFpsMs(fps, ms);
+}
+
+void ModuleEditor::log(const char* str)
+{
+	if (console)
+		console->logUi(str);
 }

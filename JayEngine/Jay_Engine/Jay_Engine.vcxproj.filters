@@ -100,6 +100,9 @@
     <ClCompile Include="ModuleFileSystem.cpp">
       <Filter>Core\Modules</Filter>
     </ClCompile>
+    <ClCompile Include="UI_Console.cpp">
+      <Filter>Core\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.h">
@@ -194,6 +197,9 @@
     </ClInclude>
     <ClInclude Include="ModuleFileSystem.h">
       <Filter>Core\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Console.h">
+      <Filter>Core\UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -204,7 +204,7 @@ void Application::setTitle(const char* titl)
 void Application::log(const char* str)
 {
 	logs.append(str);
-	//TODO: log in editor
+	editor->log(str);
 }
 
 uint Application::getMaxFPS()

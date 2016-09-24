@@ -145,6 +145,7 @@
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="UI_Comp.cpp" />
     <ClCompile Include="UI_Conf.cpp" />
+    <ClCompile Include="UI_Console.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
@@ -178,6 +179,7 @@
     <ClInclude Include="Timer.h" />
     <ClInclude Include="UI_Comp.h" />
     <ClInclude Include="UI_Conf.h" />
+    <ClInclude Include="UI_Console.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

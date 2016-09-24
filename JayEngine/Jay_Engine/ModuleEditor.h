@@ -6,6 +6,7 @@
 
 class UI_Comp;
 class UI_Conf;
+class UI_Console;
 
 class ModuleEditor : public Module
 {
@@ -23,11 +24,13 @@ public:
 	void passInput(SDL_Event* inputEvent);
 
 	void logFPS(float fps, float ms);
+	void log(const char* str);
 
 public:
 	std::list<UI_Comp*> uiList;
 
 	UI_Conf* conf = NULL;
+	UI_Console* console = NULL;
 
 private:
 	bool showImGuiDemo = false;
