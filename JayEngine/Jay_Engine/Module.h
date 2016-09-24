@@ -76,6 +76,11 @@ public:
 		return true; 
 	}
 
+	virtual void drawDebug()
+	{
+	
+	}
+
 	virtual void onCollision(PhysBody3D* body1, PhysBody3D* body2)
 	{}
 };

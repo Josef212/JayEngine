@@ -169,6 +169,14 @@ bool Application::cleanUp()
 	return ret;
 }
 
+void Application::drawDebug()
+{
+	std::list<Module*>::iterator it = modules.begin();
+	for (; it != modules.end(); ++it)
+		if ((*it)->isEnabled())
+			(*it)->drawDebug();
+}
+
 void Application::addModule(Module* mod)
 {
 	modules.push_back(mod);

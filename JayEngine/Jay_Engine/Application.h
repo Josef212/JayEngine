@@ -58,6 +58,8 @@ public:
 	update_status update();
 	bool cleanUp();
 
+	void drawDebug();
+
 	const char* getOrganitzation();
 	const char* getTitle();
 	void setOrganitzation(const char* org);

@@ -4,6 +4,7 @@
 #include "ModuleWindow.h"
 #include "ModuleCamera3D.h"
 #include "ModuleEditor.h"
+#include "DrawDebug.h"
 
 #include "OpenGL.h"
 
@@ -154,6 +155,15 @@ update_status ModuleRenderer3D::preUpdate(float dt)
 // PostUpdate present buffer to screen
 update_status ModuleRenderer3D::postUpdate(float dt)
 {
+	//TODO: draw all geometry
+
+	if (app->debug)
+	{
+		beginDebugDraw();
+		app->drawDebug();
+		endDebugDraw();
+	}
+
 	app->editor->drawEditor();
 
 	SDL_GL_SwapWindow(app->window->getWindow());
