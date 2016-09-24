@@ -15,19 +15,21 @@ class ModuleRenderer3D;
 class ModuleCamera3D;
 class ModulePhysics3D;
 class ModuleEditor;
+class ModuleFileSystem;
 
 //#include "MathGeoLib\include\MathGeoLibFwd.h"
 
 class Application
 {
 public:
-	ModuleWindow* window;
-	ModuleInput* input;
-	ModuleAudio* audio;
-	ModuleRenderer3D* renderer3D;
-	ModuleCamera3D* camera;
-	ModulePhysics3D* physics;
-	ModuleEditor* editor;
+	ModuleFileSystem* fs = NULL;
+	ModuleWindow* window = NULL;
+	ModuleInput* input = NULL;
+	ModuleAudio* audio = NULL;
+	ModuleRenderer3D* renderer3D = NULL;
+	ModuleCamera3D* camera = NULL;
+	ModulePhysics3D* physics = NULL;
+	ModuleEditor* editor = NULL;
 
 	bool debug = false;
 	bool quit = false;
@@ -65,6 +67,7 @@ public:
 	void setMaxFPS(int maxFPS);
 
 	void log(const char* str);
+	void browse(const char* url) const;
 
 private:
 	void addModule(Module* mod);

@@ -2,6 +2,8 @@
 #include "Application.h"
 #include "ModuleWindow.h"
 #include "ModuleRenderer3D.h"
+#include "ModuleFileSystem.h"
+#include "ModuleInput.h"
 
 #define MAX_FPS_LOG 100
 
@@ -94,13 +96,26 @@ void UI_Conf::draw()
 		{
 			ImGui::Text("Base path: ");
 			ImGui::SameLine();
-			//ImGui::TextColored(ImVec4(1, 1, 0, 1), app->)
+			ImGui::TextColored(ImVec4(1, 1, 0, 1), app->fs->getBasePath());
 		}
 
-		if (ImGui::CollapsingHeader("About"))
+		if (ImGui::CollapsingHeader("Input"))
 		{
-			ImGui::Text("JayEngine.");
-			ImGui::Text("Created by Josef21296.");
+			int x, y, motX, motY, w;
+			x = app->input->getMouseX();
+			y = app->input->getMouseY();
+			motX = app->input->getMouseXMotion();
+			motY = app->input->getMouseYMotion();
+			w = app->input->getWheelYMotion();
+			ImGui::Text("Mouse position: ");
+			ImGui::SameLine();
+			ImGui::TextColored(ImVec4(1, 1, 0, 1), "%d,%d", x, y);
+			ImGui::Text("Mouse motion: ");
+			ImGui::SameLine();
+			ImGui::TextColored(ImVec4(1, 1, 0, 1), "%d,%d", motX, motY);
+			ImGui::Text("Mouse wheel: ");
+			ImGui::SameLine();
+			ImGui::TextColored(ImVec4(1, 1, 0, 1), "%d", w);
 		}
 
 		ImGui::End();

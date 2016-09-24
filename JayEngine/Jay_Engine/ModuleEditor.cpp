@@ -70,6 +70,10 @@ update_status ModuleEditor::update(float dt)
 		if (ImGui::BeginMenu("Help"))
 		{
 			if (ImGui::MenuItem("ImGui Demo")) showImGuiDemo = !showImGuiDemo;
+			if (ImGui::MenuItem("Documentation")) app->browse(WIKI_URL);
+			if (ImGui::MenuItem("Check all releases")) app->browse(RELEASES_URL);
+			if (ImGui::MenuItem("Report a bug")) app->browse(ISSUES_URL);
+			if (ImGui::MenuItem("About")) showAbout = !showAbout;
 			ImGui::EndMenu();
 		}
 		
@@ -87,6 +91,24 @@ update_status ModuleEditor::update(float dt)
 	if (showImGuiDemo)
 	{
 		ImGui::ShowTestWindow(&showImGuiDemo);
+		ImGui::ShowMetricsWindow(&showImGuiDemo);
+	}
+
+	if (showAbout)
+	{
+		ImGui::Begin("About", &showAbout, ImGuiWindowFlags_AlwaysAutoResize);
+		ImGui::Text("This is a 3D game engine programmed for educational purposes as a university project.");
+		ImGui::Text("JayEngine is created by Josef21296 and I'm at UPC-CITM and it's currently at %s version.", ENGINE_VERSION);
+		ImGui::Text("Please report any bug you find, take a look at 'Help->Report a bug'. Thanks ;)");
+		ImGui::Text("Check the repository clicking here:");
+		ImGui::SameLine();
+		if (ImGui::Button("GitHub")) app->browse(REPOSITORY_URL);
+		ImGui::SameLine();
+		ImGui::Text("or know more about me clicking here:");
+		ImGui::SameLine();
+		if (ImGui::Button("Josef21296")) app->browse(GITHUB_URL);
+
+		ImGui::End();
 	}
 
 	if (showGrid)

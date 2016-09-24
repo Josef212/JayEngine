@@ -1,6 +1,7 @@
 #include "Application.h"
 
 #include "Module.h"
+#include "ModuleFileSystem.h"
 #include "ModuleWindow.h"
 #include "ModuleInput.h"
 #include "ModuleAudio.h"
@@ -12,6 +13,7 @@
 Application::Application()
 {
 	LOG("Application Constructor --------------");
+	fs = new ModuleFileSystem(this);
 	window = new ModuleWindow(this);
 	input = new ModuleInput(this);
 	audio = new ModuleAudio(this, true);
@@ -25,6 +27,7 @@ Application::Application()
 	// They will CleanUp() in reverse order
 
 	// Main Modules
+	addModule(fs);
 	addModule(window);
 	addModule(camera);
 	addModule(input);
@@ -218,4 +221,9 @@ void Application::setMaxFPS(int maxFPS)
 		cappedMs = 1000 / maxFPS;
 	else
 		cappedMs = 0;
+}
+
+void Application::browse(const char * url) const
+{
+	ShellExecuteA(NULL, "open", url, NULL, NULL, SW_SHOWNORMAL);
 }

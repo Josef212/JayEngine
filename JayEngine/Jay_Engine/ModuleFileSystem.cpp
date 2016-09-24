@@ -155,3 +155,8 @@ unsigned int ModuleFileSystem::save(const char* file, const char* buffer, unsign
 
 	return ret;
 }
+
+const char* ModuleFileSystem::getBasePath()
+{
+	return PHYSFS_getBaseDir();
+}

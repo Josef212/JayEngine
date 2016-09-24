@@ -13,7 +13,6 @@ public:
 	void pushFpsMs(float _fps, float _ms);
 
 public:
-	bool showAbout = false;
 
 private:
 	std::vector<float> fps;

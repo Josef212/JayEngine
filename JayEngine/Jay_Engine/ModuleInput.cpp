@@ -70,7 +70,7 @@ update_status ModuleInput::preUpdate(float dt)
 
 	mouseX /= SCREEN_SIZE;
 	mouseY /= SCREEN_SIZE;
-	mouseZ = 0;
+	wheelY = 0;
 
 	for(int i = 0; i < 5; ++i)
 	{
@@ -100,7 +100,7 @@ update_status ModuleInput::preUpdate(float dt)
 		switch(e.type)
 		{
 			case SDL_MOUSEWHEEL:
-			mouseZ = e.wheel.y;
+				wheelY = e.wheel.y;
 			break;
 
 			case SDL_MOUSEMOTION:

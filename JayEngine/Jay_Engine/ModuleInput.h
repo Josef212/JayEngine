@@ -45,11 +45,6 @@ public:
 		return mouseY;
 	}
 
-	int getMouseZ() const
-	{
-		return mouseZ;
-	}
-
 	int getMouseXMotion() const
 	{
 		return mouseXMotion;
@@ -60,15 +55,20 @@ public:
 		return mouseYMotion;
 	}
 
+	int getWheelYMotion()const
+	{
+		return wheelY;
+	}
+
 private:
 	KEY_STATE* keyboard;
 	KEY_STATE mouse_buttons[MAX_MOUSE_BUTTONS];
 	int mouseX;
 	int mouseY;
-	int mouseZ;
 	int mouseXMotion;
 	int mouseYMotion;
 	//int mouseZMotion;
+	int wheelY;
 };
 
 #endif // !__MODULEINPUT_H__

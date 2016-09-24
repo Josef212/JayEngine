@@ -33,6 +33,7 @@ private:
 	bool showImGuiDemo = false;
 	bool showGrid = true;
 	bool showConfig = false;
+	bool showAbout = false;
 
 };
 
