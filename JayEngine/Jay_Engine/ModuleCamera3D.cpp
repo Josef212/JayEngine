@@ -13,7 +13,7 @@ ModuleCamera3D::ModuleCamera3D(bool startEnabled) : Module(startEnabled)
 	Y = vec3(0.0f, 1.0f, 0.0f);
 	Z = vec3(0.0f, 0.0f, 1.0f);
 
-	position = vec3(10.0f, 20.0f, 10.0f);
+	position = vec3(1.0f, 1.0f, 0.0f);
 	reference = vec3(0.0f, 0.0f, 0.0f);
 }
 
@@ -36,7 +36,7 @@ bool ModuleCamera3D::start()
 	reference = vec3(0.0f, 0.0f, 0.0f);
 
 	//TMP
-	app->camera->move(vec3(1.0f, 1.0f, 0.0f));
+	app->camera->move(vec3(5.0f, 1.0f, 0.0f));
 	app->camera->lookAt(vec3(0, 0, 0));
 
 	return ret;
@@ -123,7 +123,7 @@ void ModuleCamera3D::look(const vec3 &_position, const vec3 &_reference, bool ro
 	this->position = _position;
 	this->reference = _reference;
 
-	Z = normalize(_position - _reference);
+	Z = normalize(position - reference);
 	X = normalize(cross(vec3(0.0f, 1.0f, 0.0f), Z));
 	Y = cross(Z, X);
 

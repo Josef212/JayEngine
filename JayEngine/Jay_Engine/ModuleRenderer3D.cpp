@@ -168,6 +168,11 @@ update_status ModuleRenderer3D::postUpdate(float dt)
 		floor.Render();
 	}
 
+	P_Cube c;
+	c.size = vec3(1.0f, 1.0f, 1.0f);
+	c.SetPos(0, 0, 0);
+	c.Render();
+
 	if (app->debug)
 	{
 		beginDebugDraw();
