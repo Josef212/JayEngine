@@ -7,8 +7,6 @@
 #include "UI_Conf.h"
 #include "UI_Console.h"
 
-#include "Primitive.h"
-
 #include "ImGui/imgui.h"
 #include "ImGui\imgui_impl_sdl_gl3.h"
 
@@ -66,8 +64,8 @@ update_status ModuleEditor::update(float dt)
 
 		if (ImGui::BeginMenu("View"))
 		{
-			if (ImGui::MenuItem("Console")) console->active = !console->active;
-			if (ImGui::MenuItem("Configuration")) conf->active = !conf->active;
+			if (ImGui::MenuItem("Console")) console->swapActive();
+			if (ImGui::MenuItem("Configuration")) conf->swapActive();
 			ImGui::EndMenu();
 		}
 
@@ -83,19 +81,6 @@ update_status ModuleEditor::update(float dt)
 		
 
 		ImGui::EndMainMenuBar();
-	}
-
-	std::list<UI_Comp*>::iterator it = uiList.begin();
-	for (; it != uiList.end(); ++it)
-	{
-		if ((*it)->isActive())
-			(*it)->draw();
-	}
-
-	if (showImGuiDemo)
-	{
-		ImGui::ShowTestWindow(&showImGuiDemo);
-		ImGui::ShowMetricsWindow(&showImGuiDemo);
 	}
 
 	if (showAbout)
@@ -115,16 +100,18 @@ update_status ModuleEditor::update(float dt)
 		ImGui::End();
 	}
 
-	if (showGrid)
+	std::list<UI_Comp*>::iterator it = uiList.begin();
+	for (; it != uiList.end(); ++it)
 	{
-		//Draw floor grid and world axis
-		P_Plane floor(0, 1, 0, 0);
-		floor.axis = true;
-		floor.color.Set(255, 255, 255);
-		floor.Render();
+		if ((*it)->isActive())
+			(*it)->draw();
 	}
 
-	ImGui::Render();
+	if (showImGuiDemo)
+	{
+		ImGui::ShowTestWindow(&showImGuiDemo);
+		ImGui::ShowMetricsWindow(&showImGuiDemo);
+	}
 
 	return ret;
 }

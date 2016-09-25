@@ -6,6 +6,8 @@
 #include "ModuleEditor.h"
 #include "DrawDebug.h"
 
+#include "Primitive.h"
+
 #include "OpenGL.h"
 
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
@@ -156,6 +158,15 @@ update_status ModuleRenderer3D::preUpdate(float dt)
 update_status ModuleRenderer3D::postUpdate(float dt)
 {
 	//TODO: draw all geometry
+
+	if (showGrid)
+	{
+		//Draw floor grid and world axis
+		P_Plane floor(0, 1, 0, 0);
+		floor.axis = true;
+		floor.color.Set(255, 255, 255);
+		floor.Render();
+	}
 
 	if (app->debug)
 	{

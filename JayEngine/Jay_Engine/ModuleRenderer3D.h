@@ -32,6 +32,7 @@ public:
 
 private:
 	bool vsync;
+	bool showGrid = true;
 };
 
 #endif // !__MODULERENDERER3D_H__

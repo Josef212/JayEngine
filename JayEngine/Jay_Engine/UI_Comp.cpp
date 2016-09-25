@@ -15,3 +15,8 @@ void UI_Comp::draw()
 {
 
 }
+
+void UI_Comp::swapActive()
+{
+	active = !active;
+}

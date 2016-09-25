@@ -13,6 +13,7 @@ public:
 
 	virtual void draw();
 	bool isActive() { return active; }
+	void swapActive();
 
 public:
 	bool active = false;
