@@ -1,5 +1,6 @@
 #include "Application.h"
 
+#include "HrdInfo.h"
 #include "Module.h"
 #include "ModuleFileSystem.h"
 #include "ModuleWindow.h"
@@ -12,6 +13,7 @@
 
 Application::Application()
 {
+	info = new HrdInfo();
 	LOG("Application Constructor --------------");
 	fs = new ModuleFileSystem();
 	window = new ModuleWindow();
@@ -75,6 +77,8 @@ bool Application::init()
 		if ((*it)->isEnabled())
 			ret = (*it)->start();
 	}
+
+	info->setInfo();
 
 	return ret;
 }

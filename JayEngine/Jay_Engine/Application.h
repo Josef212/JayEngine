@@ -17,6 +17,8 @@ class ModulePhysics3D;
 class ModuleEditor;
 class ModuleFileSystem;
 
+class HrdInfo;
+
 //#include "MathGeoLib\include\MathGeoLibFwd.h"
 
 class Application
@@ -30,6 +32,8 @@ public:
 	ModuleCamera3D* camera = NULL;
 	ModulePhysics3D* physics = NULL;
 	ModuleEditor* editor = NULL;
+
+	HrdInfo* info = NULL;
 
 	bool debug = false;
 	bool quit = false;

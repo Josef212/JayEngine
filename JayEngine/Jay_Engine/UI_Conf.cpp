@@ -4,6 +4,7 @@
 #include "ModuleRenderer3D.h"
 #include "ModuleFileSystem.h"
 #include "ModuleInput.h"
+#include "HrdInfo.h"
 
 UI_Conf::UI_Conf() : UI_Comp()
 {
@@ -116,6 +117,31 @@ void UI_Conf::draw()
 			ImGui::Text("Mouse wheel: ");
 			ImGui::SameLine();
 			ImGui::TextColored(ImVec4(1, 1, 0, 1), "%d", w);
+		}
+
+		if (ImGui::CollapsingHeader("Information"))
+		{
+			ImGui::Text("SDL Version: ");
+			ImGui::SameLine();
+			ImGui::TextColored(ImVec4(1, 1, 0, 1), "%d.%d.%d", app->info->getInfo()->sdlVersion.major, app->info->getInfo()->sdlVersion.minor, app->info->getInfo()->sdlVersion.patch);
+
+			ImGui::Separator();
+
+			ImGui::Text("CPUs: ");
+			ImGui::SameLine();
+			ImGui::TextColored(ImVec4(1, 1, 0, 1), "%dCores (Cache: %dKb)", app->info->getInfo()->cpuCores, app->info->getInfo()->cpuCacheSize);
+
+			ImGui::Text("System RAM: ");
+			ImGui::SameLine();
+			ImGui::TextColored(ImVec4(1, 1, 0, 1), "%dGb", app->info->getInfo()->ram);
+
+			ImGui::Text("Caps: ");
+			ImGui::SameLine();
+			ImGui::TextColored(ImVec4(1, 1, 0, 1), "%s", app->info->getCaps());
+
+			ImGui::Separator();
+
+			ImGui::TextColored(ImVec4(1, 0, 0, 1), "TODO: get GPU info");
 		}
 
 		ImGui::End();

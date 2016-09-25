@@ -62,7 +62,7 @@ enum update_status
 #define WIN_FULLSCREEN_DESKTOP false
 #define VSYNC true
 #define TITLE "JayEngine"
-#define ENGINE_VERSION "0.1-Alpha"
+#define ENGINE_VERSION "0.1.1-Alpha"
 #define REPOSITORY_URL "https://github.com/Josef212/JayEngine"
 #define GITHUB_URL "https://github.com/Josef212"
 #define WIKI_URL "https://github.com/Josef212/JayEngine/wiki"
