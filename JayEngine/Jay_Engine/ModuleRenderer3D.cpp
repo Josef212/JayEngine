@@ -105,7 +105,7 @@ bool ModuleRenderer3D::init()
 
 		// Blend for transparency
 		//glBlendEquation(GL_FUNC_ADD);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 
 		GLfloat LightModelAmbient[] = { 0.0f, 0.0f, 0.0f, 1.0f };
@@ -128,10 +128,34 @@ bool ModuleRenderer3D::init()
 		lights[0].Active(true);
 		glEnable(GL_LIGHTING);
 		glEnable(GL_COLOR_MATERIAL);
-		glEnable(GL_TEXTURE_2D);
+		//glEnable(GL_TEXTURE_2D);
 
-		glShadeModel(GL_SMOOTH);		 // Enables Smooth Shading
+		//glShadeModel(GL_SMOOTH);		 // Enables Smooth Shading
 	}
+
+	onResize(app->window->getWidth(), app->window->getHeight());
+
+	return ret;
+}
+
+bool ModuleRenderer3D::start()
+{
+	bool ret = true;
+
+	//TMP: create a cube with an array
+	glGenBuffers(1,  (GLuint*)&vArray);
+	glBindBuffer(GL_ARRAY_BUFFER, vArray);
+	float vertices[24] = 
+	{ 0.f, 0.f, 0.f, 
+	-1.f, 0.f, 0.f,
+	-1.f, 1.f, 0.f, 
+	0.f, 1.f, 0.f,
+	-1.f, 0.f, -1.f,
+	0.f, 0.f, -1.f,
+	0.f, 1.f, -1.f,
+	-1.f, 1.f, -1.f};
+
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 24, vertices, GL_STATIC_DRAW);
 
 	return ret;
 }
@@ -168,10 +192,82 @@ update_status ModuleRenderer3D::postUpdate(float dt)
 		floor.Render();
 	}
 
-	P_Cube c;
-	c.size = vec3(1.0f, 1.0f, 1.0f);
-	c.SetPos(0, 0, 0);
-	c.Render();
+	//Draw a line
+	/*glLineWidth(2.0f);
+	glBegin(GL_LINES);
+	glVertex3f(0.f, 0.f, 0.f);
+	glVertex3f(0.f, 10.f, 0.f);
+	glEnd();
+	glLineWidth(1.0f);
+	*/
+
+	//Draw a cube using triangles
+	/*glBegin(GL_TRIANGLES);
+	//----------------------- Front
+	glVertex3f(0.f, 0.f, 0.f);
+	glVertex3f(0.f, 1.f, 0.f);
+	glVertex3f(-1.f, 0.f, 0.f);
+
+	glVertex3f(-1.f, 0.f, 0.f);
+	glVertex3f(0.f, 1.f, 0.f);
+	glVertex3f(-1.f, 1.f, 0.f);
+
+	//----------------------- Top
+	glColor3d(255, 0, 0);
+	glVertex3f(-1.f, 1.f, 0.f);
+	glVertex3f(0.f, 1.f, 0.f);
+
+	glVertex3f(-1.f, 1.f, 0.f);
+	glVertex3f(0.f, 1.f, -1.f);
+	glVertex3f(-1.f, 1.f, -1.f);
+
+	//----------------------- Right
+	glColor3d(255, 255, 255);
+	glVertex3f(0.f, 1.f, 0.f);
+	glVertex3f(0.f, 0.f, 0.f);
+	glVertex3f(0.f, 1.f, -1.f);
+
+	glVertex3f(0.f, 1.f, -1.f);
+	glVertex3f(0.f, 0.f, 0.f);
+	glVertex3f(0.f, 0.f, -1.f);
+
+	//----------------------- Left
+	glVertex3f(-1.f, 1.f, -1.f);
+	glVertex3f(-1.f, 0.f, 0.f);
+	glVertex3f(-1.f, 1.f, 0.f);
+
+	glVertex3f(-1.f, 1.f, -1.f);
+	glVertex3f(-1.f, 0.f, -1.f);
+	glVertex3f(-1.f, 0.f, 0.f);
+
+	//----------------------- Bottom
+	glVertex3f(-1.f, 0.f, 0.f);
+	glVertex3f(0.f, 0.f, -1.f);
+	glVertex3f(0.f, 0.f, 0.f);
+
+	glVertex3f(-1.f, 0.f, 0.f);
+	glVertex3f(-1.f, 0.f, -1.f);
+	glVertex3f(0.f, 0.f, -1.f);
+
+	//----------------------- Behind
+	glVertex3f(-1.f, 0.f, -1.f);
+	glVertex3f(-1.f, 1.f, -1.f);
+	glVertex3f(0.f, 1.f, -1.f);
+
+	glVertex3f(-1.f, 0.f, -1.f);
+	glVertex3f(0.f, 1.f, -1.f);
+	glVertex3f(0.f, 0.f, -1.f);
+
+	glEnd();*/
+
+	//Draw a cube using vertex array
+	glBegin(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glBindBuffer(GL_ARRAY_BUFFER, vArray);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
+	glDrawArrays(GL_TRIANGLES, 0, 24);
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glEnd();
 
 	if (app->debug)
 	{
@@ -190,7 +286,6 @@ update_status ModuleRenderer3D::postUpdate(float dt)
 bool ModuleRenderer3D::cleanUp()
 {
 	LOG("Renderer3D: CleanUp.");
-	LOG("Destroying 3D Renderer");
 
 	SDL_GL_DeleteContext(context);
 

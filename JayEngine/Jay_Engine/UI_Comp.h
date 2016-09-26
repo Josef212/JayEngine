@@ -9,7 +9,7 @@ class UI_Comp
 {
 public:
 	UI_Comp();
-	~UI_Comp();
+	virtual ~UI_Comp();
 
 	virtual void draw();
 	bool isActive() { return active; }

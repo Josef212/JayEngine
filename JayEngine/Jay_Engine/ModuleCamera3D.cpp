@@ -26,20 +26,8 @@ ModuleCamera3D::~ModuleCamera3D()
 bool ModuleCamera3D::start()
 {
 	LOG("Camera3D: Start.");
-	LOG("Setting up the camera");
-	bool ret = true;
-	X = vec3(1.0f, 0.0f, 0.0f);
-	Y = vec3(0.0f, 1.0f, 0.0f);
-	Z = vec3(0.0f, 0.0f, 1.0f);
 
-	position = vec3(2.0f, 3.0f, 2.0f);
-	reference = vec3(0.0f, 0.0f, 0.0f);
-
-	//TMP
-	app->camera->move(vec3(5.0f, 1.0f, 0.0f));
-	app->camera->lookAt(vec3(0, 0, 0));
-
-	return ret;
+	return true;
 }
 
 // -----------------------------------------------------------------
@@ -118,12 +106,12 @@ update_status ModuleCamera3D::update(float dt)
 }
 
 // -----------------------------------------------------------------
-void ModuleCamera3D::look(const vec3 &_position, const vec3 &_reference, bool rotateAroundReference)
+void ModuleCamera3D::look(const vec3 &position, const vec3 &reference, bool rotateAroundReference)
 {
-	this->position = _position;
-	this->reference = _reference;
+	this->position = position;
+	this->reference = reference;
 
-	Z = normalize(position - reference);
+	Z = normalize(this->position - this->reference);
 	X = normalize(cross(vec3(0.0f, 1.0f, 0.0f), Z));
 	Y = cross(Z, X);
 
@@ -137,9 +125,9 @@ void ModuleCamera3D::look(const vec3 &_position, const vec3 &_reference, bool ro
 }
 
 // -----------------------------------------------------------------
-void ModuleCamera3D::lookAt( const vec3 &_spot)
+void ModuleCamera3D::lookAt( const vec3 &spot)
 {
-	reference = _spot;
+	reference = spot;
 
 	Z = normalize(position - reference);
 	X = normalize(cross(vec3(0.0f, 1.0f, 0.0f), Z));
@@ -150,17 +138,17 @@ void ModuleCamera3D::lookAt( const vec3 &_spot)
 
 
 // -----------------------------------------------------------------
-void ModuleCamera3D::move(const vec3 &_movement)
+void ModuleCamera3D::move(const vec3 &movement)
 {
-	position += _movement;
-	reference += _movement;
+	position += movement;
+	reference += movement;
 
 	calculateViewMatrix();
 }
 
-void ModuleCamera3D::setPos(const vec3 &_pos)
+void ModuleCamera3D::setPos(const vec3 &pos)
 {
-	position = _pos;
+	position = pos;
 	lookAt(reference);
 }
 

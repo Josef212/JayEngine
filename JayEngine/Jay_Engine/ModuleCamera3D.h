@@ -15,10 +15,10 @@ public:
 	update_status update(float dt);
 	bool cleanUp();
 
-	void look(const vec3 &_position, const vec3 &_reference, bool rotateAroundReference = false);
-	void lookAt(const vec3 &_spot);
-	void move(const vec3 &_movement);
-	void setPos(const vec3 &_pos);
+	void look(const vec3 &position, const vec3 &reference, bool rotateAroundReference = false);
+	void lookAt(const vec3 &spot);
+	void move(const vec3 &movement);
+	void setPos(const vec3 &pos);
 	float* getViewMatrix();
 
 private:

@@ -15,6 +15,7 @@ public:
 	~ModuleRenderer3D();
 
 	bool init();
+	bool start();
 	update_status preUpdate(float dt);
 	update_status postUpdate(float dt);
 	bool cleanUp();
@@ -33,6 +34,9 @@ public:
 private:
 	bool vsync;
 	bool showGrid = true;
+
+	//TMP
+	uint vArray = 0;
 };
 
 #endif // !__MODULERENDERER3D_H__
