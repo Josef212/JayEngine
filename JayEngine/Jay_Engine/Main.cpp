@@ -19,7 +19,7 @@ Application* app = NULL;
 
 int main(int argc, char ** argv)
 {
-	LOG("Starting game '%s'...", TITLE);
+	LOG("Starting game engine %s...", TITLE);
 
 	int mainReturn = EXIT_FAILURE;
 	main_states state = MAIN_CREATION;
@@ -32,7 +32,6 @@ int main(int argc, char ** argv)
 
 			LOG("-------------- Application Creation --------------");
 			app = new Application();
-			//setApp(app);
 			state = MAIN_START;
 			break;
 
@@ -84,7 +83,7 @@ int main(int argc, char ** argv)
 		}
 	}
 
-	LOG("Exiting game '%s'...\n", TITLE);
+	LOG("Exiting game engine %s...\n", TITLE);
 
 	delete app;
 

@@ -58,7 +58,7 @@ bool Application::init()
 	bool ret = true;
 
 	organitzation.assign("Josef21296");
-	title.assign("JayEngine");
+	title.assign(TITLE);
 
 	// Call Init() in all modules
 	std::list<Module*>::iterator it = modules.begin();
