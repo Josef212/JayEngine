@@ -175,6 +175,7 @@
     <ClInclude Include="ModuleRenderer3D.h" />
     <ClInclude Include="ModuleWindow.h" />
     <ClInclude Include="OpenGL.h" />
+    <ClInclude Include="OpenGLDraws.h" />
     <ClInclude Include="p2DynArray.h" />
     <ClInclude Include="p2List.h" />
     <ClInclude Include="p2Point.h" />

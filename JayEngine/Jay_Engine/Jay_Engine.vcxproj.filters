@@ -213,5 +213,8 @@
     <ClInclude Include="HrdInfo.h">
       <Filter>Core\Helpers</Filter>
     </ClInclude>
+    <ClInclude Include="OpenGLDraws.h">
+      <Filter>Core\Helpers</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

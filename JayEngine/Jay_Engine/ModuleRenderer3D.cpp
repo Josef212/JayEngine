@@ -6,6 +6,9 @@
 #include "ModuleEditor.h"
 #include "DrawDebug.h"
 
+//TMP
+#include "OpenGLDraws.h"
+
 #include "Primitive.h"
 
 #include "OpenGL.h"
@@ -143,19 +146,7 @@ bool ModuleRenderer3D::start()
 	bool ret = true;
 
 	//TMP: create a cube with an array
-	glGenBuffers(1,  (GLuint*)&vArray);
-	glBindBuffer(GL_ARRAY_BUFFER, vArray);
-	float vertices[24] = 
-	{ 0.f, 0.f, 0.f, 
-	-1.f, 0.f, 0.f,
-	-1.f, 1.f, 0.f, 
-	0.f, 1.f, 0.f,
-	-1.f, 0.f, -1.f,
-	0.f, 0.f, -1.f,
-	0.f, 1.f, -1.f,
-	-1.f, 1.f, -1.f};
-
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 24, vertices, GL_STATIC_DRAW);
+	loadVerticesBuffer(&vArray);
 
 	return ret;
 }
@@ -192,82 +183,13 @@ update_status ModuleRenderer3D::postUpdate(float dt)
 		floor.Render();
 	}
 
-	//Draw a line
-	/*glLineWidth(2.0f);
-	glBegin(GL_LINES);
-	glVertex3f(0.f, 0.f, 0.f);
-	glVertex3f(0.f, 10.f, 0.f);
-	glEnd();
-	glLineWidth(1.0f);
-	*/
+	//cubeWithTriVertices();
 
-	//Draw a cube using triangles
-	/*glBegin(GL_TRIANGLES);
-	//----------------------- Front
-	glVertex3f(0.f, 0.f, 0.f);
-	glVertex3f(0.f, 1.f, 0.f);
-	glVertex3f(-1.f, 0.f, 0.f);
+	//drawFromVerticesArray(vArray, 3, 108);
 
-	glVertex3f(-1.f, 0.f, 0.f);
-	glVertex3f(0.f, 1.f, 0.f);
-	glVertex3f(-1.f, 1.f, 0.f);
+	//drawSphere(1, 25, 25);
 
-	//----------------------- Top
-	glColor3d(255, 0, 0);
-	glVertex3f(-1.f, 1.f, 0.f);
-	glVertex3f(0.f, 1.f, 0.f);
-
-	glVertex3f(-1.f, 1.f, 0.f);
-	glVertex3f(0.f, 1.f, -1.f);
-	glVertex3f(-1.f, 1.f, -1.f);
-
-	//----------------------- Right
-	glColor3d(255, 255, 255);
-	glVertex3f(0.f, 1.f, 0.f);
-	glVertex3f(0.f, 0.f, 0.f);
-	glVertex3f(0.f, 1.f, -1.f);
-
-	glVertex3f(0.f, 1.f, -1.f);
-	glVertex3f(0.f, 0.f, 0.f);
-	glVertex3f(0.f, 0.f, -1.f);
-
-	//----------------------- Left
-	glVertex3f(-1.f, 1.f, -1.f);
-	glVertex3f(-1.f, 0.f, 0.f);
-	glVertex3f(-1.f, 1.f, 0.f);
-
-	glVertex3f(-1.f, 1.f, -1.f);
-	glVertex3f(-1.f, 0.f, -1.f);
-	glVertex3f(-1.f, 0.f, 0.f);
-
-	//----------------------- Bottom
-	glVertex3f(-1.f, 0.f, 0.f);
-	glVertex3f(0.f, 0.f, -1.f);
-	glVertex3f(0.f, 0.f, 0.f);
-
-	glVertex3f(-1.f, 0.f, 0.f);
-	glVertex3f(-1.f, 0.f, -1.f);
-	glVertex3f(0.f, 0.f, -1.f);
-
-	//----------------------- Behind
-	glVertex3f(-1.f, 0.f, -1.f);
-	glVertex3f(-1.f, 1.f, -1.f);
-	glVertex3f(0.f, 1.f, -1.f);
-
-	glVertex3f(-1.f, 0.f, -1.f);
-	glVertex3f(0.f, 1.f, -1.f);
-	glVertex3f(0.f, 0.f, -1.f);
-
-	glEnd();*/
-
-	//Draw a cube using vertex array
-	glBegin(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glBindBuffer(GL_ARRAY_BUFFER, vArray);
-	glVertexPointer(3, GL_FLOAT, 0, NULL);
-	glDrawArrays(GL_TRIANGLES, 0, 24);
-	glDisableClientState(GL_VERTEX_ARRAY);
-	glEnd();
+	drawCylinder(1, 3);
 
 	if (app->debug)
 	{
