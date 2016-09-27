@@ -62,25 +62,25 @@ void HrdInfo::logHrdInfo()
 void HrdInfo::setCaps()
 {
 	if (info.hasAVX)
-		str.append("HasAVX, ");
+		str.append("AVX ");
 	if (info.hasAltiVec)
-		str.append("HasAltiVec, ");
+		str.append("AltiVec ");
 	if (info.hasMMX)
-		str.append("HasMMX, ");
+		str.append("MMX ");
 	if (info.hasRDTSC)
-		str.append("HasRDTSC, ");
+		str.append("RDTSC ");
 	if (info.hasSSE)
-		str.append("HasSSE, ");
+		str.append("SSE ");
 	if (info.hasSSE2)
-		str.append("HasSSE2, ");
+		str.append("SSE2 ");
 	if (info.hasSSE3)
-		str.append("HasSSE3, ");
+		str.append("SSE3 ");
 	if (info.hasSSE41)
-		str.append("HasSSE41, ");
+		str.append("SSE41 ");
 	if (info.hasSSE42)
-		str.append("HasSSE42, ");
+		str.append("SSE42 ");
 	if (info.has3DNow)
-		str.append("Has3DNow");
+		str.append("3DNow");
 }
 
 const char* HrdInfo::getCaps()
