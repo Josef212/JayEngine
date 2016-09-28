@@ -189,7 +189,7 @@ update_status ModuleRenderer3D::postUpdate(float dt)
 
 	//drawSphere(1, 25, 25);
 
-	drawCylinder(1, 3);
+	//drawCylinder(1, 3);
 
 	if (app->debug)
 	{

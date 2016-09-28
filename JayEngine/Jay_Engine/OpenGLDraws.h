@@ -187,7 +187,7 @@ void drawCylinder(float r, float h)
 
 	glBegin(GL_POLYGON);
 
-	glNormal3f(0.f, -1.f, 0.f);
+	glNormal3f(0.f, 0.f, 0.f);
 
 	for (int i = 0; i < 360; i += 20)
 	{
