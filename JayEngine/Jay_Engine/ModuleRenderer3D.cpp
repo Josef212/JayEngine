@@ -8,6 +8,7 @@
 
 //TMP
 #include "OpenGLDraws.h"
+#include "ModuleImporter.h"
 
 #include "Primitive.h"
 
@@ -147,6 +148,7 @@ bool ModuleRenderer3D::start()
 
 	//TMP: create a cube with an array
 	loadVerticesBuffer(&vArray);
+	app->importer->loadFBX("Assets/fbx/warrior.FBX");
 
 	return ret;
 }
@@ -190,6 +192,8 @@ update_status ModuleRenderer3D::postUpdate(float dt)
 	//drawSphere(1, 25, 25);
 
 	//drawCylinder(1, 3);
+
+	app->importer->drawAllFBX();
 
 	if (app->debug)
 	{

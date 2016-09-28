@@ -10,6 +10,7 @@
 #include "ModuleCamera3D.h"
 //#include "ModulePhysics3D.h"
 #include "ModuleEditor.h"
+#include "ModuleImporter.h"
 
 Application::Application()
 {
@@ -23,6 +24,7 @@ Application::Application()
 	renderer3D = new ModuleRenderer3D();
 	//physics = new ModulePhysics3D();
 	editor = new ModuleEditor();
+	importer = new ModuleImporter();
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
@@ -36,6 +38,7 @@ Application::Application()
 	addModule(audio);
 	//addModule(physics);
 	addModule(editor);
+	addModule(importer);
 	
 	// Scenes
 

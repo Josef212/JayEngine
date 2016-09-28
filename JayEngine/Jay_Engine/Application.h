@@ -16,6 +16,7 @@ class ModuleCamera3D;
 class ModulePhysics3D;
 class ModuleEditor;
 class ModuleFileSystem;
+class ModuleImporter;
 
 class HrdInfo;
 
@@ -32,6 +33,7 @@ public:
 	ModuleCamera3D* camera = NULL;
 	ModulePhysics3D* physics = NULL;
 	ModuleEditor* editor = NULL;
+	ModuleImporter* importer = NULL;
 
 	HrdInfo* info = NULL;
 

@@ -197,3 +197,9 @@ void drawCylinder(float r, float h)
 
 	glEnd();
 }
+
+//------------------------------------------------
+void drawVerticesIndex()
+{
+
+}
