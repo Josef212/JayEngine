@@ -2,6 +2,7 @@
 #define __MODULEIMPORTER_H__
 
 #include "Module.h"
+#include <vector>
 
 struct Mesh
 {
@@ -21,16 +22,16 @@ public:
 	~ModuleImporter();
 
 	bool init();
-
+	bool start();
+	update_status postUpdate(float dt);
 	bool cleanUp();
-	void loadFBX(const char* path);
-	void drawAllFBX();
+	void loadFBX(const char* path, std::vector<Mesh>& vec);
+	void drawMeshes(std::vector<Mesh> vec);
 
 public:
-	Mesh* meshes = NULL;
-	uint meshesNum = 0;
+
 private:
-	
+	std::vector<Mesh> meshes;
 };
 
 #endif // !__MODULEIMPORTER_H__

@@ -36,7 +36,9 @@ private:
 	bool showGrid = true;
 
 	//TMP
-	uint vArray = 0;
+	/*uint vArray = 0;
+	uint verticesId = 0, indicesId = 0;*/
+
 };
 
 #endif // !__MODULERENDERER3D_H__

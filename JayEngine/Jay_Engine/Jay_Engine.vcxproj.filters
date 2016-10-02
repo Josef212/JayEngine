@@ -110,7 +110,7 @@
       <Filter>Core\Helpers</Filter>
     </ClCompile>
     <ClCompile Include="ModuleImporter.cpp">
-      <Filter>Core</Filter>
+      <Filter>Core\Modules</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -219,6 +219,8 @@
     <ClInclude Include="OpenGLDraws.h">
       <Filter>Core\Helpers</Filter>
     </ClInclude>
-    <ClInclude Include="ModuleImporter.h" />
+    <ClInclude Include="ModuleImporter.h">
+      <Filter>Core\Modules</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

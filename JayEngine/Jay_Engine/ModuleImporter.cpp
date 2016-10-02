@@ -34,9 +34,25 @@ bool ModuleImporter::init()
 	return ret;
 }
 
+bool ModuleImporter::start()
+{
+	loadFBX("Assets/fbx/warrior.FBX", meshes);
+
+	return true;
+}
+
+update_status ModuleImporter::postUpdate(float dt)
+{	
+	drawMeshes(meshes);
+
+	return UPDATE_CONTINUE;
+}
+
 bool ModuleImporter::cleanUp()
 {
 	bool ret = true;
+
+	meshes.clear();
 
 	//Stop log stream
 	aiDetachAllLogStreams();
@@ -44,7 +60,7 @@ bool ModuleImporter::cleanUp()
 	return ret;
 }
 
-void ModuleImporter::loadFBX(const char* path)
+void ModuleImporter::loadFBX(const char* path, std::vector<Mesh>& vec)
 {
 	if (!path)
 	{
@@ -56,7 +72,6 @@ void ModuleImporter::loadFBX(const char* path)
 
 	if (scene && scene->HasMeshes())
 	{
-		meshes = new Mesh[scene->mNumMeshes];
 		//Iterate all meshes in the scene
 		for (uint i = 0; i < scene->mNumMeshes; ++i)
 		{
@@ -70,7 +85,7 @@ void ModuleImporter::loadFBX(const char* path)
 			{
 				m.numIndices = scene->mMeshes[i]->mNumFaces * 3;
 				m.indices = new uint[m.numIndices]; //Assume each face is a triangle
-				for (uint j = 0; j < scene->mMeshes[i]->mNumFaces; ++i)
+				for (uint j = 0; j < scene->mMeshes[i]->mNumFaces; ++j)
 				{
 					if (scene->mMeshes[i]->mFaces[j].mNumIndices != 3)
 					{
@@ -78,13 +93,19 @@ void ModuleImporter::loadFBX(const char* path)
 					}
 					else
 					{
-						memcpy(&m.indices[i * 3], scene->mMeshes[i]->mFaces[i].mIndices, 3 * sizeof(uint));
+						memcpy(&m.indices[j * 3], scene->mMeshes[i]->mFaces[j].mIndices, sizeof(uint) * 3);
 					}
 				}
+				glGenBuffers(1, (GLuint*)&m.idVertices);
+				glBindBuffer(GL_ARRAY_BUFFER, m.idVertices);
+				glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m.numVertices, m.vertices, GL_STATIC_DRAW);
+
+				glGenBuffers(1, (GLuint*)&m.idIndices);
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m.idIndices);
+				glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * m.numIndices, m.indices, GL_STATIC_DRAW);
 			}
 
-			meshes[i] = m;
-			++meshesNum;
+			vec.push_back(m);
 		}
 
 		aiReleaseImport(scene);
@@ -93,16 +114,22 @@ void ModuleImporter::loadFBX(const char* path)
 	{
 		LOG("Error loading scene %s", path);
 	}
-
 }
 
-void ModuleImporter::drawAllFBX()
+void ModuleImporter::drawMeshes(std::vector<Mesh> vec)
 {
-	if (meshes)
+	for (uint i = 0; i < vec.size(); ++i)
 	{
-		for (int i = 0; i < meshesNum; ++i)
-		{
+		Mesh* m = &vec.at(i);
 
-		}
+		glEnableClientState(GL_VERTEX_ARRAY);
+
+		glBindBuffer(GL_ARRAY_BUFFER, m->idVertices);
+		glVertexPointer(3, GL_FLOAT, 0, NULL);
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m->idIndices);
+		glDrawElements(GL_TRIANGLES, m->numIndices, GL_UNSIGNED_INT, NULL);
+
+		glDisableClientState(GL_VERTEX_ARRAY);
 	}
 }

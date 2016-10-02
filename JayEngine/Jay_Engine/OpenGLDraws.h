@@ -149,6 +149,43 @@ void drawFromVerticesArray(uint vArray, int jump, int arraySize)
 	glEnd();
 }
 
+//------------------------------------------------
+void loadVerticesIndices(uint* vArrayId, uint* iArrayId)
+{
+	float s = 0.5;
+	float v[12] = {
+		s, s, s,
+		s, -s, s,
+		-s, -s, s,
+		-s, s, s
+	};
+
+	uint i[6]{
+		0, 2, 1, 0, 3, 2
+	};
+
+	glGenBuffers(1, (GLuint*)vArrayId);
+	glBindBuffer(GL_ARRAY_BUFFER, *vArrayId);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 12, v, GL_STATIC_DRAW);
+
+	glGenBuffers(1, (GLuint*)iArrayId);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, *iArrayId);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * 6, i, GL_STATIC_DRAW);
+}
+
+void drawVerticesIndex(uint vArrayId, uint iArrayId)
+{
+	glEnableClientState(GL_VERTEX_ARRAY);
+
+	glBindBuffer(GL_ARRAY_BUFFER, vArrayId);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, iArrayId);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+}
+
 //-------------------------------------------
 void drawSphere(float radius, int slices, int traces)
 {
@@ -198,8 +235,3 @@ void drawCylinder(float r, float h)
 	glEnd();
 }
 
-//------------------------------------------------
-void drawVerticesIndex()
-{
-
-}

@@ -7,7 +7,7 @@
 #include "DrawDebug.h"
 
 //TMP
-#include "OpenGLDraws.h"
+//#include "OpenGLDraws.h"
 #include "ModuleImporter.h"
 
 #include "Primitive.h"
@@ -147,8 +147,27 @@ bool ModuleRenderer3D::start()
 	bool ret = true;
 
 	//TMP: create a cube with an array
-	loadVerticesBuffer(&vArray);
-	app->importer->loadFBX("Assets/fbx/warrior.FBX");
+	//loadVerticesBuffer(&vArray);
+	//app->importer->loadFBX("Assets/fbx/warrior.FBX");
+	/*float s = 0.5;
+	float v[12] = {
+		s, s, s,
+		s, -s, s,
+		-s, -s, s,
+		-s, s, s
+	};
+
+	uint i[6]{
+		0, 2, 1, 0, 3, 2
+	};
+
+	glGenBuffers(1, (GLuint*) &verticesId);
+	glBindBuffer(GL_ARRAY_BUFFER, verticesId);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 12, v, GL_STATIC_DRAW);
+
+	glGenBuffers(1, (GLuint*) &indicesId);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicesId);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * 6, i, GL_STATIC_DRAW);*/
 
 	return ret;
 }
@@ -193,7 +212,21 @@ update_status ModuleRenderer3D::postUpdate(float dt)
 
 	//drawCylinder(1, 3);
 
-	app->importer->drawAllFBX();
+	//app->importer->drawAllFBX();
+
+	//------------------------------
+
+	/*glEnableClientState(GL_VERTEX_ARRAY);
+	
+	glBindBuffer(GL_ARRAY_BUFFER, verticesId);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicesId);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, NULL);
+
+	glDisableClientState(GL_VERTEX_ARRAY);*/
+
+	//------------------------------
 
 	if (app->debug)
 	{
