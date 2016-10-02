@@ -37,6 +37,7 @@ bool ModuleImporter::init()
 bool ModuleImporter::start()
 {
 	loadFBX("Assets/fbx/warrior.FBX", meshes);
+	//loadFBX("Assets/fbx/Brute.fbx", meshes);
 
 	return true;
 }
