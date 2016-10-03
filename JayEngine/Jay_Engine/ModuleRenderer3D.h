@@ -38,6 +38,7 @@ private:
 	//TMP
 	/*uint vArray = 0;
 	uint verticesId = 0, indicesId = 0;*/
+	uint texId = 0;
 
 };
 

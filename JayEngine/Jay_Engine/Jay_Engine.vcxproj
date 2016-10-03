@@ -143,6 +143,7 @@
     <ClCompile Include="ModulePhysics3D.cpp" />
     <ClCompile Include="ModuleRenderer3D.cpp" />
     <ClCompile Include="ModuleWindow.cpp" />
+    <ClCompile Include="parson.c" />
     <ClCompile Include="PhysBody3D.cpp" />
     <ClCompile Include="Primitive.cpp" />
     <ClCompile Include="Timer.cpp" />
@@ -181,6 +182,7 @@
     <ClInclude Include="p2DynArray.h" />
     <ClInclude Include="p2List.h" />
     <ClInclude Include="p2Point.h" />
+    <ClInclude Include="parson.h" />
     <ClInclude Include="PhysBody3D.h" />
     <ClInclude Include="Primitive.h" />
     <ClInclude Include="Timer.h" />

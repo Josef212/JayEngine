@@ -7,7 +7,7 @@
 #include "DrawDebug.h"
 
 //TMP
-//#include "OpenGLDraws.h"
+#include "OpenGLDraws.h"
 #include "ModuleImporter.h"
 
 #include "Primitive.h"
@@ -148,7 +148,6 @@ bool ModuleRenderer3D::start()
 
 	//TMP: create a cube with an array
 	//loadVerticesBuffer(&vArray);
-	//app->importer->loadFBX("Assets/fbx/warrior.FBX");
 	/*float s = 0.5;
 	float v[12] = {
 		s, s, s,
@@ -168,6 +167,30 @@ bool ModuleRenderer3D::start()
 	glGenBuffers(1, (GLuint*) &indicesId);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicesId);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * 6, i, GL_STATIC_DRAW);*/
+
+	//Create checker texture
+	const int CHECKERS_H = 64, CHECKERS_W = 64;
+	GLubyte checkImage[CHECKERS_H][CHECKERS_W][4];
+	for (int i = 0; i < CHECKERS_H; ++i)
+	{
+		for (int j = 0; j < CHECKERS_W; ++j)
+		{
+			int c = ((((i & 0x8) == 0) ^ (((j&0x8)) == 0))) * 255;
+			checkImage[i][j][0] = (GLubyte) c;
+			checkImage[i][j][1] = (GLubyte) c;
+			checkImage[i][j][2] = (GLubyte) c;
+			checkImage[i][j][3] = (GLubyte) 255;
+		}
+	}
+
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	glGenTextures(1, &texId);
+	glBindBuffer(GL_TEXTURE_2D, texId);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_W, CHECKERS_H, 0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);
 
 	return ret;
 }
@@ -204,15 +227,13 @@ update_status ModuleRenderer3D::postUpdate(float dt)
 		floor.Render();
 	}
 
-	//cubeWithTriVertices();
+	cubeWithTriVertices(texId);
 
 	//drawFromVerticesArray(vArray, 3, 108);
 
 	//drawSphere(1, 25, 25);
 
 	//drawCylinder(1, 3);
-
-	//app->importer->drawAllFBX();
 
 	//------------------------------
 

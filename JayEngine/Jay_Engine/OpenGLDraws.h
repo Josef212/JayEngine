@@ -17,21 +17,29 @@ void drawLine()
 }
 
 //--------------------------------------------------
-
-void cubeWithTriVertices()
+//Draw a cube using direct mode vertices
+void cubeWithTriVertices(uint texId)
 {
 	//Draw a cube using triangles
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, texId);
 	glBegin(GL_TRIANGLES);
 
-	float s = 1.f / 2;
+	float s = 10.f / 2;
 
 	//----------------------- Front
+	glTexCoord2f(1.f, 1.f);
 	glVertex3d(s, s, s);
+	glTexCoord2f(0.f, 0.f);
 	glVertex3d(-s, -s, s);
+	glTexCoord2f(0.f, 1.f);
 	glVertex3d(s, -s, s);
 
+	glTexCoord2f(1.f, 0.f);
 	glVertex3d(-s, s, s);
+	glTexCoord2f(0.f, 0.f);
 	glVertex3d(-s, -s, s);
+	glTexCoord2f(1.f, 1.f);
 	glVertex3d(s, s, s);
 	//----------------------- Top
 	glVertex3d(-s, s, s);
@@ -74,11 +82,14 @@ void cubeWithTriVertices()
 	glVertex3d(-s, -s, -s);
 	glVertex3d(-s, s, -s);
 
+	
 	glEnd();
+	glBindTexture(GL_TEXTURE_2D, 0);//Clean buffer
+	glDisable(GL_TEXTURE_2D);
 }
 
 //----------------------------------------------------
-
+//Load a cube using a buffer of vertices
 void loadVerticesBuffer(uint* vArray)
 {
 	glGenBuffers(1, (GLuint*)vArray);
@@ -137,6 +148,7 @@ void loadVerticesBuffer(uint* vArray)
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 108, vertices, GL_STATIC_DRAW);
 }
 
+//Draw a cube using a buffer of vertices prevously loaded
 void drawFromVerticesArray(uint vArray, int jump, int arraySize)
 {
 	//Draw a cube using vertex array
@@ -150,6 +162,7 @@ void drawFromVerticesArray(uint vArray, int jump, int arraySize)
 }
 
 //------------------------------------------------
+//Load a cube using vertices and indices in two buffers
 void loadVerticesIndices(uint* vArrayId, uint* iArrayId)
 {
 	float s = 0.5;
@@ -173,6 +186,7 @@ void loadVerticesIndices(uint* vArrayId, uint* iArrayId)
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * 6, i, GL_STATIC_DRAW);
 }
 
+//Draw a cube using a buffer of vertices and a buffer of indices prevously loaded
 void drawVerticesIndex(uint vArrayId, uint iArrayId)
 {
 	glEnableClientState(GL_VERTEX_ARRAY);
@@ -185,6 +199,9 @@ void drawVerticesIndex(uint vArrayId, uint iArrayId)
 
 	glDisableClientState(GL_VERTEX_ARRAY);
 }
+
+//-------------------------------------------
+
 
 //-------------------------------------------
 void drawSphere(float radius, int slices, int traces)

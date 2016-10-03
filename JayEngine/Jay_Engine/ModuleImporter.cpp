@@ -3,7 +3,8 @@
 #include "ModuleImporter.h"
 
 //TMP
-#include "OpenGLDraws.h"
+//#include "OpenGLDraws.h"
+#include "OpenGL.h"
 
 #include "Assimp\include\cimport.h"
 #include "Assimp\include\scene.h"
@@ -36,7 +37,7 @@ bool ModuleImporter::init()
 
 bool ModuleImporter::start()
 {
-	loadFBX("Assets/fbx/warrior.FBX", meshes);
+	//loadFBX("Assets/fbx/warrior.FBX", meshes);
 	//loadFBX("Assets/fbx/Brute.fbx", meshes);
 
 	return true;
