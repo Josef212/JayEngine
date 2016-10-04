@@ -92,7 +92,7 @@ void ModuleImporter::loadFBX(const char* path, std::vector<Mesh>& vec)
 
 				if (scene->mMeshes[i]->HasNormals())
 				{
-					//memcpy(m.normals, scene->mMeshes[i]->mNormals, sizeof(float) * m.numNormals);
+					memcpy(m.normals, scene->mMeshes[i]->mNormals, sizeof(float) * m.numNormals);
 				}
 
 				for (uint j = 0; j < scene->mMeshes[i]->mNumFaces; ++j)
@@ -109,6 +109,10 @@ void ModuleImporter::loadFBX(const char* path, std::vector<Mesh>& vec)
 				glGenBuffers(1, (GLuint*)&m.idVertices);
 				glBindBuffer(GL_ARRAY_BUFFER, m.idVertices);
 				glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m.numVertices * 3, m.vertices, GL_STATIC_DRAW); //Care: mult numVertices per 3
+
+				glGenBuffers(1, (GLuint*)&m.idNormals);
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m.idNormals);
+				glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * m.numNormals, m.normals, GL_STATIC_DRAW);
 
 				glGenBuffers(1, (GLuint*)&m.idIndices);
 				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m.idIndices);
@@ -133,13 +137,18 @@ void ModuleImporter::drawMeshes(std::vector<Mesh> vec)
 		Mesh* m = &vec.at(i);
 
 		glEnableClientState(GL_VERTEX_ARRAY);
+		glEnableClientState(GL_NORMAL_ARRAY);
 
 		glBindBuffer(GL_ARRAY_BUFFER, m->idVertices);
 		glVertexPointer(3, GL_FLOAT, 0, NULL);
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m->idNormals);
+		glNormalPointer(GL_FLOAT, 0, NULL);
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m->idIndices);
 		glDrawElements(GL_TRIANGLES, m->numIndices, GL_UNSIGNED_INT, NULL);
 
 		glDisableClientState(GL_VERTEX_ARRAY);
+		glDisableClientState(GL_NORMAL_ARRAY);
 	}
 }
