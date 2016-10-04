@@ -37,7 +37,7 @@ bool ModuleImporter::init()
 
 bool ModuleImporter::start()
 {
-	//loadFBX("Assets/fbx/warrior.FBX", meshes);
+	loadFBX("Assets/fbx/warrior.FBX", meshes);
 	//loadFBX("Assets/fbx/Brute.fbx", meshes);
 
 	return true;
@@ -45,7 +45,7 @@ bool ModuleImporter::start()
 
 update_status ModuleImporter::postUpdate(float dt)
 {	
-	//drawMeshes(meshes);
+	drawMeshes(meshes);
 
 	return UPDATE_CONTINUE;
 }
@@ -87,15 +87,15 @@ void ModuleImporter::loadFBX(const char* path, std::vector<Mesh>& vec)
 			{
 				m.numIndices = scene->mMeshes[i]->mNumFaces * 3;
 				m.indices = new uint[m.numIndices]; //Assume each face is a triangle
-				m.numFaces = scene->mMeshes[i]->mNumFaces;
+				m.numNormals = m.numVertices * 3;
 				m.normals = new float[m.numNormals];
 
 				if (scene->mMeshes[i]->HasNormals())
 				{
-					memcpy(m.normals, scene->mMeshes[i]->mNormals, sizeof(float) * m.numFaces * 3);
+					//memcpy(m.normals, scene->mMeshes[i]->mNormals, sizeof(float) * m.numNormals);
 				}
 
-				for (uint j = 0; j < m.numFaces; ++j)
+				for (uint j = 0; j < scene->mMeshes[i]->mNumFaces; ++j)
 				{
 					if (scene->mMeshes[i]->mFaces[j].mNumIndices != 3)
 					{
@@ -108,7 +108,7 @@ void ModuleImporter::loadFBX(const char* path, std::vector<Mesh>& vec)
 				}
 				glGenBuffers(1, (GLuint*)&m.idVertices);
 				glBindBuffer(GL_ARRAY_BUFFER, m.idVertices);
-				glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m.numVertices, m.vertices, GL_STATIC_DRAW);
+				glBufferData(GL_ARRAY_BUFFER, sizeof(float) * m.numVertices * 3, m.vertices, GL_STATIC_DRAW); //Care: mult numVertices per 3
 
 				glGenBuffers(1, (GLuint*)&m.idIndices);
 				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m.idIndices);

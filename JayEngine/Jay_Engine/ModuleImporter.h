@@ -14,8 +14,6 @@ struct Mesh
 	uint numIndices = 0;
 	float* vertices = NULL;
 
-	uint numFaces = 0;
-
 	uint numNormals = 0;
 	float* normals = NULL;
 };

@@ -81,7 +81,7 @@ update_status SceneTry::udate(float dt)
 
 update_status SceneTry::postUpdate(float dt)
 {
-	cubeWithTriVertices(texId);
+	///cubeWithTriVertices(texId);
 
 	//drawFromVerticesArray(vArray, 3, 108);
 
