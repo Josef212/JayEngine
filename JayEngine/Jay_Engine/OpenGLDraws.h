@@ -22,10 +22,11 @@ void cubeWithTriVertices(uint texId)
 {
 	//Draw a cube using triangles
 	glEnable(GL_TEXTURE_2D);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
 	glBindTexture(GL_TEXTURE_2D, texId);
 	glBegin(GL_TRIANGLES);
 
-	float s = 10.f / 2;
+	float s = 1.f / 2;
 
 	//----------------------- Front
 	glTexCoord2f(1.f, 1.f);

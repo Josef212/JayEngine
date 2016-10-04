@@ -45,7 +45,7 @@ bool ModuleImporter::start()
 
 update_status ModuleImporter::postUpdate(float dt)
 {	
-	drawMeshes(meshes);
+	//drawMeshes(meshes);
 
 	return UPDATE_CONTINUE;
 }
@@ -83,11 +83,19 @@ void ModuleImporter::loadFBX(const char* path, std::vector<Mesh>& vec)
 			memcpy(m.vertices, scene->mMeshes[i]->mVertices, sizeof(float)*m.numVertices * 3);
 			LOG("New mesh with %d vertices", m.numVertices);
 
-			if (scene->mMeshes[i]->mNumFaces * 3)
+			if (scene->mMeshes[i]->HasFaces())
 			{
 				m.numIndices = scene->mMeshes[i]->mNumFaces * 3;
 				m.indices = new uint[m.numIndices]; //Assume each face is a triangle
-				for (uint j = 0; j < scene->mMeshes[i]->mNumFaces; ++j)
+				m.numFaces = scene->mMeshes[i]->mNumFaces;
+				m.normals = new float[m.numNormals];
+
+				if (scene->mMeshes[i]->HasNormals())
+				{
+					memcpy(m.normals, scene->mMeshes[i]->mNormals, sizeof(float) * m.numFaces * 3);
+				}
+
+				for (uint j = 0; j < m.numFaces; ++j)
 				{
 					if (scene->mMeshes[i]->mFaces[j].mNumIndices != 3)
 					{

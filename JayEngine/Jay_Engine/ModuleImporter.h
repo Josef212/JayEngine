@@ -13,6 +13,11 @@ struct Mesh
 	uint idIndices = 0;
 	uint numIndices = 0;
 	float* vertices = NULL;
+
+	uint numFaces = 0;
+
+	uint numNormals = 0;
+	float* normals = NULL;
 };
 
 class ModuleImporter : public Module

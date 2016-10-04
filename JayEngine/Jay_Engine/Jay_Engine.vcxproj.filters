@@ -32,6 +32,9 @@
     <Filter Include="Core\3Party\Parson">
       <UniqueIdentifier>{d0c1f451-ac9a-4dbc-ab44-37eecdcf4d34}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core\Scenes">
+      <UniqueIdentifier>{7a676fa3-cb6a-4b46-b973-0763131fc471}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -117,6 +120,9 @@
     </ClCompile>
     <ClCompile Include="parson.c">
       <Filter>Core\3Party\Parson</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneTry.cpp">
+      <Filter>Core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -231,5 +237,6 @@
     <ClInclude Include="parson.h">
       <Filter>Core\3Party\Parson</Filter>
     </ClInclude>
+    <ClInclude Include="SceneTry.h" />
   </ItemGroup>
 </Project>

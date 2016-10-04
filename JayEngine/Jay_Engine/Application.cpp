@@ -12,6 +12,8 @@
 #include "ModuleEditor.h"
 #include "ModuleImporter.h"
 
+#include "SceneTry.h"
+
 Application::Application()
 {
 	info = new HrdInfo();
@@ -25,6 +27,8 @@ Application::Application()
 	//physics = new ModulePhysics3D();
 	editor = new ModuleEditor();
 	importer = new ModuleImporter();
+
+	sceneTry = new SceneTry();
 
 	// The order of calls is very important!
 	// Modules will Init() Start() and Update in this order
@@ -41,7 +45,7 @@ Application::Application()
 	addModule(importer);
 	
 	// Scenes
-
+	addModule(sceneTry);
 
 	// Renderer last!
 	addModule(renderer3D);

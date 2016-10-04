@@ -18,6 +18,8 @@ class ModuleEditor;
 class ModuleFileSystem;
 class ModuleImporter;
 
+class SceneTry;
+
 class HrdInfo;
 
 //#include "MathGeoLib\include\MathGeoLibFwd.h"
@@ -34,6 +36,8 @@ public:
 	ModulePhysics3D* physics = NULL;
 	ModuleEditor* editor = NULL;
 	ModuleImporter* importer = NULL;
+
+	SceneTry* sceneTry = NULL;
 
 	HrdInfo* info = NULL;
 
