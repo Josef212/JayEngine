@@ -145,6 +145,9 @@
     <ClCompile Include="Tranform.cpp">
       <Filter>Core\GameObjects\Components</Filter>
     </ClCompile>
+    <ClCompile Include="RandGen.cpp">
+      <Filter>Core\Tools</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.h">
@@ -275,6 +278,9 @@
     </ClInclude>
     <ClInclude Include="Tranform.h">
       <Filter>Core\GameObjects\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="RandGen.h">
+      <Filter>Core\Tools</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
