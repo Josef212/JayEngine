@@ -14,6 +14,9 @@
 ModuleEditor::ModuleEditor(bool startEnabled) : Module(startEnabled)
 {
 	LOG("Editor: Creation.");
+
+	name.assign("module_editor");
+
 	conf = new UI_Conf();
 	console = new UI_Console();
 

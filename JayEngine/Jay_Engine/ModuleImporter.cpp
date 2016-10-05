@@ -16,6 +16,7 @@
 
 ModuleImporter::ModuleImporter(bool startEnabled) : Module(startEnabled)
 {
+	name.assign("module_importer");
 }
 
 
@@ -45,7 +46,7 @@ bool ModuleImporter::start()
 
 update_status ModuleImporter::postUpdate(float dt)
 {	
-	drawMeshes(meshes);
+	//drawMeshes(meshes);
 
 	return UPDATE_CONTINUE;
 }
@@ -57,12 +58,12 @@ bool ModuleImporter::cleanUp()
 	meshes.clear();
 
 	//Stop log stream
-	aiDetachAllLogStreams();
+	//aiDetachAllLogStreams();
 
 	return ret;
 }
 
-void ModuleImporter::loadFBX(const char* path, std::vector<Mesh>& vec)
+void ModuleImporter::loadFBX(const char* path, std::vector<VertexInfo>& vec)
 {
 	if (!path)
 	{
@@ -77,7 +78,7 @@ void ModuleImporter::loadFBX(const char* path, std::vector<Mesh>& vec)
 		//Iterate all meshes in the scene
 		for (uint i = 0; i < scene->mNumMeshes; ++i)
 		{
-			Mesh m;
+			VertexInfo m;
 			m.numVertices = scene->mMeshes[i]->mNumVertices;
 			m.vertices = new float[m.numVertices * 3];
 			memcpy(m.vertices, scene->mMeshes[i]->mVertices, sizeof(float)*m.numVertices * 3);
@@ -130,11 +131,11 @@ void ModuleImporter::loadFBX(const char* path, std::vector<Mesh>& vec)
 	}
 }
 
-void ModuleImporter::drawMeshes(std::vector<Mesh> vec)
+void ModuleImporter::drawMeshes(std::vector<VertexInfo> vec)
 {
 	for (uint i = 0; i < vec.size(); ++i)
 	{
-		Mesh* m = &vec.at(i);
+		VertexInfo* m = &vec.at(i);
 
 		glEnableClientState(GL_VERTEX_ARRAY);
 		glEnableClientState(GL_NORMAL_ARRAY);

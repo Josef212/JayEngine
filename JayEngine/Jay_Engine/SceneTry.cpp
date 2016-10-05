@@ -42,7 +42,7 @@ bool SceneTry::start()
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * 6, i, GL_STATIC_DRAW);*/
 
 	//Create checker texture
-	const int CHECKERS_H = 64, CHECKERS_W = 64;
+	/*const int CHECKERS_H = 64, CHECKERS_W = 64;
 	GLubyte checkImage[CHECKERS_H][CHECKERS_W][4];
 	for (int i = 0; i < CHECKERS_H; i++)
 	{
@@ -64,7 +64,7 @@ bool SceneTry::start()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_W, CHECKERS_H, 0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_W, CHECKERS_H, 0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);*/
 
 	return true;
 }

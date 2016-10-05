@@ -18,6 +18,9 @@
 ModuleRenderer3D::ModuleRenderer3D(bool startEnabled) : Module(startEnabled)
 {
 	LOG("Renderer3D: Creation.");
+
+	name.assign("module_renderer3d");
+
 	vsync = VSYNC;
 }
 

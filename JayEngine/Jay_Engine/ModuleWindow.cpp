@@ -5,6 +5,9 @@
 ModuleWindow::ModuleWindow(bool startEnabled) : Module(startEnabled)
 {
 	LOG("Window: Creation.");
+
+	name.assign("module_window");
+
 	window = NULL;
 	screenSurface = NULL;
 }

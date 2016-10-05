@@ -4,7 +4,7 @@
 #include "Module.h"
 #include <vector>
 
-struct Mesh
+struct VertexInfo
 {
 	uint idVertices = 0;
 	uint numVertices = 0;
@@ -29,13 +29,13 @@ public:
 	bool start();
 	update_status postUpdate(float dt);
 	bool cleanUp();
-	void loadFBX(const char* path, std::vector<Mesh>& vec);
-	void drawMeshes(std::vector<Mesh> vec);
+	void loadFBX(const char* path, std::vector<VertexInfo>& vec);
+	void drawMeshes(std::vector<VertexInfo> vec);
 
 public:
 
 private:
-	std::vector<Mesh> meshes;
+	std::vector<VertexInfo> meshes;
 };
 
 #endif // !__MODULEIMPORTER_H__

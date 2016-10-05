@@ -8,6 +8,7 @@
 ModuleAudio::ModuleAudio(bool start_enabled) : Module(start_enabled)//, music(NULL)
 {
 	LOG("Audio: Creation.");
+	name.assign("module_audio");
 }
 
 // Destructor

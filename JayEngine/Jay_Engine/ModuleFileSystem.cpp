@@ -9,7 +9,7 @@
 
 ModuleFileSystem::ModuleFileSystem(bool startEnabled) : Module(startEnabled)
 {
-	name.assign("file_system");
+	name.assign("module_filesystem");
 
 	char* basePath = SDL_GetBasePath();
 	PHYSFS_init(basePath);

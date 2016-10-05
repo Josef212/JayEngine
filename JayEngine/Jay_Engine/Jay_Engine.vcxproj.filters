@@ -35,6 +35,12 @@
     <Filter Include="Core\Scenes">
       <UniqueIdentifier>{7a676fa3-cb6a-4b46-b973-0763131fc471}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core\GameObjects">
+      <UniqueIdentifier>{a4d7cfa8-4498-4204-867f-a9acae681882}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\GameObjects\Components">
+      <UniqueIdentifier>{83993b50-fe3d-429a-b80b-5574287b5911}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -122,7 +128,22 @@
       <Filter>Core\3Party\Parson</Filter>
     </ClCompile>
     <ClCompile Include="SceneTry.cpp">
-      <Filter>Core</Filter>
+      <Filter>Core\Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Core\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="Component.cpp">
+      <Filter>Core\GameObjects\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Mesh.cpp">
+      <Filter>Core\GameObjects\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Material.cpp">
+      <Filter>Core\GameObjects\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Tranform.cpp">
+      <Filter>Core\GameObjects\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -237,6 +258,23 @@
     <ClInclude Include="parson.h">
       <Filter>Core\3Party\Parson</Filter>
     </ClInclude>
-    <ClInclude Include="SceneTry.h" />
+    <ClInclude Include="SceneTry.h">
+      <Filter>Core\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Core\GameObjects</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>Core\GameObjects\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Mesh.h">
+      <Filter>Core\GameObjects\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>Core\GameObjects\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Tranform.h">
+      <Filter>Core\GameObjects\Components</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -7,6 +7,9 @@
 ModuleCamera3D::ModuleCamera3D(bool startEnabled) : Module(startEnabled)
 {
 	LOG("Camera3D: Creation.");
+
+	name.assign("module_camera3d");
+
 	calculateViewMatrix();
 
 	X = vec3(1.0f, 0.0f, 0.0f);
