@@ -8,7 +8,7 @@
 
 ModuleInput::ModuleInput(bool startEnabled) : Module(startEnabled)
 {
-	LOG("Input: Creation.");
+	_LOG("Input: Creation.");
 	
 	name.assign("module_input");
 
@@ -20,15 +20,15 @@ ModuleInput::ModuleInput(bool startEnabled) : Module(startEnabled)
 // Destructor
 ModuleInput::~ModuleInput()
 {
-	LOG("Input: Destroying.");
+	_LOG("Input: Destroying.");
 	RELEASE_ARRAY(keyboard);
 }
 
 // Called before render is available
 bool ModuleInput::init()
 {
-	LOG("Input: Init.");
-	LOG("Init SDL input event system");
+	_LOG("Input: Init.");
+	_LOG("Init SDL input event system");
 	bool ret = true;
 
 	SDL_Init(0);
@@ -37,7 +37,7 @@ bool ModuleInput::init()
 
 	if(SDL_InitSubSystem(SDL_INIT_EVENTS) < 0)
 	{
-		LOG("SDL_EVENTS could not initialize! SDL_Error: %s\n", SDL_GetError());
+		_LOG("SDL_EVENTS could not initialize! SDL_Error: %s\n", SDL_GetError());
 		ret = false;
 	}
 
@@ -134,8 +134,8 @@ update_status ModuleInput::preUpdate(float dt)
 // Called before quitting
 bool ModuleInput::cleanUp()
 {
-	LOG("Input: CleanUp.");
-	LOG("Quitting SDL input event subsystem");
+	_LOG("Input: CleanUp.");
+	_LOG("Quitting SDL input event subsystem");
 	SDL_QuitSubSystem(SDL_INIT_EVENTS);
 	return true;
 }

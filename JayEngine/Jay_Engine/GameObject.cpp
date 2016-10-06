@@ -36,7 +36,7 @@ Component* GameObject::addComponent(ComponentType type)
 	switch (type)
 	{
 		case UNKNOWN:
-			LOG("Error while creating component, no component type.");
+			_LOG("Error while creating component, no component type.");
 		break;
 
 		case TRANSFORMATION:

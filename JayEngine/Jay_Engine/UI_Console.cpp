@@ -22,7 +22,7 @@ void UI_Console::draw()
 			if (focus)
 				ImGui::SetKeyboardFocusHere();
 			//TODO: add console and its functionality
-			LOG(input);
+			_LOG(input);
 			*input = '\0';
 		}
 		

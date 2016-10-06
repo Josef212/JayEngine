@@ -19,7 +19,7 @@ Application* app = NULL;
 
 int main(int argc, char ** argv)
 {
-	LOG("Starting game engine %s...", TITLE);
+	_LOG("Starting game engine %s...", TITLE);
 
 	int mainReturn = EXIT_FAILURE;
 	main_states state = MAIN_CREATION;
@@ -30,23 +30,23 @@ int main(int argc, char ** argv)
 		{
 		case MAIN_CREATION:
 
-			LOG("-------------- Application Creation --------------");
+			_LOG("-------------- Application Creation --------------");
 			app = new Application();
 			state = MAIN_START;
 			break;
 
 		case MAIN_START:
 
-			LOG("-------------- Application Init --------------");
+			_LOG("-------------- Application Init --------------");
 			if (app->init() == false)
 			{
-				LOG("Application Init exits with ERROR");
+				_LOG("Application Init exits with ERROR");
 				state = MAIN_EXIT;
 			}
 			else
 			{
 				state = MAIN_UPDATE;
-				LOG("-------------- Application Update --------------");
+				_LOG("-------------- Application Update --------------");
 			}
 
 			break;
@@ -57,7 +57,7 @@ int main(int argc, char ** argv)
 
 			if (updateReturn == UPDATE_ERROR)
 			{
-				LOG("Application Update exits with ERROR");
+				_LOG("Application Update exits with ERROR");
 				state = MAIN_EXIT;
 			}
 
@@ -68,10 +68,10 @@ int main(int argc, char ** argv)
 
 		case MAIN_FINISH:
 
-			LOG("-------------- Application CleanUp --------------");
+			_LOG("-------------- Application CleanUp --------------");
 			if (app->cleanUp() == false)
 			{
-				LOG("Application CleanUp exits with ERROR");
+				_LOG("Application CleanUp exits with ERROR");
 			}
 			else
 				mainReturn = EXIT_SUCCESS;
@@ -83,7 +83,7 @@ int main(int argc, char ** argv)
 		}
 	}
 
-	LOG("Exiting game engine %s...\n", TITLE);
+	_LOG("Exiting game engine %s...\n", TITLE);
 
 	delete app;
 

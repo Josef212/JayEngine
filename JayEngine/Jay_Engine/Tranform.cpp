@@ -41,37 +41,37 @@ void Tranform::cleanUp()
 
 void Tranform::setPosition(float x, float y, float z)
 {
-	position.Set(x, y, z);
+	//position.Set(x, y, z);
 }
 
 const void Tranform::getPosition(float& x, float& y, float& z)const
 {
-	x = position.x;
+	/*x = position.x;
 	y = position.y;
-	z = position.z;
+	z = position.z;*/
 }
 
 void Tranform::setScale(float x, float y, float z)
 {
-	scale.Set(x, y, z);
+	//scale.Set(x, y, z);
 }
 
 const void Tranform::getScale(float& x, float& y, float& z)const
 {
-	x = scale.x;
+	/*x = scale.x;
 	y = scale.y;
-	z = scale.z;
+	z = scale.z;*/
 }
 
 void Tranform::setRotation(float x, float y, float z, float w)
 {
-	rotation.Set(x, y, z, w);
+	//rotation.Set(x, y, z, w);
 }
 
 const void Tranform::getRotation(float& x, float& y, float& z, float& w)const
 {
-	x = rotation.x;
+	/*x = rotation.x;
 	y = rotation.y;
 	z = rotation.z;
-	w = rotation.w;
+	w = rotation.w;*/
 }

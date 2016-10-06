@@ -17,7 +17,7 @@
 Application::Application()
 {
 	info = new HrdInfo();
-	LOG("Application Constructor --------------");
+	_LOG("Application Constructor --------------");
 	fs = new ModuleFileSystem();
 	window = new ModuleWindow();
 	input = new ModuleInput();
@@ -53,7 +53,7 @@ Application::Application()
 
 Application::~Application()
 {
-	LOG("Application Destroctor --------------");
+	_LOG("Application Destroctor --------------");
 	for(std::list<Module*>::reverse_iterator it = modules.rbegin(); it!=modules.rbegin(); ++it)
 	{
 		RELEASE(*it);
@@ -69,14 +69,14 @@ bool Application::init()
 
 	// Call Init() in all modules
 	std::list<Module*>::iterator it = modules.begin();
-	LOG("Application Init --------------");
+	_LOG("Application Init --------------");
 	for(; it != modules.end() && ret == true; ++it)
 	{
 		ret = (*it)->init();
 	}
 
 	// After all Init calls we call Start() in all modules
-	LOG("Application Start --------------");
+	_LOG("Application Start --------------");
 	it = modules.begin();
 
 	for (; it != modules.end() && ret == true; ++it)
@@ -171,7 +171,7 @@ bool Application::cleanUp()
 {
 	bool ret = true;
 
-	LOG("Application CleaUp --------------");
+	_LOG("Application CleaUp --------------");
 	for (std::list<Module*>::reverse_iterator it = modules.rbegin(); it != modules.rbegin(); ++it)
 	{
 		ret = (*it)->cleanUp();

@@ -32,31 +32,31 @@ void HrdInfo::setInfo()
 
 void HrdInfo::logHrdInfo()
 {
-	LOG("---Hardware information:  ---");
-	LOG("CPU cores: %d.", info.cpuCores);
-	LOG("CPU cache size: %dKb.", info.cpuCacheSize);
-	LOG(" System RAM: %dMb.", info.ram);
-	LOG("Caps:");
+	_LOG("---Hardware information:  ---");
+	_LOG("CPU cores: %d.", info.cpuCores);
+	_LOG("CPU cache size: %dKb.", info.cpuCacheSize);
+	_LOG(" System RAM: %dMb.", info.ram);
+	_LOG("Caps:");
 	if (info.hasAVX)
-		LOG("HasAVX");
+		_LOG("HasAVX");
 	if (info.hasAltiVec)
-		LOG("HasAltiVec");
+		_LOG("HasAltiVec");
 	if (info.hasMMX)
-		LOG("HasMMX");
+		_LOG("HasMMX");
 	if (info.hasRDTSC)
-		LOG("HasRDTSC");
+		_LOG("HasRDTSC");
 	if (info.hasSSE)
-		LOG("HasSSE");
+		_LOG("HasSSE");
 	if (info.hasSSE2)
-		LOG("HasSSE2");
+		_LOG("HasSSE2");
 	if (info.hasSSE3)
-		LOG("HasSSE3");
+		_LOG("HasSSE3");
 	if (info.hasSSE41)
-		LOG("HasSSE41");
+		_LOG("HasSSE41");
 	if (info.hasSSE42)
-		LOG("HasSSE42");
+		_LOG("HasSSE42");
 	if (info.has3DNow)
-		LOG("Has3DNow");
+		_LOG("Has3DNow");
 }
 
 void HrdInfo::setCaps()

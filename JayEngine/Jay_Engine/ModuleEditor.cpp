@@ -13,7 +13,7 @@
 
 ModuleEditor::ModuleEditor(bool startEnabled) : Module(startEnabled)
 {
-	LOG("Editor: Creation.");
+	_LOG("Editor: Creation.");
 
 	name.assign("module_editor");
 
@@ -27,20 +27,20 @@ ModuleEditor::ModuleEditor(bool startEnabled) : Module(startEnabled)
 
 ModuleEditor::~ModuleEditor()
 {
-	LOG("Editor: Destroying.");
+	_LOG("Editor: Destroying.");
 }
 
 
 bool ModuleEditor::init()
 {
-	LOG("Editor: Init.");
+	_LOG("Editor: Init.");
 	ImGui_ImplSdlGL3_Init(app->window->getWindow());
 	return true;
 }
 
 bool ModuleEditor::start()
 {
-	LOG("Editor: Start.");
+	_LOG("Editor: Start.");
 	return true;
 }
 
@@ -121,7 +121,7 @@ update_status ModuleEditor::update(float dt)
 
 bool ModuleEditor::cleanUp()
 {
-	LOG("Editor: CleanUp.");
+	_LOG("Editor: CleanUp.");
 
 	std::list<UI_Comp*>::iterator it = uiList.begin();
 	for (; it != uiList.end(); ++it)

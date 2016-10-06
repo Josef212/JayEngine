@@ -6,7 +6,7 @@
 
 ModuleCamera3D::ModuleCamera3D(bool startEnabled) : Module(startEnabled)
 {
-	LOG("Camera3D: Creation.");
+	_LOG("Camera3D: Creation.");
 
 	name.assign("module_camera3d");
 
@@ -22,13 +22,13 @@ ModuleCamera3D::ModuleCamera3D(bool startEnabled) : Module(startEnabled)
 
 ModuleCamera3D::~ModuleCamera3D()
 {
-	LOG("Camera3D: Destroying.");
+	_LOG("Camera3D: Destroying.");
 }
 
 // -----------------------------------------------------------------
 bool ModuleCamera3D::start()
 {
-	LOG("Camera3D: Start.");
+	_LOG("Camera3D: Start.");
 
 	return true;
 }
@@ -36,7 +36,7 @@ bool ModuleCamera3D::start()
 // -----------------------------------------------------------------
 bool ModuleCamera3D::cleanUp()
 {
-	LOG("Camera3D: CleanUp.");
+	_LOG("Camera3D: CleanUp.");
 
 	return true;
 }

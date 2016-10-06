@@ -67,7 +67,7 @@ void ModuleImporter::loadFBX(const char* path, std::vector<VertexInfo>& vec)
 {
 	if (!path)
 	{
-		LOG("Error while loading fbx: path is NULL.");
+		_LOG("Error while loading fbx: path is NULL.");
 		return; //If path is NULL dont do nothing
 	}
 
@@ -82,7 +82,7 @@ void ModuleImporter::loadFBX(const char* path, std::vector<VertexInfo>& vec)
 			m.numVertices = scene->mMeshes[i]->mNumVertices;
 			m.vertices = new float[m.numVertices * 3];
 			memcpy(m.vertices, scene->mMeshes[i]->mVertices, sizeof(float)*m.numVertices * 3);
-			LOG("New mesh with %d vertices", m.numVertices);
+			_LOG("New mesh with %d vertices", m.numVertices);
 
 			if (scene->mMeshes[i]->HasFaces())
 			{
@@ -100,7 +100,7 @@ void ModuleImporter::loadFBX(const char* path, std::vector<VertexInfo>& vec)
 				{
 					if (scene->mMeshes[i]->mFaces[j].mNumIndices != 3)
 					{
-						LOG("WARNING, geometry face with != 3 indices!");
+						_LOG("WARNING, geometry face with != 3 indices!");
 					}
 					else
 					{
@@ -127,7 +127,7 @@ void ModuleImporter::loadFBX(const char* path, std::vector<VertexInfo>& vec)
 	}
 	else
 	{
-		LOG("Error loading scene %s", path);
+		_LOG("Error loading scene %s", path);
 	}
 }
 
