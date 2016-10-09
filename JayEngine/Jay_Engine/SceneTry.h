@@ -13,7 +13,7 @@ public:
 	bool init();
 	bool start();
 	update_status preUpdate(float dt);
-	update_status udate(float dt);
+	update_status update(float dt);
 	update_status postUpdate(float dt);
 	bool cleanUp();
 

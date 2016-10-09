@@ -52,16 +52,13 @@ void UI_Inspector::drawTransformation()
 	float pX, pY, pZ, sX, sY, sZ, rX, rY, rZ, rW;
 	
 	Tranform* comp = (Tranform*)selectedGameObject->findComponent(TRANSFORMATION);
-
+	static float* pos = comp->getPosition();
+	static float* scale = comp->getScale();
+	static float* rot = comp->getRotation();
 	//Position
-	if (ImGui::InputFloat3("Position:", (float*)&comp->position));
-
-	ImGui::Separator();
-
+	if (ImGui::InputFloat3("Position:", pos)) comp->setPosition(pos);
 	//Scale
-
-	ImGui::Separator();
-
+	if (ImGui::InputFloat3("Scale:", scale)) comp->setScale(scale);
 	//Rotation
 }
 

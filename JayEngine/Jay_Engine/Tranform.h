@@ -18,13 +18,19 @@ public:
 	void cleanUp();
 
 	void setPosition(float x, float y, float z);
+	void setPosition(float* pos);
 	const void getPosition(float& x, float& y, float& z)const;
+	float* getPosition()const;
 
 	void setScale(float x, float y, float z);
+	void setScale(float* scl);
 	const void getScale(float& x, float& y, float& z)const;
+	float* getScale()const;
 
 	void setRotation(float x, float y, float z, float w);
+	void setRotation(float* rot);
 	const void getRotation(float& x, float& y, float& z, float& w)const;
+	float* getRotation()const;
 
 public:
 	float3 position;

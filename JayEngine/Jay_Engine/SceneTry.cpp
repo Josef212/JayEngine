@@ -85,8 +85,11 @@ update_status SceneTry::preUpdate(float dt)
 	return UPDATE_CONTINUE;
 }
 
-update_status SceneTry::udate(float dt)
+update_status SceneTry::update(float dt)
 {
+	if (gO)
+		gO->update(dt);
+
 	return UPDATE_CONTINUE;
 }
 
