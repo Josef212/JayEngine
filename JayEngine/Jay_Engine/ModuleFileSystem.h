@@ -1,4 +1,4 @@
-#ifndef __MODULEFILESYSTEM_H__
+/*#ifndef __MODULEFILESYSTEM_H__
 #define __MODULEFILESYSTEM_H__
 
 #include "Module.h"
@@ -29,4 +29,4 @@ public:
 	unsigned int save(const char* file, const char* buffer, unsigned int size)const;
 };
 
-#endif // !__MODULEFILESYSTEM_H__
+#endif // !__MODULEFILESYSTEM_H__*/
