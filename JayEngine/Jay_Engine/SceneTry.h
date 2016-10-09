@@ -2,6 +2,8 @@
 
 #include "Module.h"
 
+class GameObject;
+
 class SceneTry : public Module
 {
 public:
@@ -15,9 +17,13 @@ public:
 	update_status postUpdate(float dt);
 	bool cleanUp();
 
+	GameObject* createGameObject();
+
 	//TMP
 	/*uint vArray = 0;
 	uint verticesId = 0, indicesId = 0;*/
 	uint texId = 0;
+	
+	GameObject* gO = NULL;
 };
 

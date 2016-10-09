@@ -13,7 +13,7 @@ class Material;
 class GameObject
 {
 public:
-	GameObject();
+	GameObject(GameObject* parent);
 	virtual ~GameObject();
 
 	void init();
@@ -22,13 +22,16 @@ public:
 
 	Component* addComponent(ComponentType type);
 	bool removeComponent(Component* comp);
-	std::vector<Component*> findComponent(ComponentType type);
+	//std::vector<Component*> findComponent(ComponentType type);
+	Component* findComponent(ComponentType type);
 
+	//const std::vector<Component*> getComponents()const;
+
+	std::vector<Component*> components;
 private:
 	std::string name;
 
 	GameObject* parent = NULL;
-	std::vector<Component*> components;
 	std::vector<GameObject*> childrens;
 };
 

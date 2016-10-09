@@ -5,8 +5,13 @@
 #include "Material.h"
 
 
-GameObject::GameObject()
+GameObject::GameObject(GameObject* parent) : parent(parent)
 {
+	name.assign("Game Object");
+	init();
+	addComponent(TRANSFORMATION);
+	//TMP
+	_LOG("GameObject created.");
 }
 
 
@@ -16,17 +21,30 @@ GameObject::~GameObject()
 
 void GameObject::init()
 {
-
 }
 
 void GameObject::update(float dt)
 {
-
+	for (uint i = 0; i < childrens.size(); ++i)
+	{
+		childrens[i]->update(dt);
+	}
+	for (uint j = 0; j < components.size(); ++j)
+	{
+		components[j]->update(dt);
+	}
 }
 
 void GameObject::cleanUp()
 {
-
+	for (uint i = 0; i < childrens.size(); ++i)
+	{
+		childrens[i]->cleanUp();
+	}
+	for (uint i = 0; i < components.size(); ++i)
+	{
+		components[i]->cleanUp();
+	}
 }
 
 Component* GameObject::addComponent(ComponentType type)
@@ -58,12 +76,18 @@ Component* GameObject::addComponent(ComponentType type)
 		break;
 	}
 
+	if (ret)
+	{
+		components.push_back(ret);
+		ret->init();
+	}
+
 	return ret;
 }
 
 bool GameObject::removeComponent(Component* comp)
 {
-	bool ret = true;
+	bool ret = false;
 
 	if (comp)
 	{
@@ -72,10 +96,15 @@ bool GameObject::removeComponent(Component* comp)
 		{
 			if (components[pos] == comp)
 			{
+				ret = true;
 				break;
 			}
 		}
-		components.erase(components.begin() + pos);
+		if (ret)
+		{
+			components[pos]->cleanUp();
+			components.erase(components.begin() + pos);
+		}
 	}
 	else
 		ret = false;
@@ -83,14 +112,21 @@ bool GameObject::removeComponent(Component* comp)
 	return ret;
 }
 
-std::vector<Component*> GameObject::findComponent(ComponentType type)
+Component* GameObject::findComponent(ComponentType type)
 {
-	std::vector<Component*> ret;
+	Component* ret = NULL;
 
 	for (uint i = 0; i < components.size(); ++i)
 	{
-		ret.push_back(components[i]);
+		return components[i];
 	}
 
 	return ret;
 }
+
+//std::vector<Component*> findComponent(ComponentType type);
+
+/*const std::vector<Component*> GameObject::getComponents()const
+{
+	return components;
+}*/

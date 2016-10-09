@@ -5,6 +5,11 @@
 Tranform::Tranform(GameObject* gObj) : Component(gObj)
 {
 	type = TRANSFORMATION;
+	position.Set(0.f, 0.f, 0.f);
+	scale.Set(1.f, 1.f, 1.f);
+	rotation.Set(0.f, 0.f, 0.f, 0.f);
+	//TMP
+	_LOG("Transform created.");
 }
 
 

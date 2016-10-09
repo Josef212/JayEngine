@@ -1,6 +1,7 @@
 #include "Application.h"
 
 #include "HrdInfo.h"
+#include "RandGen.h"
 #include "Module.h"
 #include "ModuleFileSystem.h"
 #include "ModuleWindow.h"
@@ -16,8 +17,11 @@
 
 Application::Application()
 {
-	info = new HrdInfo();
 	_LOG("Application Constructor --------------");
+
+	info = new HrdInfo();
+	random = new RandGen();
+
 	fs = new ModuleFileSystem();
 	window = new ModuleWindow();
 	input = new ModuleInput();
@@ -29,10 +33,6 @@ Application::Application()
 	importer = new ModuleImporter();
 
 	sceneTry = new SceneTry();
-
-	// The order of calls is very important!
-	// Modules will Init() Start() and Update in this order
-	// They will CleanUp() in reverse order
 
 	// Main Modules
 	addModule(fs);
@@ -47,7 +47,7 @@ Application::Application()
 	// Scenes
 	addModule(sceneTry);
 
-	// Renderer last!
+	// Renderer last
 	addModule(renderer3D);
 }
 

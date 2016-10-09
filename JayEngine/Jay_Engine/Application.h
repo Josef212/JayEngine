@@ -21,8 +21,7 @@ class ModuleImporter;
 class SceneTry;
 
 class HrdInfo;
-
-//#include "MathGeoLib\include\MathGeoLibFwd.h"
+class RandGen;
 
 class Application
 {
@@ -40,6 +39,7 @@ public:
 	SceneTry* sceneTry = NULL;
 
 	HrdInfo* info = NULL;
+	RandGen* random = NULL;
 
 	bool debug = false;
 	bool quit = false;

@@ -6,9 +6,11 @@
 #include "UI_Comp.h"
 #include "UI_Conf.h"
 #include "UI_Console.h"
+#include "UI_Hierarchy.h"
+#include "UI_Inspector.h"
 
 #include "ImGui/imgui.h"
-#include "ImGui\imgui_impl_sdl_gl3.h"
+#include "ImGui/imgui_impl_sdl_gl3.h"
 
 
 ModuleEditor::ModuleEditor(bool startEnabled) : Module(startEnabled)
@@ -19,9 +21,14 @@ ModuleEditor::ModuleEditor(bool startEnabled) : Module(startEnabled)
 
 	conf = new UI_Conf();
 	console = new UI_Console();
+	hieracy = new UI_Hierarchy();
+	inspector = new UI_Inspector();
+
 
 	uiList.push_back(conf);
 	uiList.push_back(console);
+	uiList.push_back(hieracy);
+	uiList.push_back(inspector);
 }
 
 
@@ -69,6 +76,7 @@ update_status ModuleEditor::update(float dt)
 		{
 			if (ImGui::MenuItem("Console")) console->swapActive();
 			if (ImGui::MenuItem("Configuration")) conf->swapActive();
+			if (ImGui::MenuItem("Inspector")) inspector->swapActive();
 			ImGui::EndMenu();
 		}
 

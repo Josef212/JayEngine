@@ -190,6 +190,8 @@
     <ClCompile Include="UI_Comp.cpp" />
     <ClCompile Include="UI_Conf.cpp" />
     <ClCompile Include="UI_Console.cpp" />
+    <ClCompile Include="UI_Hierarchy.cpp" />
+    <ClCompile Include="UI_Inspector.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
@@ -296,6 +298,8 @@
     <ClInclude Include="UI_Comp.h" />
     <ClInclude Include="UI_Conf.h" />
     <ClInclude Include="UI_Console.h" />
+    <ClInclude Include="UI_Hierarchy.h" />
+    <ClInclude Include="UI_Inspector.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\include\Geometry\KDTree.inl" />

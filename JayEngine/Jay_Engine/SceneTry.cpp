@@ -1,6 +1,11 @@
 #include "Application.h"
 #include "Globals.h"
 #include "SceneTry.h"
+#include "GameObject.h"
+#include "Component.h"
+#include "ModuleInput.h"
+#include "UI_Inspector.h"
+#include "ModuleEditor.h"
 
 #include "OpenGLDraws.h"
 
@@ -71,6 +76,12 @@ bool SceneTry::start()
 
 update_status SceneTry::preUpdate(float dt)
 {
+	if (app->input->getKey(SDL_SCANCODE_C) == KEY_DOWN)
+	{
+		gO = createGameObject();
+		app->editor->inspector->selectGameObject(gO);
+	}
+
 	return UPDATE_CONTINUE;
 }
 
@@ -109,4 +120,13 @@ update_status SceneTry::postUpdate(float dt)
 bool SceneTry::cleanUp()
 {
 	return true;
+}
+
+GameObject* SceneTry::createGameObject()
+{
+	GameObject* ret = NULL;
+
+	ret = new GameObject(NULL);
+
+	return ret;
 }

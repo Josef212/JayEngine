@@ -262,6 +262,12 @@
     <ClCompile Include="MathGeoLib\include\Time\Clock.cpp">
       <Filter>Core\Math\MathGeoLib\Time</Filter>
     </ClCompile>
+    <ClCompile Include="UI_Inspector.cpp">
+      <Filter>Core\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_Hierarchy.cpp">
+      <Filter>Core\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.h">
@@ -575,6 +581,12 @@
     </ClInclude>
     <ClInclude Include="MathGeoLib\include\MathGeoLibFwd.h">
       <Filter>Core\Math\MathGeoLib</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Inspector.h">
+      <Filter>Core\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Hierarchy.h">
+      <Filter>Core\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -7,6 +7,8 @@
 class UI_Comp;
 class UI_Conf;
 class UI_Console;
+class UI_Hierarchy;
+class UI_Inspector;
 
 class ModuleEditor : public Module
 {
@@ -31,6 +33,8 @@ public:
 
 	UI_Conf* conf = NULL;
 	UI_Console* console = NULL;
+	UI_Hierarchy* hieracy = NULL;
+	UI_Inspector* inspector = NULL;
 
 private:
 	bool showImGuiDemo = false;

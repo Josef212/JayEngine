@@ -97,7 +97,7 @@ void UI_Conf::draw()
 		{
 			ImGui::Text("Base path: ");
 			ImGui::SameLine();
-			//ImGui::TextColored(ImVec4(1, 1, 0, 1), app->fs->getBasePath());
+			ImGui::TextColored(ImVec4(1, 1, 0, 1), app->fs->getBasePath());
 		}
 
 		if (ImGui::CollapsingHeader("Input"))
