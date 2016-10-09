@@ -27,9 +27,9 @@ public:
 	const void getRotation(float& x, float& y, float& z, float& w)const;
 
 public:
-	/*float3 position;
+	float3 position;
 	float3 scale;
-	Quat rotation;*/
+	Quat rotation;
 };
 
 #endif // !__TRANSFORMATION_H__

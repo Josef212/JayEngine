@@ -18,7 +18,7 @@ Application::Application()
 {
 	info = new HrdInfo();
 	_LOG("Application Constructor --------------");
-	//fs = new ModuleFileSystem();
+	fs = new ModuleFileSystem();
 	window = new ModuleWindow();
 	input = new ModuleInput();
 	audio = new ModuleAudio();
@@ -35,7 +35,7 @@ Application::Application()
 	// They will CleanUp() in reverse order
 
 	// Main Modules
-	//addModule(fs);
+	addModule(fs);
 	addModule(window);
 	addModule(camera);
 	addModule(input);

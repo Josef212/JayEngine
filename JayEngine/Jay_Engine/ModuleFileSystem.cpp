@@ -1,4 +1,4 @@
-/*#include "Application.h"
+#include "Application.h"
 #include "Globals.h"
 #include "ModuleFileSystem.h"
 
@@ -30,7 +30,7 @@ bool ModuleFileSystem::awake()
 	bool ret = true;
 
 	/*for (pugi::xml_node path = config.child("path"); path; path = path.next_sibling("path"))
-		addPath(path.child_value());
+		addPath(path.child_value());*/
 
 	char* writePath = SDL_GetPrefPath(app->getOrganitzation(), app->getTitle());
 
@@ -163,4 +163,4 @@ unsigned int ModuleFileSystem::save(const char* file, const char* buffer, unsign
 const char* ModuleFileSystem::getBasePath()
 {
 	return PHYSFS_getBaseDir();
-}*/
+}
