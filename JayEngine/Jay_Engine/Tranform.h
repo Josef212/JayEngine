@@ -28,14 +28,15 @@ public:
 	float* getScale()const;
 
 	void setRotation(float x, float y, float z, float w);
+	void setRotation(float x, float y, float z);
 	void setRotation(float* rot);
 	const void getRotation(float& x, float& y, float& z, float& w)const;
-	float* getRotation()const;
+	float* getRotation();
 
 public:
-	float3 position;
-	float3 scale;
-	Quat rotation;
+	float3 position = float3::zero;
+	float3 scale = float3::zero;
+	Quat rotation = Quat::identity;
 };
 
 #endif // !__TRANSFORMATION_H__

@@ -56,10 +56,11 @@ void UI_Inspector::drawTransformation()
 	static float* scale = comp->getScale();
 	static float* rot = comp->getRotation();
 	//Position
-	if (ImGui::InputFloat3("Position:", pos)) comp->setPosition(pos);
+	if (ImGui::DragFloat3("Position:", pos)) comp->setPosition(pos);
 	//Scale
-	if (ImGui::InputFloat3("Scale:", scale)) comp->setScale(scale);
+	if (ImGui::DragFloat3("Scale:", scale)) comp->setScale(scale);
 	//Rotation
+	if (ImGui::DragFloat3("Rotation:", rot)) comp->setRotation(rot);
 }
 
 void UI_Inspector::drawMesh()
