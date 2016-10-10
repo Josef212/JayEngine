@@ -60,6 +60,7 @@ void UI_Inspector::drawTransformation()
 	//Scale
 	if (ImGui::DragFloat3("Scale:", scale)) comp->setScale(scale);
 	//Rotation
+	_LOG("%f, %f, %f", rot[0], rot[1], rot[2]);
 	if (ImGui::DragFloat3("Rotation:", rot)) comp->setRotation(rot);
 }
 

@@ -94,11 +94,11 @@ void Tranform::setRotation(float x, float y, float z, float w)
 
 void Tranform::setRotation(float* rot)
 {
-	while (rot[0] < 360)
+	while (rot[0] < 0)
 		rot[0] += 360;
-	while (rot[1] < 360)
+	while (rot[1] < 0)
 		rot[1] += 360;
-	while (rot[2] < 360)
+	while (rot[2] < 0)
 		rot[2] += 360;
 
 	while (rot[0] > 360)
