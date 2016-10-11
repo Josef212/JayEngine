@@ -30,6 +30,7 @@ public:
 	std::vector<Component*> components;
 private:
 	std::string name;
+	int nextCompId = 0;
 
 	GameObject* parent = NULL;
 	std::vector<GameObject*> childrens;

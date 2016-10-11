@@ -7,7 +7,7 @@
 class Tranform : public Component
 {
 public:
-	Tranform(GameObject* gObj);
+	Tranform(GameObject* gObj, int id);
 	virtual ~Tranform();
 
 	void enable();

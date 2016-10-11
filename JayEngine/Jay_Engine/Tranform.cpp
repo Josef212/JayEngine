@@ -2,12 +2,13 @@
 
 
 
-Tranform::Tranform(GameObject* gObj) : Component(gObj)
+Tranform::Tranform(GameObject* gObj, int id) : Component(gObj, id)
 {
 	type = TRANSFORMATION;
 	position.Set(0.f, 0.f, 0.f);
 	scale.Set(1.f, 1.f, 1.f);
 	rotation.Set(0.f, 0.f, 0.f, 0.f);
+	name.assign("Transform");
 	//TMP
 	_LOG("Transform created.");
 }

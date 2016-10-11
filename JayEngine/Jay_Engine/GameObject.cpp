@@ -10,8 +10,6 @@ GameObject::GameObject(GameObject* parent) : parent(parent)
 	name.assign("Game Object");
 	init();
 	addComponent(TRANSFORMATION);
-	//TMP
-	_LOG("GameObject created.");
 }
 
 
@@ -59,25 +57,26 @@ Component* GameObject::addComponent(ComponentType type)
 
 		case TRANSFORMATION:
 		{
-			ret = new Tranform(this);
+			ret = new Tranform(this, nextCompId);
 		}
 		break;
 
 		case MESH:
 		{
-			ret = new Mesh(this);
+			ret = new Mesh(this, nextCompId);
 		}
 		break;
 
 		case MATERIAL:
 		{
-			ret = new Material(this);
+			ret = new Material(this, nextCompId);
 		}
 		break;
 	}
 
 	if (ret)
 	{
+		++nextCompId;
 		components.push_back(ret);
 		ret->init();
 	}

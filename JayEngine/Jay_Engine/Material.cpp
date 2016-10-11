@@ -2,9 +2,10 @@
 
 
 
-Material::Material(GameObject* gObj) : Component(gObj)
+Material::Material(GameObject* gObj, int id) : Component(gObj, id)
 {
 	type = MATERIAL;
+	name.assign("Material");
 }
 
 

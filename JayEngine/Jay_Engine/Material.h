@@ -6,7 +6,7 @@
 class Material : public Component
 {
 public:
-	Material(GameObject* gObj);
+	Material(GameObject* gObj, int id);
 	virtual ~Material();
 
 	void enable();

@@ -49,9 +49,16 @@ void UI_Inspector::draw()
 
 void UI_Inspector::drawTransformation()
 {
-	float pX, pY, pZ, sX, sY, sZ, rX, rY, rZ, rW;
-	
 	Tranform* comp = (Tranform*)selectedGameObject->findComponent(TRANSFORMATION);
+	
+	static char name[60];
+	strcpy_s(name, 60, comp->getName());
+	//Name
+	if (ImGui::InputText("Name:", name, 60)) comp->setName(name);
+	//Active
+	bool active = comp->isEnable();
+	if (ImGui::Checkbox("Active", &active)) comp->switchActive();
+
 	static float* pos = comp->getPosition();
 	static float* scale = comp->getScale();
 	static float* rot = comp->getEulerRot();
@@ -67,10 +74,26 @@ void UI_Inspector::drawTransformation()
 
 void UI_Inspector::drawMesh()
 {
+	Tranform* comp = (Tranform*)selectedGameObject->findComponent(MESH);
 
+	static char name[60];
+	strcpy_s(name, 60, comp->getName());
+	//Name
+	if (ImGui::InputText("Name:", name, 60)) comp->setName(name);
+	//Active
+	bool active = comp->isEnable();
+	if (ImGui::Checkbox("Active", &active)) comp->switchActive();
 }
 
 void UI_Inspector::drawMaterial()
 {
+	Tranform* comp = (Tranform*)selectedGameObject->findComponent(MATERIAL);
 
+	static char name[60];
+	strcpy_s(name, 60, comp->getName());
+	//Name
+	if (ImGui::InputText("Name:", name, 60)) comp->setName(name);
+	//Active
+	bool active = comp->isEnable();
+	if (ImGui::Checkbox("Active", &active)) comp->switchActive();
 }

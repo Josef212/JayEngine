@@ -2,9 +2,10 @@
 
 
 
-Mesh::Mesh(GameObject* gObj) : Component(gObj)
+Mesh::Mesh(GameObject* gObj, int id) : Component(gObj, id)
 {
 	type = MESH;
+	name.assign("Mesh");
 }
 
 

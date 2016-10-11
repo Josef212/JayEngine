@@ -6,7 +6,7 @@
 class Mesh : public Component
 {
 public:
-	Mesh(GameObject* gObj);
+	Mesh(GameObject* gObj, int id);
 	virtual ~Mesh();
 
 	void enable();
@@ -16,8 +16,10 @@ public:
 	void update(float dt);
 	void cleanUp();
 
-private:
+	void loadMesh();
 	void loadToOpenGl();
+
+private:
 
 public:
 	uint idVertices = 0;
