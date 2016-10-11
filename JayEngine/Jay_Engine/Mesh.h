@@ -4,7 +4,6 @@
 #include "Component.h"
 
 struct aiMesh;
-struct aiScene;
 
 class Mesh : public Component
 {
@@ -19,8 +18,8 @@ public:
 	void update(float dt);
 	void cleanUp();
 
-	bool loadMesh(aiScene* scene, aiMesh* mesh, bool loadToRAM = true);
-	void loadToOpenGl();
+	bool loadMesh(aiMesh* mesh, bool loadToRAM = true);
+	bool loadToOpenGl();
 
 private:
 
@@ -38,7 +37,7 @@ public:
 	float* normals = NULL;
 
 	uint idTexCoords = 0;
-	uint numTexCoords = 0;
+	uint numTexCoords = 0; //Same texCoords as num of vertices but here will save numVertices*2 because each texCoord has 2 components
 	float* texCoords = NULL;
 
 private:
