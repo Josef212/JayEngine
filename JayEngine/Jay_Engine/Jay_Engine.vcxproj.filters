@@ -160,9 +160,6 @@
     <ClCompile Include="Material.cpp">
       <Filter>Core\GameObjects\Components</Filter>
     </ClCompile>
-    <ClCompile Include="Tranform.cpp">
-      <Filter>Core\GameObjects\Components</Filter>
-    </ClCompile>
     <ClCompile Include="RandGen.cpp">
       <Filter>Core\Tools</Filter>
     </ClCompile>
@@ -267,6 +264,9 @@
     </ClCompile>
     <ClCompile Include="UI_Hierarchy.cpp">
       <Filter>Core\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Transform.cpp">
+      <Filter>Core\GameObjects\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -394,9 +394,6 @@
       <Filter>Core\GameObjects\Components</Filter>
     </ClInclude>
     <ClInclude Include="Material.h">
-      <Filter>Core\GameObjects\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Tranform.h">
       <Filter>Core\GameObjects\Components</Filter>
     </ClInclude>
     <ClInclude Include="RandGen.h">
@@ -587,6 +584,9 @@
     </ClInclude>
     <ClInclude Include="UI_Hierarchy.h">
       <Filter>Core\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>Core\GameObjects\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
