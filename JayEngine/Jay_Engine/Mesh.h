@@ -3,6 +3,9 @@
 
 #include "Component.h"
 
+struct aiMesh;
+struct aiScene;
+
 class Mesh : public Component
 {
 public:
@@ -16,7 +19,7 @@ public:
 	void update(float dt);
 	void cleanUp();
 
-	void loadMesh();
+	bool loadMesh(aiScene* scene, aiMesh* mesh, bool loadToRAM = true);
 	void loadToOpenGl();
 
 private:
@@ -37,6 +40,9 @@ public:
 	uint idTexCoords = 0;
 	uint numTexCoords = 0;
 	float* texCoords = NULL;
+
+private:
+	bool onVRAM = false;
 };
 
 #endif // !__MESH_H__

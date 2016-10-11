@@ -79,7 +79,6 @@ update_status SceneTry::preUpdate(float dt)
 	if (app->input->getKey(SDL_SCANCODE_C) == KEY_DOWN)
 	{
 		gO = createGameObject();
-		app->editor->inspector->selectGameObject(gO);
 	}
 
 	return UPDATE_CONTINUE;
@@ -130,6 +129,8 @@ GameObject* SceneTry::createGameObject()
 	GameObject* ret = NULL;
 
 	ret = new GameObject(NULL);
+	gO = ret;
+	app->editor->inspector->selectGameObject(gO);
 
 	return ret;
 }

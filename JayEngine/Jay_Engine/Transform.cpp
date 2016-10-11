@@ -1,8 +1,8 @@
-#include "Tranform.h"
+#include "Transform.h"
+#include "GameObject.h"
 
 
-
-Tranform::Tranform(GameObject* gObj, int id) : Component(gObj, id)
+Transform::Transform(GameObject* gObj, int id) : Component(gObj, id)
 {
 	type = TRANSFORMATION;
 	position.Set(0.f, 0.f, 0.f);
@@ -14,86 +14,86 @@ Tranform::Tranform(GameObject* gObj, int id) : Component(gObj, id)
 }
 
 
-Tranform::~Tranform()
+Transform::~Transform()
 {
 }
 
-void Tranform::enable()
+void Transform::enable()
 {
 	if (!active)
 		active = true;
 }
 
-void Tranform::disable()
+void Transform::disable()
 {
 	if (active)
 		active = false;
 }
 
-void Tranform::init()
+void Transform::init()
 {
 
 }
 
-void Tranform::update(float dt)
+void Transform::update(float dt)
 {
 }
 
-void Tranform::cleanUp()
+void Transform::cleanUp()
 {
 
 }
 
-void Tranform::setPosition(float x, float y, float z)
+void Transform::setPosition(float x, float y, float z)
 {
 	position.Set(x, y, z);
 }
 
-void Tranform::setPosition(float* pos)
+void Transform::setPosition(float* pos)
 {
 	position.Set(pos);
 }
 
-const void Tranform::getPosition(float& x, float& y, float& z)const
+const void Transform::getPosition(float& x, float& y, float& z)const
 {
 	x = position.x;
 	y = position.y;
 	z = position.z;
 }
 
-float* Tranform::getPosition()const
+float* Transform::getPosition()const
 {
 	return (float*)&position;
 }
 
-void Tranform::setScale(float x, float y, float z)
+void Transform::setScale(float x, float y, float z)
 {
 	scale.Set(x, y, z);
 }
 
-void Tranform::setScale(float* scl)
+void Transform::setScale(float* scl)
 {
 	scale.Set(scl);
 }
 
-const void Tranform::getScale(float& x, float& y, float& z)const
+const void Transform::getScale(float& x, float& y, float& z)const
 {
 	x = scale.x;
 	y = scale.y;
 	z = scale.z;
 }
 
-float* Tranform::getScale()const
+float* Transform::getScale()const
 {
 	return (float*)&scale;
 }
 
-void Tranform::setRotation(float x, float y, float z, float w)
+void Transform::setRotation(float x, float y, float z, float w)
 {
 	rotation.Set(x, y, z, w);
 }
 
-void Tranform::setRotation(float* rot)
+void Transform::setRotation(float* rot)
 {
 	float3 r;
 	r.Set(rot);
@@ -119,7 +119,7 @@ void Tranform::setRotation(float* rot)
 	rotation = Quat::FromEulerXYZ(r.x, r.y, r.z);
 }
 
-void Tranform::setRotation(float x, float y, float z)
+void Transform::setRotation(float x, float y, float z)
 {
 	while (x < 0)
 		x += 360;
@@ -142,7 +142,7 @@ void Tranform::setRotation(float x, float y, float z)
 	rotation = Quat::FromEulerXYZ(x, y, z);
 }
 
-const void Tranform::getRotation(float& x, float& y, float& z, float& w)const
+const void Transform::getRotation(float& x, float& y, float& z, float& w)const
 {
 	x = rotation.x;
 	y = rotation.y;
@@ -150,7 +150,7 @@ const void Tranform::getRotation(float& x, float& y, float& z, float& w)const
 	w = rotation.w;
 }
 
-float* Tranform::getRotation()
+float* Transform::getRotation()
 {
 	float3 ret = rotation.ToEulerXYZ();
 
@@ -175,7 +175,7 @@ float* Tranform::getRotation()
 	return (float*)&ret;
 }
 
-float* Tranform::getEulerRot()
+float* Transform::getEulerRot()
 {
 	rotationEuler = rotation.ToEulerXYZ();
 
@@ -198,4 +198,29 @@ float* Tranform::getEulerRot()
 		rotationEuler.z -= 360;
 
 	return (float*)&rotationEuler;
+}
+
+float3 Transform::getGlobalPosition()
+{
+	float3 ret = position;
+
+	if (object->getParent())
+	{
+		Transform* t = (Transform*)object->getParent()->findComponent(TRANSFORMATION);
+		if (t)
+		{
+			ret += t->getGlobalPosition();
+		}
+	}
+
+	return ret;
+}
+
+void Transform::getGlobalPosition(float& x, float& y, float& z)
+{
+	float3 pos = getGlobalPosition();
+
+	x = pos.x;
+	y = pos.y;
+	z = pos.z;
 }

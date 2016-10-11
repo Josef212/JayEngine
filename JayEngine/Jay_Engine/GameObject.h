@@ -27,7 +27,11 @@ public:
 
 	//const std::vector<Component*> getComponents()const;
 
+	GameObject* getParent() const;
+
+public:
 	std::vector<Component*> components;
+
 private:
 	std::string name;
 	int nextCompId = 0;

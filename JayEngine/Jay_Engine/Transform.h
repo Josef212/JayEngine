@@ -4,11 +4,11 @@
 #include "Component.h"
 #include "Math.h"
 
-class Tranform : public Component
+class Transform : public Component
 {
 public:
-	Tranform(GameObject* gObj, int id);
-	virtual ~Tranform();
+	Transform(GameObject* gObj, int id);
+	virtual ~Transform();
 
 	void enable();
 	void disable();
@@ -17,6 +17,7 @@ public:
 	void update(float dt);
 	void cleanUp();
 
+	//All these transform are about local transform
 	void setPosition(float x, float y, float z);
 	void setPosition(float* pos);
 	const void getPosition(float& x, float& y, float& z)const;
@@ -33,6 +34,10 @@ public:
 	const void getRotation(float& x, float& y, float& z, float& w)const;
 	float* getRotation();//Don't use it
 	float* getEulerRot();
+
+	//All these transform are about global
+	float3 getGlobalPosition();
+	void getGlobalPosition(float& x, float& y, float& z);
 
 public:
 	float3 position = float3::zero;

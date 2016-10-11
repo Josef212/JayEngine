@@ -1,13 +1,14 @@
 #include "UI_Inspector.h"
 
 #include "GameObject.h"
-#include "Tranform.h"
+#include "Transform.h"
 #include "Mesh.h"
 #include "Material.h"
 
 
 UI_Inspector::UI_Inspector() : UI_Comp()
 {
+	active = true;
 }
 
 
@@ -49,7 +50,7 @@ void UI_Inspector::draw()
 
 void UI_Inspector::drawTransformation()
 {
-	Tranform* comp = (Tranform*)selectedGameObject->findComponent(TRANSFORMATION);
+	Transform* comp = (Transform*)selectedGameObject->findComponent(TRANSFORMATION);
 	
 	static char name[60];
 	strcpy_s(name, 60, comp->getName());
@@ -74,7 +75,7 @@ void UI_Inspector::drawTransformation()
 
 void UI_Inspector::drawMesh()
 {
-	Tranform* comp = (Tranform*)selectedGameObject->findComponent(MESH);
+	Transform* comp = (Transform*)selectedGameObject->findComponent(MESH);
 
 	static char name[60];
 	strcpy_s(name, 60, comp->getName());
@@ -87,7 +88,7 @@ void UI_Inspector::drawMesh()
 
 void UI_Inspector::drawMaterial()
 {
-	Tranform* comp = (Tranform*)selectedGameObject->findComponent(MATERIAL);
+	Transform* comp = (Transform*)selectedGameObject->findComponent(MATERIAL);
 
 	static char name[60];
 	strcpy_s(name, 60, comp->getName());

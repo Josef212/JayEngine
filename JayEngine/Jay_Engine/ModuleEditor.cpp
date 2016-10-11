@@ -12,6 +12,8 @@
 #include "ImGui/imgui.h"
 #include "ImGui/imgui_impl_sdl_gl3.h"
 
+//TMP, for real must take this out as soon as possible
+#include "SceneTry.h"
 
 ModuleEditor::ModuleEditor(bool startEnabled) : Module(startEnabled)
 {
@@ -77,6 +79,20 @@ update_status ModuleEditor::update(float dt)
 			if (ImGui::MenuItem("Console")) console->swapActive();
 			if (ImGui::MenuItem("Configuration")) conf->swapActive();
 			if (ImGui::MenuItem("Inspector")) inspector->swapActive();
+			ImGui::EndMenu();
+		}
+
+		if (ImGui::BeginMenu("GameObject"))
+		{
+			if (ImGui::MenuItem("Create Empty Game object")) app->sceneTry->createGameObject();
+			ImGui::EndMenu();
+		}
+
+		if (ImGui::BeginMenu("Components"))
+		{
+			if (ImGui::MenuItem("Add transform"));
+			if (ImGui::MenuItem("Add mesh"));
+			if (ImGui::MenuItem("Add material"));
 			ImGui::EndMenu();
 		}
 

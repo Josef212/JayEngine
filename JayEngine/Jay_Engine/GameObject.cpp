@@ -1,6 +1,6 @@
 #include "GameObject.h"
 
-#include "Tranform.h"
+#include "Transform.h"
 #include "Mesh.h"
 #include "Material.h"
 
@@ -57,7 +57,7 @@ Component* GameObject::addComponent(ComponentType type)
 
 		case TRANSFORMATION:
 		{
-			ret = new Tranform(this, nextCompId);
+			ret = new Transform(this, nextCompId);
 		}
 		break;
 
@@ -129,3 +129,8 @@ Component* GameObject::findComponent(ComponentType type)
 {
 	return components;
 }*/
+
+GameObject* GameObject::getParent() const
+{
+	return parent;
+}
