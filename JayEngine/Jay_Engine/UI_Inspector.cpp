@@ -54,14 +54,15 @@ void UI_Inspector::drawTransformation()
 	Tranform* comp = (Tranform*)selectedGameObject->findComponent(TRANSFORMATION);
 	static float* pos = comp->getPosition();
 	static float* scale = comp->getScale();
-	static float* rot = comp->getRotation();
+	static float* rot = comp->getEulerRot();
 	//Position
 	if (ImGui::DragFloat3("Position:", pos)) comp->setPosition(pos);
 	//Scale
 	if (ImGui::DragFloat3("Scale:", scale)) comp->setScale(scale);
 	//Rotation
-	_LOG("%f, %f, %f", rot[0], rot[1], rot[2]);
-	if (ImGui::DragFloat3("Rotation:", rot)) comp->setRotation(rot);
+	if (ImGui::DragFloat3("Rotation:", rot, 0.5f, -360.f, 360.f)) comp->setRotation(rot);
+
+	ImGui::Separator();
 }
 
 void UI_Inspector::drawMesh()

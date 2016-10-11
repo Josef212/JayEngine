@@ -94,25 +94,28 @@ void Tranform::setRotation(float x, float y, float z, float w)
 
 void Tranform::setRotation(float* rot)
 {
-	while (rot[0] < 0)
-		rot[0] += 360;
-	while (rot[1] < 0)
-		rot[1] += 360;
-	while (rot[2] < 0)
-		rot[2] += 360;
+	float3 r;
+	r.Set(rot);
 
-	while (rot[0] > 360)
-		rot[0] -= 360;
-	while (rot[1] > 360)
-		rot[1] -= 360;
-	while (rot[2] > 360)
-		rot[2] -= 360;
+	while (r.x < 0)
+		r.x += 360;
+	while (r.y < 0)
+		r.y += 360;
+	while (r.z < 0)
+		r.z += 360;
 
-	rot[0] *= DEGTORAD;
-	rot[1] *= DEGTORAD;
-	rot[2] *= DEGTORAD;
+	while (r.x > 360)
+		r.x -= 360;
+	while (r.y > 360)
+		r.y -= 360;
+	while (r.z > 360)
+		r.z -= 360;
 
-	rotation = Quat::FromEulerXYZ(rot[0], rot[1], rot[2]);
+	r.x *= DEGTORAD;
+	r.y *= DEGTORAD;
+	r.z *= DEGTORAD;
+
+	rotation = Quat::FromEulerXYZ(r.x, r.y, r.z);
 }
 
 void Tranform::setRotation(float x, float y, float z)
@@ -169,4 +172,29 @@ float* Tranform::getRotation()
 		ret.z -= 360;
 
 	return (float*)&ret;
+}
+
+float* Tranform::getEulerRot()
+{
+	rotationEuler = rotation.ToEulerXYZ();
+
+	rotationEuler.x *= RADTODEG;
+	rotationEuler.y *= RADTODEG;
+	rotationEuler.z *= RADTODEG;
+
+	while (rotationEuler.x < 0)
+		rotationEuler.x += 360;
+	while (rotationEuler.y < 0)
+		rotationEuler.y += 360;
+	while (rotationEuler.z < 0)
+		rotationEuler.z += 360;
+
+	while (rotationEuler.x > 360)
+		rotationEuler.x -= 360;
+	while (rotationEuler.y > 360)
+		rotationEuler.y -= 360;
+	while (rotationEuler.z > 360)
+		rotationEuler.z -= 360;
+
+	return (float*)&rotationEuler;
 }

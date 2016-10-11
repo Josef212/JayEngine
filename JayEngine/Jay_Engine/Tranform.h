@@ -31,12 +31,14 @@ public:
 	void setRotation(float x, float y, float z);
 	void setRotation(float* rot);
 	const void getRotation(float& x, float& y, float& z, float& w)const;
-	float* getRotation();
+	float* getRotation();//Don't use it
+	float* getEulerRot();
 
 public:
 	float3 position = float3::zero;
 	float3 scale = float3::zero;
 	Quat rotation = Quat::identity;
+	float3 rotationEuler = float3::zero;
 };
 
 #endif // !__TRANSFORMATION_H__
