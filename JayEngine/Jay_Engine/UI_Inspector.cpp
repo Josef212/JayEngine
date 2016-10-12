@@ -89,26 +89,22 @@ void UI_Inspector::drawMesh()
 	{
 		mesh->switchActive();
 	}
-	uint v = mesh->numVertices;
-	uint i = mesh->numIndices;
-	uint n = mesh->numNormals;
-	uint t = mesh->numTexCoords;
 
 	ImGui::Text("Number of vertices: ");
 	ImGui::SameLine();
-	ImGui::TextColored(ImColor(255, 153, 51), "%d", v);
+	ImGui::TextColored(ImColor(255, 153, 51), "%d", mesh->numVertices);
 
 	ImGui::Text("Number of indices: ");
 	ImGui::SameLine();
-	ImGui::TextColored(ImColor(255, 153, 51), "%d", i);
+	ImGui::TextColored(ImColor(255, 153, 51), "%d", mesh->numIndices);
 
 	ImGui::Text("Number of normals: ");
 	ImGui::SameLine();
-	ImGui::TextColored(ImColor(255, 153, 51), "%d", n);
+	ImGui::TextColored(ImColor(255, 153, 51), "%d", mesh->numNormals / 3);
 
 	ImGui::Text("Number of texture coords: ");
 	ImGui::SameLine();
-	ImGui::TextColored(ImColor(255, 153, 51), "%d", t);
+	ImGui::TextColored(ImColor(255, 153, 51), "%d", mesh->numTexCoords / 2);
 
 	bool wire = mesh->renderWireframe;
 	if (ImGui::Checkbox("Wireframe", &wire)) mesh->renderWireframe = wire;
