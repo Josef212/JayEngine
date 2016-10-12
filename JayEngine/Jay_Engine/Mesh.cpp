@@ -45,7 +45,10 @@ void Mesh::update(float dt)
 
 void Mesh::cleanUp()
 {
-
+	RELEASE_ARRAY(indices);
+	RELEASE_ARRAY(vertices);
+	RELEASE_ARRAY(normals);
+	RELEASE_ARRAY(texCoords);
 }
 
 bool Mesh::loadMesh(aiMesh* mesh, bool loadToRAM)
