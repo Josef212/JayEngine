@@ -54,7 +54,7 @@ bool Mesh::loadMesh(aiMesh* mesh, bool loadToRAM)
 
 	if (mesh)
 	{
-		if(mesh->mName.C_Str() != '\0')
+		if(mesh->mName.length > 0)
 			setName(mesh->mName.C_Str());
 		
 		numVertices = mesh->mNumVertices;

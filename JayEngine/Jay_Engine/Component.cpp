@@ -25,7 +25,7 @@ void Component::setName(const char* str)
 {
 	if (str)
 	{
-		name.assign("str");
+		name.assign(str);
 	}
 }
 

@@ -14,6 +14,7 @@
 
 //TMP, for real must take this out as soon as possible
 #include "SceneTry.h"
+#include "GameObject.h"
 
 ModuleEditor::ModuleEditor(bool startEnabled) : Module(startEnabled)
 {
@@ -90,9 +91,9 @@ update_status ModuleEditor::update(float dt)
 
 		if (ImGui::BeginMenu("Components"))
 		{
-			if (ImGui::MenuItem("Add transform"));
-			if (ImGui::MenuItem("Add mesh"));
-			if (ImGui::MenuItem("Add material"));
+			if (ImGui::MenuItem("Add transform"))addTransform();
+			if (ImGui::MenuItem("Add mesh"))addMesh();
+			if (ImGui::MenuItem("Add material"))addMaterial();
 			ImGui::EndMenu();
 		}
 
@@ -175,4 +176,22 @@ void ModuleEditor::log(const char* str)
 {
 	if (console)
 		console->logUi(str);
+}
+
+void ModuleEditor::addTransform()
+{
+
+}
+
+void ModuleEditor::addMesh()
+{
+	if (app->sceneTry->gO)
+	{
+		app->sceneTry->gO->addComponent(MESH);
+	}
+}
+
+void ModuleEditor::addMaterial()
+{
+
 }

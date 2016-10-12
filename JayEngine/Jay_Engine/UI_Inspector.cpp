@@ -50,51 +50,81 @@ void UI_Inspector::draw()
 
 void UI_Inspector::drawTransformation()
 {
-	Transform* comp = (Transform*)selectedGameObject->findComponent(TRANSFORMATION);
+	Transform* trans = (Transform*)selectedGameObject->findComponent(TRANSFORMATION);
 	
-	static char name[60];
-	strcpy_s(name, 60, comp->getName());
+	static char transName[60];
+	strcpy_s(transName, 60, trans->getName());
 	//Name
-	if (ImGui::InputText("Name:", name, 60)) comp->setName(name);
+	if (ImGui::InputText("Name:", transName, 60))
+		trans->setName(transName);
 	//Active
-	bool active = comp->isEnable();
-	if (ImGui::Checkbox("Active", &active)) comp->switchActive();
+	bool transActive = trans->isEnable();
+	if (ImGui::Checkbox("Active", &transActive)) trans->switchActive();
 
-	static float* pos = comp->getPosition();
-	static float* scale = comp->getScale();
-	static float* rot = comp->getEulerRot();
+	static float* pos = trans->getPosition();
+	static float* scale = trans->getScale();
+	static float* rot = trans->getEulerRot();
 	//Position
-	if (ImGui::DragFloat3("Position:", pos)) comp->setPosition(pos);
+	if (ImGui::DragFloat3("Position:", pos)) trans->setPosition(pos);
 	//Scale
-	if (ImGui::DragFloat3("Scale:", scale)) comp->setScale(scale);
+	if (ImGui::DragFloat3("Scale:", scale)) trans->setScale(scale);
 	//Rotation
-	if (ImGui::DragFloat3("Rotation:", rot, 0.5f, -360.f, 360.f)) comp->setRotation(rot);
+	if (ImGui::DragFloat3("Rotation:", rot, 0.5f, -360.f, 360.f)) trans->setRotation(rot);
 
 	ImGui::Separator();
 }
 
 void UI_Inspector::drawMesh()
 {
-	Transform* comp = (Transform*)selectedGameObject->findComponent(MESH);
+	Mesh* mesh = (Mesh*)selectedGameObject->findComponent(MESH);
 
-	static char name[60];
-	strcpy_s(name, 60, comp->getName());
+	static char meshName[60];
+	strcpy_s(meshName, 60, mesh->getName());
 	//Name
-	if (ImGui::InputText("Name:", name, 60)) comp->setName(name);
+	if (ImGui::InputText("Name:", meshName, 60))
+		mesh->setName(meshName);
 	//Active
-	bool active = comp->isEnable();
-	if (ImGui::Checkbox("Active", &active)) comp->switchActive();
+	bool meshActive = mesh->isEnable();
+	if (ImGui::Checkbox("Active", &meshActive))
+	{
+		mesh->switchActive();
+	}
+	uint v = mesh->numVertices;
+	uint i = mesh->numIndices;
+	uint n = mesh->numNormals;
+	uint t = mesh->numTexCoords;
+
+	ImGui::Text("Number of vertices: ");
+	ImGui::SameLine();
+	ImGui::TextColored(ImColor(255, 153, 51), "%d", v);
+
+	ImGui::Text("Number of indices: ");
+	ImGui::SameLine();
+	ImGui::TextColored(ImColor(255, 153, 51), "%d", i);
+
+	ImGui::Text("Number of normals: ");
+	ImGui::SameLine();
+	ImGui::TextColored(ImColor(255, 153, 51), "%d", n);
+
+	ImGui::Text("Number of texture coords: ");
+	ImGui::SameLine();
+	ImGui::TextColored(ImColor(255, 153, 51), "%d", t);
+
+	bool wire = mesh->renderWireframe;
+	if (ImGui::Checkbox("Wireframe", &wire)) mesh->renderWireframe = wire;
+
+	ImGui::Separator();
 }
 
 void UI_Inspector::drawMaterial()
 {
-	Transform* comp = (Transform*)selectedGameObject->findComponent(MATERIAL);
+	Material* mat = (Material*)selectedGameObject->findComponent(MATERIAL);
 
-	static char name[60];
-	strcpy_s(name, 60, comp->getName());
+	static char matName[60];
+	strcpy_s(matName, 60, mat->getName());
 	//Name
-	if (ImGui::InputText("Name:", name, 60)) comp->setName(name);
+	if (ImGui::InputText("Name:", matName, 60)) mat->setName(matName);
 	//Active
-	bool active = comp->isEnable();
-	if (ImGui::Checkbox("Active", &active)) comp->switchActive();
+	bool metActive = mat->isEnable();
+	if (ImGui::Checkbox("Active", &metActive)) mat->switchActive();
 }

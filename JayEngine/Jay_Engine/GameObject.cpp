@@ -117,7 +117,8 @@ Component* GameObject::findComponent(ComponentType type)
 
 	for (uint i = 0; i < components.size(); ++i)
 	{
-		return components[i];
+		if(components[i]->type == type)
+			return components[i];
 	}
 
 	return ret;

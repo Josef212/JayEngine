@@ -28,6 +28,11 @@ public:
 	void logFPS(float fps, float ms);
 	void log(const char* str);
 
+private:
+	void addTransform();
+	void addMesh();
+	void addMaterial();
+
 public:
 	std::list<UI_Comp*> uiList;
 

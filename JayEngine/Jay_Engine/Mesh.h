@@ -40,6 +40,8 @@ public:
 	uint numTexCoords = 0; //Same texCoords as num of vertices but here will save numVertices*2 because each texCoord has 2 components
 	float* texCoords = NULL;
 
+	bool renderWireframe = false;
+
 private:
 	bool onVRAM = false;
 };
