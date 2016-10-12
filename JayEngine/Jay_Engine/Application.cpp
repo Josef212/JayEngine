@@ -12,6 +12,7 @@
 //#include "ModulePhysics3D.h"
 #include "ModuleEditor.h"
 #include "ModuleImporter.h"
+#include "ModuleManager.h"
 
 #include "SceneTry.h"
 
@@ -31,6 +32,7 @@ Application::Application()
 	//physics = new ModulePhysics3D();
 	editor = new ModuleEditor();
 	importer = new ModuleImporter();
+	manager = new ModuleManager();
 
 	sceneTry = new SceneTry();
 
@@ -42,6 +44,7 @@ Application::Application()
 	addModule(audio);
 	//addModule(physics);
 	addModule(editor);
+	addModule(manager);
 	addModule(importer);
 	
 	// Scenes

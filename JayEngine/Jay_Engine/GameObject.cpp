@@ -45,6 +45,17 @@ void GameObject::cleanUp()
 	}
 }
 
+const char* GameObject::getName()const
+{
+	return name.c_str();
+}
+
+void GameObject::setName(const char* str)
+{
+	if (str)
+		name.assign("str");
+}
+
 Component* GameObject::addComponent(ComponentType type)
 {
 	Component* ret = NULL;
@@ -80,6 +91,16 @@ Component* GameObject::addComponent(ComponentType type)
 		components.push_back(ret);
 		ret->init();
 	}
+
+	return ret;
+}
+
+GameObject* GameObject::addChild()
+{
+	GameObject* ret = NULL;
+
+	ret = new GameObject(this);
+	childrens.push_back(ret);
 
 	return ret;
 }

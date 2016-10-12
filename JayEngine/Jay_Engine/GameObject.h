@@ -21,6 +21,7 @@ public:
 	void cleanUp();
 
 	Component* addComponent(ComponentType type);
+	GameObject* addChild();
 	bool removeComponent(Component* comp);
 	//std::vector<Component*> findComponent(ComponentType type);
 	Component* findComponent(ComponentType type);
@@ -28,6 +29,9 @@ public:
 	//const std::vector<Component*> getComponents()const;
 
 	GameObject* getParent() const;
+
+	const char* getName()const;
+	void setName(const char* str);
 
 public:
 	std::vector<Component*> components;

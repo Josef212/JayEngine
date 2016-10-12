@@ -1,9 +1,12 @@
+#include "Application.h"
 #include "UI_Inspector.h"
 
 #include "GameObject.h"
 #include "Transform.h"
 #include "Mesh.h"
 #include "Material.h"
+
+#include "ModuleWindow.h"
 
 
 UI_Inspector::UI_Inspector() : UI_Comp()
@@ -24,6 +27,12 @@ void UI_Inspector::selectGameObject(GameObject* gameObj)
 
 void UI_Inspector::draw()
 {
+	int w = app->window->getWidth();
+	int h = app->window->getHeight();
+
+	ImGui::SetNextWindowPos(ImVec2(w - 250, 20));
+	ImGui::SetNextWindowSize(ImVec2(250, h));
+
 	if (ImGui::Begin("Inspector"), &active)
 	{
 		if (selectedGameObject)

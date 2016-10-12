@@ -17,6 +17,7 @@ class ModulePhysics3D;
 class ModuleEditor;
 class ModuleFileSystem;
 class ModuleImporter;
+class ModuleManager;
 
 class SceneTry;
 
@@ -35,6 +36,7 @@ public:
 	ModulePhysics3D* physics = NULL;
 	ModuleEditor* editor = NULL;
 	ModuleImporter* importer = NULL;
+	ModuleManager* manager = NULL;
 
 	SceneTry* sceneTry = NULL;
 

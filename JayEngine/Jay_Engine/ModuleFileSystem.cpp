@@ -25,7 +25,7 @@ ModuleFileSystem::~ModuleFileSystem()
 }
 
 
-bool ModuleFileSystem::awake()
+bool ModuleFileSystem::init()
 {
 	bool ret = true;
 

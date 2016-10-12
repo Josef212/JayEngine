@@ -11,7 +11,7 @@ public:
 	ModuleFileSystem(bool startEnabled = true);
 	~ModuleFileSystem();
 
-	bool awake();
+	bool init();
 	bool cleanUp();
 
 	bool addPath(const char* pathOrZip, const char* mountPoint = NULL);
