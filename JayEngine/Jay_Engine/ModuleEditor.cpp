@@ -13,7 +13,7 @@
 #include "ImGui/imgui_impl_sdl_gl3.h"
 
 //TMP, for real must take this out as soon as possible
-#include "SceneTry.h"
+#include "ModuleManager.h"
 #include "GameObject.h"
 
 ModuleEditor::ModuleEditor(bool startEnabled) : Module(startEnabled)
@@ -85,7 +85,7 @@ update_status ModuleEditor::update(float dt)
 
 		if (ImGui::BeginMenu("GameObject"))
 		{
-			if (ImGui::MenuItem("Create Empty Game object")) app->sceneTry->createGameObject();
+			if (ImGui::MenuItem("Create Empty Game object")) app->manager->createEmptyGO();
 			ImGui::EndMenu();
 		}
 
@@ -180,18 +180,15 @@ void ModuleEditor::log(const char* str)
 
 void ModuleEditor::addTransform()
 {
-
+	app->manager->addTransform();
 }
 
 void ModuleEditor::addMesh()
 {
-	if (app->sceneTry->gO)
-	{
-		app->sceneTry->gO->addComponent(MESH);
-	}
+	app->manager->addMesh();
 }
 
 void ModuleEditor::addMaterial()
 {
-
+	app->manager->addMaterial();
 }

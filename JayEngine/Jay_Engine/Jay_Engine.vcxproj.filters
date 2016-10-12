@@ -269,7 +269,7 @@
       <Filter>Core\GameObjects\Components</Filter>
     </ClCompile>
     <ClCompile Include="ModuleManager.cpp">
-      <Filter>Core</Filter>
+      <Filter>Core\Modules</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -591,7 +591,9 @@
     <ClInclude Include="Transform.h">
       <Filter>Core\GameObjects\Components</Filter>
     </ClInclude>
-    <ClInclude Include="ModuleManager.h" />
+    <ClInclude Include="ModuleManager.h">
+      <Filter>Core\Modules</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\include\Geometry\KDTree.inl">

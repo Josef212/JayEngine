@@ -8,14 +8,14 @@
 #include "Mesh.h"
 #include "Material.h"
 
-#include "Assimp\include\cimport.h"
-#include "Assimp\include\scene.h"
-#include "Assimp\include\postprocess.h"
-#include "Assimp\include\cfileio.h"
+#include "Assimp/include/cimport.h"
+#include "Assimp/include/scene.h"
+#include "Assimp/include/postprocess.h"
+#include "Assimp/include/cfileio.h"
 
-#include "Devil\include\il.h"
-#include "Devil\include\ilu.h"
-#include "Devil\include\ilut.h"
+#include "Devil/include/il.h"
+#include "Devil/include/ilu.h"
+#include "Devil/include/ilut.h"
 
 
 #pragma comment (lib, "Assimp/libx86/assimp.lib")
@@ -49,7 +49,8 @@ bool ModuleManager::init()
 		_LOG("Error while Devil Init: %s\n", iluErrorString(devilError));
 	}
 
-	sceneRootObject = new GameObject(NULL);
+	sceneRootObject = new GameObject(NULL, app->manager->nextGOId);
+	++app->manager->nextGOId;
 	sceneRootObject->setName("RootNode");
 
 	if (sceneRootObject)
@@ -97,9 +98,50 @@ GameObject* ModuleManager::createEmptyGO()
 	GameObject* ret = NULL;
 	
 	if (sceneRootObject)
-		ret = new GameObject(sceneRootObject);
+	{
+		if (selected)
+			ret = selected->addChild();
+		else
+			ret = sceneRootObject->addChild();
+	}
 	else
 		_LOG("Can't create an empty game object because sceene root node is NULL.");
+
+	return ret;
+}
+
+Component* ModuleManager::addTransform()
+{
+	Transform* ret = NULL;
+
+	if (selected)
+	{
+		selected->addComponent(TRANSFORMATION);
+	}
+
+	return ret;
+}
+
+Component* ModuleManager::addMesh()
+{
+	Mesh* ret = NULL;
+
+	if (selected)
+	{
+		selected->addComponent(MESH);
+	}
+
+	return ret;
+}
+
+Component* ModuleManager::addMaterial()
+{
+	Material* ret = NULL;
+
+	if (selected)
+	{
+		selected->addComponent(MATERIAL);
+	}
 
 	return ret;
 }

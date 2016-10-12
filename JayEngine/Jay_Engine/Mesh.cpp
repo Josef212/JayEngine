@@ -96,10 +96,9 @@ bool Mesh::loadMesh(aiMesh* mesh, bool loadToRAM)
 		{
 			numTexCoords = numVertices * 2;
 			texCoords = new float[numTexCoords];
-			uint n = 0; //Just a counter in order to iterate all aiVector3 but only take first 2 coords
-			for (uint i = 0; i < numTexCoords; ++i, ++n)
+			for (uint i = 0; i < numTexCoords; ++i)
 			{
-				memcpy(&texCoords[i * 2], &mesh->mTextureCoords[0][i*2+n], sizeof(float) * numTexCoords);
+				memcpy(&texCoords[i * 2], &mesh->mTextureCoords[0][i*2+i], sizeof(float) * numTexCoords);
 			}
 			_LOG("Mesh %s has %d texture coords.", getName(), numTexCoords / 2);
 		}

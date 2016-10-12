@@ -13,7 +13,7 @@ class Material;
 class GameObject
 {
 public:
-	GameObject(GameObject* parent);
+	GameObject(GameObject* parent, int id);
 	virtual ~GameObject();
 
 	void init();
@@ -29,19 +29,19 @@ public:
 	//const std::vector<Component*> getComponents()const;
 
 	GameObject* getParent() const;
-
+	int getGOId()const;
 	const char* getName()const;
 	void setName(const char* str);
 
 public:
 	std::vector<Component*> components;
+	std::vector<GameObject*> childrens;
 
 private:
 	std::string name;
 	int nextCompId = 0;
-
+	int id = -1;
 	GameObject* parent = NULL;
-	std::vector<GameObject*> childrens;
 };
 
 #endif // !__GAMEOBJECT_H__

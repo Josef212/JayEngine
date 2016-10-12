@@ -1,3 +1,4 @@
+#include "Application.h"
 #include "GameObject.h"
 
 #include "Transform.h"
@@ -5,7 +6,10 @@
 #include "Material.h"
 
 
-GameObject::GameObject(GameObject* parent) : parent(parent)
+#include "ModuleManager.h"
+
+
+GameObject::GameObject(GameObject* parent, int id) : parent(parent), id(id)
 {
 	name.assign("Game Object");
 	init();
@@ -56,6 +60,11 @@ void GameObject::setName(const char* str)
 		name.assign("str");
 }
 
+int GameObject::getGOId()const
+{
+	return id;
+}
+
 Component* GameObject::addComponent(ComponentType type)
 {
 	Component* ret = NULL;
@@ -99,8 +108,9 @@ GameObject* GameObject::addChild()
 {
 	GameObject* ret = NULL;
 
-	ret = new GameObject(this);
+	ret = new GameObject(this, app->manager->nextGOId);
 	childrens.push_back(ret);
+	++app->manager->nextGOId;
 
 	return ret;
 }
