@@ -13,17 +13,14 @@ public:
 
 	void draw();
 
-	void selectGameObject(GameObject* gameObj);
-
 private:
-	void drawTransformation();
-	void drawMesh();
-	void drawMaterial();
+	void drawTransformation(GameObject* selected);
+	void drawMesh(GameObject* selected);
+	void drawMaterial(GameObject* selected);
 
 public:
 
 private:
-	GameObject* selectedGameObject = NULL;
 };
 
 #endif // !__UI_INSPECTOR_H__

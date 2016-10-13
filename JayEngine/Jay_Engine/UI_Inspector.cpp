@@ -6,6 +6,7 @@
 #include "Mesh.h"
 #include "Material.h"
 
+#include "ModuleManager.h"
 #include "ModuleWindow.h"
 
 
@@ -19,36 +20,32 @@ UI_Inspector::~UI_Inspector()
 {
 }
 
-void UI_Inspector::selectGameObject(GameObject* gameObj)
-{
-	if(gameObj)
-		selectedGameObject = gameObj;
-}
-
 void UI_Inspector::draw()
 {
 	int w = app->window->getWidth();
 	int h = app->window->getHeight();
+
+	GameObject* selected = app->manager->getSelected();
 
 	ImGui::SetNextWindowPos(ImVec2(w - 250, 20));
 	ImGui::SetNextWindowSize(ImVec2(250, h));
 
 	if (ImGui::Begin("Inspector"), &active)
 	{
-		if (selectedGameObject)
+		if (selected)
 		{
-			for (uint i = 0; i < selectedGameObject->components.size(); ++i)
+			for (uint i = 0; i < selected->components.size(); ++i)
 			{
-				switch (selectedGameObject->components[i]->type)
+				switch (selected->components[i]->type)
 				{
 				case TRANSFORMATION:
-					drawTransformation();
+					drawTransformation(selected);
 					break;
 				case MESH:
-					drawMesh();
+					drawMesh(selected);
 					break;
 				case MATERIAL:
-					drawMaterial();
+					drawMaterial(selected);
 					break;
 				}
 			}
@@ -57,9 +54,9 @@ void UI_Inspector::draw()
 	}
 }
 
-void UI_Inspector::drawTransformation()
+void UI_Inspector::drawTransformation(GameObject* selected)
 {
-	Transform* trans = (Transform*)selectedGameObject->findComponent(TRANSFORMATION);
+	Transform* trans = (Transform*)selected->findComponent(TRANSFORMATION);
 	
 	static char transName[60];
 	strcpy_s(transName, 60, trans->getName());
@@ -83,9 +80,9 @@ void UI_Inspector::drawTransformation()
 	ImGui::Separator();
 }
 
-void UI_Inspector::drawMesh()
+void UI_Inspector::drawMesh(GameObject* selected)
 {
-	Mesh* mesh = (Mesh*)selectedGameObject->findComponent(MESH);
+	Mesh* mesh = (Mesh*)selected->findComponent(MESH);
 
 	static char meshName[60];
 	strcpy_s(meshName, 60, mesh->getName());
@@ -121,9 +118,9 @@ void UI_Inspector::drawMesh()
 	ImGui::Separator();
 }
 
-void UI_Inspector::drawMaterial()
+void UI_Inspector::drawMaterial(GameObject* selected)
 {
-	Material* mat = (Material*)selectedGameObject->findComponent(MATERIAL);
+	Material* mat = (Material*)selected->findComponent(MATERIAL);
 
 	static char matName[60];
 	strcpy_s(matName, 60, mat->getName());
