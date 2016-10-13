@@ -39,7 +39,7 @@ void GameObject::update(float dt)
 
 	if (isGOActive())
 	{
-		draw();
+		//draw();
 	}
 }
 
@@ -63,7 +63,7 @@ const char* GameObject::getName()const
 void GameObject::setName(const char* str)
 {
 	if (str)
-		name.assign("str");
+		name.assign(str);
 }
 
 int GameObject::getGOId()const

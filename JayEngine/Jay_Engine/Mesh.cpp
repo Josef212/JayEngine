@@ -107,11 +107,13 @@ bool Mesh::loadMesh(aiMesh* mesh, bool loadToRAM)
 
 		if (loadToRAM)
 		{
-			//Should remove current mesh in order to load new
-			_LOG("Mesh already loaded to VRAM");
-		}
-		else
+			if (onVRAM)
+			{
+				//Should remove current mesh in order to load new
+				_LOG("Mesh already loaded to VRAM");
+			}
 			ret = loadToOpenGl();
+		}
 	}
 
 	return ret;
@@ -124,22 +126,27 @@ bool Mesh::loadToOpenGl()
 	if (onVRAM)
 		return true;
 
+	_LOG("Loading mesh to VRAM");
+
 	if (numVertices > 0 && numIndices > 0)
 	{
+		//_LOG("1.Creating indices and vertices buffers");
 		glGenBuffers(1, (GLuint*)&idVertices);
 		glGenBuffers(1, (GLuint*)&idIndices);
-
+		_LOG("Buffs generated");
 		glBindBuffer(GL_ARRAY_BUFFER, idVertices);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * numVertices * 3, vertices, GL_STATIC_DRAW);
-
-		glBindBuffer(GL_ARRAY_BUFFER, idIndices);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * numIndices * 3, indices, GL_STATIC_DRAW);
-
+		_LOG("Vertices");
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, idIndices);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * numIndices * 3, indices, GL_STATIC_DRAW);
+		_LOG("Indices");
+		_LOG("Loaded vertices and indices");
 		if (numNormals > 0)
 		{
 			glGenBuffers(1, (GLuint*)&idNormals);
 			glBindBuffer(GL_ARRAY_BUFFER, idNormals);
 			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * numNormals, normals, GL_STATIC_DRAW);
+			_LOG("Loaded normals");
 		}
 	
 		if (numTexCoords> 0)
@@ -147,6 +154,7 @@ bool Mesh::loadToOpenGl()
 			glGenBuffers(1, (GLuint*)&idTexCoords);
 			glBindBuffer(GL_ARRAY_BUFFER, idTexCoords);
 			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * numTexCoords, texCoords, GL_STATIC_DRAW);
+			_LOG("Loaded UV's");
 		}
 
 		ret = true;

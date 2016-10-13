@@ -162,7 +162,23 @@ GameObject* ModuleManager::loadFBX(const char* file, const char* path)
 {
 	GameObject* root = NULL;
 
+	if (!file)
+	{
+		_LOG("Error while loading fbx: path is NULL.");
+		return root; //If path is NULL dont do nothing
+	}
 
+	const aiScene* scene = aiImportFile(file, aiProcessPreset_TargetRealtime_MaxQuality);//TODO: fit this with own format system
+
+	if (scene, scene->HasMeshes())
+	{
+		for (uint i = 0; i < scene->mNumMeshes; ++i)
+		{
+			GameObject* gO = sceneRootObject->addChild();
+			Mesh* m = (Mesh*)gO->addComponent(MESH);
+			m->loadMesh(scene->mMeshes[i], true);
+		}
+	}
 
 	return root;
 }

@@ -106,7 +106,15 @@ update_status ModuleEditor::update(float dt)
 			if (ImGui::MenuItem("About")) showAbout = !showAbout;
 			ImGui::EndMenu();
 		}
-		
+
+		//---------------------
+		//TMP
+		if (ImGui::BeginMenu("FBX"))
+		{
+			if (ImGui::MenuItem("Load fbx")) app->manager->loadFBX("Assets/fbx/warrior.FBX", NULL);
+			ImGui::EndMenu();
+		}
+		//---------------------
 
 		ImGui::EndMainMenuBar();
 	}
