@@ -224,3 +224,15 @@ void Transform::getGlobalPosition(float& x, float& y, float& z)
 	y = pos.y;
 	z = pos.z;
 }
+
+float4x4 Transform::getTransformMatrix()const
+{
+	if (isEnable())
+	{
+		float4x4 ret = float4x4::FromTRS(position, rotation.ToFloat4x4, scale);
+		ret.Transpose();
+		return ret;
+	}
+	else
+		return float4x4::identity;
+}

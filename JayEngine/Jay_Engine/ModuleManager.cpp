@@ -116,7 +116,9 @@ Component* ModuleManager::addTransform()
 
 	if (selected)
 	{
-		selected->addComponent(TRANSFORMATION);
+		Transform* trans = (Transform*)selected->findComponent(TRANSFORMATION);
+		if(trans)
+			selected->addComponent(TRANSFORMATION);
 	}
 
 	return ret;

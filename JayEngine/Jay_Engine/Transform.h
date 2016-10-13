@@ -39,6 +39,8 @@ public:
 	float3 getGlobalPosition();
 	void getGlobalPosition(float& x, float& y, float& z);
 
+	float4x4 getTransformMatrix()const;
+
 public:
 	float3 position = float3::zero;
 	float3 scale = float3::zero;
