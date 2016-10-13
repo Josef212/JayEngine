@@ -41,6 +41,7 @@ public:
 	float* texCoords = NULL;
 
 	bool renderWireframe = false;
+	bool renderNormals = false;
 
 private:
 	bool onVRAM = false;

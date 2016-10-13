@@ -33,6 +33,12 @@ public:
 	const char* getName()const;
 	void setName(const char* str);
 
+	bool isGOActive();
+	void setGOEnable(bool set);
+
+private:
+	void draw();
+
 public:
 	std::vector<Component*> components;
 	std::vector<GameObject*> childrens;
@@ -42,6 +48,7 @@ private:
 	int nextCompId = 0;
 	int id = -1;
 	GameObject* parent = NULL;
+	bool goActive = true;
 };
 
 #endif // !__GAMEOBJECT_H__

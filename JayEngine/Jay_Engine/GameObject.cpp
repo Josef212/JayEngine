@@ -5,6 +5,7 @@
 #include "Mesh.h"
 #include "Material.h"
 
+#include "OpenGL.h"
 
 #include "ModuleManager.h"
 
@@ -35,6 +36,11 @@ void GameObject::update(float dt)
 	{
 		components[j]->update(dt);
 	}
+
+	if (isGOActive())
+	{
+		draw();
+	}
 }
 
 void GameObject::cleanUp()
@@ -63,6 +69,16 @@ void GameObject::setName(const char* str)
 int GameObject::getGOId()const
 {
 	return id;
+}
+
+bool GameObject::isGOActive()
+{
+	return goActive;
+}
+
+void GameObject::setGOEnable(bool set)
+{
+	goActive = set;
 }
 
 Component* GameObject::addComponent(ComponentType type)
@@ -165,4 +181,108 @@ Component* GameObject::findComponent(ComponentType type)
 GameObject* GameObject::getParent() const
 {
 	return parent;
+}
+
+void GameObject::draw()
+{
+	Transform* trans = (Transform*)findComponent(TRANSFORMATION);
+	Mesh* mesh = (Mesh*)findComponent(MESH);
+	Material* mat = (Material*)findComponent(MATERIAL);
+
+	if (trans && mesh)
+	{
+		glEnableClientState(GL_VERTEX_ARRAY);
+
+		glBindBuffer(GL_ARRAY_BUFFER, mesh->idVertices);
+		glVertexPointer(3, GL_FLOAT, 0, NULL);
+
+		if (mesh->renderWireframe)
+		{
+			glDisable(GL_LIGHTING);
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			glLineWidth(1.f);
+			glColor4f(0.2f, 1.f, 0.2f, 1.f);
+			if (app->manager->getSelected() == this)
+			{
+				glLineWidth(0.1f);
+				glColor4f(0.f, 0.8f, 0.8f, 1.f);
+			}
+			else
+			{
+				glDisable(GL_CULL_FACE);
+			}
+		}
+		else
+		{
+			//RenderNormals
+
+			if (mesh->renderNormals)
+			{
+				glDisable(GL_LIGHTING);
+				glLineWidth(0.7f);
+				glBegin(GL_LINE);
+				glColor4f(0.54f, 0.f, 0.54f, 1.f);
+
+				for (uint i = 0; i < mesh->numVertices; ++i)
+				{
+					glVertex3f(mesh->vertices[i * 3], mesh->vertices[i * 3 + 1], mesh->vertices[i * 3 + 2]);
+					glVertex3f(mesh->vertices[i * 3] + mesh->normals[i * 3], mesh->vertices[i * 3 + 1] + mesh->normals[i * 3 + 1], mesh->vertices[i * 3 + 2] + mesh->normals[i * 3 + 2]);
+				}
+
+				glEnd();
+				glLineWidth(1.f);
+				glEnable(GL_LIGHTING);
+			}
+
+			//-------------
+
+			glEnable(GL_LIGHTING);
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+			if (mat)
+			{
+				//glColor4f(mat->getColor().r, mat->getColor().g, mat->getColor().b, mat->getColor().a);
+				uint tex = mat->idTexture;
+				if (tex > 0)
+				{
+					glBindTexture(GL_TEXTURE_2D, tex);
+				}
+			}
+			else
+			{
+				glColor4f(0.5f, 0.5f, 0.5f, 1.f);
+			}
+
+			if (mesh->numTexCoords > 0)
+			{
+				glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+				glBindBuffer(GL_ARRAY_BUFFER, mesh->idTexCoords);
+				glTexCoordPointer(2, GL_FLOAT, 0, NULL);
+			}
+
+			if (mesh->numNormals > 0)
+			{
+				glEnableClientState(GL_NORMAL_ARRAY);
+				glBindBuffer(GL_ARRAY_BUFFER, mesh->idNormals);
+				glNormalPointer(GL_FLOAT, 0, NULL);
+			}
+		}
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->idIndices);
+		glDrawElements(GL_TRIANGLES, mesh->numIndices, GL_UNSIGNED_INT, NULL);
+
+		//Cleaning
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		//------
+		glDisableClientState(GL_NORMAL_ARRAY);
+		glDisableClientState(GL_COLOR_ARRAY);
+		glDisableClientState(GL_VERTEX_ARRAY);
+		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
+		//==============
+		glEnable(GL_LIGHTING);
+		glEnable(GL_CULL_FACE);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	}
 }

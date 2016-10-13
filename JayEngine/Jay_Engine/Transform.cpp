@@ -229,7 +229,7 @@ float4x4 Transform::getTransformMatrix()const
 {
 	if (isEnable())
 	{
-		float4x4 ret = float4x4::FromTRS(position, rotation.ToFloat4x4, scale);
+		float4x4 ret = float4x4::FromTRS(position, rotation.ToFloat4x4(), scale);
 		ret.Transpose();
 		return ret;
 	}
