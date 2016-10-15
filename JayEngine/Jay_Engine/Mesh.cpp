@@ -130,7 +130,7 @@ bool Mesh::loadToOpenGl()
 
 	if (numVertices > 0 && numIndices > 0)
 	{
-		//_LOG("1.Creating indices and vertices buffers");
+		_LOG("1.Creating indices and vertices buffers");
 		glGenBuffers(1, (GLuint*)&idVertices);
 		glGenBuffers(1, (GLuint*)&idIndices);
 		_LOG("Buffs generated");
