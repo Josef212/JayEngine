@@ -5,6 +5,9 @@
 
 class GameObject;
 class Component;
+struct aiScene;
+struct aiNode;
+struct aiMesh;
 
 class ModuleManager : public Module
 {
@@ -28,7 +31,8 @@ public:
 	GameObject* getSelected()const;
 	void select(GameObject* toSelect);
 
-	GameObject* loadFBX(const char* file, const char* path);
+	GameObject* loadFBX(char* file, char* path);
+	GameObject* loadObjects(aiNode* node, const aiScene* scene, GameObject* parent);
 private:
 
 public:
@@ -42,6 +46,9 @@ private:
 
 	GameObject* sceneRootObject = NULL;
 	GameObject* selected = NULL;
+
+	uint indexGO = 0;
+	uint indexMesh = 0;
 };
 
 #endif // !__MODULEMANAGER_H__

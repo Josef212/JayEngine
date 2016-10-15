@@ -21,6 +21,8 @@ public:
 	bool loadMesh(aiMesh* mesh, bool loadToRAM = true);
 	bool loadToOpenGl();
 
+	void clearMesh();
+
 private:
 
 public:
@@ -37,7 +39,7 @@ public:
 	float* normals = NULL;
 
 	uint idTexCoords = 0;
-	uint numTexCoords = 0; //Same texCoords as num of vertices but here will save numVertices*2 because each texCoord has 2 components
+	uint numTexCoords = 0; //Same texCoords as num of vertices but here will save numVertices*3 because each texCoord has 3 components, actually uv's are 2D but keep the 3rd variable
 	float* texCoords = NULL;
 
 	bool renderWireframe = false;

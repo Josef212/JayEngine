@@ -26,7 +26,7 @@ void UI_Hierarchy::draw()
 	int h = app->window->getHeight();
 	
 	ImGui::SetNextWindowPos(ImVec2(0, 20));
-	ImGui::SetNextWindowSize(ImVec2(200, h / 2));
+	//ImGui::SetNextWindowSize(ImVec2(200, h / 2));
 	if (ImGui::Begin("Hierarchy"), &active)
 	{
 		GameObject* root = app->manager->getSceneroot();

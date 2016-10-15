@@ -51,7 +51,7 @@ bool ModuleManager::init()
 
 	sceneRootObject = new GameObject(NULL, app->manager->nextGOId);
 	++app->manager->nextGOId;
-	sceneRootObject->setName("RootNode");
+	sceneRootObject->setName("SceneRootNode");
 
 	if (sceneRootObject)
 		return true;
@@ -158,27 +158,73 @@ void ModuleManager::select(GameObject* toSelect)
 	selected = toSelect;
 }
 
-GameObject* ModuleManager::loadFBX(const char* file, const char* path)
+GameObject* ModuleManager::loadFBX(char* file, char* path)
 {
 	GameObject* root = NULL;
 
 	if (!file)
 	{
-		_LOG("Error while loading fbx: path is NULL.");
+		_LOG("Error while loading fbx: file is NULL.");
 		return root; //If path is NULL dont do nothing
 	}
 
-	const aiScene* scene = aiImportFile(file, aiProcessPreset_TargetRealtime_MaxQuality);//TODO: fit this with own format system
+	char* realPath = new char[256];
+
+	if (!path)
+	{
+		//Maybe in future take a default path
+		strcpy_s(realPath, 256, DEFAULT_FB_PATH);
+	}
+	else
+		strcpy_s(realPath, 256, path);
+
+	strcat_s(realPath, 256, "/");
+	strcat_s(realPath, 256, file);
+
+	const aiScene* scene = aiImportFile(realPath, aiProcessPreset_TargetRealtime_MaxQuality);//TODO: fit this with own format system
 
 	if (scene, scene->HasMeshes())
 	{
-		for (uint i = 0; i < scene->mNumMeshes; ++i)
-		{
-			GameObject* gO = sceneRootObject->addChild();
-			Mesh* m = (Mesh*)gO->addComponent(MESH);
-			m->loadMesh(scene->mMeshes[i], true);
-		}
+		_LOG("Loading fbx from %s.", realPath);
+		loadObjects(scene->mRootNode, scene, sceneRootObject);
+
+		aiReleaseImport(scene);
 	}
 
+	RELEASE_ARRAY(realPath);
+
 	return root;
+}
+
+GameObject* ModuleManager::loadObjects(aiNode* node, const aiScene* scene, GameObject* parent)
+{
+	GameObject* ret = NULL;
+
+	if (!parent)
+		return ret;
+
+	ret = parent->addChild();
+
+	ret->setName(node->mName.C_Str());
+
+	//TODO: set transformation
+	_LOG("Loading new game obejct: %i. ===================", indexGO);
+	++indexGO;
+	//TODO: set material
+
+	for (uint i = 0; i < node->mNumMeshes; ++i)
+	{
+		_LOG("Loading new mesh: %i. ------------------", indexMesh);
+		Mesh* m = (Mesh*)ret->addComponent(MESH);
+		m->loadMesh(scene->mMeshes[node->mMeshes[i]], true);
+		//node->mMeshes is an uint array with the index of the mesh in scene->mMesh
+		++indexMesh;
+	}
+
+	for (uint i = 0; i < node->mNumChildren; ++i)
+	{
+		loadObjects(node->mChildren[i], scene, ret);
+	}
+
+	return ret;
 }

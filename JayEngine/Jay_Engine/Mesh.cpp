@@ -45,6 +45,21 @@ void Mesh::update(float dt)
 
 void Mesh::cleanUp()
 {
+	clearMesh();
+}
+
+void Mesh::clearMesh()
+{
+	if (idIndices > 0) glDeleteBuffers(1, &idIndices);
+	if (idVertices > 0) glDeleteBuffers(1, &idVertices);
+	if (idNormals > 0) glDeleteBuffers(1, &idNormals);
+	if (idTexCoords > 0) glDeleteBuffers(1, &idTexCoords);
+
+	numIndices = 0;
+	numVertices = 0;
+	numNormals = 0;
+	numTexCoords = 0;
+
 	RELEASE_ARRAY(indices);
 	RELEASE_ARRAY(vertices);
 	RELEASE_ARRAY(normals);
@@ -92,15 +107,12 @@ bool Mesh::loadMesh(aiMesh* mesh, bool loadToRAM)
 			_LOG("Mesh %s has %d normal.", getName(), numNormals / 3);
 		}
 
-		if (mesh->HasTextureCoords(0))
+		if (mesh->HasTextureCoords(0))//Difuse 
 		{
-			numTexCoords = numVertices * 2;
+			numTexCoords = numVertices * 3;
 			texCoords = new float[numTexCoords];
-			for (uint i = 0; i < numTexCoords; ++i)
-			{
-				memcpy(&texCoords[i * 2], &mesh->mTextureCoords[0][i*2+i], sizeof(float) * numTexCoords);
-			}
-			_LOG("Mesh %s has %d texture coords.", getName(), numTexCoords / 2);
+			memcpy(texCoords, mesh->mTextureCoords[0], sizeof(float) * 3);
+			_LOG("Mesh %s has %d texture coords.", getName(), numTexCoords / 3);
 		}
 
 		ret = true;
@@ -130,23 +142,20 @@ bool Mesh::loadToOpenGl()
 
 	if (numVertices > 0 && numIndices > 0)
 	{
-		_LOG("1.Creating indices and vertices buffers");
 		glGenBuffers(1, (GLuint*)&idVertices);
 		glGenBuffers(1, (GLuint*)&idIndices);
-		_LOG("Buffs generated");
+
 		glBindBuffer(GL_ARRAY_BUFFER, idVertices);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * numVertices * 3, vertices, GL_STATIC_DRAW);
-		_LOG("Vertices");
+
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, idIndices);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * numIndices * 3, indices, GL_STATIC_DRAW);
-		_LOG("Indices");
-		_LOG("Loaded vertices and indices");
+
 		if (numNormals > 0)
 		{
 			glGenBuffers(1, (GLuint*)&idNormals);
 			glBindBuffer(GL_ARRAY_BUFFER, idNormals);
 			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * numNormals, normals, GL_STATIC_DRAW);
-			_LOG("Loaded normals");
 		}
 	
 		if (numTexCoords> 0)
@@ -154,7 +163,6 @@ bool Mesh::loadToOpenGl()
 			glGenBuffers(1, (GLuint*)&idTexCoords);
 			glBindBuffer(GL_ARRAY_BUFFER, idTexCoords);
 			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * numTexCoords, texCoords, GL_STATIC_DRAW);
-			_LOG("Loaded UV's");
 		}
 
 		ret = true;

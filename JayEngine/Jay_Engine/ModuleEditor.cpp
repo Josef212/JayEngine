@@ -111,7 +111,10 @@ update_status ModuleEditor::update(float dt)
 		//TMP
 		if (ImGui::BeginMenu("FBX"))
 		{
-			if (ImGui::MenuItem("Load fbx")) app->manager->loadFBX("Assets/fbx/warrior.FBX", NULL);
+			if (ImGui::MenuItem("Load warrior.fbx")) app->manager->loadFBX("warrior.fbx", NULL);
+			if (ImGui::MenuItem("Load brute.fbx")) app->manager->loadFBX("Brute.fbx", NULL);
+			if (ImGui::MenuItem("Load mecha.fbx")) app->manager->loadFBX("MechaT.fbx", NULL);
+			if (ImGui::MenuItem("Load town.fbx")) app->manager->loadFBX("Street environment_V01.FBX", NULL);
 			ImGui::EndMenu();
 		}
 		//---------------------

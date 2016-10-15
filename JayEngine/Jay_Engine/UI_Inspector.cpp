@@ -115,6 +115,9 @@ void UI_Inspector::drawMesh(GameObject* selected)
 	bool wire = mesh->renderWireframe;
 	if (ImGui::Checkbox("Wireframe", &wire)) mesh->renderWireframe = wire;
 
+	bool normals = mesh->renderNormals;
+	if (ImGui::Checkbox("Normals", &normals)) mesh->renderNormals = normals;
+
 	ImGui::Separator();
 }
 

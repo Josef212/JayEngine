@@ -69,4 +69,6 @@ enum update_status
 #define RELEASES_URL "https://github.com/Josef212/JayEngine/releases"
 #define ISSUES_URL "https://github.com/Josef212/JayEngine/issues"
 
+#define DEFAULT_FB_PATH "Assets/fbx"
+
 #endif

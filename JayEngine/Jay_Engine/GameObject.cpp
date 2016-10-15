@@ -39,7 +39,7 @@ void GameObject::update(float dt)
 
 	if (isGOActive())
 	{
-		//draw();
+		draw();
 	}
 }
 
@@ -114,7 +114,6 @@ Component* GameObject::addComponent(ComponentType type)
 	{
 		++nextCompId;
 		components.push_back(ret);
-		ret->init();
 	}
 
 	return ret;
@@ -201,11 +200,11 @@ void GameObject::draw()
 			glDisable(GL_LIGHTING);
 			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 			glLineWidth(1.f);
-			glColor4f(0.2f, 1.f, 0.2f, 1.f);
+			glColor4f(0.f, 0.8f, 0.8f, 1.f);
 			if (app->manager->getSelected() == this)
 			{
 				glLineWidth(0.1f);
-				glColor4f(0.f, 0.8f, 0.8f, 1.f);
+				glColor4f(0.2f, 1.f, 0.2f, 1.f);
 			}
 			else
 			{
@@ -220,7 +219,7 @@ void GameObject::draw()
 			{
 				glDisable(GL_LIGHTING);
 				glLineWidth(0.7f);
-				glBegin(GL_LINE);
+				glBegin(GL_LINES);
 				glColor4f(0.54f, 0.f, 0.54f, 1.f);
 
 				for (uint i = 0; i < mesh->numVertices; ++i)
@@ -253,14 +252,14 @@ void GameObject::draw()
 				glColor4f(0.5f, 0.5f, 0.5f, 1.f);
 			}
 
-			if (mesh->numTexCoords > 0)
+			if (mesh->idTexCoords > 0)
 			{
 				glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 				glBindBuffer(GL_ARRAY_BUFFER, mesh->idTexCoords);
 				glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 			}
 
-			if (mesh->numNormals > 0)
+			if (mesh->idNormals > 0)
 			{
 				glEnableClientState(GL_NORMAL_ARRAY);
 				glBindBuffer(GL_ARRAY_BUFFER, mesh->idNormals);
