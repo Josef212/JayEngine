@@ -149,7 +149,7 @@ bool Mesh::loadToOpenGl()
 		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * numVertices * 3, vertices, GL_STATIC_DRAW);
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, idIndices);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * numIndices * 3, indices, GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(float) * numIndices, indices, GL_STATIC_DRAW);
 
 		if (numNormals > 0)
 		{
