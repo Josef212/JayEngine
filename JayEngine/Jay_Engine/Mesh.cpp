@@ -13,6 +13,7 @@
 Mesh::Mesh(GameObject* gObj, int id) : Component(gObj, id)
 {
 	type = MESH;
+	//idTexture = -1;
 	name.assign("Mesh");
 }
 

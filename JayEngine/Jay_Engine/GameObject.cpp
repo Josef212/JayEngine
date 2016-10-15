@@ -241,7 +241,7 @@ void GameObject::draw()
 			if (mat)
 			{
 				//glColor4f(mat->getColor().r, mat->getColor().g, mat->getColor().b, mat->getColor().a);
-				uint tex = mat->idTexture;
+				uint tex = mat->getTexture(mesh->idTexture);
 				if (tex > 0)
 				{
 					glBindTexture(GL_TEXTURE_2D, tex);

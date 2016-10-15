@@ -112,6 +112,10 @@ void UI_Inspector::drawMesh(GameObject* selected)
 	ImGui::SameLine();
 	ImGui::TextColored(ImColor(255, 153, 51), "%d", mesh->numTexCoords / 2);
 
+	ImGui::Text("Texture ID: ");
+	ImGui::SameLine();
+	ImGui::TextColored(ImColor(255, 153, 51), "%d", mesh->idTexture);
+
 	bool wire = mesh->renderWireframe;
 	if (ImGui::Checkbox("Wireframe", &wire)) mesh->renderWireframe = wire;
 
@@ -132,4 +136,15 @@ void UI_Inspector::drawMaterial(GameObject* selected)
 	//Active
 	bool metActive = mat->isEnable();
 	if (ImGui::Checkbox("Active", &metActive)) mat->switchActive();
+
+	ImGui::Text("Textures vec size: ");
+	ImGui::SameLine();
+	ImGui::TextColored(ImColor(255, 153, 51), "%d", mat->getTexxturesSize());
+
+	for (std::map<std::string, int>::iterator it = mat->paths.begin(); it != mat->paths.end(); ++it)
+	{
+		ImGui::Text("%s", (*it).first.c_str());
+	}
+
+	ImGui::Separator();
 }

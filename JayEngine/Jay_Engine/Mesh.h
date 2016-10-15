@@ -42,6 +42,10 @@ public:
 	uint numTexCoords = 0; //Same texCoords as num of vertices but here will save numVertices*3 because each texCoord has 3 components, actually uv's are 2D but keep the 3rd variable
 	float* texCoords = NULL;
 
+	/**Will use a similar system as assimp, each mesh has the id of each texture, 
+	the id is the index of the textures array in the material component of the game object. */
+	int idTexture = -1; 
+
 	bool renderWireframe = false;
 	bool renderNormals = false;
 

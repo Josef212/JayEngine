@@ -2,6 +2,10 @@
 #define __MATERIAL_H__
 
 #include "Component.h"
+#include "Color.h"
+#include <vector>
+#include <map>
+#include <string>
 
 class Material : public Component
 {
@@ -16,10 +20,22 @@ public:
 	void update(float dt);
 	void cleanUp();
 
+	int loadTexture(char* file, char* path = NULL);
+	int getTexture(int index);
+	uint getTexxturesSize()
+	{
+		return textures.size();
+	}
+
+
 private:
 
 public:
-	uint idTexture = 0;
+	Color color;
+	std::vector<uint> textures;
+	std::map<std::string, int> paths;
+
+private:
 };
 
 #endif // !__MATERIAL_H__

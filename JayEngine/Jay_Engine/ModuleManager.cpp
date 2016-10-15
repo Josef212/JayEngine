@@ -211,13 +211,30 @@ GameObject* ModuleManager::loadObjects(aiNode* node, const aiScene* scene, GameO
 	_LOG("Loading new game obejct: %i. ===================", indexGO);
 	++indexGO;
 	//TODO: set material
-
 	for (uint i = 0; i < node->mNumMeshes; ++i)
 	{
 		_LOG("Loading new mesh: %i. ------------------", indexMesh);
 		Mesh* m = (Mesh*)ret->addComponent(MESH);
 		m->loadMesh(scene->mMeshes[node->mMeshes[i]], true);
 		//node->mMeshes is an uint array with the index of the mesh in scene->mMesh
+		if (scene->HasMaterials())
+		{
+			Material* mat = NULL;
+			mat = (Material*)ret->findComponent(MATERIAL);
+			if (!mat)
+				mat = (Material*)ret->addComponent(MATERIAL);
+			//TODO: Clear tex path
+			char* path = new char[256];
+			aiString str;
+			scene->mMaterials[scene->mMeshes[node->mMeshes[i]]->mMaterialIndex]->GetTexture(aiTextureType_DIFFUSE, 0, &str);
+			if (str.length > 0)
+			{
+				strcpy_s(path, 256, str.C_Str());
+				m->idTexture = mat->loadTexture(path);
+			}
+
+			RELEASE_ARRAY(path);
+		}
 		++indexMesh;
 	}
 
