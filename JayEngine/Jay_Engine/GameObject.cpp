@@ -240,11 +240,14 @@ void GameObject::draw()
 
 			if (mat)
 			{
-				//glColor4f(mat->getColor().r, mat->getColor().g, mat->getColor().b, mat->getColor().a);
-				uint tex = mat->getTexture(mesh->idTexture);
-				if (tex > 0)
+				glColor4f(mat->color.r, mat->color.g, mat->color.b, mat->color.a);
+				if (mesh->idTexture > -1)
 				{
-					glBindTexture(GL_TEXTURE_2D, tex);
+					uint tex = mat->getTexture(mesh->idTexture);
+					if (tex > 0)
+					{
+						glBindTexture(GL_TEXTURE_2D, tex);
+					}
 				}
 			}
 			else
@@ -273,6 +276,7 @@ void GameObject::draw()
 		//Cleaning
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindTexture(GL_TEXTURE_2D, 0);
 		//------
 		glDisableClientState(GL_NORMAL_ARRAY);
 		glDisableClientState(GL_COLOR_ARRAY);

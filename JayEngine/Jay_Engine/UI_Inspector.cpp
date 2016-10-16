@@ -1,6 +1,8 @@
 #include "Application.h"
 #include "UI_Inspector.h"
 
+#include "OpenGL.h"
+
 #include "GameObject.h"
 #include "Transform.h"
 #include "Mesh.h"
@@ -22,13 +24,13 @@ UI_Inspector::~UI_Inspector()
 
 void UI_Inspector::draw()
 {
-	int w = app->window->getWidth();
-	int h = app->window->getHeight();
+	windowW = app->window->getWidth();
+	windowH = app->window->getHeight();
 
 	GameObject* selected = app->manager->getSelected();
 
-	ImGui::SetNextWindowPos(ImVec2(w - 250, 20));
-	ImGui::SetNextWindowSize(ImVec2(250, h));
+	ImGui::SetNextWindowPos(ImVec2(windowW - 250, 20));
+	ImGui::SetNextWindowSize(ImVec2(250, windowH - 20));
 
 	if (ImGui::Begin("Inspector"), &active)
 	{
@@ -140,10 +142,27 @@ void UI_Inspector::drawMaterial(GameObject* selected)
 	ImGui::Text("Textures vec size: ");
 	ImGui::SameLine();
 	ImGui::TextColored(ImColor(255, 153, 51), "%d", mat->getTexxturesSize());
-
+	
+	ImGui::ColorEdit4("Color:", (float*)&mat->color, false);
+	
 	for (std::map<std::string, int>::iterator it = mat->paths.begin(); it != mat->paths.end(); ++it)
 	{
 		ImGui::Text("%s", (*it).first.c_str());
+
+	}
+
+	std::map<std::string, int>::iterator it = mat->paths.begin();
+	for (uint i = 0; i < mat->textures.size() && it != mat->paths.end(); ++i, ++it)
+	{
+		if (ImGui::TreeNode("%s", (*it).first.c_str()))
+		{
+			uint j = mat->textures[i];
+			glBindTexture(GL_TEXTURE_2D, j);
+			ImTextureID texture = (void*)j;
+			ImGui::Image(texture, ImVec2(windowW, 250));
+
+			ImGui::TreePop();
+		}
 	}
 
 	ImGui::Separator();

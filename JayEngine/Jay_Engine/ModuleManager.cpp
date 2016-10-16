@@ -233,6 +233,10 @@ GameObject* ModuleManager::loadObjects(aiNode* node, const aiScene* scene, GameO
 				m->idTexture = mat->loadTexture(path);
 			}
 
+			aiColor4D col;
+			scene->mMaterials[scene->mMeshes[node->mMeshes[i]]->mMaterialIndex]->Get(AI_MATKEY_COLOR_DIFFUSE, col);
+			mat->color.Set(col.r, col.g, col.b, col.a);
+
 			RELEASE_ARRAY(path);
 		}
 		++indexMesh;

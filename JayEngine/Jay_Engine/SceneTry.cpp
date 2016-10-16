@@ -7,7 +7,17 @@
 #include "UI_Inspector.h"
 #include "ModuleEditor.h"
 
-#include "OpenGLDraws.h"
+#include "OpenGL.h"
+
+#include "Devil/include/il.h"
+#include "Devil/include/ilu.h"
+#include "Devil/include/ilut.h"
+
+#pragma comment( lib, "Devil/libx86/DevIL.lib" )
+#pragma comment( lib, "Devil/libx86/ILU.lib" )
+#pragma comment( lib, "Devil/libx86/ILUT.lib" )
+
+//#include "OpenGLDraws.h"
 
 SceneTry::SceneTry(bool startEnabled) : Module(startEnabled)
 {
@@ -47,7 +57,7 @@ bool SceneTry::start()
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * 6, i, GL_STATIC_DRAW);*/
 
 	//Create checker texture
-	/*const int CHECKERS_H = 64, CHECKERS_W = 64;
+	const int CHECKERS_H = 64, CHECKERS_W = 64;
 	GLubyte checkImage[CHECKERS_H][CHECKERS_W][4];
 	for (int i = 0; i < CHECKERS_H; i++)
 	{
@@ -69,7 +79,9 @@ bool SceneTry::start()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_W, CHECKERS_H, 0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);*/
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_W, CHECKERS_H, 0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);
+
+	//texId = ilutGLLoadImage("Assets/textures/Lenna.png");
 
 	return true;
 }
@@ -107,6 +119,107 @@ update_status SceneTry::postUpdate(float dt)
 	glDisableClientState(GL_VERTEX_ARRAY);*/
 
 	//------------------------------
+
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, texId);
+	
+	glBegin(GL_TRIANGLES);
+
+	float s = 1.f * 2;
+
+	//----------------------- Front
+	
+	glTexCoord2f(1.f, 1.f);
+	glVertex3d(s, s, s);	
+	glTexCoord2f(0.f, 0.f);
+	glVertex3d(-s, -s, s);	
+	glTexCoord2f(1.f, 0.f);
+	glVertex3d(s, -s, s);
+
+	glTexCoord2f(0.f, 1.f);
+	glVertex3d(-s, s, s);	
+	glTexCoord2f(0.f, 0.f);
+	glVertex3d(-s, -s, s);	
+	glTexCoord2f(1.f, 1.f);
+	glVertex3d(s, s, s);
+	//----------------------- Top
+
+	glTexCoord2f(0.f, 1.f);
+	glVertex3d(-s, s, s);
+	glTexCoord2f(1.f, 1.f);
+	glVertex3d(s, s, s);
+	glTexCoord2f(1.f, 0.f);
+	glVertex3d(s, s, -s);
+
+	glTexCoord2f(0.f, 1.f);
+	glVertex3d(-s, s, s);
+	glTexCoord2f(1.f, 0.f);
+	glVertex3d(s, s, -s);
+	glTexCoord2f(0.f, 0.f);
+	glVertex3d(-s, s, -s);
+	//----------------------- Right
+
+	glTexCoord2f(1.f, 1.f);
+	glVertex3d(s, s, s);
+	glTexCoord2f(0.f, 1.f);
+	glVertex3d(s, -s, s);
+	glTexCoord2f(1.f, 0.f);
+	glVertex3d(s, s, -s);
+
+	glTexCoord2f(0.f, 1.f);
+	glVertex3d(s, -s, s);
+	glTexCoord2f(0.f, 0.f);
+	glVertex3d(s, -s, -s);
+	glTexCoord2f(1.f, 0.f);
+	glVertex3d(s, s, -s);
+	//----------------------- Left
+
+	glTexCoord2f(1.f, 0.f);
+	glVertex3d(-s, s, -s);
+	glTexCoord2f(0.f, 1.f);
+	glVertex3d(-s, -s, s);
+	glTexCoord2f(1.f, 1.f);
+	glVertex3d(-s, s, s);
+
+	glTexCoord2f(1.f, 0.f);
+	glVertex3d(-s, s, -s);
+	glTexCoord2f(0.f, 0.f);
+	glVertex3d(-s, -s, -s);
+	glTexCoord2f(0.f, 1.f);
+	glVertex3d(-s, -s, s);
+	//----------------------- Bottom
+	
+	glTexCoord2f(0.f, 1.f);
+	glVertex3d(-s, -s, s);
+	glTexCoord2f(1.f, 0.f);
+	glVertex3d(s, -s, -s);
+	glTexCoord2f(1.f, 1.f);
+	glVertex3d(s, -s, s);
+
+	glTexCoord2f(0.f, 1.f);
+	glVertex3d(-s, -s, s);
+	glTexCoord2f(0.f, 0.f);
+	glVertex3d(-s, -s, -s);
+	glTexCoord2f(1.f, 0.f);
+	glVertex3d(s, -s, -s);
+	//----------------------- Behind
+
+	glTexCoord2f(1.f, 1.f);
+	glVertex3d(s, s, -s);
+	glTexCoord2f(1.f, 0.f);
+	glVertex3d(s, -s, -s);
+	glTexCoord2f(0.f, 1.f);
+	glVertex3d(-s, s, -s);
+
+	glTexCoord2f(1.f, 0.f);
+	glVertex3d(s, -s, -s);
+	glTexCoord2f(0.f, 0.f);
+	glVertex3d(-s, -s, -s);
+	glTexCoord2f(0.f, 1.f);
+	glVertex3d(-s, s, -s);
+
+	glEnd();
+	glBindTexture(GL_TEXTURE_2D, 0);
 
 	return UPDATE_CONTINUE;
 }

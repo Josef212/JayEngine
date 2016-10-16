@@ -21,6 +21,7 @@ private:
 public:
 
 private:
+	uint windowW = 1, windowH = 1;
 };
 
 #endif // !__UI_INSPECTOR_H__
