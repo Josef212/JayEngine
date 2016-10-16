@@ -10,6 +10,7 @@
 
 #include "ModuleManager.h"
 #include "ModuleWindow.h"
+#include "ModuleRenderer3D.h"
 
 
 UI_Inspector::UI_Inspector() : UI_Comp()
@@ -34,6 +35,7 @@ void UI_Inspector::draw()
 
 	ImGui::Begin("Inspector", &active);
 	{
+		ImGui::Checkbox("ShowGrid", &app->renderer3D->showGrid);
 		if (selected)
 		{
 			for (uint i = 0; i < selected->components.size(); ++i)

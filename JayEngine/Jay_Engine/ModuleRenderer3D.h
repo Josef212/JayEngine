@@ -30,10 +30,10 @@ public:
 	SDL_GLContext context;
 	mat3x3 normalMatrix;
 	mat4x4 modelMatrix, viewMatrix, projectionMatrix;
+	bool showGrid = true;
 
 private:
 	bool vsync;
-	bool showGrid = true;
 
 };
 
