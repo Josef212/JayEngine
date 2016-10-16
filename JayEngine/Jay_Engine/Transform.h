@@ -39,13 +39,25 @@ public:
 	float3 getGlobalPosition();
 	void getGlobalPosition(float& x, float& y, float& z);
 
-	float4x4 getTransformMatrix()const;
+	float3 getGlobalScale();
+	void getGlobalScale(float& x, float& y, float& z);
+
+	float4x4 getGlobalRotation();
+
+	float4x4 getTransformMatrix();
+	//float4x4 getGlobalTransformMatrix();
+
+private:
+	void updateTransform();
 
 public:
 	float3 position = float3::zero;
 	float3 scale = float3::zero;
 	Quat rotation = Quat::identity;
 	float3 rotationEuler = float3::zero;
+
+private:
+	float4x4 transform = float4x4::identity;
 };
 
 #endif // !__TRANSFORMATION_H__

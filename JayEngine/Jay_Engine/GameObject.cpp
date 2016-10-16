@@ -20,6 +20,11 @@ GameObject::GameObject(GameObject* parent, int id) : parent(parent), id(id)
 
 GameObject::~GameObject()
 {
+	for (uint i = 0; i < components.size(); ++i)
+		RELEASE(components[i]);
+
+	for (uint j = 0; j < childrens.size(); ++j)
+		RELEASE(childrens[j]);
 }
 
 void GameObject::init()
@@ -190,30 +195,25 @@ void GameObject::draw()
 
 	if (trans && mesh)
 	{
-		glEnableClientState(GL_VERTEX_ARRAY);
+		//----------------------
 
+		glPushMatrix();
+		glMultMatrixf(trans->getTransformMatrix().ptr());
+
+		//----------------------
+
+		glEnableClientState(GL_VERTEX_ARRAY);
 		glBindBuffer(GL_ARRAY_BUFFER, mesh->idVertices);
 		glVertexPointer(3, GL_FLOAT, 0, NULL);
 
 		if (mesh->renderWireframe)
 		{
-			glDisable(GL_LIGHTING);
-			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-			glLineWidth(1.f);
-			glColor4f(0.f, 0.8f, 0.8f, 1.f);
-			if (app->manager->getSelected() == this)
-			{
-				glLineWidth(0.1f);
-				glColor4f(0.2f, 1.f, 0.2f, 1.f);
-			}
-			else
-			{
-				glDisable(GL_CULL_FACE);
-			}
+			drawWires(app->manager->getSelected() == this);
 		}
 		else
 		{
-			//RenderNormals
+			if (app->manager->getSelected() == this)
+				drawWires(true);
 
 			if (mesh->renderNormals)
 			{
@@ -240,6 +240,7 @@ void GameObject::draw()
 
 			if (mat)
 			{
+				glEnable(GL_TEXTURE_2D);
 				glColor4f(mat->color.r, mat->color.g, mat->color.b, mat->color.a);
 				if (mesh->idTexture > -1)
 				{
@@ -287,5 +288,29 @@ void GameObject::draw()
 		glEnable(GL_LIGHTING);
 		glEnable(GL_CULL_FACE);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+		//----------------------
+
+		glPopMatrix();
+
+		//----------------------
+	}
+}
+
+void GameObject::drawWires(bool selct)
+{
+	glDisable(GL_LIGHTING);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glLineWidth(1.f);
+	glColor4f(0.f, 0.8f, 0.8f, 1.f);
+
+	if (selct)
+	{
+		glLineWidth(1.1f);
+		glColor4f(0.2f, 1.f, 0.2f, 1.f);
+	}
+	else
+	{
+		glDisable(GL_CULL_FACE);
 	}
 }

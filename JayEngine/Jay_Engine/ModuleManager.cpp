@@ -32,6 +32,8 @@ ModuleManager::ModuleManager(bool startEnabled) : Module(startEnabled)
 
 ModuleManager::~ModuleManager()
 {
+	if (sceneRootObject)
+		RELEASE(sceneRootObject);
 }
 
 bool ModuleManager::init()
@@ -42,6 +44,9 @@ bool ModuleManager::init()
 	aiAttachLogStream(&stream);
 
 	ilInit();
+	iluInit();
+	ilutInit();
+	ilutRenderer(ILUT_OPENGL);
 
 	ILuint devilError = ilGetError();
 	if (devilError != IL_NO_ERROR)
@@ -61,6 +66,7 @@ bool ModuleManager::init()
 
 update_status ModuleManager::preUpdate(float dt)
 {
+
 	return UPDATE_CONTINUE;
 }
 
@@ -207,10 +213,25 @@ GameObject* ModuleManager::loadObjects(aiNode* node, const aiScene* scene, GameO
 
 	ret->setName(node->mName.C_Str());
 
-	//TODO: set transformation
 	_LOG("Loading new game obejct: %i. ===================", indexGO);
 	++indexGO;
-	//TODO: set material
+
+	//Set transformation
+	aiVector3D pos;
+	aiVector3D scl;
+	aiQuaternion rot;
+	node->mTransformation.Decompose(scl, rot, pos);
+
+	Transform* trans = (Transform*)ret->findComponent(TRANSFORMATION);
+	if (trans)
+	{
+		trans->setPosition(pos.x, pos.y, pos.z);
+		trans->setScale(scl.x, scl.y, scl.z);
+		trans->setRotation(rot.x, rot.y, rot.z, rot.w);
+	}
+
+
+	//Set material
 	for (uint i = 0; i < node->mNumMeshes; ++i)
 	{
 		_LOG("Loading new mesh: %i. ------------------", indexMesh);

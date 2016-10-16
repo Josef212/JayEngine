@@ -3,6 +3,7 @@
 
 #include "Globals.h"
 #include "Component.h"
+#include "Math.h"
 #include <vector>
 #include <string>
 
@@ -38,6 +39,7 @@ public:
 
 private:
 	void draw();
+	void drawWires(bool selct);
 
 public:
 	std::vector<Component*> components;

@@ -14,6 +14,8 @@ Material::Material(GameObject* gObj, int id) : Component(gObj, id)
 
 Material::~Material()
 {
+	textures.clear();
+	paths.clear();
 }
 
 void Material::enable()
@@ -78,7 +80,9 @@ int Material::loadTexture(char* file, char* path)
 		_LOG("Error loading texture %s", realPath);
 		ILuint devilError = ilGetError();
 		if (devilError != IL_NO_ERROR)
+		{
 			_LOG("Error while loading a texture, devil: %s\n", iluErrorString(devilError));
+		}
 	}
 
 	RELEASE_ARRAY(realPath);

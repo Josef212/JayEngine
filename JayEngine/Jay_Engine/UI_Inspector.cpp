@@ -29,8 +29,8 @@ void UI_Inspector::draw()
 
 	GameObject* selected = app->manager->getSelected();
 
-	ImGui::SetNextWindowPos(ImVec2(windowW - 250, 20));
-	ImGui::SetNextWindowSize(ImVec2(250, windowH - 20));
+	ImGui::SetNextWindowPos(ImVec2(windowW - 300, 20));
+	ImGui::SetNextWindowSize(ImVec2(300, windowH - 20));
 
 	if (ImGui::Begin("Inspector"), &active)
 	{
@@ -60,7 +60,7 @@ void UI_Inspector::drawTransformation(GameObject* selected)
 {
 	Transform* trans = (Transform*)selected->findComponent(TRANSFORMATION);
 	
-	static char transName[60];
+	char transName[60];
 	strcpy_s(transName, 60, trans->getName());
 	//Name
 	if (ImGui::InputText("Name:", transName, 60))
@@ -69,9 +69,9 @@ void UI_Inspector::drawTransformation(GameObject* selected)
 	bool transActive = trans->isEnable();
 	if (ImGui::Checkbox("Active", &transActive)) trans->switchActive();
 
-	static float* pos = trans->getPosition();
-	static float* scale = trans->getScale();
-	static float* rot = trans->getEulerRot();
+	float* pos = trans->getPosition();
+	float* scale = trans->getScale();
+	float* rot = trans->getEulerRot();
 	//Position
 	if (ImGui::DragFloat3("Position:", pos)) trans->setPosition(pos);
 	//Scale
@@ -86,7 +86,7 @@ void UI_Inspector::drawMesh(GameObject* selected)
 {
 	Mesh* mesh = (Mesh*)selected->findComponent(MESH);
 
-	static char meshName[60];
+	char meshName[60];
 	strcpy_s(meshName, 60, mesh->getName());
 	//Name
 	if (ImGui::InputText("Name:", meshName, 60))
@@ -131,7 +131,7 @@ void UI_Inspector::drawMaterial(GameObject* selected)
 {
 	Material* mat = (Material*)selected->findComponent(MATERIAL);
 
-	static char matName[60];
+	char matName[60];
 	strcpy_s(matName, 60, mat->getName());
 	//Name
 	if (ImGui::InputText("Name:", matName, 60)) mat->setName(matName);
@@ -159,7 +159,7 @@ void UI_Inspector::drawMaterial(GameObject* selected)
 			uint j = mat->textures[i];
 			glBindTexture(GL_TEXTURE_2D, j);
 			ImTextureID texture = (void*)j;
-			ImGui::Image(texture, ImVec2(windowW, 250));
+			ImGui::Image(texture, ImVec2(windowW, 300));
 
 			ImGui::TreePop();
 		}

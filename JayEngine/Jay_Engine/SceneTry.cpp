@@ -6,6 +6,7 @@
 #include "ModuleInput.h"
 #include "UI_Inspector.h"
 #include "ModuleEditor.h"
+#include "ModuleImporter.h"
 
 #include "OpenGL.h"
 
@@ -30,6 +31,11 @@ SceneTry::~SceneTry()
 
 bool SceneTry::init()
 {
+	ilInit();
+	iluInit();
+	ilutInit();
+	ilutRenderer(ILUT_OPENGL);
+
 	return true;
 }
 
@@ -57,7 +63,7 @@ bool SceneTry::start()
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * 6, i, GL_STATIC_DRAW);*/
 
 	//Create checker texture
-	const int CHECKERS_H = 64, CHECKERS_W = 64;
+	/*const int CHECKERS_H = 64, CHECKERS_W = 64;
 	GLubyte checkImage[CHECKERS_H][CHECKERS_W][4];
 	for (int i = 0; i < CHECKERS_H; i++)
 	{
@@ -79,9 +85,10 @@ bool SceneTry::start()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_W, CHECKERS_H, 0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_W, CHECKERS_H, 0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);*/
 
-	//texId = ilutGLLoadImage("Assets/textures/Lenna.png");
+	app->importer->loadFBXs("Assets/fbx/MechaT.fbx");
+	texId = ilutGLLoadImage("Assets/textures/Diffuse_Mech.png");//ilutGLLoadImage("Assets/textures/Lenna.png");
 
 	return true;
 }
@@ -120,7 +127,7 @@ update_status SceneTry::postUpdate(float dt)
 
 	//------------------------------
 
-	glEnable(GL_TEXTURE_2D);
+	/*glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, texId);
 	
 	glBegin(GL_TRIANGLES);
@@ -219,12 +226,17 @@ update_status SceneTry::postUpdate(float dt)
 	glVertex3d(-s, s, -s);
 
 	glEnd();
-	glBindTexture(GL_TEXTURE_2D, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);*/
+	/*glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, texId);
+	app->importer->drawMeshes(app->importer->Mmeshes);
+	glBindTexture(GL_TEXTURE_2D, 0);*/
 
 	return UPDATE_CONTINUE;
 }
 
 bool SceneTry::cleanUp()
 {
+	ilShutDown();
 	return true;
 }

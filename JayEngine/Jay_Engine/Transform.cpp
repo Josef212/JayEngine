@@ -45,11 +45,13 @@ void Transform::cleanUp()
 void Transform::setPosition(float x, float y, float z)
 {
 	position.Set(x, y, z);
+	updateTransform();
 }
 
 void Transform::setPosition(float* pos)
 {
 	position.Set(pos);
+	updateTransform();
 }
 
 const void Transform::getPosition(float& x, float& y, float& z)const
@@ -67,11 +69,13 @@ float* Transform::getPosition()const
 void Transform::setScale(float x, float y, float z)
 {
 	scale.Set(x, y, z);
+	updateTransform();
 }
 
 void Transform::setScale(float* scl)
 {
 	scale.Set(scl);
+	updateTransform();
 }
 
 const void Transform::getScale(float& x, float& y, float& z)const
@@ -89,6 +93,7 @@ float* Transform::getScale()const
 void Transform::setRotation(float x, float y, float z, float w)
 {
 	rotation.Set(x, y, z, w);
+	updateTransform();
 }
 
 void Transform::setRotation(float* rot)
@@ -103,11 +108,11 @@ void Transform::setRotation(float* rot)
 	while (r.z < 0)
 		r.z += 360;
 
-	while (r.x > 360)
+	while (r.x >= 360)
 		r.x -= 360;
-	while (r.y > 360)
+	while (r.y >= 360)
 		r.y -= 360;
-	while (r.z > 360)
+	while (r.z >= 360)
 		r.z -= 360;
 
 	r.x *= DEGTORAD;
@@ -115,6 +120,7 @@ void Transform::setRotation(float* rot)
 	r.z *= DEGTORAD;
 
 	rotation = Quat::FromEulerXYZ(r.x, r.y, r.z);
+	updateTransform();
 }
 
 void Transform::setRotation(float x, float y, float z)
@@ -126,11 +132,11 @@ void Transform::setRotation(float x, float y, float z)
 	while (z < 0)
 		z += 360;
 
-	while (x > 360)
+	while (x >= 360)
 		x -= 360;
-	while (y > 360)
+	while (y >= 360)
 		y -= 360;
-	while (z > 360)
+	while (z >= 360)
 		z -= 360;
 
 	x *= DEGTORAD;
@@ -138,6 +144,7 @@ void Transform::setRotation(float x, float y, float z)
 	z *= DEGTORAD;
 
 	rotation = Quat::FromEulerXYZ(x, y, z);
+	updateTransform();
 }
 
 const void Transform::getRotation(float& x, float& y, float& z, float& w)const
@@ -163,11 +170,11 @@ float* Transform::getRotation()
 	while (ret.z < 0)
 		ret.z += 360;
 
-	while (ret.x > 360)
+	while (ret.x >= 360)
 		ret.x -= 360;
-	while (ret.y > 360)
+	while (ret.y >= 360)
 		ret.y -= 360;
-	while (ret.z > 360)
+	while (ret.z >= 360)
 		ret.z -= 360;
 
 	return (float*)&ret;
@@ -188,11 +195,11 @@ float* Transform::getEulerRot()
 	while (rotationEuler.z < 0)
 		rotationEuler.z += 360;
 
-	while (rotationEuler.x > 360)
+	while (rotationEuler.x >= 360)
 		rotationEuler.x -= 360;
-	while (rotationEuler.y > 360)
+	while (rotationEuler.y >= 360)
 		rotationEuler.y -= 360;
-	while (rotationEuler.z > 360)
+	while (rotationEuler.z >= 360)
 		rotationEuler.z -= 360;
 
 	return (float*)&rotationEuler;
@@ -202,13 +209,15 @@ float3 Transform::getGlobalPosition()
 {
 	float3 ret = position;
 
-	if (object->getParent())
+	GameObject* it = object->getParent();
+	while (it)
 	{
-		Transform* t = (Transform*)object->getParent()->findComponent(TRANSFORMATION);
-		if (t)
+		Transform* trans = (Transform*)object->getParent()->findComponent(TRANSFORMATION);
+		if (trans)
 		{
-			ret += t->getGlobalPosition();
+			ret += trans->getGlobalPosition();
 		}
+		it = it->getParent();
 	}
 
 	return ret;
@@ -223,14 +232,98 @@ void Transform::getGlobalPosition(float& x, float& y, float& z)
 	z = pos.z;
 }
 
-float4x4 Transform::getTransformMatrix()const
+float3 Transform::getGlobalScale()
+{
+	float3 ret = scale;
+
+	GameObject* it = object->getParent();
+	while (it)
+	{
+		Transform* trans = (Transform*)object->getParent()->findComponent(TRANSFORMATION);
+		if (trans)
+		{
+			ret += trans->getGlobalScale();
+		}
+		it = it->getParent();
+	}
+
+	return ret;
+}
+
+void Transform::getGlobalScale(float& x, float& y, float& z)
+{
+	float3 scl = getGlobalScale();
+
+	x = scl.x;
+	y = scl.y;
+	z = scl.z;
+}
+
+/*float4x4 Transform::getGlobalRotation()
+{
+	float4x4 ret = rotation.ToFloat4x4();
+
+	GameObject* it = object->getParent();
+	while (it)
+	{
+		Transform* trans = (Transform*)object->getParent()->findComponent(TRANSFORMATION);
+		if (trans)
+		{
+			ret += trans->getGlobalRotation();
+		}
+		it = it->getParent();
+	}
+
+	return ret;
+}*/
+
+/*float4x4 Transform::getTransformMatrix()
 {
 	if (isEnable())
 	{
-		float4x4 ret = float4x4::FromTRS(position, rotation.ToFloat4x4(), scale);
-		ret.Transpose();
-		return ret;
+		float4x4 ret = transform;
+		if (object->getParent())
+		{
+			Transform* trans = (Transform*)object->getParent()->findComponent(TRANSFORMATION);
+			if(trans)
+				ret = trans->getTransformMatrix() * transform;
+		}
+		return ret.Transposed();
 	}
 	else
 		return float4x4::identity;
+}*/
+
+float4x4 Transform::getTransformMatrix()
+{
+	if (isEnable())
+	{
+		return float4x4::FromTRS(position, rotation.ToFloat3x3(), scale).Transposed();
+	}
+	else
+		return float4x4::identity;
+}
+
+float4x4 Transform::getGlobalRotation()
+{
+	float4x4 ret = rotation.ToFloat4x4();
+
+	GameObject* it = object->getParent();
+	while (it)
+	{
+		Transform* trans = (Transform*)object->getParent()->findComponent(TRANSFORMATION);
+		if (trans)
+		{
+			ret = ret * trans->getGlobalRotation();
+		}
+		it = it->getParent();
+	}
+
+	return ret;
+}
+
+void Transform::updateTransform()
+{
+	/*transform = float4x4::FromTRS(position, rotation, scale);
+	transform.Transpose();*/
 }
