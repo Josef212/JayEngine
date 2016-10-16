@@ -218,16 +218,3 @@ void ModuleEditor::addMaterial()
 {
 	app->manager->addMaterial();
 }
-
-void ModuleEditor::showDoc()
-{
-	if (ImGui::MenuItem("Assimp")) app->browse(ASSIMP_DOC_URL);
-	if (ImGui::MenuItem("Bullet")) app->browse(BULLET_DOC_URL);
-	if (ImGui::MenuItem("Devil")) app->browse(DEVIL_DOC_URL);
-	if (ImGui::MenuItem("ImGui")) app->browse(IMGUI_DOC_URL);
-	if (ImGui::MenuItem("MathGeolib")) app->browse(MATHGEOLIB_DOC_URL);
-	if (ImGui::MenuItem("OpenGL")) app->browse(OPENGL_DOC_URL);
-	if (ImGui::MenuItem("PhysFs")) app->browse(PHYSFS_DOC_URL);
-	if (ImGui::MenuItem("SDL2")) app->browse(SDL_DOC_URL);
-	if (ImGui::MenuItem("SDL_Mixer")) app->browse(SDL_MIXER_DOC_URL);
-}

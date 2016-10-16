@@ -39,14 +39,6 @@ public:
 	float* getRotation();//Don't use it
 	float* getEulerRot();
 
-	//All these transform are about global
-	float3 getGlobalPosition();
-	void getGlobalPosition(float& x, float& y, float& z);
-
-	float3 getGlobalScale();
-	void getGlobalScale(float& x, float& y, float& z);
-
-	float4x4 getGlobalRotation();
 	float4x4 getTransformMatrix();
 	void updateTransform(float4x4& parentMat);
 

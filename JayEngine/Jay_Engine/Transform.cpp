@@ -242,60 +242,6 @@ float* Transform::getEulerRot()
 	return (float*)&rotationEuler;
 }
 
-float3 Transform::getGlobalPosition()
-{
-	float3 ret = position;
-
-	GameObject* it = object->getParent();
-	while (it)
-	{
-		Transform* trans = (Transform*)object->getParent()->findComponent(TRANSFORMATION);
-		if (trans)
-		{
-			ret += trans->getGlobalPosition();
-		}
-		it = it->getParent();
-	}
-
-	return ret;
-}
-
-void Transform::getGlobalPosition(float& x, float& y, float& z)
-{
-	float3 pos = getGlobalPosition();
-
-	x = pos.x;
-	y = pos.y;
-	z = pos.z;
-}
-
-float3 Transform::getGlobalScale()
-{
-	float3 ret = scale;
-
-	GameObject* it = object->getParent();
-	while (it)
-	{
-		Transform* trans = (Transform*)object->getParent()->findComponent(TRANSFORMATION);
-		if (trans)
-		{
-			ret += trans->getGlobalScale();
-		}
-		it = it->getParent();
-	}
-
-	return ret;
-}
-
-void Transform::getGlobalScale(float& x, float& y, float& z)
-{
-	float3 scl = getGlobalScale();
-
-	x = scl.x;
-	y = scl.y;
-	z = scl.z;
-}
-
 float4x4 Transform::getTransformMatrix()
 {
 	if (isEnable())
