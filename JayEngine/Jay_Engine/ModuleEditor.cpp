@@ -77,8 +77,9 @@ update_status ModuleEditor::update(float dt)
 
 		if (ImGui::BeginMenu("View"))
 		{
-			if (ImGui::MenuItem("Console")) console->swapActive();
 			if (ImGui::MenuItem("Configuration")) conf->swapActive();
+			if (ImGui::MenuItem("Console")) console->swapActive();
+			if (ImGui::MenuItem("Hierarchy")) hieracy->swapActive();
 			if (ImGui::MenuItem("Inspector")) inspector->swapActive();
 			ImGui::EndMenu();
 		}
@@ -100,9 +101,24 @@ update_status ModuleEditor::update(float dt)
 		if (ImGui::BeginMenu("Help"))
 		{
 			if (ImGui::MenuItem("ImGui Demo")) showImGuiDemo = !showImGuiDemo;
-			if (ImGui::MenuItem("Documentation")) app->browse(WIKI_URL);
+			if (ImGui::MenuItem("Engine Documentation")) app->browse(WIKI_URL);
 			if (ImGui::MenuItem("Check all releases")) app->browse(RELEASES_URL);
 			if (ImGui::MenuItem("Report a bug")) app->browse(ISSUES_URL);
+			if (ImGui::BeginMenu("3rd Party Documentation"))
+			{
+				if (ImGui::MenuItem("Assimp")) app->browse(ASSIMP_DOC_URL);
+				if (ImGui::MenuItem("Bullet")) app->browse(BULLET_DOC_URL);
+				if (ImGui::MenuItem("Devil")) app->browse(DEVIL_DOC_URL);
+				if (ImGui::MenuItem("ImGui")) app->browse(IMGUI_DOC_URL);
+				if (ImGui::MenuItem("MathGeolib")) app->browse(MATHGEOLIB_DOC_URL);
+				if (ImGui::MenuItem("OpenGL")) app->browse(OPENGL_DOC_URL);
+				if (ImGui::MenuItem("PhysFs")) app->browse(PHYSFS_DOC_URL);
+				if (ImGui::MenuItem("SDL2")) app->browse(SDL_DOC_URL);
+				if (ImGui::MenuItem("SDL_Mixer")) app->browse(SDL_MIXER_DOC_URL);
+
+				ImGui::EndMenu();
+			}
+
 			if (ImGui::MenuItem("About")) showAbout = !showAbout;
 			ImGui::EndMenu();
 		}
@@ -111,7 +127,6 @@ update_status ModuleEditor::update(float dt)
 		//TMP
 		if (ImGui::BeginMenu("FBX"))
 		{
-			if (ImGui::MenuItem("Load warrior.fbx")) app->manager->loadFBX("warrior.fbx", NULL);
 			if (ImGui::MenuItem("Load brute.fbx")) app->manager->loadFBX("Brute.fbx", NULL);
 			if (ImGui::MenuItem("Load mecha.fbx")) app->manager->loadFBX("MechaT.fbx", NULL);
 			if (ImGui::MenuItem("Load town.fbx")) app->manager->loadFBX("Street environment_V01.FBX", NULL);
@@ -202,4 +217,17 @@ void ModuleEditor::addMesh()
 void ModuleEditor::addMaterial()
 {
 	app->manager->addMaterial();
+}
+
+void ModuleEditor::showDoc()
+{
+	if (ImGui::MenuItem("Assimp")) app->browse(ASSIMP_DOC_URL);
+	if (ImGui::MenuItem("Bullet")) app->browse(BULLET_DOC_URL);
+	if (ImGui::MenuItem("Devil")) app->browse(DEVIL_DOC_URL);
+	if (ImGui::MenuItem("ImGui")) app->browse(IMGUI_DOC_URL);
+	if (ImGui::MenuItem("MathGeolib")) app->browse(MATHGEOLIB_DOC_URL);
+	if (ImGui::MenuItem("OpenGL")) app->browse(OPENGL_DOC_URL);
+	if (ImGui::MenuItem("PhysFs")) app->browse(PHYSFS_DOC_URL);
+	if (ImGui::MenuItem("SDL2")) app->browse(SDL_DOC_URL);
+	if (ImGui::MenuItem("SDL_Mixer")) app->browse(SDL_MIXER_DOC_URL);
 }

@@ -198,7 +198,7 @@ void GameObject::draw()
 		//----------------------
 
 		glPushMatrix();
-		glMultMatrixf(trans->getTransformMatrix().ptr());
+		glMultMatrixf(*trans->getTransformMatrix().v);
 
 		//----------------------
 

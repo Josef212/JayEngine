@@ -32,7 +32,7 @@ void UI_Inspector::draw()
 	ImGui::SetNextWindowPos(ImVec2(windowW - 300, 20));
 	ImGui::SetNextWindowSize(ImVec2(300, windowH - 20));
 
-	if (ImGui::Begin("Inspector"), &active)
+	ImGui::Begin("Inspector", &active);
 	{
 		if (selected)
 		{
@@ -77,7 +77,7 @@ void UI_Inspector::drawTransformation(GameObject* selected)
 	//Scale
 	if (ImGui::DragFloat3("Scale:", scale)) trans->setScale(scale);
 	//Rotation
-	if (ImGui::DragFloat3("Rotation:", rot, 0.5f, -360.f, 360.f)) trans->setRotation(rot);
+	if (ImGui::DragFloat3("Rotation:", rot, 0.5f)) trans->setRotation(rot);
 
 	ImGui::Separator();
 }

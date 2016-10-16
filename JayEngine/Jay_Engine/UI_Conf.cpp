@@ -19,7 +19,7 @@ UI_Conf::~UI_Conf()
 
 void UI_Conf::draw()
 {
-	if (ImGui::Begin("Configuration"), &active)
+	ImGui::Begin("Configuration", &active);
 	{
 		if (ImGui::CollapsingHeader("Application"))
 		{

@@ -41,6 +41,8 @@ public:
 	UI_Hierarchy* hieracy = NULL;
 	UI_Inspector* inspector = NULL;
 
+	void showDoc();
+
 private:
 	bool showImGuiDemo = false;
 	bool showConfig = false;

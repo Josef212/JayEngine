@@ -1,5 +1,9 @@
 #include "Transform.h"
 #include "GameObject.h"
+#include "Assimp/include/cimport.h"
+#include "Assimp/include/scene.h"
+#include "Assimp/include/postprocess.h"
+#include "Assimp/include/cfileio.h"
 
 
 Transform::Transform(GameObject* gObj, int id) : Component(gObj, id)
@@ -42,16 +46,49 @@ void Transform::cleanUp()
 
 }
 
+void Transform::setTransform(aiNode* node)
+{
+	aiVector3D pos;
+	aiVector3D scl;
+	aiQuaternion rot;
+	node->mTransformation.Decompose(scl, rot, pos);
+
+	setPosition(pos.x, pos.y, pos.z);
+	setScale(scl.x, scl.y, scl.z);
+	setRotation(rot.x, rot.y, rot.z, rot.w);
+
+	localTransform = float4x4::FromTRS(position, rotation, scale);
+
+	float3 dadPos;
+	float3 dadScale;
+	Quat dadRot;
+
+	for (aiNode* tmp = node->mParent; tmp; tmp = tmp->mParent)
+	{
+		tmp->mTransformation.Decompose(scl, rot, pos);
+		dadPos.Set(pos.x, pos.y, pos.z);
+		dadScale.Set(scl.x, scl.y, scl.z);
+		dadRot.Set(rot.x, rot.y, rot.z, rot.w);
+
+		float4x4 dadMat = float4x4::FromTRS(dadPos, dadRot, dadScale);
+		parentTransform = dadMat * parentTransform;
+	}
+
+	worldTransform = parentTransform * localTransform;
+	worldTransform = worldTransform.Transposed();
+
+}
+
 void Transform::setPosition(float x, float y, float z)
 {
 	position.Set(x, y, z);
-	updateTransform();
+	updateTransform(parentTransform);
 }
 
 void Transform::setPosition(float* pos)
 {
 	position.Set(pos);
-	updateTransform();
+	updateTransform(parentTransform);
 }
 
 const void Transform::getPosition(float& x, float& y, float& z)const
@@ -69,13 +106,13 @@ float* Transform::getPosition()const
 void Transform::setScale(float x, float y, float z)
 {
 	scale.Set(x, y, z);
-	updateTransform();
+	updateTransform(parentTransform);
 }
 
 void Transform::setScale(float* scl)
 {
 	scale.Set(scl);
-	updateTransform();
+	updateTransform(parentTransform);
 }
 
 const void Transform::getScale(float& x, float& y, float& z)const
@@ -93,7 +130,7 @@ float* Transform::getScale()const
 void Transform::setRotation(float x, float y, float z, float w)
 {
 	rotation.Set(x, y, z, w);
-	updateTransform();
+	updateTransform(parentTransform);
 }
 
 void Transform::setRotation(float* rot)
@@ -120,7 +157,7 @@ void Transform::setRotation(float* rot)
 	r.z *= DEGTORAD;
 
 	rotation = Quat::FromEulerXYZ(r.x, r.y, r.z);
-	updateTransform();
+	updateTransform(parentTransform);
 }
 
 void Transform::setRotation(float x, float y, float z)
@@ -144,7 +181,7 @@ void Transform::setRotation(float x, float y, float z)
 	z *= DEGTORAD;
 
 	rotation = Quat::FromEulerXYZ(x, y, z);
-	updateTransform();
+	updateTransform(parentTransform);
 }
 
 const void Transform::getRotation(float& x, float& y, float& z, float& w)const
@@ -259,71 +296,29 @@ void Transform::getGlobalScale(float& x, float& y, float& z)
 	z = scl.z;
 }
 
-/*float4x4 Transform::getGlobalRotation()
-{
-	float4x4 ret = rotation.ToFloat4x4();
-
-	GameObject* it = object->getParent();
-	while (it)
-	{
-		Transform* trans = (Transform*)object->getParent()->findComponent(TRANSFORMATION);
-		if (trans)
-		{
-			ret += trans->getGlobalRotation();
-		}
-		it = it->getParent();
-	}
-
-	return ret;
-}*/
-
-/*float4x4 Transform::getTransformMatrix()
-{
-	if (isEnable())
-	{
-		float4x4 ret = transform;
-		if (object->getParent())
-		{
-			Transform* trans = (Transform*)object->getParent()->findComponent(TRANSFORMATION);
-			if(trans)
-				ret = trans->getTransformMatrix() * transform;
-		}
-		return ret.Transposed();
-	}
-	else
-		return float4x4::identity;
-}*/
-
 float4x4 Transform::getTransformMatrix()
 {
 	if (isEnable())
 	{
-		return float4x4::FromTRS(position, rotation.ToFloat3x3(), scale).Transposed();
+		return worldTransform;
 	}
 	else
 		return float4x4::identity;
 }
 
-float4x4 Transform::getGlobalRotation()
+void Transform::updateTransform(float4x4& parentMat)
 {
-	float4x4 ret = rotation.ToFloat4x4();
+	parentTransform = parentMat;
+	localTransform = float4x4::FromTRS(position, rotation, scale);
+	worldTransform = parentTransform * localTransform;
 
-	GameObject* it = object->getParent();
-	while (it)
+	for (uint i = 0; i < object->childrens.size(); ++i)
 	{
-		Transform* trans = (Transform*)object->getParent()->findComponent(TRANSFORMATION);
+		Transform* trans = (Transform*)object->childrens[i]->findComponent(TRANSFORMATION);
 		if (trans)
 		{
-			ret = ret * trans->getGlobalRotation();
+			trans->updateTransform(worldTransform);
 		}
-		it = it->getParent();
 	}
-
-	return ret;
-}
-
-void Transform::updateTransform()
-{
-	/*transform = float4x4::FromTRS(position, rotation, scale);
-	transform.Transpose();*/
+	worldTransform = worldTransform.Transposed();
 }

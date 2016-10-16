@@ -11,7 +11,7 @@ UI_Console::~UI_Console()
 
 void UI_Console::draw()
 {
-	if (ImGui::Begin("Console"), &active)
+	ImGui::Begin("Console", &active);
 	{
 		ImGui::TextUnformatted(logs.begin());
 

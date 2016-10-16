@@ -217,19 +217,9 @@ GameObject* ModuleManager::loadObjects(aiNode* node, const aiScene* scene, GameO
 	++indexGO;
 
 	//Set transformation
-	aiVector3D pos;
-	aiVector3D scl;
-	aiQuaternion rot;
-	node->mTransformation.Decompose(scl, rot, pos);
-
 	Transform* trans = (Transform*)ret->findComponent(TRANSFORMATION);
 	if (trans)
-	{
-		trans->setPosition(pos.x, pos.y, pos.z);
-		trans->setScale(scl.x, scl.y, scl.z);
-		trans->setRotation(rot.x, rot.y, rot.z, rot.w);
-	}
-
+		trans->setTransform(node);
 
 	//Set material
 	for (uint i = 0; i < node->mNumMeshes; ++i)

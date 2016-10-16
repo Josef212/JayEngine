@@ -72,6 +72,16 @@ enum update_status
 #define RELEASES_URL "https://github.com/Josef212/JayEngine/releases"
 #define ISSUES_URL "https://github.com/Josef212/JayEngine/issues"
 
+#define ASSIMP_DOC_URL "http://www.assimp.org/lib_html/index.html"
+#define BULLET_DOC_URL "http://bulletphysics.org/Bullet/BulletFull/"
+#define DEVIL_DOC_URL "http://openil.sourceforge.net/docs/"
+#define IMGUI_DOC_URL "https://github.com/ocornut/imgui/blob/master/README.md"
+#define MATHGEOLIB_DOC_URL "http://clb.demon.fi/MathGeoLib/nightly/usermanual.html"
+#define OPENGL_DOC_URL "https://www.opengl.org/documentation/"
+#define PHYSFS_DOC_URL "https://icculus.org/physfs/"
+#define SDL_DOC_URL "https://wiki.libsdl.org/"
+#define SDL_MIXER_DOC_URL "https://www.libsdl.org/projects/SDL_mixer/docs/SDL_mixer_frame.html"
+
 #define DEFAULT_FB_PATH "Assets/fbx"
 #define DEFAULT_TEXTURES_PATH "Assets/textures"
 

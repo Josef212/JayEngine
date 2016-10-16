@@ -4,6 +4,8 @@
 #include "Component.h"
 #include "Math.h"
 
+struct aiNode;
+
 class Transform : public Component
 {
 public:
@@ -16,6 +18,8 @@ public:
 	void init();
 	void update(float dt);
 	void cleanUp();
+
+	void setTransform(aiNode* node);
 
 	//All these transform are about local transform
 	void setPosition(float x, float y, float z);
@@ -43,12 +47,10 @@ public:
 	void getGlobalScale(float& x, float& y, float& z);
 
 	float4x4 getGlobalRotation();
-
 	float4x4 getTransformMatrix();
-	//float4x4 getGlobalTransformMatrix();
+	void updateTransform(float4x4& parentMat);
 
 private:
-	void updateTransform();
 
 public:
 	float3 position = float3::zero;
@@ -57,7 +59,9 @@ public:
 	float3 rotationEuler = float3::zero;
 
 private:
-	float4x4 transform = float4x4::identity;
+	float4x4 worldTransform = float4x4::identity;
+	float4x4 localTransform = float4x4::identity;
+	float4x4 parentTransform = float4x4::identity;
 };
 
 #endif // !__TRANSFORMATION_H__
