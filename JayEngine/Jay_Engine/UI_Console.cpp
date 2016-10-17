@@ -3,6 +3,7 @@
 
 UI_Console::UI_Console() : UI_Comp()
 {
+	lastLogColor = ImColor(255, 255, 255);
 }
 
 UI_Console::~UI_Console()
@@ -13,7 +14,11 @@ void UI_Console::draw()
 {
 	ImGui::Begin("Console", &active);
 	{
-		ImGui::TextUnformatted(logs.begin());
+		//ImGui::TextUnformatted(logs.begin());
+		for (uint i =0; i < colors.size(); ++i)
+		{
+			ImGui::TextColored(colors[i], log[i].c_str());
+		}
 
 		static char input[100];
 		static bool focus = true;
@@ -22,7 +27,7 @@ void UI_Console::draw()
 			if (focus)
 				ImGui::SetKeyboardFocusHere();
 			//TODO: add console and its functionality
-			_LOG(input);
+			_LOG(LOG_CMD, input);
 			*input = '\0';
 		}
 		
@@ -36,8 +41,58 @@ void UI_Console::draw()
 	}
 }
 
-void UI_Console::logUi(const char* str)
+void UI_Console::logUi(const char* str, logType type)
 {
-	logs.append(str);
+	//logs.append(str);
 	scrollDown = true;
+	switch (type)
+	{
+	case LOG_STD:
+		lastLogColor = ImColor(255, 255, 255);
+		break;
+	case LOG_ERROR:
+		lastLogColor = ImColor(255, 0, 0);
+		break;
+	case LOG_WARN:
+		lastLogColor = ImColor(255, 255, 0);
+		break;
+	case LOG_CMD:
+		lastLogColor = ImColor(51, 153, 255);
+		break;
+	case LOG_AUDIO:
+		lastLogColor = ImColor(15, 149, 0);
+		break;
+	case LOG_CAMERA:
+		lastLogColor = ImColor(15, 149, 0);
+		break;
+	case LOG_EDITOR:
+		lastLogColor = ImColor(15, 149, 0);
+		break;
+	case LOG_FS:
+		lastLogColor = ImColor(15, 149, 0);
+		break;
+	case LOG_IMPORT:
+		lastLogColor = ImColor(15, 149, 0);
+		break;
+	case LOG_INPUT:
+		lastLogColor = ImColor(15, 149, 0);
+		break;
+	case LOG_MANAGER:
+		lastLogColor = ImColor(15, 149, 0);
+		break;
+	case LOG_PHYSICS:
+		lastLogColor = ImColor(15, 149, 0);
+		break;
+	case LOG_REN:
+		lastLogColor = ImColor(15, 149, 0);
+		break;
+	case LOG_WIN:
+		lastLogColor = ImColor(15, 149, 0);
+		break;
+	default:
+		lastLogColor = ImColor(255, 255, 255);
+		break;
+	}
+	log.push_back(str);
+	colors.push_back(lastLogColor);
 }

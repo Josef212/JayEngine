@@ -48,7 +48,6 @@ private:
 	GameObject* selected = NULL;
 
 	uint indexGO = 0;
-	uint indexMesh = 0;
 };
 
 #endif // !__MODULEMANAGER_H__

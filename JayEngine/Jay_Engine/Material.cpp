@@ -51,7 +51,7 @@ int Material::loadTexture(char* file, char* path)
 
 	if (!file)
 	{
-		_LOG("Error while loading a texture: File is NULL");
+		_LOG(LOG_ERROR, "Error while loading a texture: File is NULL");
 		return ret;
 	}
 
@@ -65,7 +65,7 @@ int Material::loadTexture(char* file, char* path)
 	strcat_s(realPath, 256, "/");
 	strcat_s(realPath, 256, file);
 
-	_LOG("Loading a texture from: %s", realPath);
+	_LOG(LOG_STD, "Loading a texture from: %s", realPath);
 
 	uint id = ilutGLLoadImage(realPath);
 
@@ -77,11 +77,11 @@ int Material::loadTexture(char* file, char* path)
 	}
 	else
 	{
-		_LOG("Error loading texture %s", realPath);
+		_LOG(LOG_ERROR, "Error loading texture %s", realPath);
 		ILuint devilError = ilGetError();
 		if (devilError != IL_NO_ERROR)
 		{
-			_LOG("Error while loading a texture, devil: %s\n", iluErrorString(devilError));
+			_LOG(LOG_ERROR, "Error while loading a texture, devil: %s\n", iluErrorString(devilError));
 		}
 	}
 

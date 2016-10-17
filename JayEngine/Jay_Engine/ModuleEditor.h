@@ -26,7 +26,7 @@ public:
 	void passInput(SDL_Event* inputEvent);
 
 	void logFPS(float fps, float ms);
-	void log(const char* str);
+	void log(const char* str, logType type);
 
 private:
 	void addTransform();

@@ -17,7 +17,7 @@
 
 ModuleRenderer3D::ModuleRenderer3D(bool startEnabled) : Module(startEnabled)
 {
-	_LOG("Renderer3D: Creation.");
+	_LOG(LOG_STD, "Renderer3D: Creation.");
 
 	name.assign("module_renderer3d");
 
@@ -27,21 +27,21 @@ ModuleRenderer3D::ModuleRenderer3D(bool startEnabled) : Module(startEnabled)
 // Destructor
 ModuleRenderer3D::~ModuleRenderer3D()
 {
-	_LOG("Renderer3D: Destroying.");
+	_LOG(LOG_STD, "Renderer3D: Destroying.");
 }
 
 // Called before render is available
 bool ModuleRenderer3D::init()
 {
-	_LOG("Renderer3D: Init.");
-	_LOG("Creating 3D Renderer context");
+	_LOG(LOG_STD, "Renderer3D: Init.");
+	_LOG(LOG_REN, "Creating 3D Renderer context");
 	bool ret = true;
 
 	//Create context
 	context = SDL_GL_CreateContext(app->window->getWindow());
 	if (context == nullptr)
 	{
-		_LOG("OpenGL context could not be created! SDL_Error: %s\n", SDL_GetError());
+		_LOG(LOG_ERROR, "OpenGL context could not be created! SDL_Error: %s\n", SDL_GetError());
 		ret = false;
 	}
 	else
@@ -50,20 +50,20 @@ bool ModuleRenderer3D::init()
 
 		if (gl != GLEW_OK)
 		{
-			_LOG("Glew library could not init %s\n", glewGetErrorString(gl));
+			_LOG(LOG_ERROR, "Glew library could not init %s\n", glewGetErrorString(gl));
 			ret = false;
 		}
 		else
-			_LOG("Using Glew %s", glewGetString(GLEW_VERSION));
+			_LOG(LOG_REN, "Using Glew %s", glewGetString(GLEW_VERSION));
 	}
 
 	if (ret == true)
 	{
 		// get version info
-		_LOG("Vendor: %s", glGetString(GL_VENDOR));
-		_LOG("Renderer: %s", glGetString(GL_RENDERER));
-		_LOG("OpenGL version supported %s", glGetString(GL_VERSION));
-		_LOG("GLSL: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
+		_LOG(LOG_REN,"Vendor: %s", glGetString(GL_VENDOR));
+		_LOG(LOG_REN,"Renderer: %s", glGetString(GL_RENDERER));
+		_LOG(LOG_REN,"OpenGL version supported %s", glGetString(GL_VERSION));
+		_LOG(LOG_REN, "GLSL: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
 
 		//Use Vsync
 		setVSync(vsync);
@@ -76,7 +76,7 @@ bool ModuleRenderer3D::init()
 		GLenum error = glGetError();
 		if (error != GL_NO_ERROR)
 		{
-			_LOG("Error initializing OpenGL! %s\n", gluErrorString(error));
+			_LOG(LOG_ERROR, "Error initializing OpenGL! %s\n", gluErrorString(error));
 			ret = false;
 		}
 
@@ -88,7 +88,7 @@ bool ModuleRenderer3D::init()
 		error = glGetError();
 		if (error != GL_NO_ERROR)
 		{
-			_LOG("Error initializing OpenGL! %s\n", gluErrorString(error));
+			_LOG(LOG_ERROR, "Error initializing OpenGL! %s\n", gluErrorString(error));
 			ret = false;
 		}
 
@@ -102,7 +102,7 @@ bool ModuleRenderer3D::init()
 		error = glGetError();
 		if (error != GL_NO_ERROR)
 		{
-			_LOG("Error initializing OpenGL! %s\n", gluErrorString(error));
+			_LOG(LOG_ERROR, "Error initializing OpenGL! %s\n", gluErrorString(error));
 			ret = false;
 		}
 
@@ -143,6 +143,7 @@ bool ModuleRenderer3D::init()
 
 bool ModuleRenderer3D::start()
 {
+	_LOG(LOG_STD, "Render3D: Start.");
 	bool ret = true;
 
 	return ret;
@@ -196,7 +197,7 @@ update_status ModuleRenderer3D::postUpdate(float dt)
 // Called before quitting
 bool ModuleRenderer3D::cleanUp()
 {
-	_LOG("Renderer3D: CleanUp.");
+	_LOG(LOG_STD, "Renderer3D: CleanUp.");
 
 	SDL_GL_DeleteContext(context);
 
@@ -228,6 +229,6 @@ void ModuleRenderer3D::setVSync(bool vsync)
 	{
 		this->vsync = vsync;
 		if (SDL_GL_SetSwapInterval(vsync ? 1 : 0) < 0)
-			_LOG("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
+			_LOG(LOG_WARN, "Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
 	}
 }

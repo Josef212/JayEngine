@@ -79,7 +79,7 @@ bool Mesh::loadMesh(aiMesh* mesh, bool loadToRAM)
 		numVertices = mesh->mNumVertices;
 		vertices = new float[numVertices * 3];
 		memcpy(vertices, mesh->mVertices, sizeof(float)*numVertices * 3);
-		_LOG("New mesh called %s with %d vertices.", getName(), numVertices);
+		_LOG(LOG_STD, "New mesh called %s with %d vertices.", getName(), numVertices);
 
 		if (mesh->HasFaces())
 		{
@@ -89,14 +89,14 @@ bool Mesh::loadMesh(aiMesh* mesh, bool loadToRAM)
 			{
 				if (mesh->mFaces[i].mNumIndices != 3)
 				{
-					_LOG("WARNING, geometry face with != 3 indices!");
+					_LOG(LOG_WARN, "WARNING, geometry face with != 3 indices!");
 				}
 				else
 				{
 					memcpy(&indices[i * 3], mesh->mFaces[i].mIndices, sizeof(uint) * 3);
 				}
 			}
-			_LOG("Mesh %s has %d indices.", getName(), numIndices);
+			_LOG(LOG_STD, "Mesh %s has %d indices.", getName(), numIndices);
 		}
 
 		if (mesh->HasNormals())
@@ -105,7 +105,7 @@ bool Mesh::loadMesh(aiMesh* mesh, bool loadToRAM)
 			normals = new float[numNormals];
 			memcpy(normals, mesh->mNormals, sizeof(float) * numNormals);
 
-			_LOG("Mesh %s has %d normal.", getName(), numNormals / 3);
+			_LOG(LOG_STD, "Mesh %s has %d normal.", getName(), numNormals / 3);
 		}
 
 		if (mesh->HasTextureCoords(0))//Difuse 
@@ -113,7 +113,7 @@ bool Mesh::loadMesh(aiMesh* mesh, bool loadToRAM)
 			numTexCoords = numVertices * 3;
 			texCoords = new float[numTexCoords];
 			memcpy(texCoords, mesh->mTextureCoords[0], sizeof(float) * 3);
-			_LOG("Mesh %s has %d texture coords.", getName(), numTexCoords / 3);
+			_LOG(LOG_STD, "Mesh %s has %d texture coords.", getName(), numTexCoords / 3);
 		}
 
 		ret = true;
@@ -123,7 +123,7 @@ bool Mesh::loadMesh(aiMesh* mesh, bool loadToRAM)
 			if (onVRAM)
 			{
 				//Should remove current mesh in order to load new
-				_LOG("Mesh already loaded to VRAM");
+				_LOG(LOG_WARN, "Mesh already loaded to VRAM");
 			}
 			ret = loadToOpenGl();
 		}
@@ -139,7 +139,7 @@ bool Mesh::loadToOpenGl()
 	if (onVRAM)
 		return true;
 
-	_LOG("Loading mesh to VRAM");
+	_LOG(LOG_STD, "Loading mesh to VRAM");
 
 	if (numVertices > 0 && numIndices > 0)
 	{
@@ -170,7 +170,7 @@ bool Mesh::loadToOpenGl()
 	}
 	else
 	{
-		_LOG("Could not load to VRAM because there are no vertices or indices. Vertices number: %d, indices number: %d", numVertices, numIndices);
+		_LOG(LOG_ERROR, "Could not load to VRAM because there are no vertices or indices. Vertices number: %d, indices number: %d", numVertices, numIndices);
 		ret = false;
 	}
 

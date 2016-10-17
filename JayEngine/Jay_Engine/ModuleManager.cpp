@@ -26,18 +26,21 @@
 
 ModuleManager::ModuleManager(bool startEnabled) : Module(startEnabled)
 {
+	_LOG(LOG_STD, "Manager: Creation.");
 	name.assign("module_manager");
 }
 
 
 ModuleManager::~ModuleManager()
 {
+	_LOG(LOG_STD, "Manager: Destroying.");
 	if (sceneRootObject)
 		RELEASE(sceneRootObject);
 }
 
 bool ModuleManager::init()
 {
+	_LOG(LOG_STD, "Manager: Init.");
 	//Log assimp info
 	struct aiLogStream stream;
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
@@ -51,7 +54,7 @@ bool ModuleManager::init()
 	ILuint devilError = ilGetError();
 	if (devilError != IL_NO_ERROR)
 	{
-		_LOG("Error while Devil Init: %s\n", iluErrorString(devilError));
+		_LOG(LOG_ERROR, "Error while Devil Init: %s\n", iluErrorString(devilError));
 	}
 
 	sceneRootObject = new GameObject(NULL, app->manager->nextGOId);
@@ -111,7 +114,7 @@ GameObject* ModuleManager::createEmptyGO()
 			ret = sceneRootObject->addChild();
 	}
 	else
-		_LOG("Can't create an empty game object because sceene root node is NULL.");
+		_LOG(LOG_ERROR, "Can't create an empty game object because sceene root node is NULL.");
 
 	return ret;
 }
@@ -170,7 +173,7 @@ GameObject* ModuleManager::loadFBX(char* file, char* path)
 
 	if (!file)
 	{
-		_LOG("Error while loading fbx: file is NULL.");
+		_LOG(LOG_ERROR, "Error while loading fbx: file is NULL.");
 		return root; //If path is NULL dont do nothing
 	}
 
@@ -191,8 +194,8 @@ GameObject* ModuleManager::loadFBX(char* file, char* path)
 
 	if (scene, scene->HasMeshes())
 	{
-		_LOG("Loading fbx from %s.", realPath);
-		loadObjects(scene->mRootNode, scene, sceneRootObject);
+		_LOG(LOG_MANAGER, "Loading fbx from %s.", realPath);
+		root = loadObjects(scene->mRootNode, scene, sceneRootObject);
 
 		aiReleaseImport(scene);
 	}
@@ -211,9 +214,12 @@ GameObject* ModuleManager::loadObjects(aiNode* node, const aiScene* scene, GameO
 
 	ret = parent->addChild();
 
-	ret->setName(node->mName.C_Str());
+	char name[256];
+	sprintf_s(name, 256, "%s %d", node->mName.C_Str(), indexGO);
 
-	_LOG("Loading new game obejct: %i. ===================", indexGO);
+	ret->setName(name);
+
+	_LOG(LOG_MANAGER, "Loading new game obejct: %i. ===================", indexGO);
 	++indexGO;
 
 	//Set transformation
@@ -224,7 +230,7 @@ GameObject* ModuleManager::loadObjects(aiNode* node, const aiScene* scene, GameO
 	//Set material
 	for (uint i = 0; i < node->mNumMeshes; ++i)
 	{
-		_LOG("Loading new mesh: %i. ------------------", indexMesh);
+		_LOG(LOG_MANAGER, "Loading new mesh. ------------------");
 		Mesh* m = (Mesh*)ret->addComponent(MESH);
 		m->loadMesh(scene->mMeshes[node->mMeshes[i]], true);
 		//node->mMeshes is an uint array with the index of the mesh in scene->mMesh
@@ -250,7 +256,6 @@ GameObject* ModuleManager::loadObjects(aiNode* node, const aiScene* scene, GameO
 
 			RELEASE_ARRAY(path);
 		}
-		++indexMesh;
 	}
 
 	for (uint i = 0; i < node->mNumChildren; ++i)

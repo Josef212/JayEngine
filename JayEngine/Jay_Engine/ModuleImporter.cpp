@@ -15,16 +15,19 @@
 
 ModuleImporter::ModuleImporter(bool startEnabled) : Module(startEnabled)
 {
+	_LOG(LOG_STD, "Importer: Creation.");
 	name.assign("module_importer");
 }
 
 
 ModuleImporter::~ModuleImporter()
 {
+	_LOG(LOG_STD, "Importer: Destroying.");
 }
 
 bool ModuleImporter::init()
 {
+	_LOG(LOG_STD, "Importer: Init.");
 	bool ret = true;
 
 	//Log assimp info
@@ -37,6 +40,7 @@ bool ModuleImporter::init()
 
 bool ModuleImporter::start()
 {
+	_LOG(LOG_STD, "Importer: Start.");
 	//loadFBX("Assets/fbx/warrior.FBX", meshes);
 	//loadFBX("Assets/fbx/Brute.fbx", meshes);
 
@@ -52,6 +56,7 @@ update_status ModuleImporter::postUpdate(float dt)
 
 bool ModuleImporter::cleanUp()
 {
+	_LOG(LOG_STD, "Importer: Init.");
 	bool ret = true;
 
 	meshes.clear();
@@ -66,7 +71,7 @@ void ModuleImporter::loadFBX(const char* path, std::vector<VertexInfo>& vec)
 {
 	if (!path)
 	{
-		_LOG("Error while loading fbx: path is NULL.");
+		_LOG(LOG_ERROR, "Error while loading fbx: path is NULL.");
 		return; //If path is NULL dont do nothing
 	}
 
@@ -81,7 +86,7 @@ void ModuleImporter::loadFBX(const char* path, std::vector<VertexInfo>& vec)
 			m.numVertices = scene->mMeshes[i]->mNumVertices;
 			m.vertices = new float[m.numVertices * 3];
 			memcpy(m.vertices, scene->mMeshes[i]->mVertices, sizeof(float)*m.numVertices * 3);
-			_LOG("New mesh with %d vertices", m.numVertices);
+			_LOG(LOG_ERROR, "New mesh with %d vertices", m.numVertices);
 
 			if (scene->mMeshes[i]->HasFaces())
 			{
@@ -99,7 +104,7 @@ void ModuleImporter::loadFBX(const char* path, std::vector<VertexInfo>& vec)
 				{
 					if (scene->mMeshes[i]->mFaces[j].mNumIndices != 3)
 					{
-						_LOG("WARNING, geometry face with != 3 indices!");
+						_LOG(LOG_WARN, "WARNING, geometry face with != 3 indices!");
 					}
 					else
 					{
@@ -126,7 +131,7 @@ void ModuleImporter::loadFBX(const char* path, std::vector<VertexInfo>& vec)
 	}
 	else
 	{
-		_LOG("Error loading scene %s", path);
+		_LOG(LOG_ERROR, "Error loading scene %s", path);
 	}
 }
 

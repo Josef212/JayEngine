@@ -4,9 +4,27 @@
 #include <windows.h>
 #include <stdio.h>
 
-#define _LOG(format, ...) _log(__FILE__, __LINE__, format, __VA_ARGS__);
+enum logType
+{
+	LOG_STD,
+	LOG_ERROR,
+	LOG_WARN,
+	LOG_CMD,
+	LOG_AUDIO,
+	LOG_CAMERA,
+	LOG_EDITOR,
+	LOG_FS,
+	LOG_IMPORT,
+	LOG_INPUT,
+	LOG_MANAGER,
+	LOG_PHYSICS,
+	LOG_REN,
+	LOG_WIN
+};
 
-void _log(const char file[], int line, const char* format, ...);
+#define _LOG(type, format, ...) _log(type, __FILE__, __LINE__, format, __VA_ARGS__);
+
+void _log(logType type, const char file[], int line, const char* format, ...);
 
 #ifdef NULL
 #undef NULL

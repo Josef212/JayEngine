@@ -2,7 +2,7 @@
 #include "SDL\include\SDL.h"
 #include "Application.h"
 
-void _log(const char file[], int line, const char* format, ...)
+void _log(logType type, const char file[], int line, const char* format, ...)
 {
 	static char tmp_string[4096];
 	static char tmp_string2[4096];
@@ -19,7 +19,7 @@ void _log(const char file[], int line, const char* format, ...)
 
 	if(app)
 	{
-		sprintf_s(tmp_string2, 4096, "\n%s", tmp_string);
-		app->log(tmp_string2);
+		sprintf_s(tmp_string2, 4096, "%s", tmp_string);
+		app->log(tmp_string2, type);
 	}
 }

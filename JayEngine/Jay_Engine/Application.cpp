@@ -18,7 +18,7 @@
 
 Application::Application()
 {
-	_LOG("Application Constructor --------------");
+	_LOG(LOG_STD, "Application Constructor --------------");
 
 	info = new HrdInfo();
 	random = new RandGen();
@@ -56,7 +56,7 @@ Application::Application()
 
 Application::~Application()
 {
-	_LOG("Application Destroctor --------------");
+	_LOG(LOG_STD, "Application Destructor --------------");
 	for(std::list<Module*>::reverse_iterator it = modules.rbegin(); it!=modules.rbegin(); ++it)
 	{
 		RELEASE(*it);
@@ -72,14 +72,14 @@ bool Application::init()
 
 	// Call Init() in all modules
 	std::list<Module*>::iterator it = modules.begin();
-	_LOG("Application Init --------------");
+	_LOG(LOG_STD, "Application Init --------------");
 	for(; it != modules.end() && ret == true; ++it)
 	{
 		ret = (*it)->init();
 	}
 
 	// After all Init calls we call Start() in all modules
-	_LOG("Application Start --------------");
+	_LOG(LOG_STD, "Application Start --------------");
 	it = modules.begin();
 
 	for (; it != modules.end() && ret == true; ++it)
@@ -174,7 +174,7 @@ bool Application::cleanUp()
 {
 	bool ret = true;
 
-	_LOG("Application CleaUp --------------");
+	_LOG(LOG_STD, "Application CleaUp --------------");
 	for (std::list<Module*>::reverse_iterator it = modules.rbegin(); it != modules.rbegin(); ++it)
 	{
 		ret = (*it)->cleanUp();
@@ -223,10 +223,10 @@ void Application::setTitle(const char* titl)
 	}
 }
 
-void Application::log(const char* str)
+void Application::log(const char* str, logType type)
 {
 	logs.append(str);
-	editor->log(str);
+	editor->log(str, type);
 }
 
 uint Application::getMaxFPS()

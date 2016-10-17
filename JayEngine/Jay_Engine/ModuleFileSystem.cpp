@@ -9,6 +9,7 @@
 
 ModuleFileSystem::ModuleFileSystem(bool startEnabled) : Module(startEnabled)
 {
+	_LOG(LOG_STD, "FileSystem: Creation.");
 	name.assign("module_filesystem");
 
 	char* basePath = SDL_GetBasePath();
@@ -21,12 +22,14 @@ ModuleFileSystem::ModuleFileSystem(bool startEnabled) : Module(startEnabled)
 
 ModuleFileSystem::~ModuleFileSystem()
 {
+	_LOG(LOG_STD, "FileSystem: Destroying.");
 	PHYSFS_deinit();
 }
 
 
 bool ModuleFileSystem::init()
 {
+	_LOG(LOG_STD, "FileSystem: init.");
 	bool ret = true;
 
 	/*for (pugi::xml_node path = config.child("path"); path; path = path.next_sibling("path"))
@@ -40,7 +43,7 @@ bool ModuleFileSystem::init()
 	}
 	else
 	{
-		_LOG("Writing directory is %s\n", writePath);
+		_LOG(LOG_FS, "Writing directory is %s\n", writePath);
 		addPath(writePath, getSaveDirectory());
 	}
 
@@ -49,6 +52,7 @@ bool ModuleFileSystem::init()
 
 bool ModuleFileSystem::cleanUp()
 {
+	_LOG(LOG_STD, "FileSystem: CleanUp.");
 	return true;
 }
 
@@ -58,7 +62,7 @@ bool ModuleFileSystem::addPath(const char* pathOrZip, const char* mountPoint)
 
 	if (PHYSFS_mount(pathOrZip, mountPoint, 1) == 0)
 	{
-		_LOG("File System error while adding a path or zip(%s): %s.", pathOrZip, PHYSFS_getLastError());
+		_LOG(LOG_ERROR, "File System error while adding a path or zip(%s): %s.", pathOrZip, PHYSFS_getLastError());
 	}
 	else
 		ret = true;
@@ -93,7 +97,7 @@ unsigned int ModuleFileSystem::load(const char* file, char** buffer)const
 			{
 				if (readed != size)
 				{
-					_LOG("File System error while reading from file %s: %s\n", file, PHYSFS_getLastError());
+					_LOG(LOG_ERROR, "File System error while reading from file %s: %s\n", file, PHYSFS_getLastError());
 					RELEASE(buffer);
 				}
 				else
@@ -103,10 +107,10 @@ unsigned int ModuleFileSystem::load(const char* file, char** buffer)const
 			}
 		}
 		if (PHYSFS_close(fsFile) == 0)
-			_LOG("File System error while closing file %s: %s\n", file, PHYSFS_getLastError());
+			_LOG(LOG_ERROR, "File System error while closing file %s: %s\n", file, PHYSFS_getLastError());
 	}
 	else
-		_LOG("File System error while opening file %s: %s\n", file, PHYSFS_getLastError());
+		_LOG(LOG_ERROR, "File System error while opening file %s: %s\n", file, PHYSFS_getLastError());
 
 	return ret;
 }
@@ -146,16 +150,16 @@ unsigned int ModuleFileSystem::save(const char* file, const char* buffer, unsign
 		PHYSFS_sint64 written = PHYSFS_write(fsFile, (const void*)buffer, 1, size);
 		if (written != size)
 		{
-			_LOG("File System error while writing to file %s: %s\n", file, PHYSFS_getLastError());
+			_LOG(LOG_ERROR, "File System error while writing to file %s: %s\n", file, PHYSFS_getLastError());
 		}
 		else
 			ret = (uint)written;
 
 		if (PHYSFS_close(fsFile) == 0)
-			_LOG("File System error while closing file %s: %s\n", file, PHYSFS_getLastError());
+			_LOG(LOG_ERROR, "File System error while closing file %s: %s\n", file, PHYSFS_getLastError());
 	}
 	else
-		_LOG("File System error while opening file %s: %s\n", file, PHYSFS_getLastError());
+		_LOG(LOG_ERROR, "File System error while opening file %s: %s\n", file, PHYSFS_getLastError());
 
 	return ret;
 }

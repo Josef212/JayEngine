@@ -18,7 +18,7 @@
 
 ModuleEditor::ModuleEditor(bool startEnabled) : Module(startEnabled)
 {
-	_LOG("Editor: Creation.");
+	_LOG(LOG_STD, "Editor: Creation.");
 
 	name.assign("module_editor");
 
@@ -37,20 +37,20 @@ ModuleEditor::ModuleEditor(bool startEnabled) : Module(startEnabled)
 
 ModuleEditor::~ModuleEditor()
 {
-	_LOG("Editor: Destroying.");
+	_LOG(LOG_STD, "Editor: Destroying.");
 }
 
 
 bool ModuleEditor::init()
 {
-	_LOG("Editor: Init.");
+	_LOG(LOG_STD, "Editor: Init.");
 	ImGui_ImplSdlGL3_Init(app->window->getWindow());
 	return true;
 }
 
 bool ModuleEditor::start()
 {
-	_LOG("Editor: Start.");
+	_LOG(LOG_STD, "Editor: Start.");
 	return true;
 }
 
@@ -67,7 +67,7 @@ update_status ModuleEditor::update(float dt)
 {
 	update_status ret = UPDATE_CONTINUE;
 
-	if (ImGui::BeginMainMenuBar())
+	ImGui::BeginMainMenuBar();
 	{
 		if (ImGui::BeginMenu("File"))
 		{
@@ -115,6 +115,25 @@ update_status ModuleEditor::update(float dt)
 				if (ImGui::MenuItem("PhysFs")) app->browse(PHYSFS_DOC_URL);
 				if (ImGui::MenuItem("SDL2")) app->browse(SDL_DOC_URL);
 				if (ImGui::MenuItem("SDL_Mixer")) app->browse(SDL_MIXER_DOC_URL);
+
+				ImGui::EndMenu();
+			}
+			if (ImGui::BeginMenu("Test LOG"))
+			{
+				if (ImGui::MenuItem("Std")) _LOG(LOG_STD, "Test log.");
+				if (ImGui::MenuItem("Error")) _LOG(LOG_ERROR, "Test log.");
+				if (ImGui::MenuItem("Warning")) _LOG(LOG_WARN, "Test log.");
+				if (ImGui::MenuItem("Command")) _LOG(LOG_CMD, "Test log.");
+				if (ImGui::MenuItem("Audio")) _LOG(LOG_AUDIO, "Test log.");
+				if (ImGui::MenuItem("Camera")) _LOG(LOG_CAMERA, "Test log.");
+				if (ImGui::MenuItem("Editor")) _LOG(LOG_EDITOR, "Test log.");
+				if (ImGui::MenuItem("FS")) _LOG(LOG_FS, "Test log.");
+				if (ImGui::MenuItem("Import")) _LOG(LOG_IMPORT, "Test log.");
+				if (ImGui::MenuItem("Input")) _LOG(LOG_INPUT, "Test log.");
+				if (ImGui::MenuItem("Manager")) _LOG(LOG_MANAGER, "Test log.");
+				if (ImGui::MenuItem("Physics")) _LOG(LOG_PHYSICS, "Test log.");
+				if (ImGui::MenuItem("Render")) _LOG(LOG_REN, "Test log.");
+				if (ImGui::MenuItem("Window")) _LOG(LOG_WIN, "Test log.");
 
 				ImGui::EndMenu();
 			}
@@ -172,7 +191,7 @@ update_status ModuleEditor::update(float dt)
 
 bool ModuleEditor::cleanUp()
 {
-	_LOG("Editor: CleanUp.");
+	_LOG(LOG_EDITOR, "Editor: CleanUp.");
 
 	std::list<UI_Comp*>::iterator it = uiList.begin();
 	for (; it != uiList.end(); ++it)
@@ -198,10 +217,10 @@ void ModuleEditor::logFPS(float fps, float ms)
 		conf->pushFpsMs(fps, ms);
 }
 
-void ModuleEditor::log(const char* str)
+void ModuleEditor::log(const char* str, logType type)
 {
 	if (console)
-		console->logUi(str);
+		console->logUi(str, type);
 }
 
 void ModuleEditor::addTransform()

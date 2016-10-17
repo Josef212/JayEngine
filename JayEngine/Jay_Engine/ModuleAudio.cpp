@@ -7,20 +7,20 @@
 
 ModuleAudio::ModuleAudio(bool start_enabled) : Module(start_enabled)//, music(NULL)
 {
-	_LOG("Audio: Creation.");
+	_LOG(LOG_STD, "Audio: Creation.");
 	name.assign("module_audio");
 }
 
 // Destructor
 ModuleAudio::~ModuleAudio()
 {
-	_LOG("Audio: Destroying.");
+	_LOG(LOG_STD, "Audio: Destroying.");
 }
 
 // Called before render is available
 bool ModuleAudio::init()
 {
-	_LOG("Audio: Init.");
+	_LOG(LOG_STD, "Audio: Init.");
 	bool ret = true;
 	/*SDL_Init(0);
 
@@ -53,7 +53,7 @@ bool ModuleAudio::init()
 // Called before quitting
 bool ModuleAudio::cleanUp()
 {
-	_LOG("Audio: CleanUp.");
+	_LOG(LOG_STD, "Audio: CleanUp.");
 	/*LOG("Freeing sound FX, closing Mixer and Audio subsystem");
 
 	if(music != NULL)

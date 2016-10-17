@@ -80,7 +80,7 @@ public:
 	uint getMaxFPS();
 	void setMaxFPS(int maxFPS);
 
-	void log(const char* str);
+	void log(const char* str, logType type);
 	void browse(const char* url) const;
 
 private:
