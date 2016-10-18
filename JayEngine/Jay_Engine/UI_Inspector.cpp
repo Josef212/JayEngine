@@ -71,12 +71,10 @@ void UI_Inspector::drawTransformation(GameObject* selected)
 	
 	char transName[60];
 	strcpy_s(transName, 60, trans->getName());
-	//Name
-	if (ImGui::InputText("Name:", transName, 60))
-		trans->setName(transName);
+	
 	//Active
 	bool transActive = trans->isEnable();
-	if (ImGui::Checkbox("Active", &transActive)) trans->switchActive();
+	if (ImGui::Checkbox("Transform:", &transActive)) trans->switchActive();
 
 	float* pos = trans->getPosition();
 	float* scale = trans->getScale();
@@ -97,12 +95,10 @@ void UI_Inspector::drawMesh(GameObject* selected)
 
 	char meshName[60];
 	strcpy_s(meshName, 60, mesh->getName());
-	//Name
-	if (ImGui::InputText("Name:", meshName, 60))
-		mesh->setName(meshName);
+
 	//Active
 	bool meshActive = mesh->isEnable();
-	if (ImGui::Checkbox("Active", &meshActive))
+	if (ImGui::Checkbox("Mesh:", &meshActive))
 	{
 		mesh->switchActive();
 	}
@@ -142,11 +138,10 @@ void UI_Inspector::drawMaterial(GameObject* selected)
 
 	char matName[60];
 	strcpy_s(matName, 60, mat->getName());
-	//Name
-	if (ImGui::InputText("Name:", matName, 60)) mat->setName(matName);
+
 	//Active
 	bool metActive = mat->isEnable();
-	if (ImGui::Checkbox("Active", &metActive)) mat->switchActive();
+	if (ImGui::Checkbox("Material:", &metActive)) mat->switchActive();
 
 	ImGui::Text("Textures vec size: ");
 	ImGui::SameLine();
