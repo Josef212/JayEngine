@@ -7,6 +7,7 @@
 #include "Transform.h"
 #include "Mesh.h"
 #include "Material.h"
+#include "OpenGL.h"
 
 #include "Assimp/include/cimport.h"
 #include "Assimp/include/scene.h"
@@ -262,6 +263,40 @@ GameObject* ModuleManager::loadObjects(aiNode* node, const aiScene* scene, GameO
 	{
 		loadObjects(node->mChildren[i], scene, ret);
 	}
+
+	return ret;
+}
+
+GameObject* ModuleManager::loadCube()
+{
+	GameObject* ret = NULL;
+
+	if (!sceneRootObject)
+		return ret;
+
+	ret = sceneRootObject->addChild();
+
+	Mesh* mesh = (Mesh*)ret->addComponent(MESH);
+
+	float s = 0.5;
+	float vertex[12] = {
+		s, s, s,
+		s, -s, s,
+		-s, -s, s,
+		-s, s, s
+	};
+
+	uint index[6]{
+		0, 2, 1, 0, 3, 2
+	};
+
+	glGenBuffers(1, (GLuint*)&mesh->idVertices);
+	glBindBuffer(GL_ARRAY_BUFFER, mesh->idVertices);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 12, vertex, GL_STATIC_DRAW);
+
+	glGenBuffers(1, (GLuint*)&mesh->idIndices);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->idIndices);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * 6, index, GL_STATIC_DRAW); 
 
 	return ret;
 }
