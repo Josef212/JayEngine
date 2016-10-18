@@ -38,6 +38,13 @@ void UI_Inspector::draw()
 		ImGui::Checkbox("ShowGrid", &app->renderer3D->showGrid);
 		if (selected)
 		{
+			char name[128];
+			sprintf_s(name, 128, selected->getName());
+			if (ImGui::InputText("Name", name, 128)) selected->setName(name);
+
+			ImGui::Separator();
+			ImGui::Separator();
+
 			for (uint i = 0; i < selected->components.size(); ++i)
 			{
 				switch (selected->components[i]->type)

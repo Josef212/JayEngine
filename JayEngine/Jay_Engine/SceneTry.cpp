@@ -88,7 +88,8 @@ bool SceneTry::start()
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, CHECKERS_W, CHECKERS_H, 0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);*/
 
 	app->importer->loadFBXs("Assets/fbx/MechaT.fbx");
-	texId = ilutGLLoadImage("Assets/textures/Diffuse_Mech.png");//ilutGLLoadImage("Assets/textures/Lenna.png");
+	//texId = ilutGLLoadImage("Assets/textures/Diffuse_Mech.png");
+	texId = ilutGLLoadImage("Assets/textures/Lenna.png");
 
 	return true;
 }
@@ -127,7 +128,7 @@ update_status SceneTry::postUpdate(float dt)
 
 	//------------------------------
 
-	/*glEnable(GL_TEXTURE_2D);
+	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, texId);
 	
 	glBegin(GL_TRIANGLES);
@@ -226,7 +227,7 @@ update_status SceneTry::postUpdate(float dt)
 	glVertex3d(-s, s, -s);
 
 	glEnd();
-	glBindTexture(GL_TEXTURE_2D, 0);*/
+	glBindTexture(GL_TEXTURE_2D, 0);
 	/*glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, texId);
 	app->importer->drawMeshes(app->importer->Mmeshes);

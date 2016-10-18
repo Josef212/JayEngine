@@ -288,6 +288,7 @@ void GameObject::draw()
 		glEnable(GL_LIGHTING);
 		glEnable(GL_CULL_FACE);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		glColor4f(1.f, 1.f, 1.f, 1.f);
 
 		//----------------------
 
@@ -295,6 +296,7 @@ void GameObject::draw()
 
 		//----------------------
 	}
+
 }
 
 void GameObject::drawWires(bool selct)

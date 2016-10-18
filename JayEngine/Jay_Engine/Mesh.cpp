@@ -110,10 +110,17 @@ bool Mesh::loadMesh(aiMesh* mesh, bool loadToRAM)
 
 		if (mesh->HasTextureCoords(0))//Difuse 
 		{
-			numTexCoords = numVertices * 3;
+			numTexCoords = numVertices * 2;
 			texCoords = new float[numTexCoords];
-			memcpy(texCoords, mesh->mTextureCoords[0], sizeof(float) * 3);
-			_LOG(LOG_STD, "Mesh %s has %d texture coords.", getName(), numTexCoords / 3);
+
+			aiVector3D* tmp = mesh->mTextureCoords[0];
+			for (int i = 0; i < numTexCoords; i += 2)
+			{
+				texCoords[i] = tmp->x;
+				texCoords[i + 1] = tmp->y;
+				++tmp;
+			}
+			_LOG(LOG_STD, "Mesh %s has %d texture coords.", getName(), numTexCoords / 2);
 		}
 
 		ret = true;
