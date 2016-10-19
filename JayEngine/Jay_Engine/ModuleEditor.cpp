@@ -87,6 +87,12 @@ update_status ModuleEditor::update(float dt)
 		if (ImGui::BeginMenu("GameObject"))
 		{
 			if (ImGui::MenuItem("Create Empty Game object")) app->manager->createEmptyGO();
+			if (ImGui::BeginMenu("Primitives"))
+			{
+				if (ImGui::MenuItem("Cube")) app->manager->loadCube();
+
+				ImGui::EndMenu();
+			}
 			ImGui::EndMenu();
 		}
 

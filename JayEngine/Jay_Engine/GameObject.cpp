@@ -215,7 +215,7 @@ void GameObject::draw()
 			if (app->manager->getSelected() == this)
 				drawWires(true);
 
-			if (mesh->renderNormals)
+			if (mesh->renderNormals && mesh->numNormals > 0)
 			{
 				glDisable(GL_LIGHTING);
 				glLineWidth(0.7f);

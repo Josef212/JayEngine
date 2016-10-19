@@ -278,25 +278,42 @@ GameObject* ModuleManager::loadCube()
 
 	Mesh* mesh = (Mesh*)ret->addComponent(MESH);
 
+	const uint verticesNum = 24;
+	const uint indicesNum = 36;
 	float s = 0.5;
-	float vertex[12] = {
-		s, s, s,
-		s, -s, s,
-		-s, -s, s,
-		-s, s, s
+	float vertex[verticesNum] = {
+		s, s, s,	//0
+		s, -s, s,	//1
+		-s, -s, s,	//2
+		-s, s, s,	//3
+		s, s, -s,	//4
+		-s, s, -s,	//5
+		s, -s, -s,	//6
+		-s, -s, -s	//7
 	};
 
-	uint index[6]{
-		0, 2, 1, 0, 3, 2
+	uint index[indicesNum]{
+		0, 2, 1, 0, 3, 2,	//Front
+		3, 0, 4, 3, 4, 5,	//Top
+		4, 0, 1, 4, 1, 6,	//Right
+		3, 5, 7, 3, 7, 2,	//Left
+		5, 4, 6, 5, 6, 7,	//Back
+		1, 2, 7, 1, 7, 6	//Bottom
 	};
+
+	mesh->numVertices = verticesNum;
+	mesh->vertices = new float[mesh->numVertices];
 
 	glGenBuffers(1, (GLuint*)&mesh->idVertices);
 	glBindBuffer(GL_ARRAY_BUFFER, mesh->idVertices);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 12, vertex, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * verticesNum, vertex, GL_STATIC_DRAW);
+
+	mesh->numIndices = indicesNum;
+	mesh->indices = new uint[mesh->numIndices];
 
 	glGenBuffers(1, (GLuint*)&mesh->idIndices);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->idIndices);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * 6, index, GL_STATIC_DRAW); 
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * indicesNum, index, GL_STATIC_DRAW);
 
 	return ret;
 }
