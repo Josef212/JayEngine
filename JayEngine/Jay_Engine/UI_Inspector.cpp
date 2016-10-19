@@ -25,8 +25,9 @@ UI_Inspector::~UI_Inspector()
 
 void UI_Inspector::draw()
 {
-	windowW = app->window->getWidth();
-	windowH = app->window->getHeight();
+	ImGuiIO& io = ImGui::GetIO();
+	windowW = io.DisplaySize.x;
+	windowH = io.DisplaySize.y;
 
 	GameObject* selected = app->manager->getSelected();
 

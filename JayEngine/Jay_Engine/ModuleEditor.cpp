@@ -12,7 +12,6 @@
 #include "ImGui/imgui.h"
 #include "ImGui/imgui_impl_sdl_gl3.h"
 
-//TMP, for real must take this out as soon as possible
 #include "ModuleManager.h"
 #include "GameObject.h"
 
