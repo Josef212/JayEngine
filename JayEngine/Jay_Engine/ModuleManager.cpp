@@ -313,12 +313,36 @@ GameObject* ModuleManager::loadCube()
 		-1, -1, -1
 	};
 
-	const uint uvsNum = 16;
+	const uint uvsNum = 48;
 
-	/*float uvs[uvsNum]
+	float uvs[uvsNum]
 	{
-		
-	};*/
+			0, 0,
+			1, 0,
+			0, 1, 
+			1, 1, 
+			1, 1, 
+			0, 1, 
+			0, 0, 
+			1, 0, 
+			1, 1, 
+			0, 1, 
+			0, 0, 
+			1, 0, 
+			1, 1, 
+			0, 1, 
+			0, 0, 
+			1, 0, 
+			1, 1, 
+			0, 1, 
+			0, 0, 
+			1, 0, 
+			1, 1, 
+			0, 1, 
+			0, 0, 
+			1, 0
+
+	};
 
 	mesh->numVertices = verticesNum;
 	mesh->vertices = new float[mesh->numVertices];
@@ -341,15 +365,15 @@ GameObject* ModuleManager::loadCube()
 	glBindBuffer(GL_ARRAY_BUFFER, mesh->idNormals);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->numNormals, normals, GL_STATIC_DRAW);
 
-	//mesh->numTexCoords = uvsNum;
-	//mesh->texCoords = new float[mesh->numTexCoords];
+	mesh->numTexCoords = uvsNum;
+	mesh->texCoords = new float[mesh->numTexCoords];
 
-	//glGenBuffers(1, (GLuint*)&mesh->idTexCoords);
-	//glBindBuffer(GL_ARRAY_BUFFER, mesh->idTexCoords);
-	//glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->numTexCoords, uvs, GL_STATIC_DRAW);
+	glGenBuffers(1, (GLuint*)&mesh->idTexCoords);
+	glBindBuffer(GL_ARRAY_BUFFER, mesh->idTexCoords);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->numTexCoords, uvs, GL_STATIC_DRAW);
 
-	/*Material* mat = (Material*)ret->addComponent(MATERIAL);
-	mat->loadTexture("Lenna.png");*/
+	Material* mat = (Material*)ret->addComponent(MATERIAL);
+	mat->loadTexture("Lenna.png");
 
 	return ret;
 }
