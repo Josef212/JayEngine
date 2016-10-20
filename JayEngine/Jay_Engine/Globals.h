@@ -96,7 +96,7 @@ enum update_status
 #define IMGUI_DOC_URL "https://github.com/ocornut/imgui/blob/master/README.md"
 #define MATHGEOLIB_DOC_URL "http://clb.demon.fi/MathGeoLib/nightly/usermanual.html"
 #define OPENGL_DOC_URL "https://www.opengl.org/documentation/"
-#define PHYSFS_DOC_URL "https://icculus.org/physfs/"
+#define PHYSFS_DOC_URL "https://icculus.org/physfs/docs/html/index.html"
 #define SDL_DOC_URL "https://wiki.libsdl.org/"
 #define SDL_MIXER_DOC_URL "https://www.libsdl.org/projects/SDL_mixer/docs/SDL_mixer_frame.html"
 

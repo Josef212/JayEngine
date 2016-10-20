@@ -47,6 +47,18 @@ bool ModuleFileSystem::init()
 		addPath(writePath, getSaveDirectory());
 	}
 
+	if (!exist("Library"))
+		makeDirectory("Library");
+
+	if (!exist("textures"))
+		makeDirectory("textures", "Library");
+
+	if (!exist("textures"))
+		makeDirectory("textures", "Library");
+
+	if (!exist("models"))
+		makeDirectory("models", "Library");
+
 	return ret;
 }
 
@@ -78,6 +90,33 @@ bool ModuleFileSystem::exist(const char* file)
 bool ModuleFileSystem::isDirectory(const char* file)
 {
 	return PHYSFS_isDirectory(file) != 0;
+}
+
+bool ModuleFileSystem::makeDirectory(const char* dir, const char* mount)
+{
+	bool ret = false;
+
+	if (!dir)
+		return ret;
+
+	char newDir[128];
+
+	if (mount)
+		sprintf_s(newDir, 128, "%s/%s", mount, dir);
+	else
+		sprintf_s(newDir, 128, dir);
+
+	if (PHYSFS_mkdir(newDir) == 0)
+	{
+		_LOG(LOG_ERROR, "Could not make dir: %s. PhsyFs error: %s", newDir, PHYSFS_getLastError());
+	}
+	else
+	{
+		_LOG(LOG_FS, "Just created a dir: %s.", newDir);
+		ret = true;
+	}
+
+	return ret;
 }
 
 unsigned int ModuleFileSystem::load(const char* file, char** buffer)const
