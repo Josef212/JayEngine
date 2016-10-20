@@ -34,6 +34,8 @@ public:
 	GameObject* loadFBX(char* file, char* path);
 	GameObject* loadObjects(aiNode* node, const aiScene* scene, GameObject* parent);
 
+	bool deleteGameObject(GameObject* toDel);
+
 	GameObject* loadCube();
 
 private:

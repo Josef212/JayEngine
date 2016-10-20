@@ -44,6 +44,9 @@ void UI_Inspector::draw()
 			if (ImGui::InputText("Name", name, 128)) selected->setName(name);
 
 			ImGui::Separator();
+
+			if (ImGui::Button("Delete.")) app->manager->deleteGameObject(selected);
+
 			ImGui::Separator();
 
 			for (uint i = 0; i < selected->components.size(); ++i)

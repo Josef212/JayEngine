@@ -267,6 +267,39 @@ GameObject* ModuleManager::loadObjects(aiNode* node, const aiScene* scene, GameO
 	return ret;
 }
 
+bool ModuleManager::deleteGameObject(GameObject* toDel)
+{
+	bool ret = false;
+
+	if (!toDel)
+		return ret;
+
+	if (selected == toDel)
+		select(NULL);
+
+	if (toDel->getParent())
+	{
+		GameObject* parent = toDel->getParent();
+
+		uint i = 0;
+		for (; i < parent->childrens.size(); ++i)
+		{
+			if (parent->childrens[i] == toDel)
+			{
+				parent->childrens.erase(parent->childrens.begin() + i);
+				break;
+			}
+		}		
+	}
+
+	RELEASE(toDel);
+	
+	if (!toDel)
+		ret = true;
+
+	return ret;
+}
+
 GameObject* ModuleManager::loadCube()
 {
 	GameObject* ret = NULL;
