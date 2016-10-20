@@ -51,13 +51,13 @@ bool ModuleFileSystem::init()
 		makeDirectory("Library");
 
 	if (!exist("textures"))
-		makeDirectory("textures", "Library");
+		makeDirectory("Meshes", "Library");
 
 	if (!exist("textures"))
-		makeDirectory("textures", "Library");
+		makeDirectory("Material", "Library");
 
 	if (!exist("models"))
-		makeDirectory("models", "Library");
+		makeDirectory("Animation", "Library");
 
 	return ret;
 }
