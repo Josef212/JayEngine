@@ -18,7 +18,7 @@ void drawLine()
 
 //--------------------------------------------------
 //Draw a cube using direct mode vertices
-void cubeWithTriVertices(uint texId)
+void cubeWithTriVertices(int texId)
 {
 	//Draw a cube using triangles
 	glEnable(GL_TEXTURE_2D);
@@ -91,7 +91,7 @@ void cubeWithTriVertices(uint texId)
 
 //----------------------------------------------------
 //Load a cube using a buffer of vertices
-void loadVerticesBuffer(uint* vArray)
+void loadVerticesBuffer(int* vArray)
 {
 	glGenBuffers(1, (GLuint*)vArray);
 	glBindBuffer(GL_ARRAY_BUFFER, *vArray);
@@ -150,7 +150,7 @@ void loadVerticesBuffer(uint* vArray)
 }
 
 //Draw a cube using a buffer of vertices prevously loaded
-void drawFromVerticesArray(uint vArray, int jump, int arraySize)
+void drawFromVerticesArray(int vArray, int jump, int arraySize)
 {
 	//Draw a cube using vertex array
 	glBegin(GL_VERTEX_ARRAY);
@@ -164,7 +164,7 @@ void drawFromVerticesArray(uint vArray, int jump, int arraySize)
 
 //------------------------------------------------
 //Load a cube using vertices and indices in two buffers
-void loadVerticesIndices(uint* vArrayId, uint* iArrayId)
+void loadVerticesIndices(int* vArrayId, int* iArrayId)
 {
 	float s = 0.5;
 	float v[12] = {
@@ -174,7 +174,7 @@ void loadVerticesIndices(uint* vArrayId, uint* iArrayId)
 		-s, s, s
 	};
 
-	uint i[6]{
+	int i[6]{
 		0, 2, 1, 0, 3, 2
 	};
 
@@ -184,11 +184,11 @@ void loadVerticesIndices(uint* vArrayId, uint* iArrayId)
 
 	glGenBuffers(1, (GLuint*)iArrayId);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, *iArrayId);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * 6, i, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int) * 6, i, GL_STATIC_DRAW);
 }
 
 //Draw a cube using a buffer of vertices and a buffer of indices prevously loaded
-void drawVerticesIndex(uint vArrayId, uint iArrayId)
+void drawVerticesIndex(int vArrayId, int iArrayId)
 {
 	glEnableClientState(GL_VERTEX_ARRAY);
 
@@ -205,7 +205,7 @@ void drawVerticesIndex(uint vArrayId, uint iArrayId)
 
 
 //-------------------------------------------
-void drawSphere(float radius, int slices, int traces)
+/*void drawSphere(float radius, int slices, int traces)
 {
 	glBegin(GL_POINTS);
 
@@ -226,11 +226,11 @@ void drawSphere(float radius, int slices, int traces)
 	}
 
 	glEnd();
-}
+}*/
 
 //-------------------------------------------
 
-void drawCylinder(float r, float h)
+/*void drawCylinder(float r, float h)
 {
 	glBegin(GL_POLYGON);
 	for (int i = 0; i < 360; i+=20)
@@ -251,5 +251,5 @@ void drawCylinder(float r, float h)
 	}
 
 	glEnd();
-}
+}*/
 

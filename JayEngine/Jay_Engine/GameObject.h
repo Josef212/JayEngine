@@ -42,6 +42,8 @@ public:
 	bool isGOActive();
 	void setGOEnable(bool set);
 
+	void drawDebug();
+
 private:
 	void draw();
 	void drawWires(bool selct);

@@ -322,6 +322,19 @@ void GameObject::draw()
 
 }
 
+void GameObject::drawDebug()
+{
+	for (uint i = 0; i < childrens.size(); ++i)
+	{
+		childrens[i]->drawDebug();
+	}
+
+	for (uint j = 0; j < components.size(); ++j)
+	{
+		components[j]->debugDraw();
+	}
+}
+
 void GameObject::drawWires(bool selct)
 {
 	glDisable(GL_LIGHTING);

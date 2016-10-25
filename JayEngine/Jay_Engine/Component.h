@@ -34,6 +34,8 @@ public:
 	void setName(const char* str);
 	int getId();
 
+	virtual void debugDraw();
+
 public:
 	ComponentType type = UNKNOWN;
 

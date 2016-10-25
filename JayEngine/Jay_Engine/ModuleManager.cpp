@@ -289,6 +289,12 @@ GameObject* ModuleManager::loadObjects(aiNode* node, const aiScene* scene, GameO
 	return ret;
 }
 
+void ModuleManager::drawDebug()
+{
+	if (sceneRootObject)
+		sceneRootObject->drawDebug();
+}
+
 bool ModuleManager::deleteGameObject(GameObject* toDel)
 {
 	bool ret = false;

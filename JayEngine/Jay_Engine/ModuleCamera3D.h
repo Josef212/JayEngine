@@ -5,6 +5,8 @@
 #include "Globals.h"
 #include "glmath.h"
 
+class GameObject;
+
 class ModuleCamera3D : public Module
 {
 public:
@@ -31,7 +33,6 @@ public:
 	vec3 X, Y, Z, position, reference;
 
 private:
-
 	mat4x4 viewMatrix, viewMatrixInverse;
 };
 

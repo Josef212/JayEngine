@@ -68,3 +68,8 @@ void Component::cleanUp()
 {
 
 }
+
+void Component::debugDraw()
+{
+
+}

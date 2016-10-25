@@ -39,6 +39,8 @@ public:
 
 	GameObject* loadCube();
 
+	void drawDebug();
+
 private:
 
 public:

@@ -2,19 +2,21 @@
 #include "GameObject.h"
 #include "Transform.h"
 
-//MathGeolib frustrum: http://clb.demon.fi/MathGeoLib/nightly/docs/Frustum_summary.php
+#include "DrawDebug.h"
+
+//MathGeolib frustum: http://clb.demon.fi/MathGeoLib/nightly/docs/Frustum_summary.php
 
 Camera::Camera(GameObject* gObj, int id) : Component(gObj, id)
 {
 	type = CAMERA;
 	name.assign("Camera");
 
-	frustrum.pos = float3(0.f, 0.f, 0.f);
-	frustrum.front = float3(0.f, 0.f, 1.f);
-	frustrum.up = float3(0.f, 1.f, 0.f);
+	frustum.pos = float3(0.f, 0.f, 0.f);
+	frustum.front = float3(0.f, 0.f, 1.f);
+	frustum.up = float3(0.f, 1.f, 0.f);
 
-	frustrum.nearPlaneDistance = nearPlaneDist;
-	frustrum.farPlaneDistance = farPlaneDist;
+	frustum.nearPlaneDistance = nearPlaneDist;
+	frustum.farPlaneDistance = farPlaneDist;
 	setFOV(FOV);
 }
 
@@ -34,7 +36,7 @@ void Camera::setFOV(float vFOV) //Vertical FOV
 	{
 		//Will set manually aspect ratio (h fov) cause can use SetVerticalFovAndAspectRatio function
 		FOV = vFOV;
-		frustrum.horizontalFov = DEGTORAD * FOV;
+		frustum.horizontalFov = DEGTORAD * FOV;
 		setAspectRatio(aspectRatio);
 	}
 }
@@ -49,7 +51,7 @@ void Camera::setFarPlaneDist(float farPlaneD)
 	if (farPlaneD > 0.f && farPlaneD > nearPlaneDist)
 	{
 		farPlaneDist = farPlaneD;
-		frustrum.farPlaneDistance = farPlaneDist;
+		frustum.farPlaneDistance = farPlaneDist;
 		projectMatrixChanged = true;
 	}
 }
@@ -64,7 +66,7 @@ void Camera::setNearPlaneDist(float nearPlaneD)
 	if (nearPlaneD > 0.f && nearPlaneD < farPlaneDist)
 	{
 		nearPlaneDist = nearPlaneD;
-		frustrum.nearPlaneDistance = nearPlaneDist;
+		frustum.nearPlaneDistance = nearPlaneDist;
 		projectMatrixChanged = true;
 	}
 }
@@ -79,7 +81,7 @@ void Camera::setAspectRatio(float ratio)
 	if (ratio > 0)
 	{
 		aspectRatio = ratio;
-		frustrum.horizontalFov = 2 * atan(tan(FOV / 2) * aspectRatio);
+		frustum.horizontalFov = 2 * atan(tan(FOV / 2) * aspectRatio);
 		projectMatrixChanged = true;
 	}
 }
@@ -119,19 +121,37 @@ void Camera::move()
 		return;
 	float4x4 mat = trans->getTransformMatrix();
 
-	frustrum.pos = (float3)trans->getPosition();
-	frustrum.front = mat.WorldZ();
-	frustrum.up = mat.WorldY();
+	frustum.pos = (float3)trans->getPosition();
+	frustum.front = mat.WorldZ();
+	frustum.up = mat.WorldY();
 }
 
 float* Camera::getGLViewMatrix()
 {
-	float4x4 ret = frustrum.ViewMatrix();
+	float4x4 ret = frustum.ViewMatrix();
 	return (float*)ret.Transposed().v;
 }
 
 float* Camera::getGLProjectMatrix()
 {
-	float4x4 ret = frustrum.ProjectionMatrix();
+	float4x4 ret = frustum.ProjectionMatrix();
 	return (float*)ret.Transposed().v;
+}
+
+void Camera::debugDraw()
+{
+	drawFrustumDebug(frustum);
+}
+
+//TMP
+void Camera::update(float dt)
+{
+	Transform* trans = object->getTransform();
+	if (!trans)
+		return;
+	float4x4 mat = trans->getTransformMatrix();
+
+	frustum.pos = (float3)trans->getPosition();
+	frustum.front = mat.WorldZ();
+	frustum.up = mat.WorldY();
 }

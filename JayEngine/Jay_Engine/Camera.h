@@ -31,11 +31,15 @@ public:
 	void setBackground(float r, float g, float b, float a);
 
 	void move();
+	//TMP
+	void update(float dt);
 
 	//View matrix must update every frame
 	float* getGLViewMatrix();
 	//Projection matrix every time camera is changed like fov or window is resized
 	float* getGLProjectMatrix();
+
+	void debugDraw();
 
 private:
 
@@ -44,7 +48,7 @@ public:
 	bool projectMatrixChanged = false;
 
 private:
-	Frustum frustrum;
+	Frustum frustum;
 	float nearPlaneDist = 1.f;
 	float farPlaneDist = 1000.f;
 	float FOV = 75.f; //Actually vertical fov
