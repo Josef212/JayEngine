@@ -17,6 +17,7 @@ private:
 	void drawTransformation(GameObject* selected);
 	void drawMesh(GameObject* selected);
 	void drawMaterial(GameObject* selected);
+	void drawCamera(GameObject* selected);
 
 public:
 

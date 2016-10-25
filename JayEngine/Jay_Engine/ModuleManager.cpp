@@ -120,6 +120,25 @@ GameObject* ModuleManager::createEmptyGO()
 	return ret;
 }
 
+GameObject* ModuleManager::createCamera()
+{
+	GameObject* ret = NULL;
+
+	if (sceneRootObject)
+	{
+		ret = sceneRootObject->addChild();
+		if (ret)
+		{
+			ret->addComponent(CAMERA);
+			ret->setName("Camera");
+		}
+	}
+	else
+		_LOG(LOG_ERROR, "Can't create an empty game object because sceene root node is NULL.");
+
+	return ret;
+}
+
 Component* ModuleManager::addTransform()
 {
 	Transform* ret = NULL;

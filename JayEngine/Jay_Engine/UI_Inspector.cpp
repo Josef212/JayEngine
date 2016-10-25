@@ -7,6 +7,7 @@
 #include "Transform.h"
 #include "Mesh.h"
 #include "Material.h"
+#include "Camera.h"
 
 #include "ModuleManager.h"
 #include "ModuleWindow.h"
@@ -61,6 +62,9 @@ void UI_Inspector::draw()
 					break;
 				case MATERIAL:
 					drawMaterial(selected);
+					break;
+				case CAMERA:
+					drawCamera(selected);
 					break;
 				}
 			}
@@ -174,6 +178,56 @@ void UI_Inspector::drawMaterial(GameObject* selected) //TODO: must iterate all m
 			ImGui::TreePop();
 		}
 	}
+
+	ImGui::Separator();
+}
+
+void UI_Inspector::drawCamera(GameObject* selected)
+{
+	Camera* cam = (Camera*)selected->findComponent(CAMERA)[0];
+
+	if (!cam)
+		return;
+
+	ImGui::ColorEdit4("Background:", (float*)&cam->background, false);
+
+	float nearP = cam->getNearPlaneDist();
+	float farP = cam->getFarPlaneDist();
+	float fov = cam->getFOV();
+	
+	if(ImGui::DragFloat("Near plane:", &nearP)) cam->setNearPlaneDist(nearP);
+	if(ImGui::DragFloat("Far plane:", &farP))cam->setFarPlaneDist(farP);
+	if(ImGui::DragFloat("Field of view:", &fov))cam->setFOV(fov);
+
+	static int item = 0;
+	if (ImGui::Combo("AspectRatio", &item, " 16:9\0 16:10\0 5:4\0 4:3\0\0"))
+	{
+		switch (item)
+		{
+			case 0:
+			{
+				cam->setAspectRatio(16 / 9);
+			}
+			break;
+			case 1:
+			{
+				cam->setAspectRatio(16 / 10);
+			}
+			break;
+			case 2:
+			{
+				cam->setAspectRatio(5/4);
+			}
+			break;
+			case 3:
+			{
+				cam->setAspectRatio(4/3);
+			}
+			break;
+		}
+	}
+
+	if(ImGui::Button("Make this active."));
 
 	ImGui::Separator();
 }

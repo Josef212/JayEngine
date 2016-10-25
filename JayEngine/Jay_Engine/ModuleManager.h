@@ -23,6 +23,7 @@ public:
 
 	GameObject* getSceneroot()const;
 	GameObject* createEmptyGO();
+	GameObject* createCamera();
 
 	Component* addTransform();
 	Component* addMesh();

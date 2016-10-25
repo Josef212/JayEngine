@@ -38,8 +38,12 @@ public:
 	float* getGLProjectMatrix();
 
 private:
-	Frustum frustrum;
+
+public:
 	Color background;
+
+private:
+	Frustum frustrum;
 	float nearPlaneDist = 1.f;
 	float farPlaneDist = 1000.f;
 	float FOV = 75.f; //Actually vertical fov

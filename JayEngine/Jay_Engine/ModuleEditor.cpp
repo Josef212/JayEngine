@@ -92,6 +92,7 @@ update_status ModuleEditor::update(float dt)
 
 				ImGui::EndMenu();
 			}
+			if (ImGui::MenuItem("Camera")) app->manager->createCamera();
 			ImGui::EndMenu();
 		}
 

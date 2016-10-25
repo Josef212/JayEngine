@@ -4,6 +4,7 @@
 #include "Transform.h"
 #include "Mesh.h"
 #include "Material.h"
+#include "Camera.h"
 
 #include "OpenGL.h"
 
@@ -111,6 +112,12 @@ Component* GameObject::addComponent(ComponentType type)
 		case MATERIAL:
 		{
 			ret = new Material(this, nextCompId);
+		}
+		break;
+
+		case CAMERA:
+		{
+			ret = new Camera(this, nextCompId);
 		}
 		break;
 	}
