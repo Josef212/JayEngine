@@ -50,7 +50,7 @@ void Camera::setFarPlaneDist(float farPlaneD)
 	{
 		farPlaneDist = farPlaneD;
 		frustrum.farPlaneDistance = farPlaneDist;
-		//TODO: must update project matrix
+		projectMatrixChanged = true;
 	}
 }
 
@@ -65,7 +65,7 @@ void Camera::setNearPlaneDist(float nearPlaneD)
 	{
 		nearPlaneDist = nearPlaneD;
 		frustrum.nearPlaneDistance = nearPlaneDist;
-		//TODO: must update project matrix
+		projectMatrixChanged = true;
 	}
 }
 
@@ -80,7 +80,7 @@ void Camera::setAspectRatio(float ratio)
 	{
 		aspectRatio = ratio;
 		frustrum.horizontalFov = 2 * atan(tan(FOV / 2) * aspectRatio);
-		//TODO: must update project matrix
+		projectMatrixChanged = true;
 	}
 }
 

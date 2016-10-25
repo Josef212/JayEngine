@@ -227,6 +227,9 @@ void UI_Inspector::drawCamera(GameObject* selected)
 		}
 	}
 
+	static bool culling = cam->isCullingActive();
+	if (ImGui::Checkbox("Culling", &culling))cam->setCulling(culling);
+
 	if(ImGui::Button("Make this active."));
 
 	ImGui::Separator();

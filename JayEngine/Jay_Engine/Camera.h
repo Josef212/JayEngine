@@ -41,6 +41,7 @@ private:
 
 public:
 	Color background;
+	bool projectMatrixChanged = false;
 
 private:
 	Frustum frustrum;
