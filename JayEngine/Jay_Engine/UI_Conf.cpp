@@ -81,7 +81,8 @@ void UI_Conf::draw()
 			if (ImGui::Checkbox("Fullscreen", &fullscreen)) app->window->setFullScreen(fullscreen);
 			ImGui::SameLine();
 			if (ImGui::Checkbox("Resizable", &resizable)) app->window->setResizable(resizable);
-			if (ImGui::IsItemHovered()) ImGui::SetTooltip("Restart to apply");
+			ImGui::SameLine();
+			ImGui::TextColored(ImVec4(0.69, 0.13, 0.13, 1), "Reset app too apply."); //TODO: add functionality to save and load to change resizale
 			if (ImGui::Checkbox("Borderless", &borderless)) app->window->setBorderless(borderless);
 			ImGui::SameLine();
 			if (ImGui::Checkbox("FullDesktop", &fullscreenDesktop)) app->window->setFullScreenDesktop(fullscreenDesktop);

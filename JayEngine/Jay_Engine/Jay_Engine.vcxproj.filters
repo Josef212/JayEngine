@@ -271,6 +271,9 @@
     <ClCompile Include="ModuleManager.cpp">
       <Filter>Core\Modules</Filter>
     </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>Core\GameObjects\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.h">
@@ -593,6 +596,9 @@
     </ClInclude>
     <ClInclude Include="ModuleManager.h">
       <Filter>Core\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Core\GameObjects\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

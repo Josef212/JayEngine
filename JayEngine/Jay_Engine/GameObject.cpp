@@ -14,7 +14,7 @@ GameObject::GameObject(GameObject* parent, int id) : parent(parent), id(id)
 {
 	name.assign("Game Object");
 	init();
-	addComponent(TRANSFORMATION);
+	transform = (Transform*)addComponent(TRANSFORMATION);
 }
 
 
@@ -162,7 +162,7 @@ bool GameObject::removeComponent(Component* comp)
 	return ret;
 }
 
-Component* GameObject::findComponent(ComponentType type)
+/*Component* GameObject::findComponent(ComponentType type)
 {
 	Component* ret = NULL;
 
@@ -173,9 +173,23 @@ Component* GameObject::findComponent(ComponentType type)
 	}
 
 	return ret;
-}
+}*/
 
-//std::vector<Component*> findComponent(ComponentType type);
+std::vector<Component*> GameObject::findComponent(ComponentType type)
+{
+	std::vector<Component*> ret;
+
+	for (uint i = 0; i < components.size(); ++i)
+	{
+		if (components[i]->type == type)
+			ret.push_back(components[i]);
+	}
+
+	if (ret.empty())
+		ret.push_back(NULL);
+
+	return ret;
+}
 
 /*const std::vector<Component*> GameObject::getComponents()const
 {
@@ -189,16 +203,18 @@ GameObject* GameObject::getParent() const
 
 void GameObject::draw()
 {
-	Transform* trans = (Transform*)findComponent(TRANSFORMATION);
-	Mesh* mesh = (Mesh*)findComponent(MESH);
-	Material* mat = (Material*)findComponent(MATERIAL);
+	Mesh* mesh = (Mesh*)findComponent(MESH)[0];
+	Material* mat = (Material*)findComponent(MATERIAL)[0];
 
-	if (trans && mesh)
+	if (!transform)
+		transform = (Transform*)findComponent(TRANSFORMATION)[0];
+
+	if (transform && mesh)
 	{
 		//----------------------
 
 		glPushMatrix();
-		glMultMatrixf(*trans->getTransformMatrix().v);
+		glMultMatrixf(*transform->getTransformMatrix().v);
 
 		//----------------------
 

@@ -24,8 +24,8 @@ public:
 	Component* addComponent(ComponentType type);
 	GameObject* addChild();
 	bool removeComponent(Component* comp);
-	//std::vector<Component*> findComponent(ComponentType type);
-	Component* findComponent(ComponentType type);
+	std::vector<Component*> findComponent(ComponentType type);
+	//Component* findComponent(ComponentType type);
 
 	//const std::vector<Component*> getComponents()const;
 
@@ -33,6 +33,11 @@ public:
 	int getGOId()const;
 	const char* getName()const;
 	void setName(const char* str);
+
+	Transform* getTransform()const
+	{
+		return transform;
+	}
 
 	bool isGOActive();
 	void setGOEnable(bool set);
@@ -51,6 +56,10 @@ private:
 	int id = -1;
 	GameObject* parent = NULL;
 	bool goActive = true;
+
+	/**Just a pointer to transformation component 
+	in order to agile transform search. May be transform info should be in game object class */
+	Transform* transform = NULL;
 };
 
 #endif // !__GAMEOBJECT_H__

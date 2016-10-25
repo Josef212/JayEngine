@@ -71,7 +71,9 @@ void UI_Inspector::draw()
 
 void UI_Inspector::drawTransformation(GameObject* selected)
 {
-	Transform* trans = (Transform*)selected->findComponent(TRANSFORMATION);
+	Transform* trans = selected->getTransform();
+	if(trans )
+		trans = (Transform*)selected->findComponent(TRANSFORMATION)[0];
 	
 	char transName[60];
 	strcpy_s(transName, 60, trans->getName());
@@ -93,9 +95,9 @@ void UI_Inspector::drawTransformation(GameObject* selected)
 	ImGui::Separator();
 }
 
-void UI_Inspector::drawMesh(GameObject* selected)
+void UI_Inspector::drawMesh(GameObject* selected) //TODO: must iterate all meshes to show components info in inspector
 {
-	Mesh* mesh = (Mesh*)selected->findComponent(MESH);
+	Mesh* mesh = (Mesh*)selected->findComponent(MESH)[0];
 
 	char meshName[60];
 	strcpy_s(meshName, 60, mesh->getName());
@@ -136,9 +138,9 @@ void UI_Inspector::drawMesh(GameObject* selected)
 	ImGui::Separator();
 }
 
-void UI_Inspector::drawMaterial(GameObject* selected)
+void UI_Inspector::drawMaterial(GameObject* selected) //TODO: must iterate all materials to show components info in inspector
 {
-	Material* mat = (Material*)selected->findComponent(MATERIAL);
+	Material* mat = (Material*)selected->findComponent(MATERIAL)[0];
 
 	char matName[60];
 	strcpy_s(matName, 60, mat->getName());

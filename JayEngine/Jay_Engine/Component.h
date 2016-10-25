@@ -11,7 +11,8 @@ enum ComponentType
 	UNKNOWN = 0,
 	TRANSFORMATION,
 	MESH,
-	MATERIAL
+	MATERIAL,
+	CAMERA
 };
 
 class Component

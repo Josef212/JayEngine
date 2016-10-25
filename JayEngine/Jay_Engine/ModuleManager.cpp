@@ -126,7 +126,10 @@ Component* ModuleManager::addTransform()
 
 	if (selected)
 	{
-		Transform* trans = (Transform*)selected->findComponent(TRANSFORMATION);
+		Transform* trans = selected->getTransform();
+		if(!trans)
+			trans = (Transform*)selected->findComponent(TRANSFORMATION)[0];
+
 		if(trans)
 			selected->addComponent(TRANSFORMATION);
 	}
@@ -224,7 +227,10 @@ GameObject* ModuleManager::loadObjects(aiNode* node, const aiScene* scene, GameO
 	++indexGO;
 
 	//Set transformation
-	Transform* trans = (Transform*)ret->findComponent(TRANSFORMATION);
+	Transform* trans = ret->getTransform();
+	if(!trans)
+		trans = (Transform*)ret->findComponent(TRANSFORMATION)[0];
+
 	if (trans)
 		trans->setTransform(node);
 
@@ -237,10 +243,7 @@ GameObject* ModuleManager::loadObjects(aiNode* node, const aiScene* scene, GameO
 		//node->mMeshes is an uint array with the index of the mesh in scene->mMesh
 		if (scene->HasMaterials())
 		{
-			Material* mat = NULL;
-			mat = (Material*)ret->findComponent(MATERIAL);
-			if (!mat)
-				mat = (Material*)ret->addComponent(MATERIAL);
+			Material* mat = (Material*)ret->addComponent(MATERIAL);
 			//TODO: Clear tex path
 			char* path = new char[256];
 			aiString str;

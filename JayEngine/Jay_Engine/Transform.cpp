@@ -260,7 +260,7 @@ void Transform::updateTransform(float4x4& parentMat)
 
 	for (uint i = 0; i < object->childrens.size(); ++i)
 	{
-		Transform* trans = (Transform*)object->childrens[i]->findComponent(TRANSFORMATION);
+		Transform* trans = object->childrens[i]->getTransform();
 		if (trans)
 		{
 			trans->updateTransform(worldTransform);
