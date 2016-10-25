@@ -6,6 +6,7 @@
 #include "glmath.h"
 
 class GameObject;
+class Camera;
 
 class ModuleCamera3D : public Module
 {
@@ -32,8 +33,13 @@ public:
 	float maxDistanceToVehicle = 25.0f;
 	vec3 X, Y, Z, position, reference;
 
+	//TMP
+	GameObject* defaultCamera = NULL;
+	Camera* cameraComp = NULL;
+
 private:
 	mat4x4 viewMatrix, viewMatrixInverse;
+
 };
 
 #endif // !__MODULECAMERA3D_H__

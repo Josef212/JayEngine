@@ -129,13 +129,15 @@ void Camera::move()
 float* Camera::getGLViewMatrix()
 {
 	float4x4 ret = frustum.ViewMatrix();
-	return (float*)ret.Transposed().v;
+	ret.Transpose();
+	return (float*)ret.v;
 }
 
 float* Camera::getGLProjectMatrix()
 {
 	float4x4 ret = frustum.ProjectionMatrix();
-	return (float*)ret.Transposed().v;
+	ret.Transpose();
+	return (float*)ret.v;
 }
 
 void Camera::debugDraw()

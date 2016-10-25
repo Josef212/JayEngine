@@ -3,6 +3,10 @@
 #include "PhysBody3D.h"
 #include "ModuleCamera3D.h"
 #include "ModuleInput.h"
+#include "ModuleManager.h"
+
+#include "GameObject.h"
+#include "Camera.h"
 
 ModuleCamera3D::ModuleCamera3D(bool startEnabled) : Module(startEnabled)
 {
@@ -30,6 +34,15 @@ bool ModuleCamera3D::start()
 {
 	_LOG(LOG_STD, "Camera3D: Start.");
 
+	if (!defaultCamera)
+		defaultCamera = app->manager->createCamera();
+
+	if (defaultCamera)
+		cameraComp = (Camera*)defaultCamera->findComponent(CAMERA)[0];
+
+	if (!cameraComp)
+		return false;
+
 	return true;
 }
 
@@ -37,6 +50,9 @@ bool ModuleCamera3D::start()
 bool ModuleCamera3D::cleanUp()
 {
 	_LOG(LOG_STD, "Camera3D: CleanUp.");
+
+	defaultCamera = NULL;
+	cameraComp = NULL;
 
 	return true;
 }

@@ -7,6 +7,7 @@
 #include "DrawDebug.h"
 
 #include "Primitive.h"
+#include "Camera.h"
 
 #include "OpenGL.h"
 
@@ -154,6 +155,28 @@ update_status ModuleRenderer3D::preUpdate(float dt)
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
+	
+	//TODO
+	/*Camera* cam = app->camera->cameraComp;
+	if (cam->projectMatrixChanged)
+	{
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		glLoadMatrixf((GLfloat*)cam->getGLProjectMatrix());
+
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		cam->projectMatrixChanged = false;
+	}
+
+	Color c = cam->background;
+	glClearColor(c.r, c.g, c.b, c.a);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glLoadIdentity();
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadMatrixf(cam->getGLViewMatrix());*/
+
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadMatrixf(app->camera->getViewMatrix());
