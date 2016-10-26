@@ -1,5 +1,7 @@
 #include "Material.h"
 
+#include "ModuleFileSystem.h"
+
 #include "Devil/include/il.h"
 #include "Devil/include/ilu.h"
 #include "Devil/include/ilut.h"
@@ -66,6 +68,7 @@ int Material::loadTexture(char* file, char* path)
 	strcat_s(realPath, 256, file);
 
 	_LOG(LOG_STD, "Loading a texture from: %s", realPath);
+
 
 	uint id = ilutGLLoadImage(realPath);
 
