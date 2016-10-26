@@ -2,6 +2,8 @@
 #include "Application.h"
 #include "ModuleManager.h"
 
+#include "ModuleFileSystem.h"
+
 #include "GameObject.h"
 #include "Component.h"
 #include "Transform.h"
@@ -213,7 +215,19 @@ GameObject* ModuleManager::loadFBX(char* file, char* path)
 	strcat_s(realPath, 256, "/");
 	strcat_s(realPath, 256, file);
 
-	const aiScene* scene = aiImportFile(realPath, aiProcessPreset_TargetRealtime_MaxQuality);//TODO: fit this with own format system
+	char* buffer;
+	uint fileSize = app->fs->load(realPath, &buffer);
+	const aiScene* scene = NULL;
+	if (buffer && fileSize > 0)
+	{
+		scene = aiImportFileFromMemory(buffer, fileSize, aiProcessPreset_TargetRealtime_MaxQuality, "fbx");
+	}
+	else
+	{
+		_LOG(LOG_ERROR, "Error while loading fbx.");
+		return NULL;
+	}
+	//const aiScene* scene = aiImportFile(realPath, aiProcessPreset_TargetRealtime_MaxQuality);//TODO: fit this with own format system
 
 	if (scene, scene->HasMeshes())
 	{
@@ -223,6 +237,7 @@ GameObject* ModuleManager::loadFBX(char* file, char* path)
 		aiReleaseImport(scene);
 	}
 
+	RELEASE_ARRAY(buffer);
 	RELEASE_ARRAY(realPath);
 
 	return root;
