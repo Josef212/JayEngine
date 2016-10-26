@@ -1,5 +1,6 @@
 #include "Material.h"
 
+#include "Application.h"
 #include "ModuleFileSystem.h"
 
 #include "Devil/include/il.h"
@@ -69,7 +70,18 @@ int Material::loadTexture(char* file, char* path)
 
 	_LOG(LOG_STD, "Loading a texture from: %s", realPath);
 
-
+	
+	/*ILubyte* buffer;
+	uint fileSize = app->fs->load(realPath, (char**)&buffer);
+	if (!ilLoadL(IL_TYPE_UNKNOWN, buffer, fileSize))//TODO: change type because DDS images should be load
+	{
+		ILuint devilError = ilGetError();
+		if (devilError != IL_NO_ERROR)
+		{
+			_LOG(LOG_ERROR, "Error while loading texture '%s'. Devil:%s\n", realPath, iluErrorString(devilError));
+		}
+	}*/
+	
 	uint id = ilutGLLoadImage(realPath);
 
 	if (id > 0)

@@ -45,35 +45,35 @@ void drawFrustumDebug(Frustum& frustum)
 
 	glBegin(GL_QUADS);
 
-	glVertex3fv((float*)&vertices[1]);
-	glVertex3fv((float*)&vertices[5]);
-	glVertex3fv((float*)&vertices[7]);
-	glVertex3fv((float*)&vertices[3]);
+	glVertex3fv((GLfloat*)&vertices[1]);
+	glVertex3fv((GLfloat*)&vertices[5]);
+	glVertex3fv((GLfloat*)&vertices[7]);
+	glVertex3fv((GLfloat*)&vertices[3]);
 						   
-	glVertex3fv((float*)&vertices[4]);
-	glVertex3fv((float*)&vertices[0]);
-	glVertex3fv((float*)&vertices[2]);
-	glVertex3fv((float*)&vertices[6]);
+	glVertex3fv((GLfloat*)&vertices[4]);
+	glVertex3fv((GLfloat*)&vertices[0]);
+	glVertex3fv((GLfloat*)&vertices[2]);
+	glVertex3fv((GLfloat*)&vertices[6]);
 						   
-	glVertex3fv((float*)&vertices[5]);
-	glVertex3fv((float*)&vertices[4]);
-	glVertex3fv((float*)&vertices[6]);
-	glVertex3fv((float*)&vertices[7]);
+	glVertex3fv((GLfloat*)&vertices[5]);
+	glVertex3fv((GLfloat*)&vertices[4]);
+	glVertex3fv((GLfloat*)&vertices[6]);
+	glVertex3fv((GLfloat*)&vertices[7]);
 						   
-	glVertex3fv((float*)&vertices[0]);
-	glVertex3fv((float*)&vertices[1]);
-	glVertex3fv((float*)&vertices[3]);
-	glVertex3fv((float*)&vertices[2]);
+	glVertex3fv((GLfloat*)&vertices[0]);
+	glVertex3fv((GLfloat*)&vertices[1]);
+	glVertex3fv((GLfloat*)&vertices[3]);
+	glVertex3fv((GLfloat*)&vertices[2]);
 						   
-	glVertex3fv((float*)&vertices[3]);
-	glVertex3fv((float*)&vertices[7]);
-	glVertex3fv((float*)&vertices[6]);
-	glVertex3fv((float*)&vertices[2]);
+	glVertex3fv((GLfloat*)&vertices[3]);
+	glVertex3fv((GLfloat*)&vertices[7]);
+	glVertex3fv((GLfloat*)&vertices[6]);
+	glVertex3fv((GLfloat*)&vertices[2]);
 						   
-	glVertex3fv((float*)&vertices[0]);
-	glVertex3fv((float*)&vertices[4]);
-	glVertex3fv((float*)&vertices[5]);
-	glVertex3fv((float*)&vertices[1]);
+	glVertex3fv((GLfloat*)&vertices[0]);
+	glVertex3fv((GLfloat*)&vertices[4]);
+	glVertex3fv((GLfloat*)&vertices[5]);
+	glVertex3fv((GLfloat*)&vertices[1]);
 
 	glEnd();
 }

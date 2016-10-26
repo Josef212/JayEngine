@@ -18,6 +18,7 @@ Camera::Camera(GameObject* gObj, int id) : Component(gObj, id)
 	frustum.nearPlaneDistance = nearPlaneDist;
 	frustum.farPlaneDistance = farPlaneDist;
 	setFOV(FOV);
+	setAspectRatio(1.3f);
 }
 
 Camera::~Camera()
@@ -36,7 +37,7 @@ void Camera::setFOV(float vFOV) //Vertical FOV
 	{
 		//Will set manually aspect ratio (h fov) cause can use SetVerticalFovAndAspectRatio function
 		FOV = vFOV;
-		frustum.horizontalFov = DEGTORAD * FOV;
+		frustum.verticalFov = DEGTORAD * FOV;
 		setAspectRatio(aspectRatio);
 	}
 }
@@ -81,7 +82,7 @@ void Camera::setAspectRatio(float ratio)
 	if (ratio > 0)
 	{
 		aspectRatio = ratio;
-		frustum.horizontalFov = 2 * atan(tan(FOV / 2) * aspectRatio);
+		frustum.horizontalFov = 2.f * atan(tan((FOV * DEGTORAD) / 2) * aspectRatio);
 		projectMatrixChanged = true;
 	}
 }
@@ -128,14 +129,14 @@ void Camera::move()
 
 float* Camera::getGLViewMatrix()
 {
-	float4x4 ret = frustum.ViewMatrix();
+	static float4x4 ret = frustum.ViewMatrix();
 	ret.Transpose();
 	return (float*)ret.v;
 }
 
 float* Camera::getGLProjectMatrix()
 {
-	float4x4 ret = frustum.ProjectionMatrix();
+	static float4x4 ret = frustum.ProjectionMatrix();
 	ret.Transpose();
 	return (float*)ret.v;
 }
