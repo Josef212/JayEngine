@@ -35,10 +35,11 @@ void Camera::setFOV(float vFOV) //Vertical FOV
 {
 	if (vFOV > 0.f)
 	{
+		float aR = frustum.AspectRatio();
 		//Will set manually aspect ratio (h fov) cause can use SetVerticalFovAndAspectRatio function
 		FOV = vFOV;
-		frustum.verticalFov = DEGTORAD * FOV;
-		setAspectRatio(aspectRatio);
+		frustum.verticalFov = DEGTORAD * vFOV;
+		setAspectRatio(aR);
 	}
 }
 
@@ -82,7 +83,7 @@ void Camera::setAspectRatio(float ratio)
 	if (ratio > 0)
 	{
 		aspectRatio = ratio;
-		frustum.horizontalFov = 2.f * atan(tan((FOV * DEGTORAD) / 2) * aspectRatio);
+		frustum.horizontalFov = 2.f * atanf(tanf(frustum.verticalFov * 0.5f) * ratio);
 		projectMatrixChanged = true;
 	}
 }
@@ -153,8 +154,9 @@ void Camera::update(float dt)
 	if (!trans)
 		return;
 	float4x4 mat = trans->getTransformMatrix();
+	//mat.Transpose();
 
-	frustum.pos = (float3)trans->getPosition();
+	frustum.pos = mat.TranslatePart();//(float3)trans->getPosition();
 	frustum.front = mat.WorldZ();
 	frustum.up = mat.WorldY();
 }
