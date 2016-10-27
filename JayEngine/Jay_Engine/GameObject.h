@@ -52,6 +52,8 @@ public:
 	std::vector<Component*> components;
 	std::vector<GameObject*> childrens;
 
+	AABB aabb;
+
 private:
 	std::string name;
 	int nextCompId = 0;
