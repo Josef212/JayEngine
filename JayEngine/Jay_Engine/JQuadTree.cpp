@@ -105,6 +105,9 @@ void treeNode::divideNode()
 	center2.Set(center.x - sx, center.y, center.z + sz);
 	tmp.SetFromCenterAndSize(center2, size2);
 	childs[3] = new treeNode(tmp);
+
+	for (uint i = 0; i < 4; ++i)
+		childs[i]->parent = this;
 }
 
 void treeNode::ajustNode()
