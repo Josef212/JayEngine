@@ -1,6 +1,6 @@
 /** Quadtree with AABB boxes and gameobjects, created to use on the game engine: JayEngine. */
-#ifndef __JQUADTREE__
-#define __JQUADTREE__
+#ifndef __JOCTTREE__
+#define __JOCTTREE__
 
 #include "Math.h"
 #include <list>
@@ -12,11 +12,11 @@ class GameObject;
 //---------------TreeNode----------------------------
 //---------------------------------------------------
 
-class treeNode
+class oTreeNode
 {
 public:
-	treeNode(const AABB& _box);
-	~treeNode();
+	oTreeNode(const AABB& _box);
+	~oTreeNode();
 
 	void insert(GameObject* obj);
 	void erase(GameObject* obj);
@@ -24,28 +24,28 @@ public:
 	void coollectBoxes(std::vector<AABB>& vec);
 	void coollectGO(std::vector<GameObject*>& vec);
 
-	void collectCandidates(std::vector<GameObject*>& vec, const Frustum& frustum);
-
 	void divideNode();
 	void ajustNode();
 	bool intersectsAllChilds(const AABB& _box);
 
+	void collectCandidates(std::vector<GameObject*>& vec, const Frustum& frustum);
+
 public:
 	AABB box;
 	std::list<GameObject*> objects;
-	treeNode* parent = nullptr;
-	treeNode* childs[4];
+	oTreeNode* parent = nullptr;
+	oTreeNode* childs[8];
 };
 
 //---------------------------------------------------
 //---------------JQuadTree---------------------------
 //---------------------------------------------------
 
-class JQuadTree
+class JOctTree
 {
 public:
-	JQuadTree();
-	virtual ~JQuadTree();
+	JOctTree();
+	virtual ~JOctTree();
 
 	void insert(GameObject* obj);
 	void erase(GameObject* obj);
@@ -56,8 +56,8 @@ public:
 	void collectCandidates(std::vector<GameObject*>& vec, const Frustum& primitive);
 
 public:
-	treeNode* rootNode = nullptr;
+	oTreeNode* rootNode = nullptr;
 };
 
 
-#endif // !__JQUADTREE__
+#endif // !__JOCTTREE__
