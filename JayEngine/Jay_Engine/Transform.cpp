@@ -77,6 +77,7 @@ void Transform::setTransform(aiNode* node)
 	worldTransform = parentTransform * localTransform;
 	worldTransform = worldTransform.Transposed();
 
+	transformUpdated = true;
 }
 
 void Transform::setPosition(float x, float y, float z)
@@ -252,6 +253,16 @@ float4x4 Transform::getTransformMatrix()
 		return float4x4::identity;
 }
 
+float4x4 Transform::getLocalMatrix()
+{
+	if (isEnable())
+	{
+		return localTransform;
+	}
+	else
+		return float4x4::identity;
+}
+
 void Transform::updateTransform(float4x4& parentMat)
 {
 	parentTransform = parentMat;
@@ -267,4 +278,5 @@ void Transform::updateTransform(float4x4& parentMat)
 		}
 	}
 	worldTransform = worldTransform.Transposed();
+	transformUpdated = true;
 }

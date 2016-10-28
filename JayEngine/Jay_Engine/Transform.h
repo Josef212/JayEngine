@@ -40,6 +40,7 @@ public:
 	float* getEulerRot();
 
 	float4x4 getTransformMatrix();
+	float4x4 getLocalMatrix();
 	void updateTransform(float4x4& parentMat);
 
 private:
@@ -49,6 +50,8 @@ public:
 	float3 scale = float3::zero;
 	Quat rotation = Quat::identity;
 	float3 rotationEuler = float3::zero;
+
+	bool transformUpdated = false;
 
 private:
 	float4x4 worldTransform = float4x4::identity;

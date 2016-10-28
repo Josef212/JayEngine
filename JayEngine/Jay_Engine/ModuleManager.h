@@ -21,6 +21,8 @@ public:
 	update_status postUpdate(float dt);
 	bool cleanUp();
 
+	void draw();
+
 	GameObject* getSceneroot()const;
 	GameObject* createEmptyGO();
 	GameObject* createCamera();
@@ -41,10 +43,17 @@ public:
 
 	void drawDebug();
 
+	void makeGOShowAABox(bool show);
+	void makeGOShowOBox(bool show);
+
 private:
+	void makeGOShowAABoxRec(GameObject* obj, bool show);
+	void makeGOShowOBoxRec(GameObject* obj, bool show);
 
 public:
 	int nextGOId = 0;
+	bool showEnclosingBoxes = false;
+	bool showOrientedBoxes = false;
 
 private:
 	//Components limits, if 0 there is no limit. Should load that from json

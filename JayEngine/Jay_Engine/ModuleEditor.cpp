@@ -2,6 +2,7 @@
 #include "Globals.h"
 #include "ModuleEditor.h"
 #include "ModuleWindow.h"
+#include "ModuleManager.h"
 
 #include "UI_Comp.h"
 #include "UI_Conf.h"
@@ -93,6 +94,23 @@ update_status ModuleEditor::update(float dt)
 				ImGui::EndMenu();
 			}
 			if (ImGui::MenuItem("Camera")) app->manager->createCamera();
+			if (ImGui::BeginMenu("Show"))
+			{
+				bool showAABB = app->manager->showEnclosingBoxes;
+				if (ImGui::MenuItem("Show enclosing boxes", NULL, showAABB))
+				{
+					showAABB = !showAABB;
+					app->manager->makeGOShowAABox(showAABB);
+				}
+
+				bool showO = app->manager->showOrientedBoxes;
+				if (ImGui::MenuItem("Show oriented boxes", NULL, showO))
+				{
+					showO = !showO;
+					app->manager->makeGOShowOBox(showO);
+				}
+				ImGui::EndMenu();
+			}
 			ImGui::EndMenu();
 		}
 

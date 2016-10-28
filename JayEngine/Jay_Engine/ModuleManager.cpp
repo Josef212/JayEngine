@@ -100,6 +100,12 @@ bool ModuleManager::cleanUp()
 	return true;
 }
 
+void ModuleManager::draw()
+{
+	if (sceneRootObject)
+		sceneRootObject->draw();
+}
+
 GameObject* ModuleManager::getSceneroot()const
 {
 	return sceneRootObject;
@@ -296,6 +302,8 @@ GameObject* ModuleManager::loadObjects(aiNode* node, const aiScene* scene, GameO
 		}
 	}
 
+	ret->updateAABB();
+
 	for (uint i = 0; i < node->mNumChildren; ++i)
 	{
 		loadObjects(node->mChildren[i], scene, ret);
@@ -341,6 +349,48 @@ bool ModuleManager::deleteGameObject(GameObject* toDel)
 		ret = true;
 
 	return ret;
+}
+
+void ModuleManager::makeGOShowAABox(bool show)
+{
+	if (sceneRootObject)
+	{
+		showEnclosingBoxes = show;
+		makeGOShowAABoxRec(sceneRootObject, show);
+	}
+}
+
+void ModuleManager::makeGOShowAABoxRec(GameObject* obj, bool show)
+{
+	if (obj)
+	{
+		obj->drawEnclosingAABB = show;
+		for (uint i = 0; i < obj->childrens.size(); ++i)
+		{
+			makeGOShowAABoxRec(obj->childrens[i], show);
+		}
+	}
+}
+
+void ModuleManager::makeGOShowOBox(bool show)
+{
+	if (sceneRootObject)
+	{
+		showOrientedBoxes = show;
+		makeGOShowOBoxRec(sceneRootObject, show);
+	}
+}
+
+void ModuleManager::makeGOShowOBoxRec(GameObject* obj, bool show)
+{
+	if (obj)
+	{
+		obj->drawOrientedBox = show;
+		for (uint i = 0; i < obj->childrens.size(); ++i)
+		{
+			makeGOShowOBoxRec(obj->childrens[i], show);
+		}
+	}
 }
 
 GameObject* ModuleManager::loadCube()

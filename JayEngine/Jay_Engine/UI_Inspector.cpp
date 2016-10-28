@@ -46,6 +46,12 @@ void UI_Inspector::draw()
 
 			ImGui::Separator();
 
+			bool showAABB = selected->drawEnclosingAABB;
+			if (ImGui::Checkbox("Show enclosing AABB", &showAABB)) selected->drawEnclosingAABB = showAABB;
+			ImGui::SameLine();
+			bool showOBB = selected->drawOrientedBox;
+			if (ImGui::Checkbox("Show oriented box", &showOBB)) selected->drawOrientedBox = showOBB;
+
 			if (ImGui::Button("Delete.")) app->manager->deleteGameObject(selected);
 
 			ImGui::Separator();
