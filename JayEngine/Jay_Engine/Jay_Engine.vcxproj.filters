@@ -275,7 +275,10 @@
       <Filter>Core\GameObjects\Components</Filter>
     </ClCompile>
     <ClCompile Include="JQuadTree.cpp">
-      <Filter>Core</Filter>
+      <Filter>Core\Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="JOcttree.cpp">
+      <Filter>Core\Containers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -603,7 +606,12 @@
     <ClInclude Include="Camera.h">
       <Filter>Core\GameObjects\Components</Filter>
     </ClInclude>
-    <ClInclude Include="JQuadTree.h" />
+    <ClInclude Include="JQuadTree.h">
+      <Filter>Core\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="JOcttree.h">
+      <Filter>Core\Containers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\include\Geometry\KDTree.inl">

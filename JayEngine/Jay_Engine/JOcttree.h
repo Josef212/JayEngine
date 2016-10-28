@@ -1,4 +1,6 @@
-/** Quadtree with AABB boxes and gameobjects, created to use on the game engine: JayEngine. */
+/** Octree with AABB boxes and gameobjects, created to use on the game engine: JayEngine. */
+//https://github.com/Josef212/Containers
+
 #ifndef __JOCTTREE__
 #define __JOCTTREE__
 

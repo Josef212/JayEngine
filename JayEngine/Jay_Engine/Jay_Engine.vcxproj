@@ -136,6 +136,7 @@
     <ClCompile Include="imGUI\imgui_demo.cpp" />
     <ClCompile Include="imGUI\imgui_draw.cpp" />
     <ClCompile Include="imGUI\imgui_impl_sdl_gl3.cpp" />
+    <ClCompile Include="JOcttree.cpp" />
     <ClCompile Include="JQuadTree.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="Globals.cpp" />
@@ -214,6 +215,7 @@
     <ClInclude Include="imGUI\stb_rect_pack.h" />
     <ClInclude Include="imGUI\stb_textedit.h" />
     <ClInclude Include="imGUI\stb_truetype.h" />
+    <ClInclude Include="JOcttree.h" />
     <ClInclude Include="JQuadTree.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="Math.h" />
