@@ -5,6 +5,7 @@
 #include "ModuleCamera3D.h"
 #include "ModuleEditor.h"
 #include "DrawDebug.h"
+#include "ModuleManager.h"
 
 #include "Primitive.h"
 #include "Camera.h"
@@ -204,7 +205,9 @@ update_status ModuleRenderer3D::postUpdate(float dt)
 		floor.Render();
 	}
 
-	if (app->debug)
+	app->manager->draw();
+
+	if (/*app->debug*/true) //TODO: change debug system
 	{
 		beginDebugDraw();
 		app->drawDebug();
