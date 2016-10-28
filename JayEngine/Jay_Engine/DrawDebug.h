@@ -7,6 +7,7 @@ void beginDebugDraw();
 void endDebugDraw();
 
 void drawBoxDebug(AABB& box);
+void drawBoxDebug(OBB& box);
 void drawSphereDebug();
 void drawFrustumDebug(Frustum& frustum);
 
