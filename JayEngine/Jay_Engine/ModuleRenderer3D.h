@@ -6,6 +6,8 @@
 #include "glmath.h"
 #include "Light.h"
 
+class GameObject;
+
 #define MAX_LIGHTS 8
 
 class ModuleRenderer3D : public Module
@@ -24,6 +26,9 @@ public:
 
 	bool getVSync()const;
 	void setVSync(bool vsync);
+
+	void drawGameObject(GameObject* obj);
+	void drawWireframe(bool selected);
 
 public:
 	Light lights[MAX_LIGHTS];

@@ -7,6 +7,11 @@
 #include "DrawDebug.h"
 #include "ModuleManager.h"
 
+#include "GameObject.h"
+#include "Transform.h"
+#include "Mesh.h"
+#include "Material.h"
+
 #include "Primitive.h"
 #include "Camera.h"
 
@@ -257,4 +262,152 @@ void ModuleRenderer3D::setVSync(bool vsync)
 		if (SDL_GL_SetSwapInterval(vsync ? 1 : 0) < 0)
 			_LOG(LOG_WARN, "Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
 	}
+}
+
+//---------------------------------
+
+void ModuleRenderer3D::drawGameObject(GameObject* obj)
+{
+	if (!obj)
+		return;
+
+	Transform* trans = obj->getTransform();
+	std::vector<Component*> meshes = obj->findComponent(MESH);
+	Material* mat = (Material*)obj->findComponent(MATERIAL)[0];
+
+	if (!meshes[0] || !trans)
+		return;
+
+	bool selected = (app->manager->getSelected() == obj);
+
+	//First push transform matrix, remember to pop it at end of draw
+	//----------------------
+
+	glPushMatrix();
+	glMultMatrixf(*trans->getTransformMatrix().v);
+
+	//----------------------
+
+	//Iterate all meshes
+	for (uint i = 0; i < meshes.size(); ++i)
+	{
+		Mesh* mesh = (Mesh*)meshes[i];
+
+		glEnable(GL_LIGHTING);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+		//Now pass vertices
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glBindBuffer(GL_ARRAY_BUFFER, mesh->idVertices);
+		glVertexPointer(3, GL_FLOAT, 0, NULL);
+
+		if (mesh->renderWireframe || selected)
+		{
+			drawWireframe(selected);
+		}
+		else
+		{
+			//Render normals
+			if (mesh->renderNormals && mesh->numNormals > 0)
+			{
+				glDisable(GL_LIGHTING);
+				glLineWidth(0.7f);
+				glBegin(GL_LINES);
+				glColor4f(0.4f, 0.1f, 0.f, 1.f);
+
+				for (uint i = 0; i < mesh->numVertices; ++i)
+				{
+					glVertex3f(mesh->vertices[i * 3], mesh->vertices[i * 3 + 1], mesh->vertices[i * 3 + 2]);
+					glVertex3f(mesh->vertices[i * 3] + mesh->normals[i * 3], mesh->vertices[i * 3 + 1] + mesh->normals[i * 3 + 1], mesh->vertices[i * 3 + 2] + mesh->normals[i * 3 + 2]);
+				}
+
+				glEnd();
+				glLineWidth(1.f);
+				glEnable(GL_LIGHTING);
+			}
+
+			//Set normals
+			if (mesh->idNormals > 0)
+			{
+				glEnableClientState(GL_NORMAL_ARRAY);
+				glBindBuffer(GL_ARRAY_BUFFER, mesh->idNormals);
+				glNormalPointer(GL_FLOAT, 0, NULL);
+			}
+
+			//If there is a material use its texture and colour if not use a default colour
+			if (mat)
+			{
+				glEnable(GL_TEXTURE_2D);
+				glColor4f(mat->color.r, mat->color.g, mat->color.b, mat->color.a);
+				if (mesh->idTexture > -1)
+				{
+					uint tex = mat->getTexture(mesh->idTexture);
+					if (tex > 0)
+					{
+						glBindTexture(GL_TEXTURE_2D, tex);
+					}
+
+					//Set UV's
+					if (mesh->idTexCoords > 0)
+					{
+						glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+						glBindBuffer(GL_ARRAY_BUFFER, mesh->idTexCoords);
+						glTexCoordPointer(2, GL_FLOAT, 0, NULL);
+					}
+				}
+			}
+			else
+			{
+				glColor4f(0.5f, 0.5f, 0.5f, 1.f);
+			}
+		}
+
+		//Finally set indices and draw elements
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->idIndices);
+		glDrawElements(GL_TRIANGLES, mesh->numIndices, GL_UNSIGNED_INT, NULL);
+
+		//Cleaning
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		glBindTexture(GL_TEXTURE_2D, 0);
+		//------
+		glDisableClientState(GL_NORMAL_ARRAY);
+		glDisableClientState(GL_COLOR_ARRAY);
+		glDisableClientState(GL_VERTEX_ARRAY);
+		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
+		//==============
+		glEnable(GL_LIGHTING);
+		glEnable(GL_CULL_FACE);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		glColor4f(1.f, 1.f, 1.f, 1.f);
+	}
+
+	//----------------------
+
+	glPopMatrix();
+
+	//----------------------
+}
+
+void ModuleRenderer3D::drawWireframe(bool selected)
+{
+	//Wireframe
+	//----------------
+	glDisable(GL_LIGHTING);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glColor4f(0.f, 0.8f, 0.8f, 1.f);
+
+	if (selected)
+	{
+		glLineWidth(1.1f);
+		glColor4f(0.2f, 1.f, 0.2f, 1.f);
+	}
+	else
+	{
+		glLineWidth(1.f);
+		glDisable(GL_CULL_FACE);
+	}
+
+	//----------------
 }

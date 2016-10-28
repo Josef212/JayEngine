@@ -49,7 +49,6 @@ public:
 	void updateAABB();
 
 private:
-	void drawWires(bool selct);
 
 
 public:
