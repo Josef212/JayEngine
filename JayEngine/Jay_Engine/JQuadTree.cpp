@@ -55,7 +55,7 @@ void treeNode::coollectBoxes(std::vector<AABB>& vec)
 {
 	for (std::list<GameObject*>::iterator it = objects.begin(); it != objects.end(); ++it)
 	{
-		vec.push_back((*it)->aabb);
+		vec.push_back((*it)->enclosingBox);
 	}
 
 	for (unsigned int i = 0; i < 4; ++i)
@@ -116,13 +116,13 @@ void treeNode::ajustNode()
 	while (it != objects.end())
 	{
 		GameObject* tmp = (*it);
-		if (intersectsAllChilds(tmp->aabb))
+		if (intersectsAllChilds(tmp->enclosingBox))
 			++it; //Let the object in parent if it intersects with all childs
 		else
 		{
 			it = objects.erase(it);
 			for (unsigned int i = 0; i < 4; ++i)
-				if (box.Intersects(tmp->aabb)) //box.MinimalEnclosingAABB().Intersects()
+				if (box.Intersects(tmp->enclosingBox)) //box.MinimalEnclosingAABB().Intersects()
 					insert(tmp);
 		}
 	}
@@ -143,7 +143,7 @@ void treeNode::collectCandidates(std::vector<GameObject*>& vec, const Frustum& f
 {
 	if (frustum.Intersects(box))
 		for (std::list<GameObject*>::iterator it = objects.begin(); it != objects.end(); ++it)
-			if (frustum.Intersects((*it)->aabb))
+			if (frustum.Intersects((*it)->enclosingBox))
 				vec.push_back((*it));
 
 	for (unsigned int i = 0; i < 4; ++i)
@@ -168,7 +168,7 @@ JQuadTree::~JQuadTree()
 void JQuadTree::insert(GameObject* obj)
 {
 	if (rootNode && obj)
-		if (rootNode->box.Intersects(obj->aabb))
+		if (rootNode->box.Intersects(obj->enclosingBox))
 			rootNode->insert(obj);
 }
 

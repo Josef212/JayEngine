@@ -1,6 +1,8 @@
 #include "Application.h"
 #include "GameObject.h"
 
+#include "DrawDebug.h"
+
 #include "Transform.h"
 #include "Mesh.h"
 #include "Material.h"
@@ -43,10 +45,9 @@ void GameObject::update(float dt)
 		components[j]->update(dt);
 	}
 
-	if (isGOActive())
-	{
-		draw();
-	}
+	if (transform && transform->transformUpdated)
+		updateAABB();
+
 }
 
 void GameObject::cleanUp()
@@ -210,6 +211,11 @@ GameObject* GameObject::getParent() const
 
 void GameObject::draw()
 {
+	if (!isGOActive())
+		return;
+
+	//Move this to a renderer method
+	//-----------------------------------------------------------------
 	Mesh* mesh = (Mesh*)findComponent(MESH)[0];
 	Material* mat = (Material*)findComponent(MATERIAL)[0];
 
@@ -319,7 +325,11 @@ void GameObject::draw()
 
 		//----------------------
 	}
+	//--------------------------------------------
 
+	for (uint i = 0; i < childrens.size(); ++i)
+		if (childrens[i])
+			childrens[i]->draw();
 }
 
 void GameObject::drawDebug()
@@ -333,6 +343,11 @@ void GameObject::drawDebug()
 	{
 		components[j]->debugDraw();
 	}
+
+	if (drawEnclosingAABB)
+		drawBoxDebug(enclosingBox);
+	if (drawOrientedBox)
+		drawBoxDebug(orientedBox);
 }
 
 void GameObject::drawWires(bool selct)
@@ -351,4 +366,22 @@ void GameObject::drawWires(bool selct)
 	{
 		glDisable(GL_CULL_FACE);
 	}
+}
+
+void GameObject::updateAABB() //TODO: make enclose for all meshes
+{
+	enclosingBox.SetNegativeInfinity();
+
+	Mesh* m = (Mesh*)findComponent(MESH)[0];
+	if (m)
+		enclosingBox.Enclose((float3*)m->vertices, m->numVertices);
+
+	orientedBox = enclosingBox;
+	orientedBox.Transform(transform->getTransformMatrix().Transposed());
+	enclosingBox.SetFrom(orientedBox);
+
+	for (std::vector<GameObject*>::iterator it = childrens.begin(); it != childrens.end(); ++it)
+		(*it)->updateAABB();
+
+	transform->transformUpdated = false;
 }

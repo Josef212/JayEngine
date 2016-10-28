@@ -21,6 +21,8 @@ public:
 	void update(float dt);
 	void cleanUp();
 
+	void draw();
+
 	Component* addComponent(ComponentType type);
 	GameObject* addChild();
 	bool removeComponent(Component* comp);
@@ -44,15 +46,20 @@ public:
 
 	void drawDebug();
 
+	void updateAABB();
+
 private:
-	void draw();
 	void drawWires(bool selct);
+
 
 public:
 	std::vector<Component*> components;
 	std::vector<GameObject*> childrens;
 
-	AABB aabb;
+	AABB enclosingBox;
+	OBB orientedBox;
+	bool drawEnclosingAABB = false;
+	bool drawOrientedBox = false;
 
 private:
 	std::string name;
