@@ -9,15 +9,18 @@
 Camera::Camera(GameObject* gObj, int id) : Component(gObj, id)
 {
 	type = CAMERA;
+
 	name.assign("Camera");
+
+	frustum.type = PerspectiveFrustum;
 
 	frustum.pos = float3(0.f, 0.f, 0.f);
 	frustum.front = float3(0.f, 0.f, 1.f);
 	frustum.up = float3(0.f, 1.f, 0.f);
 
-	frustum.nearPlaneDistance = nearPlaneDist;
-	frustum.farPlaneDistance = farPlaneDist;
-	setFOV(FOV);
+	frustum.nearPlaneDistance = 1.f;
+	frustum.farPlaneDistance = 1000.f;
+	setFOV(75.f);
 	setAspectRatio(1.3f);
 }
 
