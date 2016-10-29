@@ -301,7 +301,7 @@ void ModuleRenderer3D::drawGameObject(GameObject* obj)
 		glBindBuffer(GL_ARRAY_BUFFER, mesh->idVertices);
 		glVertexPointer(3, GL_FLOAT, 0, NULL);
 
-		if (mesh->renderWireframe || selected)
+		if (mesh->renderWireframe)
 		{
 			drawWireframe(selected);
 		}
@@ -366,6 +366,12 @@ void ModuleRenderer3D::drawGameObject(GameObject* obj)
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->idIndices);
 		glDrawElements(GL_TRIANGLES, mesh->numIndices, GL_UNSIGNED_INT, NULL);
 
+		if (selected)
+		{
+			drawWireframe(selected);
+			glDrawElements(GL_TRIANGLES, mesh->numIndices, GL_UNSIGNED_INT, NULL);
+		}
+
 		//Cleaning
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -400,7 +406,7 @@ void ModuleRenderer3D::drawWireframe(bool selected)
 
 	if (selected)
 	{
-		glLineWidth(1.1f);
+		glLineWidth(1.5f);
 		glColor4f(0.2f, 1.f, 0.2f, 1.f);
 	}
 	else
