@@ -366,7 +366,7 @@ void ModuleRenderer3D::drawGameObject(GameObject* obj)
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->idIndices);
 		glDrawElements(GL_TRIANGLES, mesh->numIndices, GL_UNSIGNED_INT, NULL);
 
-		if (selected)
+		if (selected && !mesh->renderWireframe)
 		{
 			drawWireframe(selected);
 			glDrawElements(GL_TRIANGLES, mesh->numIndices, GL_UNSIGNED_INT, NULL);

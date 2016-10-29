@@ -50,7 +50,7 @@ public:
 private:
 	Frustum frustum;
 	float nearPlaneDist = 1.f;
-	float farPlaneDist = 1000.f;
+	float farPlaneDist = 400.f;
 	float FOV = 75.f; //Actually vertical fov
 	float aspectRatio = 16 / 9;
 

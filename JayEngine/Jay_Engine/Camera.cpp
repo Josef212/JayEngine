@@ -2,6 +2,8 @@
 #include "GameObject.h"
 #include "Transform.h"
 
+#include "Application.h"
+
 #include "DrawDebug.h"
 
 //MathGeolib frustum: http://clb.demon.fi/MathGeoLib/nightly/docs/Frustum_summary.php
@@ -18,10 +20,10 @@ Camera::Camera(GameObject* gObj, int id) : Component(gObj, id)
 	frustum.front = float3(0.f, 0.f, 1.f);
 	frustum.up = float3(0.f, 1.f, 0.f);
 
-	frustum.nearPlaneDistance = 1.f;
-	frustum.farPlaneDistance = 1000.f;
-	setFOV(75.f);
-	setAspectRatio(1.3f);
+	frustum.nearPlaneDistance = nearPlaneDist;
+	frustum.farPlaneDistance = farPlaneDist;
+	setFOV(FOV);
+	setAspectRatio(aspectRatio);
 }
 
 Camera::~Camera()
@@ -38,11 +40,10 @@ void Camera::setFOV(float vFOV) //Vertical FOV
 {
 	if (vFOV > 0.f)
 	{
-		float aR = frustum.AspectRatio();
 		//Will set manually aspect ratio (h fov) cause can use SetVerticalFovAndAspectRatio function
 		FOV = vFOV;
-		frustum.verticalFov = DEGTORAD * vFOV;
-		setAspectRatio(aR);
+		frustum.verticalFov = DEGTORAD * FOV;
+		setAspectRatio(aspectRatio);
 	}
 }
 
@@ -86,7 +87,7 @@ void Camera::setAspectRatio(float ratio)
 	if (ratio > 0)
 	{
 		aspectRatio = ratio;
-		frustum.horizontalFov = 2.f * atanf(tanf(frustum.verticalFov * 0.5f) * ratio);
+		frustum.horizontalFov = 2.f * atan(tan(frustum.verticalFov * 0.5f) * aspectRatio);
 		projectMatrixChanged = true;
 	}
 }
@@ -147,7 +148,8 @@ float* Camera::getGLProjectMatrix()
 
 void Camera::debugDraw()
 {
-	drawFrustumDebug(frustum);
+	if(app->debug)
+		drawFrustumDebug(frustum);
 }
 
 //TMP
@@ -159,7 +161,7 @@ void Camera::update(float dt)
 	float4x4 mat = trans->getTransformMatrix();
 	//mat.Transpose();
 
-	frustum.pos = mat.TranslatePart();//(float3)trans->getPosition();
+	frustum.pos = (float3)trans->getPosition();
 	frustum.front = mat.WorldZ();
 	frustum.up = mat.WorldY();
 }
