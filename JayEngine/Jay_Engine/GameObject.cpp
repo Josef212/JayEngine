@@ -233,9 +233,9 @@ void GameObject::drawDebug()
 	}
 
 	if (drawEnclosingAABB)
-		drawBoxDebug(enclosingBox);
+		drawBoxDebug(enclosingBox, Green);
 	if (drawOrientedBox)
-		drawBoxDebug(orientedBox);
+		drawBoxDebug(orientedBox, ClearBlue);
 }
 
 void GameObject::updateAABB() //TODO: make enclose for all meshes

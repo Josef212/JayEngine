@@ -26,12 +26,12 @@ void endDebugDraw()
 
 //-------------------------------------
 
-void drawBoxDebug(AABB& box)
+void drawBoxDebug(AABB& box, Color color)
 {
 	float3 vertices[8];
 	box.GetCornerPoints(vertices);
 
-	//glColor4f(1.f, 1.f, 0.f, 1.f);
+	glColor4f(color.r, color.g, color.b, color.a);
 
 	glBegin(GL_QUADS);
 
@@ -68,12 +68,12 @@ void drawBoxDebug(AABB& box)
 	glEnd();
 }
 
-void drawBoxDebug(OBB& box)
+void drawBoxDebug(OBB& box, Color color)
 {
 	float3 vertices[8];
 	box.GetCornerPoints(vertices);
 
-	//glColor4f(1.f, 1.f, 0.f, 1.f);
+	glColor4f(color.r, color.g, color.b, color.a);
 
 	glBegin(GL_QUADS);
 
@@ -115,12 +115,12 @@ void drawSphereDebug()
 
 }
 
-void drawFrustumDebug(Frustum& frustum)
+void drawFrustumDebug(Frustum& frustum, Color color)
 {
 	float3 vertices[8];
 	frustum.GetCornerPoints(vertices);
 
-	glColor4f(1.f, 1.f, 0.f, 1.f);
+	glColor4f(color.r, color.g, color.b, color.a);
 
 	glBegin(GL_QUADS);
 

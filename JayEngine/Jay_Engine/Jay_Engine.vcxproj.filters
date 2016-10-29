@@ -309,15 +309,6 @@
     <ClInclude Include="glmath.h">
       <Filter>Core\Containers</Filter>
     </ClInclude>
-    <ClInclude Include="p2DynArray.h">
-      <Filter>Core\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="p2List.h">
-      <Filter>Core\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="p2Point.h">
-      <Filter>Core\Containers</Filter>
-    </ClInclude>
     <ClInclude Include="Light.h">
       <Filter>Core\Helpers</Filter>
     </ClInclude>
