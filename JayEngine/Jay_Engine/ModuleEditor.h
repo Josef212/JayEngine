@@ -29,9 +29,6 @@ public:
 	void log(const char* str, logType type);
 
 private:
-	void addTransform();
-	void addMesh();
-	void addMaterial();
 
 public:
 	std::list<UI_Comp*> uiList;

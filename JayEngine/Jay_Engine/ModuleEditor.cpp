@@ -94,31 +94,15 @@ update_status ModuleEditor::update(float dt)
 				ImGui::EndMenu();
 			}
 			if (ImGui::MenuItem("Camera")) app->manager->createCamera();
-			if (ImGui::BeginMenu("Show"))
-			{
-				bool showAABB = app->manager->showEnclosingBoxes;
-				if (ImGui::MenuItem("Show enclosing boxes", NULL, showAABB))
-				{
-					showAABB = !showAABB;
-					app->manager->makeGOShowAABox(showAABB);
-				}
-
-				bool showO = app->manager->showOrientedBoxes;
-				if (ImGui::MenuItem("Show oriented boxes", NULL, showO))
-				{
-					showO = !showO;
-					app->manager->makeGOShowOBox(showO);
-				}
-				ImGui::EndMenu();
-			}
 			ImGui::EndMenu();
 		}
 
 		if (ImGui::BeginMenu("Components"))
 		{
-			if (ImGui::MenuItem("Add transform"))addTransform();
-			if (ImGui::MenuItem("Add mesh"))addMesh();
-			if (ImGui::MenuItem("Add material"))addMaterial();
+			if (ImGui::MenuItem("Add transform"))app->manager->addTransform();
+			if (ImGui::MenuItem("Add mesh"))app->manager->addMesh();
+			if (ImGui::MenuItem("Add material"))app->manager->addMaterial();
+			if (ImGui::MenuItem("Add camera"))app->manager->addCamera();
 			ImGui::EndMenu();
 		}
 
@@ -246,19 +230,4 @@ void ModuleEditor::log(const char* str, logType type)
 {
 	if (console)
 		console->logUi(str, type);
-}
-
-void ModuleEditor::addTransform()
-{
-	app->manager->addTransform();
-}
-
-void ModuleEditor::addMesh()
-{
-	app->manager->addMesh();
-}
-
-void ModuleEditor::addMaterial()
-{
-	app->manager->addMaterial();
 }

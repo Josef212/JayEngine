@@ -49,10 +49,14 @@ void GameObject::update(float dt)
 	{
 		updateAABB();
 
-		//TODO: get camera from camera module
-		Camera* cam = (Camera*)findComponent(CAMERA)[0];
-		if (cam)
-			cam->move();
+		//TODO: get active camera from camera module
+		std::vector<Component*> vec = findComponent(CAMERA);
+		for (uint i = 0; i < vec.size(); ++i)
+		{
+			Camera* cam = (Camera*)vec[i];
+			if (cam)
+				cam->move();
+		}
 	}
 
 }

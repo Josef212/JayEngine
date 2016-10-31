@@ -192,6 +192,18 @@ Component* ModuleManager::addMaterial()
 	return ret;
 }
 
+Component* ModuleManager::addCamera()
+{
+	Material* ret = NULL;
+
+	if (selected)
+	{
+		selected->addComponent(CAMERA);
+	}
+
+	return ret;
+}
+
 GameObject* ModuleManager::getSelected()const
 {
 	return selected;
@@ -350,10 +362,10 @@ bool ModuleManager::deleteGameObject(GameObject* toDel)
 	if (selected == toDel)
 		select(NULL);
 
-	if (toDel->getParent())
-	{
-		GameObject* parent = toDel->getParent();
+	GameObject* parent = toDel->getParent();
 
+	if (parent)
+	{
 		uint i = 0;
 		for (; i < parent->childrens.size(); ++i)
 		{
@@ -373,15 +385,6 @@ bool ModuleManager::deleteGameObject(GameObject* toDel)
 	return ret;
 }
 
-void ModuleManager::makeGOShowAABox(bool show)
-{
-	if (sceneRootObject)
-	{
-		showEnclosingBoxes = show;
-		makeGOShowAABoxRec(sceneRootObject, show);
-	}
-}
-
 void ModuleManager::makeGOShowAABoxRec(GameObject* obj, bool show)
 {
 	if (obj)
@@ -391,15 +394,6 @@ void ModuleManager::makeGOShowAABoxRec(GameObject* obj, bool show)
 		{
 			makeGOShowAABoxRec(obj->childrens[i], show);
 		}
-	}
-}
-
-void ModuleManager::makeGOShowOBox(bool show)
-{
-	if (sceneRootObject)
-	{
-		showOrientedBoxes = show;
-		makeGOShowOBoxRec(sceneRootObject, show);
 	}
 }
 

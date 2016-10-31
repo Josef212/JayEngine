@@ -59,6 +59,8 @@ public:
 	bool drawEnclosingAABB = false;
 	bool drawOrientedBox = false;
 
+	bool toDel = false;
+
 private:
 	std::string name;
 	int nextCompId = 0;
