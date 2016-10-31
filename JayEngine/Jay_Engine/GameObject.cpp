@@ -2,6 +2,7 @@
 #include "GameObject.h"
 
 #include "DrawDebug.h"
+#include "ModuleCamera3D.h"
 #include "ModuleRenderer3D.h"
 
 #include "Transform.h"
@@ -220,8 +221,20 @@ void GameObject::draw()
 	if (!isGOActive())
 		return;
 
-	app->renderer3D->drawGameObject(this);
-	
+	//TODO: use tree to optimize culling
+	Camera* cam = app->camera->cameraComp;
+	if (cam && cam->isCullingActive())
+	{
+		if (cam->frustum.Intersects(enclosingBox))
+		{
+			app->renderer3D->drawGameObject(this);
+		}
+	}
+	else
+	{
+		app->renderer3D->drawGameObject(this);
+	}
+		
 	for (uint i = 0; i < childrens.size(); ++i)
 		if (childrens[i])
 			childrens[i]->draw();
