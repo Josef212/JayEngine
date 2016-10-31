@@ -80,7 +80,7 @@ void treeNode::divideNode()
 	float3 center = box.CenterPoint();
 	float3 center2 = float3::zero;
 	float3 size = box.Size();
-	float3 size2(size.x * 0.5f, size.y, size.z + 0.5f);
+	float3 size2(size.x * 0.5f, size.y, size.z * 0.5f);
 	AABB tmp;
 
 	float sx = size.x * 0.25f;
@@ -122,8 +122,8 @@ void treeNode::ajustNode()
 		{
 			it = objects.erase(it);
 			for (unsigned int i = 0; i < 4; ++i)
-				if (box.Intersects(tmp->enclosingBox)) //box.MinimalEnclosingAABB().Intersects()
-					insert(tmp);
+				if (childs[i]->box.Intersects(tmp->enclosingBox)) //box.MinimalEnclosingAABB().Intersects()
+					childs[i]->insert(tmp);
 		}
 	}
 }
@@ -137,6 +137,14 @@ bool treeNode::intersectsAllChilds(const AABB& _box)
 			++count;
 
 	return count == 4;
+}
+
+void treeNode::collectTreeBoxes(std::vector<AABB>& vec)
+{
+	vec.push_back(box);
+
+	for (unsigned int i = 0; i < 4; ++i)
+		if (childs[i]) childs[i]->collectTreeBoxes(vec);
 }
 
 void treeNode::collectCandidates(std::vector<GameObject*>& vec, const Frustum& frustum)
@@ -175,7 +183,7 @@ void JQuadTree::insert(GameObject* obj)
 void JQuadTree::erase(GameObject* obj)
 {
 	if (rootNode && obj)
-		rootNode->insert(obj);
+		rootNode->erase(obj);
 }
 
 void JQuadTree::setRoot(const AABB& _box)
@@ -192,6 +200,24 @@ void JQuadTree::clear()
 	if (rootNode)
 		delete(rootNode);
 	rootNode = nullptr;
+}
+
+void JQuadTree::coollectBoxes(std::vector<AABB>& vec)
+{
+	if (rootNode)
+		rootNode->coollectBoxes(vec);
+}
+
+void JQuadTree::coollectGO(std::vector<GameObject*>& vec)
+{
+	if (rootNode)
+		rootNode->coollectGO(vec);
+}
+
+void JQuadTree::collectTreeBoxes(std::vector<AABB>& vec)
+{
+	if (rootNode)
+		rootNode->collectTreeBoxes(vec);
 }
 
 void JQuadTree::collectCandidates(std::vector<GameObject*>& vec, const Frustum& frustum)

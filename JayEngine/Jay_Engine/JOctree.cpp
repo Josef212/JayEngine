@@ -1,4 +1,4 @@
-#include "JOcttree.h"
+#include "JOctree.h"
 #include "GameObject.h"
 
 #define MAX_NODE_OBJECTS 8
@@ -146,8 +146,8 @@ void oTreeNode::ajustNode()
 		{
 			it = objects.erase(it);
 			for (unsigned int i = 0; i < 8; ++i)
-				if (box.Intersects(tmp->enclosingBox)) //box.MinimalEnclosingAABB().Intersects()
-					insert(tmp);
+				if (childs[i]->box.Intersects(tmp->enclosingBox)) //box.MinimalEnclosingAABB().Intersects()
+					childs[i]->insert(tmp);
 		}
 	}
 }
@@ -163,6 +163,14 @@ bool oTreeNode::intersectsAllChilds(const AABB& _box)
 	return count == 8;
 }
 
+void oTreeNode::collectTreeBoxes(std::vector<AABB>& vec)
+{
+	vec.push_back(box);
+
+	for (unsigned int i = 0; i < 4; ++i)
+		if (childs[i]) childs[i]->collectTreeBoxes(vec);
+}
+
 void oTreeNode::collectCandidates(std::vector<GameObject*>& vec, const Frustum& frustum)
 {
 	if (frustum.Intersects(box))
@@ -176,34 +184,34 @@ void oTreeNode::collectCandidates(std::vector<GameObject*>& vec, const Frustum& 
 
 
 //---------------------------------------------------
-//---------------JOctTree---------------------------
+//---------------JOctree---------------------------
 //---------------------------------------------------
 
 
-JOctTree::JOctTree()
+JOctree::JOctree()
 {
 }
 
 
-JOctTree::~JOctTree()
+JOctree::~JOctree()
 {
 	clear();
 }
 
-void JOctTree::insert(GameObject* obj)
+void JOctree::insert(GameObject* obj)
 {
 	if (rootNode && obj)
 		if (rootNode->box.Intersects(obj->enclosingBox)) //box.MinimalEnclosingAABB().Intersects()
 			rootNode->insert(obj);
 }
 
-void JOctTree::erase(GameObject* obj)
+void JOctree::erase(GameObject* obj)
 {
 	if (rootNode && obj)
-		rootNode->insert(obj);
+		rootNode->erase(obj);
 }
 
-void JOctTree::setRoot(const AABB& _box)
+void JOctree::setRoot(const AABB& _box)
 {
 	if (rootNode)
 		delete(rootNode);
@@ -211,7 +219,7 @@ void JOctTree::setRoot(const AABB& _box)
 	rootNode = new oTreeNode(_box);
 }
 
-void JOctTree::clear()
+void JOctree::clear()
 {
 
 	if (rootNode)
@@ -219,7 +227,25 @@ void JOctTree::clear()
 	rootNode = nullptr;
 }
 
-void JOctTree::collectCandidates(std::vector<GameObject*>& vec, const Frustum& frustum)
+void JOctree::coollectBoxes(std::vector<AABB>& vec)
+{
+	if (rootNode)
+		rootNode->coollectBoxes(vec);
+}
+
+void JOctree::coollectGO(std::vector<GameObject*>& vec)
+{
+	if (rootNode)
+		rootNode->coollectGO(vec);
+}
+
+void JOctree::collectTreeBoxes(std::vector<AABB>& vec)
+{
+	if (rootNode)
+		rootNode->collectTreeBoxes(vec);
+}
+
+void JOctree::collectCandidates(std::vector<GameObject*>& vec, const Frustum& frustum)
 {
 	if (rootNode)
 		if (frustum.Intersects(rootNode->box))

@@ -10,6 +10,7 @@
 class Transform;
 class Mesh;
 class Material;
+class Cmaera;
 
 class GameObject
 {

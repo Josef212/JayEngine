@@ -277,7 +277,7 @@
     <ClCompile Include="JQuadTree.cpp">
       <Filter>Core\Containers</Filter>
     </ClCompile>
-    <ClCompile Include="JOcttree.cpp">
+    <ClCompile Include="JOctree.cpp">
       <Filter>Core\Containers</Filter>
     </ClCompile>
   </ItemGroup>
@@ -600,7 +600,7 @@
     <ClInclude Include="JQuadTree.h">
       <Filter>Core\Containers</Filter>
     </ClInclude>
-    <ClInclude Include="JOcttree.h">
+    <ClInclude Include="JOctree.h">
       <Filter>Core\Containers</Filter>
     </ClInclude>
   </ItemGroup>

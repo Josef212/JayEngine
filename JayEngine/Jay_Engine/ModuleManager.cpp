@@ -4,6 +4,10 @@
 
 #include "ModuleFileSystem.h"
 
+#include "JQuadTree.h"
+#include "JOctree.h"
+#include "DrawDebug.h"
+
 #include "GameObject.h"
 #include "Component.h"
 #include "Transform.h"
@@ -316,6 +320,24 @@ void ModuleManager::drawDebug()
 {
 	if (sceneRootObject)
 		sceneRootObject->drawDebug();
+
+	/*if (showTree && sceneTree)
+	{
+		std::vector<AABB> boxes;
+		sceneTree->collectTreeBoxes(boxes);
+
+		for (uint i = 0; i < boxes.size(); ++i)
+		{
+			drawBoxDebug(boxes[i], Red);
+		}
+
+		sceneTree->coollectBoxes(boxes);
+
+		for (uint i = 0; i < boxes.size(); ++i)
+		{
+			drawBoxDebug(boxes[i], Yellow);
+		}
+	}*/
 }
 
 bool ModuleManager::deleteGameObject(GameObject* toDel)
@@ -392,6 +414,18 @@ void ModuleManager::makeGOShowOBoxRec(GameObject* obj, bool show)
 		}
 	}
 }
+
+/*void ModuleManager::insertGameObjectToTree(GameObject* obj)
+{
+	if (sceneTree && obj)
+		sceneTree->insert(obj);
+}
+
+void ModuleManager::eraseGameObjectFromTree(GameObject* obj)
+{
+	if (sceneTree && obj)
+		sceneTree->erase(obj);
+}*/
 
 GameObject* ModuleManager::loadCube()
 {

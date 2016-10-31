@@ -26,6 +26,8 @@ public:
 	void coollectBoxes(std::vector<AABB>& vec);
 	void coollectGO(std::vector<GameObject*>& vec);
 
+	void collectTreeBoxes(std::vector<AABB>& vec);
+
 	void divideNode();
 	void ajustNode();
 	bool intersectsAllChilds(const AABB& _box);
@@ -43,17 +45,22 @@ public:
 //---------------JQuadTree---------------------------
 //---------------------------------------------------
 
-class JOctTree
+class JOctree
 {
 public:
-	JOctTree();
-	virtual ~JOctTree();
+	JOctree();
+	virtual ~JOctree();
 
 	void insert(GameObject* obj);
 	void erase(GameObject* obj);
 
 	void setRoot(const AABB& _box);
 	void clear();
+
+	void coollectBoxes(std::vector<AABB>& vec);
+	void coollectGO(std::vector<GameObject*>& vec);
+
+	void collectTreeBoxes(std::vector<AABB>& vec);
 
 	void collectCandidates(std::vector<GameObject*>& vec, const Frustum& primitive);
 

@@ -45,7 +45,14 @@ void GameObject::update(float dt)
 	}
 
 	if (transform && transform->transformUpdated)
+	{
 		updateAABB();
+
+		//TODO: get camera from camera module
+		Camera* cam = (Camera*)findComponent(CAMERA)[0];
+		if (cam)
+			cam->move();
+	}
 
 }
 

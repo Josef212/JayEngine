@@ -9,6 +9,9 @@ struct aiScene;
 struct aiNode;
 struct aiMesh;
 
+class JQuadTree;
+class JOctree;
+
 class ModuleManager : public Module
 {
 public:
@@ -46,6 +49,9 @@ public:
 	void makeGOShowAABox(bool show);
 	void makeGOShowOBox(bool show);
 
+	/*void insertGameObjectToTree(GameObject* obj);
+	void eraseGameObjectFromTree(GameObject* obj);*/
+
 private:
 	void makeGOShowAABoxRec(GameObject* obj, bool show);
 	void makeGOShowOBoxRec(GameObject* obj, bool show);
@@ -54,6 +60,10 @@ public:
 	int nextGOId = 0;
 	bool showEnclosingBoxes = false;
 	bool showOrientedBoxes = false;
+	bool showTree = false;
+
+	//JQuadTree* sceneTree = NULL;
+	//JOctree* sceneTree = NULL;
 
 private:
 	//Components limits, if 0 there is no limit. Should load that from json

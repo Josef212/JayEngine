@@ -26,6 +26,8 @@ public:
 	void coollectBoxes(std::vector<AABB>& vec);
 	void coollectGO(std::vector<GameObject*>& vec);
 
+	void collectTreeBoxes(std::vector<AABB>& vec);
+
 	void collectCandidates(std::vector<GameObject*>& vec, const Frustum& frustum);
 
 	void divideNode();
@@ -54,6 +56,11 @@ public:
 
 	void setRoot(const AABB& _box);
 	void clear();
+
+	void coollectBoxes(std::vector<AABB>& vec);
+	void coollectGO(std::vector<GameObject*>& vec);
+
+	void collectTreeBoxes(std::vector<AABB>& vec);
 
 	void collectCandidates(std::vector<GameObject*>& vec, const Frustum& primitive);
 
