@@ -32,7 +32,7 @@ ModuleCamera3D::~ModuleCamera3D()
 
 bool ModuleCamera3D::init()
 {
-	if (!defaultCamera)
+	/*if (!defaultCamera)
 		defaultCamera = app->manager->createCamera();
 
 	if (defaultCamera)
@@ -40,7 +40,7 @@ bool ModuleCamera3D::init()
 
 	if (!cameraComp)
 		return false;
-	else
+	else*/
 		return true;
 }
 
@@ -57,8 +57,8 @@ bool ModuleCamera3D::cleanUp()
 {
 	_LOG(LOG_STD, "Camera3D: CleanUp.");
 
-	defaultCamera = NULL;
-	cameraComp = NULL;
+	//defaultCamera = NULL;
+	//cameraComp = NULL;
 
 	return true;
 }

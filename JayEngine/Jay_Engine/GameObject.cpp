@@ -224,7 +224,8 @@ void GameObject::draw()
 		return;
 
 	//TODO: use tree to optimize culling
-	Camera* cam = app->camera->cameraComp;
+	//Camera* cam = app->camera->cameraComp;
+	Camera* cam = (Camera*)findComponent(CAMERA)[0];//TODO use active camera and use it from module camera
 	if (cam && cam->isCullingActive())
 	{
 		if (cam->frustum.Intersects(enclosingBox))

@@ -203,35 +203,7 @@ void UI_Inspector::drawCamera(GameObject* selected)
 	
 	if(ImGui::DragFloat("Near plane:", &nearP)) cam->setNearPlaneDist(nearP);
 	if(ImGui::DragFloat("Far plane:", &farP))cam->setFarPlaneDist(farP);
-	if(ImGui::DragFloat("Field of view:", &fov))cam->setFOV(fov);
-
-	static int item = 0;
-	if (ImGui::Combo("AspectRatio", &item, " 16:9\0 16:10\0 5:4\0 4:3\0\0"))
-	{
-		switch (item)
-		{
-			case 0:
-			{
-				cam->setAspectRatio(16 / 9);
-			}
-			break;
-			case 1:
-			{
-				cam->setAspectRatio(16 / 10);
-			}
-			break;
-			case 2:
-			{
-				cam->setAspectRatio(5/4);
-			}
-			break;
-			case 3:
-			{
-				cam->setAspectRatio(4/3);
-			}
-			break;
-		}
-	}
+	if (ImGui::DragFloat("Field of view:", &fov))cam->setFOV(fov);
 
 	bool culling = cam->isCullingActive();
 	if (ImGui::Checkbox("Culling", &culling))cam->setCulling(culling);

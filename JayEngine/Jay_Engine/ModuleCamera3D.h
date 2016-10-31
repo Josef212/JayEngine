@@ -35,8 +35,8 @@ public:
 	vec3 X, Y, Z, position, reference;
 
 	//TMP
-	GameObject* defaultCamera = NULL;
-	Camera* cameraComp = NULL;
+	/*GameObject* defaultCamera = NULL;
+	Camera* cameraComp = NULL;*/
 
 private:
 	mat4x4 viewMatrix, viewMatrixInverse;
