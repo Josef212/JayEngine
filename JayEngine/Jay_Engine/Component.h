@@ -42,7 +42,6 @@ public:
 protected:
 	std::string name;
 	bool active = true;
-	uint componentLimit = 0, componentInstances = 0;//TODO: thinking to put this data on another structure to control it
 	GameObject* object = NULL;
 	int id = -1;
 };

@@ -28,9 +28,7 @@ public:
 	GameObject* addChild();
 	bool removeComponent(Component* comp);
 	std::vector<Component*> findComponent(ComponentType type);
-	//Component* findComponent(ComponentType type);
-
-	//const std::vector<Component*> getComponents()const;
+	int hasComponent(ComponentType type);
 
 	GameObject* getParent() const;
 	int getGOId()const;

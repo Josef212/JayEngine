@@ -107,7 +107,10 @@ Component* GameObject::addComponent(ComponentType type)
 
 		case TRANSFORMATION:
 		{
-			ret = new Transform(this, nextCompId);
+			if (hasComponent(TRANSFORMATION) == 0)
+				ret = new Transform(this, nextCompId);
+			else
+				_LOG(LOG_WARN, "Can't add transform component, already has one.");
 		}
 		break;
 
@@ -177,19 +180,6 @@ bool GameObject::removeComponent(Component* comp)
 	return ret;
 }
 
-/*Component* GameObject::findComponent(ComponentType type)
-{
-	Component* ret = NULL;
-
-	for (uint i = 0; i < components.size(); ++i)
-	{
-		if(components[i]->type == type)
-			return components[i];
-	}
-
-	return ret;
-}*/
-
 std::vector<Component*> GameObject::findComponent(ComponentType type)
 {
 	std::vector<Component*> ret;
@@ -206,10 +196,18 @@ std::vector<Component*> GameObject::findComponent(ComponentType type)
 	return ret;
 }
 
-/*const std::vector<Component*> GameObject::getComponents()const
+int GameObject::hasComponent(ComponentType type)
 {
-	return components;
-}*/
+	int ret = 0;
+
+	for (uint i = 0; i < components.size(); ++i)
+	{
+		if (components[i]->type == type)
+			++ret;
+	}
+
+	return ret;
+}
 
 GameObject* GameObject::getParent() const
 {

@@ -35,6 +35,10 @@ ModuleManager::ModuleManager(bool startEnabled) : Module(startEnabled)
 {
 	_LOG(LOG_STD, "Manager: Creation.");
 	name.assign("module_manager");
+
+	sceneRootObject = new GameObject(NULL, nextGOId);
+	++nextGOId;
+	sceneRootObject->setName("SceneRootNode");
 }
 
 
@@ -63,10 +67,6 @@ bool ModuleManager::init()
 	{
 		_LOG(LOG_ERROR, "Error while Devil Init: %s\n", iluErrorString(devilError));
 	}
-
-	sceneRootObject = new GameObject(NULL, app->manager->nextGOId);
-	++app->manager->nextGOId;
-	sceneRootObject->setName("SceneRootNode");
 
 	if (sceneRootObject)
 		return true;

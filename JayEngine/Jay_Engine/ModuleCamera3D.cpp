@@ -22,6 +22,7 @@ ModuleCamera3D::ModuleCamera3D(bool startEnabled) : Module(startEnabled)
 
 	position = vec3(1.0f, 1.0f, 0.0f);
 	reference = vec3(0.0f, 0.0f, 0.0f);
+
 }
 
 ModuleCamera3D::~ModuleCamera3D()
@@ -29,11 +30,8 @@ ModuleCamera3D::~ModuleCamera3D()
 	_LOG(LOG_STD, "Camera3D: Destroying.");
 }
 
-// -----------------------------------------------------------------
-bool ModuleCamera3D::start()
+bool ModuleCamera3D::init()
 {
-	_LOG(LOG_STD, "Camera3D: Start.");
-
 	if (!defaultCamera)
 		defaultCamera = app->manager->createCamera();
 
@@ -42,6 +40,14 @@ bool ModuleCamera3D::start()
 
 	if (!cameraComp)
 		return false;
+	else
+		return true;
+}
+
+// -----------------------------------------------------------------
+bool ModuleCamera3D::start()
+{
+	_LOG(LOG_STD, "Camera3D: Start.");
 
 	return true;
 }

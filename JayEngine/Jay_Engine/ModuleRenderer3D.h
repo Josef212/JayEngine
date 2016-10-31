@@ -30,6 +30,9 @@ public:
 	void drawGameObject(GameObject* obj);
 	void drawWireframe(bool selected);
 
+
+private:
+
 public:
 	Light lights[MAX_LIGHTS];
 	SDL_GLContext context;

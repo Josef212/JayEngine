@@ -245,22 +245,12 @@ float* Transform::getEulerRot()
 
 float4x4 Transform::getTransformMatrix()
 {
-	if (isEnable())
-	{
-		return worldTransform;
-	}
-	else
-		return float4x4::identity;
+	return worldTransform;
 }
 
 float4x4 Transform::getLocalMatrix()
 {
-	if (isEnable())
-	{
-		return localTransform;
-	}
-	else
-		return float4x4::identity;
+	return localTransform;
 }
 
 void Transform::updateTransform(float4x4& parentMat)
