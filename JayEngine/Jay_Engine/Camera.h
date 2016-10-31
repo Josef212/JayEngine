@@ -44,9 +44,9 @@ private:
 public:
 	Color background;
 	bool projectMatrixChanged = false;
+	Frustum frustum;
 
 private:
-	Frustum frustum;
 	float nearPlaneDist = 1.f;
 	float farPlaneDist = 400.f;
 	float FOV = 75.f; //Actually vertical fov

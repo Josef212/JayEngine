@@ -130,6 +130,8 @@ void Camera::move()
 	frustum.pos = (float3)trans->getPosition();
 	frustum.front = mat.WorldZ();
 	frustum.up = mat.WorldY();
+
+	projectMatrixChanged = true;
 }
 
 float* Camera::getGLViewMatrix()
