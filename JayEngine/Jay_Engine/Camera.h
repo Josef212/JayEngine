@@ -31,8 +31,6 @@ public:
 	void setBackground(float r, float g, float b, float a);
 
 	void move();
-	//TMP
-	void update(float dt);
 
 	//View matrix must update every frame
 	float* getGLViewMatrix();

@@ -151,17 +151,3 @@ void Camera::debugDraw()
 	if(app->debug)
 		drawFrustumDebug(frustum);
 }
-
-//TMP
-void Camera::update(float dt)
-{
-	Transform* trans = object->getTransform();
-	if (!trans)
-		return;
-	float4x4 mat = trans->getTransformMatrix();
-	//mat.Transpose();
-
-	frustum.pos = (float3)trans->getPosition();
-	frustum.front = mat.WorldZ();
-	frustum.up = mat.WorldY();
-}
