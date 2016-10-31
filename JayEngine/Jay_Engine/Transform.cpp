@@ -58,24 +58,8 @@ void Transform::setTransform(aiNode* node)
 	setRotation(rot.x, rot.y, rot.z, rot.w);
 
 	localTransform = float4x4::FromTRS(position, rotation, scale);
-
-	float3 dadPos;
-	float3 dadScale;
-	Quat dadRot;
-
-	for (aiNode* tmp = node->mParent; tmp; tmp = tmp->mParent)
-	{
-		tmp->mTransformation.Decompose(scl, rot, pos);
-		dadPos.Set(pos.x, pos.y, pos.z);
-		dadScale.Set(scl.x, scl.y, scl.z);
-		dadRot.Set(rot.x, rot.y, rot.z, rot.w);
-
-		float4x4 dadMat = float4x4::FromTRS(dadPos, dadRot, dadScale);
-		parentTransform = dadMat * parentTransform;
-	}
-
+	parentTransform = object->getParent()->getTransform()->getTransformMatrix().Transposed();
 	worldTransform = parentTransform * localTransform;
-	worldTransform = worldTransform.Transposed();
 
 	transformUpdated = true;
 }
@@ -245,7 +229,7 @@ float* Transform::getEulerRot()
 
 float4x4 Transform::getTransformMatrix()
 {
-	return worldTransform;
+	return worldTransform.Transposed();
 }
 
 float4x4 Transform::getLocalMatrix()
@@ -267,6 +251,5 @@ void Transform::updateTransform(float4x4& parentMat)
 			trans->updateTransform(worldTransform);
 		}
 	}
-	worldTransform = worldTransform.Transposed();
 	transformUpdated = true;
 }

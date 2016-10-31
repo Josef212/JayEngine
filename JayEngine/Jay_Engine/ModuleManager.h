@@ -44,7 +44,7 @@ public:
 
 	bool deleteGameObject(GameObject* toDel);
 
-	GameObject* loadCube();
+	//GameObject* loadCube(); //DEL_COM
 
 	void drawDebug();
 
@@ -52,7 +52,7 @@ public:
 	void makeGOShowOBoxRec(GameObject* obj, bool show);
 
 	/*void insertGameObjectToTree(GameObject* obj);
-	void eraseGameObjectFromTree(GameObject* obj);*/
+	void eraseGameObjectFromTree(GameObject* obj);*/ //DEL_COM
 
 private:
 
@@ -62,8 +62,10 @@ public:
 	bool showOrientedBoxes = false;
 	bool showTree = false;
 
-	//JQuadTree* sceneTree = NULL;
-	//JOctree* sceneTree = NULL;
+	//JQuadTree* sceneTree = NULL; //DEL_COM
+	//JOctree* sceneTree = NULL; //DEL_COM
+
+	GameObject* mainCamera = NULL;
 
 private:
 

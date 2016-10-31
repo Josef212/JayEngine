@@ -69,7 +69,11 @@ bool ModuleManager::init()
 	}
 
 	if (sceneRootObject)
+	{
+		mainCamera = createCamera();
+		mainCamera->setName("Main camera");
 		return true;
+	}
 	else
 		return false;
 }
@@ -349,7 +353,7 @@ void ModuleManager::drawDebug()
 		{
 			drawBoxDebug(boxes[i], Yellow);
 		}
-	}*/
+	}*///DEL_COM
 }
 
 bool ModuleManager::deleteGameObject(GameObject* toDel)
@@ -358,6 +362,13 @@ bool ModuleManager::deleteGameObject(GameObject* toDel)
 
 	if (!toDel)
 		return ret;
+
+	if (toDel == mainCamera)
+	{
+		_LOG(LOG_WARN, "Trying to delete main camera.");
+		_LOG(LOG_WARN, "You can change or delete main camera yet, wait for further realeases."); //TODO
+		return ret;
+	}
 
 	if (selected == toDel)
 		select(NULL);
@@ -409,19 +420,19 @@ void ModuleManager::makeGOShowOBoxRec(GameObject* obj, bool show)
 	}
 }
 
-/*void ModuleManager::insertGameObjectToTree(GameObject* obj)
+/*void ModuleManager::insertGameObjectToTree(GameObject* obj)//DEL_COM
 {
 	if (sceneTree && obj)
 		sceneTree->insert(obj);
 }
 
-void ModuleManager::eraseGameObjectFromTree(GameObject* obj)
+void ModuleManager::eraseGameObjectFromTree(GameObject* obj)//DEL_COM
 {
 	if (sceneTree && obj)
 		sceneTree->erase(obj);
 }*/
 
-GameObject* ModuleManager::loadCube()
+/*GameObject* ModuleManager::loadCube()//DEL_COM
 {
 	GameObject* ret = NULL;
 
@@ -530,4 +541,4 @@ GameObject* ModuleManager::loadCube()
 	mat->loadTexture("Lenna.png");
 
 	return ret;
-}
+}*/
