@@ -1,22 +1,22 @@
 #include "Application.h"
 #include "Globals.h"
 #include "SceneTry.h"
-#include "GameObject.h"
-#include "Component.h"
-#include "ModuleInput.h"
-#include "UI_Inspector.h"
-#include "ModuleEditor.h"
-#include "ModuleImporter.h"
-
-#include "OpenGL.h"
-
-#include "Devil/include/il.h"
-#include "Devil/include/ilu.h"
-#include "Devil/include/ilut.h"
-
-#pragma comment( lib, "Devil/libx86/DevIL.lib" )
-#pragma comment( lib, "Devil/libx86/ILU.lib" )
-#pragma comment( lib, "Devil/libx86/ILUT.lib" )
+//#include "GameObject.h"
+//#include "Component.h"
+//#include "ModuleInput.h"
+//#include "UI_Inspector.h"
+//#include "ModuleEditor.h"
+//#include "ModuleImporter.h"
+//
+//#include "OpenGL.h"
+//
+//#include "Devil/include/il.h"
+//#include "Devil/include/ilu.h"
+//#include "Devil/include/ilut.h"
+//
+//#pragma comment( lib, "Devil/libx86/DevIL.lib" )
+//#pragma comment( lib, "Devil/libx86/ILU.lib" )
+//#pragma comment( lib, "Devil/libx86/ILUT.lib" )
 
 //#include "OpenGLDraws.h"
 
@@ -31,10 +31,10 @@ SceneTry::~SceneTry()
 
 bool SceneTry::init()
 {
-	ilInit();
+	/*ilInit();
 	iluInit();
 	ilutInit();
-	ilutRenderer(ILUT_OPENGL);
+	ilutRenderer(ILUT_OPENGL);*/
 
 	return true;
 }
@@ -238,6 +238,6 @@ update_status SceneTry::postUpdate(float dt)
 
 bool SceneTry::cleanUp()
 {
-	ilShutDown();
+	//ilShutDown();
 	return true;
 }

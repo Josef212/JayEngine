@@ -229,12 +229,18 @@ float* Transform::getEulerRot()
 
 float4x4 Transform::getTransformMatrix()
 {
-	return worldTransform.Transposed();
+	if (isEnable())
+		return worldTransform.Transposed();
+	else
+		return float4x4::identity;
 }
 
 float4x4 Transform::getLocalMatrix()
 {
-	return localTransform;
+	if(isEnable())
+		return localTransform;
+	else
+		return float4x4::identity;
 }
 
 void Transform::updateTransform(float4x4& parentMat)
