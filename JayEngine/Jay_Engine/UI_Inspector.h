@@ -4,6 +4,10 @@
 #include "UI_Comp.h"
 
 class GameObject;
+class Transform;
+class Mesh;
+class Material;
+class Camera;
 
 class UI_Inspector : public UI_Comp
 {
@@ -15,9 +19,9 @@ public:
 
 private:
 	void drawTransformation(GameObject* selected);
-	void drawMesh(GameObject* selected);
-	void drawMaterial(GameObject* selected);
-	void drawCamera(GameObject* selected);
+	void drawMesh(GameObject* selected, Mesh* mesh);
+	void drawMaterial(GameObject* selected, Material* mat);
+	void drawCamera(GameObject* selected, Camera* cam);
 
 public:
 

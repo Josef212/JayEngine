@@ -174,6 +174,11 @@ bool GameObject::removeComponent(Component* comp)
 		}
 		if (ret)
 		{
+			if (comp == transform && comp->type == TRANSFORMATION)
+			{
+				transform = NULL;
+			}
+
 			components[pos]->cleanUp();
 			components.erase(components.begin() + pos);
 		}

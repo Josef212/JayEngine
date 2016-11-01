@@ -64,13 +64,13 @@ void UI_Inspector::draw()
 					drawTransformation(selected);
 					break;
 				case MESH:
-					drawMesh(selected);
+					drawMesh(selected, (Mesh*)selected->components[i]);
 					break;
 				case MATERIAL:
-					drawMaterial(selected);
+					drawMaterial(selected, (Material*)selected->components[i]);
 					break;
 				case CAMERA:
-					drawCamera(selected);
+					drawCamera(selected, (Camera*)selected->components[i]);
 					break;
 				}
 			}
@@ -92,6 +92,10 @@ void UI_Inspector::drawTransformation(GameObject* selected)
 	bool transActive = trans->isEnable();
 	if (ImGui::Checkbox("Transform:", &transActive)) trans->switchActive();
 
+	ImGui::SameLine();
+
+	if (ImGui::Button("Remove trans")) selected->removeComponent(trans);
+
 	float* pos = trans->getPosition();
 	float* scale = trans->getScale();
 	float* rot = trans->getEulerRot();
@@ -105,19 +109,19 @@ void UI_Inspector::drawTransformation(GameObject* selected)
 	ImGui::Separator();
 }
 
-void UI_Inspector::drawMesh(GameObject* selected) //TODO: must iterate all meshes to show components info in inspector
+void UI_Inspector::drawMesh(GameObject* selected, Mesh* mesh) //TODO: must iterate all meshes to show components info in inspector
 {
-	Mesh* mesh = (Mesh*)selected->findComponent(MESH)[0];
-
 	char meshName[60];
 	strcpy_s(meshName, 60, mesh->getName());
 
 	//Active
 	bool meshActive = mesh->isEnable();
 	if (ImGui::Checkbox("Mesh:", &meshActive))
-	{
 		mesh->switchActive();
-	}
+
+	ImGui::SameLine();
+
+	if (ImGui::Button("Remove mesh")) selected->removeComponent(mesh);
 
 	ImGui::Text("Number of vertices: ");
 	ImGui::SameLine();
@@ -148,10 +152,8 @@ void UI_Inspector::drawMesh(GameObject* selected) //TODO: must iterate all meshe
 	ImGui::Separator();
 }
 
-void UI_Inspector::drawMaterial(GameObject* selected) //TODO: must iterate all materials to show components info in inspector
+void UI_Inspector::drawMaterial(GameObject* selected, Material* mat) //TODO: must iterate all materials to show components info in inspector
 {
-	Material* mat = (Material*)selected->findComponent(MATERIAL)[0];
-
 	char matName[60];
 	strcpy_s(matName, 60, mat->getName());
 
@@ -159,12 +161,16 @@ void UI_Inspector::drawMaterial(GameObject* selected) //TODO: must iterate all m
 	bool metActive = mat->isEnable();
 	if (ImGui::Checkbox("Material:", &metActive)) mat->switchActive();
 
+	ImGui::SameLine();
+
+	if (ImGui::Button("Remove material")) selected->removeComponent(mat);
+
 	ImGui::Text("Textures vec size: ");
 	ImGui::SameLine();
 	ImGui::TextColored(ImColor(255, 153, 51), "%d", mat->getTexxturesSize());
-	
+
 	ImGui::ColorEdit4("Color:", (float*)&mat->color, false);
-	
+
 	for (std::map<std::string, int>::iterator it = mat->paths.begin(); it != mat->paths.end(); ++it)
 	{
 		ImGui::Text("%s", (*it).first.c_str());
@@ -188,27 +194,26 @@ void UI_Inspector::drawMaterial(GameObject* selected) //TODO: must iterate all m
 	ImGui::Separator();
 }
 
-void UI_Inspector::drawCamera(GameObject* selected)
+void UI_Inspector::drawCamera(GameObject* selected, Camera* cam)
 {
-	Camera* cam = (Camera*)selected->findComponent(CAMERA)[0];
+	if (cam)
+	{
+		ImGui::ColorEdit4("Background:", (float*)&cam->background, false);
 
-	if (!cam)
-		return;
+		float nearP = cam->getNearPlaneDist();
+		float farP = cam->getFarPlaneDist();
+		float fov = cam->getFOV();
 
-	ImGui::ColorEdit4("Background:", (float*)&cam->background, false);
+		if (ImGui::DragFloat("Near plane:", &nearP)) cam->setNearPlaneDist(nearP);
+		if (ImGui::DragFloat("Far plane:", &farP))cam->setFarPlaneDist(farP);
+		if (ImGui::DragFloat("Field of view:", &fov))cam->setFOV(fov);
 
-	float nearP = cam->getNearPlaneDist();
-	float farP = cam->getFarPlaneDist();
-	float fov = cam->getFOV();
-	
-	if(ImGui::DragFloat("Near plane:", &nearP)) cam->setNearPlaneDist(nearP);
-	if(ImGui::DragFloat("Far plane:", &farP))cam->setFarPlaneDist(farP);
-	if (ImGui::DragFloat("Field of view:", &fov))cam->setFOV(fov);
+		bool culling = cam->isCullingActive();
+		if (ImGui::Checkbox("Culling", &culling))cam->setCulling(culling);
 
-	bool culling = cam->isCullingActive();
-	if (ImGui::Checkbox("Culling", &culling))cam->setCulling(culling);
+		if (ImGui::Button("Make this active."));
 
-	if(ImGui::Button("Make this active."));
-
-	ImGui::Separator();
+		ImGui::Separator();
+		
+	}
 }
