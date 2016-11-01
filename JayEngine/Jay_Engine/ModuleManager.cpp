@@ -311,7 +311,7 @@ GameObject* ModuleManager::loadObjects(aiNode* node, const aiScene* scene, GameO
 			if (str.length > 0)
 			{
 				strcpy_s(path, 256, str.C_Str());
-				m->idTexture = mat->loadTexture(path);
+				m->idTexture = mat->loadTexture(clearTexPath(path));
 			}
 
 			aiColor4D col;

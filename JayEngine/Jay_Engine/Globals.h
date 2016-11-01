@@ -73,6 +73,9 @@ enum update_status
 	UPDATE_ERROR
 };
 
+//Clear texture path to remove any folder path on the string
+char* clearTexPath(char* path);
+
 // Configuration -----------
 #define SCREEN_WIDTH 1280
 #define SCREEN_HEIGHT 1024

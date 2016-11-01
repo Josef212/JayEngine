@@ -185,7 +185,7 @@ void UI_Inspector::drawMaterial(GameObject* selected, Material* mat) //TODO: mus
 			uint j = mat->textures[i];
 			glBindTexture(GL_TEXTURE_2D, j);
 			ImTextureID texture = (void*)j;
-			ImGui::Image(texture, ImVec2(windowW, 300));
+			ImGui::Image(texture, ImVec2(250, 250));
 
 			ImGui::TreePop();
 		}

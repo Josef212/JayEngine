@@ -23,3 +23,26 @@ void _log(logType type, const char file[], int line, const char* format, ...)
 		app->log(tmp_string2, type);
 	}
 }
+
+char* clearTexPath(char* path)
+{
+	if (!path)
+		return NULL;
+
+	uint size = strlen(path);
+
+	if (size > 0)
+	{
+		char* it = path;
+		char* start = path;
+
+		it = start + size;
+
+		while (*(it - 1) != '\\' && *(it - 1) != '/' && it != start)
+			--it;
+
+		return it;
+	}
+	else
+		return NULL;
+}
