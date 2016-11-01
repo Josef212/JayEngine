@@ -1,6 +1,7 @@
 #include "Material.h"
 
 #include "Application.h"
+#include "ModuleManager.h"
 #include "ModuleFileSystem.h"
 
 #include "Devil/include/il.h"
@@ -81,8 +82,29 @@ int Material::loadTexture(char* file, char* path)
 			_LOG(LOG_ERROR, "Error while loading texture '%s'. Devil:%s\n", realPath, iluErrorString(devilError));
 		}
 	}*/
-	
-	uint id = ilutGLLoadImage(realPath);
+
+	uint id = 0;
+
+	for (std::map<std::string, uint>::iterator it = app->manager->texturesLoaded.begin(); it != app->manager->texturesLoaded.end(); ++it)
+	{
+		if ((*it).first == realPath)
+		{
+			id = (*it).second;
+			break;
+		}
+	}
+
+	if (id <= 0)
+	{
+		uint id = ilutGLLoadImage(realPath);
+		app->manager->texturesLoaded.insert(std::pair<std::string, uint>(std::string(realPath), id));
+		if (id > 0)
+		{
+			textures.push_back(id);
+			ret = textures.size() - 1;
+			paths.insert(std::pair<std::string, int>(std::string(realPath), ret));
+		}
+	}
 
 	if (id > 0)
 	{

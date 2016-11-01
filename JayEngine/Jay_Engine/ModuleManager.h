@@ -2,6 +2,7 @@
 #define __MODULEMANAGER_H__
 
 #include "Module.h"
+#include <map>
 
 class GameObject;
 class Component;
@@ -66,6 +67,9 @@ public:
 	//JOctree* sceneTree = NULL; //DEL_COM
 
 	GameObject* mainCamera = NULL;
+
+	//-------
+	std::map<std::string, uint> texturesLoaded;  //textures paths and idBuffers
 
 private:
 
