@@ -3,6 +3,9 @@
 Welcome to JayEngine a 3D game engine created for eductional purposes by Josep Casanovas Vidal(Josef21296), me. I am 
 currently studying at CITM (UPC).
 
+GitHub: https://github.com/Josef212/JayEngine
+Releases: https://github.com/Josef212/JayEngine/releases
+
 Assignment instructions:
     ·Run the engine.
     ·Go to "FBX" menu "Load town" to load the teacher material.
