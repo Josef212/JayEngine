@@ -252,7 +252,7 @@ void ModuleRenderer3D::drawGameObject(GameObject* obj)
 
 	Transform* trans = obj->getTransform();
 	std::vector<Component*> meshes = obj->findComponent(MESH);
-	Material* mat = (Material*)obj->findComponent(MATERIAL)[0];
+	std::vector<Component*> mats = obj->findComponent(MATERIAL);
 
 	if (!meshes[0] || !trans)
 		return;
@@ -271,6 +271,7 @@ void ModuleRenderer3D::drawGameObject(GameObject* obj)
 	for (uint i = 0; i < meshes.size(); ++i)
 	{
 		Mesh* mesh = (Mesh*)meshes[i];
+		Material* mat = (Material*)mats[i];
 
 		glEnable(GL_LIGHTING);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
