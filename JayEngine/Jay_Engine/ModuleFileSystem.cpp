@@ -35,7 +35,10 @@ bool ModuleFileSystem::init()
 	/*for (pugi::xml_node path = config.child("path"); path; path = path.next_sibling("path"))
 		addPath(path.child_value());*/
 
-	char* writePath = SDL_GetPrefPath(app->getOrganitzation(), app->getTitle());
+	//Old, might be used when swap editor save dir and game saves.
+	//char* writePath = SDL_GetPrefPath(app->getOrganitzation(), app->getTitle());
+
+	char* writePath = SDL_GetBasePath(); //Set write dir at the same as working dir.
 
 	if (PHYSFS_setWriteDir(writePath) == 0)
 	{
@@ -47,17 +50,18 @@ bool ModuleFileSystem::init()
 		addPath(writePath, getSaveDirectory());
 	}
 
+	addPath("Data");
+
 	if (!exist("Library"))
-		makeDirectory("Library");
+		makeDirectory("Library", "Data");
 
-	if (!exist("textures"))
-		makeDirectory("Meshes", "Library");
+	if (!exist("Meshes"))
+		makeDirectory("Library/Meshes", "Data");
 
-	if (!exist("textures"))
-		makeDirectory("Material", "Library");
+	if (!exist("Textures"))
+		makeDirectory("Library/Textures", "Data");
 
-	if (!exist("models"))
-		makeDirectory("Animation", "Library");
+	_LOG(LOG_FS, "PHYS_FS base path: %s", getBasePath());
 
 	return ret;
 }
@@ -156,7 +160,7 @@ unsigned int ModuleFileSystem::load(const char* file, char** buffer)const
 
 int closeSdlRwops(SDL_RWops *rw)
 {
-	RELEASE(rw->hidden.mem.base);
+	RELEASE_ARRAY(rw->hidden.mem.base);
 	SDL_FreeRW(rw);
 	return 0;
 }

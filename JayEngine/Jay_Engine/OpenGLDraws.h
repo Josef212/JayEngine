@@ -1,4 +1,4 @@
-#pragma once
+/*#pragma once
 #include "OpenGL.h"
 
 #define PI 3.14159265359f
