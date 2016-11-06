@@ -14,6 +14,8 @@
 #include "ModuleImporter.h"
 #include "ModuleManager.h"
 
+#include "FileParser.h"
+
 #include "SceneTry.h"
 
 Application::Application()
@@ -67,8 +69,15 @@ bool Application::init()
 {
 	bool ret = true;
 
-	organitzation.assign("Josef21296");
-	title.assign(TITLE);
+	char* buffer = NULL;
+	uint size = fs->load("config.json", STTINGS_PATH, &buffer);
+
+	FileParser conf(buffer);
+
+	organitzation.assign(conf.getString("organitzation", "Josef21296"));
+	title.assign(conf.getString("app_name", "JayEngine"));
+
+	//NOTE/TODO: For now will pass Config on init but maybe will pass on start too
 
 	// Call Init() in all modules
 	std::list<Module*>::iterator it = modules.begin();

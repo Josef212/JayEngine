@@ -123,9 +123,23 @@ bool ModuleFileSystem::makeDirectory(const char* dir, const char* mount)
 	return ret;
 }
 
-unsigned int ModuleFileSystem::load(const char* file, char** buffer)const
+uint ModuleFileSystem::load(const char* file, const char* path, char** buffer)const
 {
-	unsigned int ret = 0;
+	if (!file)
+		return 0;
+
+	char realPath[256];
+	if (path)
+		sprintf_s(realPath, 256, "%s%s", path, file);
+	else
+		strcpy_s(realPath, 256, file);
+
+	return load(realPath, buffer);
+}
+
+uint ModuleFileSystem::load(const char* file, char** buffer)const
+{
+	uint ret = 0;
 
 	PHYSFS_file* fsFile = PHYSFS_openRead(file);
 

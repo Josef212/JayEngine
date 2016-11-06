@@ -77,6 +77,8 @@ enum update_status
 char* clearTexPath(char* path);
 
 // Configuration -----------
+#define STTINGS_PATH "Data/Settings/"
+
 #define SCREEN_WIDTH 1280
 #define SCREEN_HEIGHT 1024
 #define SCREEN_SIZE 1

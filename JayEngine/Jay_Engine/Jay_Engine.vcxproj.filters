@@ -280,6 +280,9 @@
     <ClCompile Include="JOctree.cpp">
       <Filter>Core\Containers</Filter>
     </ClCompile>
+    <ClCompile Include="FileParser.cpp">
+      <Filter>Core\Tools</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.h">
@@ -602,6 +605,9 @@
     </ClInclude>
     <ClInclude Include="JOctree.h">
       <Filter>Core\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="FileParser.h">
+      <Filter>Core\Tools</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

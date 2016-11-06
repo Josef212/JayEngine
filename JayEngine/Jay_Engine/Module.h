@@ -3,7 +3,7 @@
 
 #include <string>
 
-class Application;
+class FileParser;
 struct PhysBody3D;
 
 class Module
@@ -46,7 +46,8 @@ public:
 		return ret;
 	}
 
-	virtual bool init() 
+	//virtual bool init(FileParser* conf)
+	virtual bool init()
 	{
 		return true; 
 	}
