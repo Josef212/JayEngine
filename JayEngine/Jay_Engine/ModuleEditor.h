@@ -16,7 +16,7 @@ public:
 	ModuleEditor(bool startEnabled = true);
 	~ModuleEditor();
 
-	bool init();
+	bool init(FileParser* conf);
 	bool start();
 	update_status preUpdate(float dt);
 	update_status update(float dt);

@@ -25,7 +25,7 @@ ModuleInput::~ModuleInput()
 }
 
 // Called before render is available
-bool ModuleInput::init()
+bool ModuleInput::init(FileParser* conf)
 {
 	_LOG(LOG_STD, "Input: Init.");
 	_LOG(LOG_INPUT, "Init SDL input event system");

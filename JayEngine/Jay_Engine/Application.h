@@ -23,6 +23,7 @@ class SceneTry;
 
 class HrdInfo;
 class RandGen;
+class FileParser;
 
 class Application
 {
@@ -87,6 +88,8 @@ private:
 	void addModule(Module* mod);
 	void prepareUpdate();
 	void finishUpdate();
+
+	void readConfig(FileParser* conf);
 };
 
 extern Application* app;

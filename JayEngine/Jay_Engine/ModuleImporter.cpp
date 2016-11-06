@@ -25,7 +25,7 @@ ModuleImporter::~ModuleImporter()
 	_LOG(LOG_STD, "Importer: Destroying.");
 }
 
-bool ModuleImporter::init()
+bool ModuleImporter::init(FileParser* conf)
 {
 	_LOG(LOG_STD, "Importer: Init.");
 	bool ret = true;

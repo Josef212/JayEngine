@@ -30,7 +30,7 @@ ModuleCamera3D::~ModuleCamera3D()
 	_LOG(LOG_STD, "Camera3D: Destroying.");
 }
 
-bool ModuleCamera3D::init()
+bool ModuleCamera3D::init(FileParser* conf)
 {
 	/*if (!defaultCamera)
 		defaultCamera = app->manager->createCamera();

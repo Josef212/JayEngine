@@ -27,7 +27,7 @@ ModuleFileSystem::~ModuleFileSystem()
 }
 
 
-bool ModuleFileSystem::init()
+bool ModuleFileSystem::init(FileParser* conf)
 {
 	_LOG(LOG_STD, "FileSystem: init.");
 	bool ret = true;

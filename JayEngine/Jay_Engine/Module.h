@@ -46,8 +46,7 @@ public:
 		return ret;
 	}
 
-	//virtual bool init(FileParser* conf)
-	virtual bool init()
+	virtual bool init(FileParser* conf)
 	{
 		return true; 
 	}

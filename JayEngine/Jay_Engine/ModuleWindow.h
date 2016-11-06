@@ -13,7 +13,7 @@ public:
 	ModuleWindow(bool startEnabled = true);
 	virtual ~ModuleWindow();
 
-	bool init();
+	bool init(FileParser* conf);
 	bool cleanUp();
 
 	void setTitle(const char* title);

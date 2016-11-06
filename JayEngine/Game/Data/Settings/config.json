@@ -1,4 +1,24 @@
 {
-    "app_name" : "JayEgine",
-    "organitzation" : "Josef21296"
+    "app" :
+    {
+        "app_name" : "JayEgine",
+        "organitzation" : "Josef21296",
+        "fps_limit" : 0
+    },
+
+    "module_window" : 
+    {
+        "fullscreen" : false,
+        "resizable" : true,
+        "borderless" : false,
+        "fullscreen_desktop" : false,
+        "width" : 1280,
+        "height" : 1024,
+        "screen_size" : 1
+    },
+
+    "module_renderer3d" : 
+    {
+        "vsync" : true
+    }
 }

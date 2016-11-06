@@ -38,7 +38,7 @@ ModuleRenderer3D::~ModuleRenderer3D()
 }
 
 // Called before render is available
-bool ModuleRenderer3D::init()
+bool ModuleRenderer3D::init(FileParser* conf)
 {
 	_LOG(LOG_STD, "Renderer3D: Init.");
 	_LOG(LOG_REN, "Creating 3D Renderer context");

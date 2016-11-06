@@ -13,7 +13,7 @@ public:
 	ModuleAudio(bool start_enabled = true);
 	~ModuleAudio();
 
-	bool init();
+	bool init(FileParser* conf);
 	bool cleanUp();
 
 	// Play a music file

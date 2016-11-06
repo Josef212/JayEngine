@@ -29,7 +29,7 @@ public:
 	ModuleImporter(bool startEnabled = true);
 	~ModuleImporter();
 
-	bool init();
+	bool init(FileParser* conf);
 	bool start();
 	update_status postUpdate(float dt);
 	bool cleanUp();

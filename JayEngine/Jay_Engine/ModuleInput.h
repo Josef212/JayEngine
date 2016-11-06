@@ -21,7 +21,7 @@ public:
 	ModuleInput(bool startEnabled = true);
 	~ModuleInput();
 
-	bool init();
+	bool init(FileParser* conf);
 	update_status preUpdate(float dt);
 	bool cleanUp();
 

@@ -49,7 +49,7 @@ ModuleManager::~ModuleManager()
 		RELEASE(sceneRootObject);
 }
 
-bool ModuleManager::init()
+bool ModuleManager::init(FileParser* conf)
 {
 	_LOG(LOG_STD, "Manager: Init.");
 	//Log assimp info

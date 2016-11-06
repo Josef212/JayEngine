@@ -1,6 +1,7 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleWindow.h"
+#include "FileParser.h"
 
 ModuleWindow::ModuleWindow(bool startEnabled) : Module(startEnabled)
 {
@@ -19,7 +20,7 @@ ModuleWindow::~ModuleWindow()
 }
 
 // Called before render is available
-bool ModuleWindow::init()
+bool ModuleWindow::init(FileParser* conf)
 {
 	_LOG(LOG_STD, "Window: Init.");
 	bool ret = true;
@@ -32,13 +33,14 @@ bool ModuleWindow::init()
 	else
 	{
 		//Create window
-		width = SCREEN_WIDTH * SCREEN_SIZE;
-		height = SCREEN_HEIGHT * SCREEN_SIZE;
+		int screenSize = conf->getInt("screen_size", 1);
+		width = conf->getInt("width", 1280) * screenSize;
+		height = conf->getInt("height", 1024) * screenSize;
 
-		fullscreen = WIN_FULLSCREEN;
-		resizable = WIN_RESIZABLE;
-		borderless = WIN_BORDERLESS;
-		fullscreenDesktop = WIN_FULLSCREEN_DESKTOP;
+		fullscreen = conf->getBool("fullscreen", false);
+		resizable = conf->getBool("resizable", true);
+		borderless = conf->getBool("borderless", false);
+		fullscreenDesktop = conf->getBool("fullscreen_desktop", false);
 
 		Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN;
 

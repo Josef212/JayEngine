@@ -41,7 +41,7 @@ ModuleEditor::~ModuleEditor()
 }
 
 
-bool ModuleEditor::init()
+bool ModuleEditor::init(FileParser* conf)
 {
 	_LOG(LOG_STD, "Editor: Init.");
 	ImGui_ImplSdlGL3_Init(app->window->getWindow());

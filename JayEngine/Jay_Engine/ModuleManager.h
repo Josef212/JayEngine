@@ -19,7 +19,7 @@ public:
 	ModuleManager(bool startEnabled = true);
 	virtual ~ModuleManager();
 
-	bool init();
+	bool init(FileParser* conf);
 	update_status preUpdate(float dt);
 	update_status update(float dt);
 	update_status postUpdate(float dt);

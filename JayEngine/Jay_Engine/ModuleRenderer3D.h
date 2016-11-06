@@ -16,7 +16,7 @@ public:
 	ModuleRenderer3D(bool startEnabled = true);
 	~ModuleRenderer3D();
 
-	bool init();
+	bool init(FileParser* conf);
 	bool start();
 	update_status preUpdate(float dt);
 	update_status postUpdate(float dt);

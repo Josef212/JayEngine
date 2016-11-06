@@ -14,7 +14,7 @@ public:
 	ModuleCamera3D(bool startEnabled = true);
 	~ModuleCamera3D();
 
-	bool init();
+	bool init(FileParser* conf);
 	bool start();
 	update_status update(float dt);
 	bool cleanUp();

@@ -11,7 +11,7 @@ public:
 	ModuleFileSystem(bool startEnabled = true);
 	~ModuleFileSystem();
 
-	bool init();
+	bool init(FileParser* conf);
 	bool cleanUp();
 
 	bool addPath(const char* pathOrZip, const char* mountPoint = NULL);

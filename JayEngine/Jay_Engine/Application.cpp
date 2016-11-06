@@ -70,12 +70,11 @@ bool Application::init()
 	bool ret = true;
 
 	char* buffer = NULL;
-	uint size = fs->load("config.json", STTINGS_PATH, &buffer);
+	uint size = fs->load("config.json", SETTINGS_PATH, &buffer);
 
 	FileParser conf(buffer);
 
-	organitzation.assign(conf.getString("organitzation", "Josef21296"));
-	title.assign(conf.getString("app_name", "JayEngine"));
+	readConfig(&conf.getSection("app"));
 
 	//NOTE/TODO: For now will pass Config on init but maybe will pass on start too
 
@@ -84,7 +83,7 @@ bool Application::init()
 	_LOG(LOG_STD, "Application Init --------------");
 	for(; it != modules.end() && ret == true; ++it)
 	{
-		ret = (*it)->init();
+		ret = (*it)->init(&conf.getSection((*it)->name.c_str()));
 	}
 
 	// After all Init calls we call Start() in all modules
@@ -98,6 +97,8 @@ bool Application::init()
 	}
 
 	info->setInfo();
+
+	RELEASE_ARRAY(buffer);
 
 	return ret;
 }
@@ -257,4 +258,10 @@ void Application::setMaxFPS(int maxFPS)
 void Application::browse(const char * url) const
 {
 	ShellExecuteA(NULL, "open", url, NULL, NULL, SW_SHOWNORMAL);
+}
+
+void Application::readConfig(FileParser* conf)
+{
+	organitzation.assign(conf->getString("organitzation", "Josef21296"));
+	title.assign(conf->getString("app_name", "JayEngine"));
 }

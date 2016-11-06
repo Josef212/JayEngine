@@ -18,7 +18,7 @@ ModuleAudio::~ModuleAudio()
 }
 
 // Called before render is available
-bool ModuleAudio::init()
+bool ModuleAudio::init(FileParser* conf)
 {
 	_LOG(LOG_STD, "Audio: Init.");
 	bool ret = true;
