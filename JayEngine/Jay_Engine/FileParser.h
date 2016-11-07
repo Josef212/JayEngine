@@ -3,7 +3,7 @@
 
 #include "Globals.h"
 #include "jsoncpp\json\json.h"
-
+#include <string>
 //struct Value;
 
 class FileParser
@@ -11,12 +11,13 @@ class FileParser
 public:
 	FileParser();
 	FileParser(const char* buffer);
-	FileParser(Json::Value* sectionObject);
+	FileParser(Json::Value& sectionObject);
 	virtual ~FileParser();
 
 	FileParser getSection(const char* sectionName);
 
-	const char* getString(const char* name, const char* defaultStr, int index = -1);
+	const char* getString(const char* name, const char* defaultStr, int index = -1);//TODO
+	std::string getStdString(const char* name, const char* defaultStr, int index = -1);
 	bool getBool(const char* name, bool defaultBool, int index = -1);
 	int getInt(const char* name, int defaultInt, int index = -1);
 	float getFloat(const char* name, float defaultFloat, int index = -1);
