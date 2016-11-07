@@ -74,6 +74,8 @@ bool Application::init()
 
 	FileParser conf(buffer);
 
+	FileParser app = conf.getSection("app");
+	organitzation.assign(app.root.get("app_name", "error").asString());
 	organitzation.assign("Josef21296");
 	title.assign(TITLE);
 

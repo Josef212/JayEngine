@@ -2,18 +2,16 @@
 #define __FILEPARSER_H__
 
 #include "Globals.h"
+#include "jsoncpp\json\json.h"
 
-
-typedef struct json_object_t JSON_Object;
-//typedef struct json_array_t  JSON_Array;
-typedef struct json_value_t  JSON_Value;
+//struct Value;
 
 class FileParser
 {
 public:
 	FileParser();
 	FileParser(const char* buffer);
-	FileParser(JSON_Object* sectionObject);
+	FileParser(Json::Value* sectionObject);
 	virtual ~FileParser();
 
 	FileParser getSection(const char* sectionName);
@@ -26,10 +24,9 @@ public:
 private:
 
 public:
-	JSON_Value* getValue(const char* name, int index = -1);
-private:
-	JSON_Value* valueRoot = NULL;
-	JSON_Object* objRoot = NULL;
+	Json::Value* getValue(const char* name, int index = -1);
+//private:
+	Json::Value root = NULL;
 };
 
 

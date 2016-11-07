@@ -29,9 +29,6 @@
     <Filter Include="Core\UI">
       <UniqueIdentifier>{5b7ab48d-03d8-44ca-b2f5-9a9541651abc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Core\3Party\Parson">
-      <UniqueIdentifier>{d0c1f451-ac9a-4dbc-ab44-37eecdcf4d34}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Core\Scenes">
       <UniqueIdentifier>{7a676fa3-cb6a-4b46-b973-0763131fc471}</UniqueIdentifier>
     </Filter>
@@ -144,9 +141,6 @@
     </ClCompile>
     <ClCompile Include="ModuleImporter.cpp">
       <Filter>Core\Modules</Filter>
-    </ClCompile>
-    <ClCompile Include="parson.c">
-      <Filter>Core\3Party\Parson</Filter>
     </ClCompile>
     <ClCompile Include="SceneTry.cpp">
       <Filter>Core\Scenes</Filter>
@@ -389,9 +383,6 @@
     </ClInclude>
     <ClInclude Include="ModuleImporter.h">
       <Filter>Core\Modules</Filter>
-    </ClInclude>
-    <ClInclude Include="parson.h">
-      <Filter>Core\3Party\Parson</Filter>
     </ClInclude>
     <ClInclude Include="SceneTry.h">
       <Filter>Core\Scenes</Filter>
