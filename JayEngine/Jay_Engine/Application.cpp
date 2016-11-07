@@ -74,6 +74,9 @@ bool Application::init()
 
 	FileParser conf(buffer);
 
+	organitzation.assign("Josef21296");
+	title.assign(TITLE);
+
 	readConfig(&conf.getSection("app"));
 
 	//NOTE/TODO: For now will pass Config on init but maybe will pass on start too
@@ -262,6 +265,6 @@ void Application::browse(const char * url) const
 
 void Application::readConfig(FileParser* conf)
 {
-	organitzation.assign(conf->getString("organitzation", "Josef21296"));
-	title.assign(conf->getString("app_name", "JayEngine"));
+	/*organitzation.assign(conf->getString("organitzation", "Josef21296"));
+	title.assign(conf->getString("app_name", "JayEngine"));*/
 }

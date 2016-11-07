@@ -59,6 +59,9 @@
     <Filter Include="Core\Math\MathGeoLib\Algorithm\Random">
       <UniqueIdentifier>{2d8f994c-3dd8-4c92-8d84-8cc5d2966403}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core\3Party\jsoncpp">
+      <UniqueIdentifier>{5c7a4122-7566-4ffe-bff6-fe66757a8612}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -282,6 +285,9 @@
     </ClCompile>
     <ClCompile Include="FileParser.cpp">
       <Filter>Core\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="jsoncpp\jsoncpp.cpp">
+      <Filter>Core\3Party\jsoncpp</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -608,6 +614,12 @@
     </ClInclude>
     <ClInclude Include="FileParser.h">
       <Filter>Core\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="jsoncpp\json\json.h">
+      <Filter>Core\3Party\jsoncpp</Filter>
+    </ClInclude>
+    <ClInclude Include="jsoncpp\json\json-forwards.h">
+      <Filter>Core\3Party\jsoncpp</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
