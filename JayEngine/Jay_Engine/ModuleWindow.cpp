@@ -32,22 +32,14 @@ bool ModuleWindow::init(FileParser* conf)
 	}
 	else
 	{
-		//Create window
-		width = SCREEN_WIDTH * SCREEN_SIZE;
-		height = SCREEN_HEIGHT * SCREEN_SIZE;
-
-		fullscreen = WIN_FULLSCREEN;
-		resizable = WIN_RESIZABLE;
-		borderless = WIN_BORDERLESS;
-		fullscreenDesktop = WIN_FULLSCREEN_DESKTOP;
-		/*int screenSize = conf->getInt("screen_size", 1);
+		int screenSize = conf->getInt("screen_size", 1);
 		width = conf->getInt("width", 1280) * screenSize;
 		height = conf->getInt("height", 1024) * screenSize;
 
-		fullscreen = conf->getBool("fullscreen", false);
+		fullscreen = conf->getBool("fullscreen", true);
 		resizable = conf->getBool("resizable", true);
 		borderless = conf->getBool("borderless", false);
-		fullscreenDesktop = conf->getBool("fullscreen_desktop", false);*/
+		fullscreenDesktop = conf->getBool("fullscreen_desktop", false);
 
 		Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN;
 
@@ -75,7 +67,7 @@ bool ModuleWindow::init(FileParser* conf)
 			flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 		}
 
-		window = SDL_CreateWindow(TITLE, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, flags);
+		window = SDL_CreateWindow(app->getTitle(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, flags);
 
 		if(window == NULL)
 		{

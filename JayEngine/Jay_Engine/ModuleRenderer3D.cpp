@@ -6,6 +6,7 @@
 #include "ModuleEditor.h"
 #include "DrawDebug.h"
 #include "ModuleManager.h"
+#include "FileParser.h"
 
 #include "GameObject.h"
 #include "Transform.h"
@@ -27,8 +28,6 @@ ModuleRenderer3D::ModuleRenderer3D(bool startEnabled) : Module(startEnabled)
 	_LOG(LOG_STD, "Renderer3D: Creation.");
 
 	name.assign("module_renderer3d");
-
-	vsync = VSYNC;
 }
 
 // Destructor
@@ -43,6 +42,8 @@ bool ModuleRenderer3D::init(FileParser* conf)
 	_LOG(LOG_STD, "Renderer3D: Init.");
 	_LOG(LOG_REN, "Creating 3D Renderer context");
 	bool ret = true;
+
+	vsync = conf->getBool("vsync", true);
 
 	//Create context
 	context = SDL_GL_CreateContext(app->window->getWindow());

@@ -18,6 +18,9 @@
 
 #include "SceneTry.h"
 
+//TMP
+#include "jsoncpp\json\json.h"
+
 Application::Application()
 {
 	_LOG(LOG_STD, "Application Constructor --------------");
@@ -73,11 +76,6 @@ bool Application::init()
 	uint size = fs->load("config.json", SETTINGS_PATH, &buffer);
 
 	FileParser conf(buffer);
-
-	FileParser app = conf.getSection("app");
-	organitzation.assign(app.root.get("app_name", "error").asString());
-	organitzation.assign("Josef21296");
-	title.assign(TITLE);
 
 	readConfig(&conf.getSection("app"));
 
@@ -267,6 +265,8 @@ void Application::browse(const char * url) const
 
 void Application::readConfig(FileParser* conf)
 {
-	/*organitzation.assign(conf->getString("organitzation", "Josef21296"));
-	title.assign(conf->getString("app_name", "JayEngine"));*/
+	std::string str = conf->getStdString("organitzation", "Josef21296");
+	organitzation.assign(str);
+	str.assign(conf->getStdString("app_name", "Jay_Engine"));
+	setTitle(str.c_str());
 }
