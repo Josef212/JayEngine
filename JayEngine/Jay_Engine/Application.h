@@ -53,9 +53,9 @@ private:
 	Uint32	frames = 0;
 	float	dt;
 	int		fpsCounter = 0;
-	int		lastFrameMs = -1;
+	Uint32		lastFrameMs = -1;
 	int		lastFps = -1;
-	int		cappedMs = 0;
+	Uint32		cappedMs = 0;
 
 	std::list<Module*> modules;
 	std::string			title;

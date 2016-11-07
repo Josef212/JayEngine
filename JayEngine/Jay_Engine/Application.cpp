@@ -132,11 +132,6 @@ void Application::finishUpdate()
 	if (cappedMs > 0 && (lastFrameMs < cappedMs))
 		SDL_Delay(cappedMs - lastFrameMs);
 
-	if (cappedMs > 0 && lastFrameMs < cappedMs)
-	{
-		SDL_Delay(cappedMs - lastFrameMs);
-	}
-
 	if (editor)
 		editor->logFPS((float)lastFps, (float)lastFrameMs);
 }
