@@ -3,6 +3,7 @@
 #include "ModuleEditor.h"
 #include "ModuleWindow.h"
 #include "ModuleManager.h"
+#include "FileParser.h"
 
 #include "UI_Comp.h"
 #include "UI_Conf.h"
@@ -45,6 +46,9 @@ bool ModuleEditor::init(FileParser* conf)
 {
 	_LOG(LOG_STD, "Editor: Init.");
 	ImGui_ImplSdlGL3_Init(app->window->getWindow());
+
+	engineVersion.assign(conf->getStdString("version", "0.1.0-V"));
+
 	return true;
 }
 
@@ -168,7 +172,7 @@ update_status ModuleEditor::update(float dt)
 	{
 		ImGui::Begin("About", &showAbout, ImGuiWindowFlags_AlwaysAutoResize);
 		ImGui::Text("This is a 3D game engine programmed for educational purposes as a university project.");
-		ImGui::Text("JayEngine is created by Josef21296 and I'm at UPC-CITM and it's currently at %s version.", ENGINE_VERSION);
+		ImGui::Text("JayEngine is created by Josef21296 and I'm studying at UPC-CITM and it's currently on %s version.", engineVersion.c_str());
 		ImGui::Text("Please report any bug you find, take a look at 'Help->Report a bug'. Thanks ;)");
 		ImGui::Text("Check the repository clicking here:");
 		ImGui::SameLine();

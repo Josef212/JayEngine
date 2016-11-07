@@ -3,6 +3,7 @@
 
 #include "Module.h"
 #include <list>
+#include <string>
 
 class UI_Comp;
 class UI_Conf;
@@ -42,6 +43,7 @@ private:
 	bool showImGuiDemo = false;
 	bool showConfig = false;
 	bool showAbout = false;
+	std::string engineVersion ;
 
 };
 

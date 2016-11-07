@@ -3,6 +3,7 @@
 #include "ModuleInput.h"
 #include "ModuleRenderer3D.h"
 #include "ModuleEditor.h"
+#include "ModuleWindow.h"
 
 #define MAX_KEYS 300
 
@@ -71,8 +72,8 @@ update_status ModuleInput::preUpdate(float dt)
 
 	Uint32 buttons = SDL_GetMouseState(&mouseX, &mouseY);
 
-	mouseX /= SCREEN_SIZE;
-	mouseY /= SCREEN_SIZE;
+	mouseX /= app->window->getWinSize();
+	mouseY /= app->window->getWinSize();
 	wheelY = 0;
 
 	for(int i = 0; i < 5; ++i)
@@ -107,11 +108,11 @@ update_status ModuleInput::preUpdate(float dt)
 			break;
 
 			case SDL_MOUSEMOTION:
-			mouseX = e.motion.x / SCREEN_SIZE;
-			mouseY = e.motion.y / SCREEN_SIZE;
+			mouseX = e.motion.x / app->window->getWinSize();
+			mouseY = e.motion.y / app->window->getWinSize();
 
-			mouseXMotion = e.motion.xrel / SCREEN_SIZE;
-			mouseYMotion = e.motion.yrel / SCREEN_SIZE;
+			mouseXMotion = e.motion.xrel / app->window->getWinSize();
+			mouseYMotion = e.motion.yrel / app->window->getWinSize();
 			break;
 
 			case SDL_QUIT:

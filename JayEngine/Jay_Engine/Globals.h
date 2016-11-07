@@ -79,16 +79,8 @@ char* clearTexPath(char* path);
 // Configuration -----------
 #define SETTINGS_PATH "Data/Settings/"
 
-#define SCREEN_WIDTH 1280
-#define SCREEN_HEIGHT 1024
-#define SCREEN_SIZE 1
-#define WIN_FULLSCREEN false
-#define WIN_RESIZABLE true
-#define WIN_BORDERLESS false
-#define WIN_FULLSCREEN_DESKTOP false
-#define VSYNC true
 #define TITLE "JayEngine"
-#define ENGINE_VERSION "0.1.3-Alpha"
+
 #define REPOSITORY_URL "https://github.com/Josef212/JayEngine"
 #define GITHUB_URL "https://github.com/Josef212"
 #define WIKI_URL "https://github.com/Josef212/JayEngine/wiki"

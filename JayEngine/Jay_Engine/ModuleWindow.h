@@ -55,6 +55,8 @@ public:
 	int getWidth();
 	void setHeight(int height);
 	int getHeight();
+
+	int getWinSize()const;
 	
 	bool setBrightness(float bright);
 	float getBrightness();
@@ -66,6 +68,7 @@ public:
 	//void setIcon(const char* file);
 
 private:
+	int winSize = 1;
 	int width;
 	int height;
 	bool fullscreen, resizable, borderless, fullscreenDesktop;//TODO: save and load changes on this variables

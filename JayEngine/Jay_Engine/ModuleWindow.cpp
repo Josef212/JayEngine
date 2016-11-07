@@ -32,9 +32,9 @@ bool ModuleWindow::init(FileParser* conf)
 	}
 	else
 	{
-		int screenSize = conf->getInt("screen_size", 1);
-		width = conf->getInt("width", 1280) * screenSize;
-		height = conf->getInt("height", 1024) * screenSize;
+		winSize = conf->getInt("screen_size", 1);
+		width = conf->getInt("width", 1280) * winSize;
+		height = conf->getInt("height", 1024) * winSize;
 
 		fullscreen = conf->getBool("fullscreen", true);
 		resizable = conf->getBool("resizable", true);
@@ -340,6 +340,11 @@ void ModuleWindow::setHeight(int height)
 int ModuleWindow::getHeight()
 {
 	return height;
+}
+
+int ModuleWindow::getWinSize()const
+{
+	return winSize;
 }
 
 bool ModuleWindow::setBrightness(float bright)
