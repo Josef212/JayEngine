@@ -134,6 +134,8 @@ uint ModuleFileSystem::getFilesOnDir(const char* dir, std::vector<std::string>& 
 		++ret;
 	}
 
+	PHYSFS_freeList(rc);
+
 	return ret;
 }
 

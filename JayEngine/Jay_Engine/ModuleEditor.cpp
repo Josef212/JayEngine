@@ -3,6 +3,7 @@
 #include "ModuleEditor.h"
 #include "ModuleWindow.h"
 #include "ModuleManager.h"
+#include "ModuleFileSystem.h"
 #include "FileParser.h"
 
 #include "UI_Comp.h"
@@ -75,6 +76,7 @@ update_status ModuleEditor::update(float dt)
 	{
 		if (ImGui::BeginMenu("File"))
 		{
+			if (ImGui::MenuItem("Serch files")) showDirWin = !showDirWin;
 			if (ImGui::MenuItem("Quit")) app->quit = true;
 			ImGui::EndMenu();
 		}
@@ -198,6 +200,9 @@ update_status ModuleEditor::update(float dt)
 		ImGui::ShowMetricsWindow(&showImGuiDemo);
 	}
 
+	if (showDirWin)
+		openDirWin();
+
 	return ret;
 }
 
@@ -233,4 +238,35 @@ void ModuleEditor::log(const char* str, logType type)
 {
 	if (console)
 		console->logUi(str, type);
+}
+
+void ModuleEditor::openDirWin()
+{
+	std::vector<std::string> files;
+	app->fs->getFilesOnDir("Assets/fbx", files);
+	if (ImGui::Begin("Dir", &showDirWin))
+	{
+		static int selected = -1;
+		ImGui::BeginChild("Files", ImVec2(200, 0), true);
+		{
+			for (int i = 0; i < files.size(); ++i)
+			{
+				if (ImGui::Selectable(files[i].c_str(), selected == i))
+					selected = i;
+			}
+		}
+		ImGui::EndChild();
+		ImGui::SameLine();
+		if (selected > -1 && selected < files.size())
+		{
+			if (ImGui::Button("Load fbx"))
+			{
+				char file[64];
+				strcpy_s(file, 64, files[selected].c_str());
+				app->manager->loadFBX(file, NULL);
+				showDirWin = !showDirWin;
+			}
+		}
+	}
+	ImGui::End();
 }

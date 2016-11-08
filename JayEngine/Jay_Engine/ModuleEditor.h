@@ -30,6 +30,7 @@ public:
 	void log(const char* str, logType type);
 
 private:
+	void openDirWin();
 
 public:
 	std::list<UI_Comp*> uiList;
@@ -43,6 +44,7 @@ private:
 	bool showImGuiDemo = false;
 	bool showConfig = false;
 	bool showAbout = false;
+	bool showDirWin = false;
 	std::string engineVersion ;
 
 };
