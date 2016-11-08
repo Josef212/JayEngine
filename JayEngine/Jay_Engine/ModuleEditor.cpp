@@ -95,7 +95,7 @@ update_status ModuleEditor::update(float dt)
 			if (ImGui::MenuItem("Create Empty Game object")) app->manager->createEmptyGO();
 			if (ImGui::BeginMenu("Primitives"))
 			{
-				//if (ImGui::MenuItem("Cube")) app->manager->loadCube(); //DEL_COM: commented for delivery
+				if (ImGui::MenuItem("Cube")) app->manager->loadCube(); //DEL_COM: commented for delivery
 
 				ImGui::EndMenu();
 			}
@@ -160,7 +160,8 @@ update_status ModuleEditor::update(float dt)
 		//TMP
 		if (ImGui::BeginMenu("FBX"))
 		{
-			//if (ImGui::MenuItem("Load cube.fbx")) app->manager->loadFBX("Cube.fbx", NULL);//DEL_COM
+			if (ImGui::MenuItem("Load cube.fbx")) app->manager->loadFBX("Cube.fbx", NULL);//DEL_COM
+			if (ImGui::MenuItem("Load cube2.fbx")) app->manager->loadFBX("cube2.fbx", NULL);
 			if (ImGui::MenuItem("Load mecha.fbx")) app->manager->loadFBX("MechaT.fbx", NULL);
 			if (ImGui::MenuItem("Load town.fbx")) app->manager->loadFBX("Street environment_V01.FBX", NULL);
 			ImGui::EndMenu();

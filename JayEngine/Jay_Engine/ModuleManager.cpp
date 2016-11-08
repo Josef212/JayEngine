@@ -255,7 +255,7 @@ GameObject* ModuleManager::loadFBX(char* file, char* path)
 	}
 	//const aiScene* scene = aiImportFile(realPath, aiProcessPreset_TargetRealtime_MaxQuality);//TODO: fit this with own format system
 
-	if (scene, scene->HasMeshes())
+	if (scene && scene->HasMeshes())
 	{
 		_LOG(LOG_MANAGER, "Loading fbx from %s.", realPath);
 		root = loadObjects(scene->mRootNode, scene, sceneRootObject);
@@ -432,7 +432,7 @@ void ModuleManager::eraseGameObjectFromTree(GameObject* obj)//DEL_COM
 		sceneTree->erase(obj);
 }*/
 
-/*GameObject* ModuleManager::loadCube()//DEL_COM
+GameObject* ModuleManager::loadCube()//DEL_COM
 {
 	GameObject* ret = NULL;
 
@@ -478,35 +478,21 @@ void ModuleManager::eraseGameObjectFromTree(GameObject* obj)//DEL_COM
 		-1, -1, -1
 	};
 
-	const uint uvsNum = 48;
+	const uint uvsNum = 72;
 
 	float uvs[uvsNum]
 	{
-			0, 0,
-			1, 0,
-			0, 1, 
-			1, 1, 
-			1, 1, 
-			0, 1, 
-			0, 0, 
-			1, 0, 
-			1, 1, 
-			0, 1, 
-			0, 0, 
-			1, 0, 
-			1, 1, 
-			0, 1, 
-			0, 0, 
-			1, 0, 
-			1, 1, 
-			0, 1, 
-			0, 0, 
-			1, 0, 
-			1, 1, 
-			0, 1, 
-			0, 0, 
-			1, 0
-
+		1.f, 1.f, 0.f, 0.f,	1.f, 0.f, 1.f, 1.f, 0.f, 1.f, 0.f, 0.f,//Front
+		//------
+		0.f, 0.f, 1.f, 0.f, 1.f, 1.f, 0.f, 0.f, 1.f, 1.f, 0.f, 1.f,//Top
+		//-----
+		1.f, 1.f, 1.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f,//Right
+		//-----
+		1.f, 1.f, 1.f, 0.f, 0.f, 0.f, 1.f, 1.f, 0.f, 0.f, 1.f, 0.f,//Left
+		//-----
+		1.f, 1.f, 1.f, 0.f, 0.f, 0.f, 1.f, 1.f, 0.f, 0.f, 1.f, 0.f,//Back
+		//-----
+		1.f, 1.f, 0.f, 1.f, 0.f, 0.f, 1.f, 1.f, 0.f, 0.f, 1.f, 0.f //Bottom
 	};
 
 	mesh->numVertices = verticesNum;
@@ -541,4 +527,4 @@ void ModuleManager::eraseGameObjectFromTree(GameObject* obj)//DEL_COM
 	mat->loadTexture("Lenna.png");
 
 	return ret;
-}*/
+}

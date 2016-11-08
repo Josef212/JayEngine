@@ -79,6 +79,7 @@ bool Mesh::loadMesh(aiMesh* mesh, bool loadToRAM)
 		numVertices = mesh->mNumVertices;
 		vertices = new float[numVertices * 3];
 		memcpy(vertices, mesh->mVertices, sizeof(float)*numVertices * 3);
+
 		_LOG(LOG_STD, "New mesh called %s with %d vertices.", getName(), numVertices);
 
 		if (mesh->HasFaces())
@@ -96,6 +97,7 @@ bool Mesh::loadMesh(aiMesh* mesh, bool loadToRAM)
 					memcpy(&indices[i * 3], mesh->mFaces[i].mIndices, sizeof(uint) * 3);
 				}
 			}
+
 			_LOG(LOG_STD, "Mesh %s has %d indices.", getName(), numIndices);
 		}
 
@@ -112,7 +114,6 @@ bool Mesh::loadMesh(aiMesh* mesh, bool loadToRAM)
 		{
 			numTexCoords = numVertices * 2;
 			texCoords = new float[numTexCoords];
-
 			aiVector3D* tmp = mesh->mTextureCoords[0];
 			for (int i = 0; i < numTexCoords; i += 2)
 			{

@@ -45,7 +45,7 @@ public:
 
 	bool deleteGameObject(GameObject* toDel);
 
-	//GameObject* loadCube(); //DEL_COM
+	GameObject* loadCube(); //DEL_COM
 
 	void drawDebug();
 
