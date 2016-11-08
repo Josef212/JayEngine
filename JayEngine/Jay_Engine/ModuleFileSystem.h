@@ -2,6 +2,8 @@
 #define __MODULEFILESYSTEM_H__
 
 #include "Module.h"
+#include <vector>
+#include <string>
 
 struct SDL_RWops;
 
@@ -24,6 +26,8 @@ public:
 	}
 
 	const char* getBasePath();
+
+	uint getFilesOnDir(const char* dir, std::vector<std::string>& files);
 
 	uint load(const char* file, const char* path, char** buffer)const;
 	uint load(const char* file, char** buffer)const;

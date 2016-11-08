@@ -123,6 +123,20 @@ bool ModuleFileSystem::makeDirectory(const char* dir, const char* mount)
 	return ret;
 }
 
+uint ModuleFileSystem::getFilesOnDir(const char* dir, std::vector<std::string>& files)
+{
+	uint ret = 0;
+
+	char** rc = PHYSFS_enumerateFiles(dir);
+	for (char** it = rc; *it != NULL; ++it)
+	{
+		files.push_back(*it);
+		++ret;
+	}
+
+	return ret;
+}
+
 uint ModuleFileSystem::load(const char* file, const char* path, char** buffer)const
 {
 	if (!file)
