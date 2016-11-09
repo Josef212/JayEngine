@@ -29,6 +29,7 @@ public:
 
 	GameObject* getSceneroot()const;
 	GameObject* createEmptyGO();
+	GameObject* createEmptyGoWithAABB(float xP, float yP, float zP); //TMP
 	GameObject* createCamera();
 
 	Component* addTransform();
@@ -52,8 +53,8 @@ public:
 	void makeGOShowAABoxRec(GameObject* obj, bool show);
 	void makeGOShowOBoxRec(GameObject* obj, bool show);
 
-	/*void insertGameObjectToTree(GameObject* obj);
-	void eraseGameObjectFromTree(GameObject* obj);*/ //DEL_COM
+	void insertGameObjectToTree(GameObject* obj);
+	void eraseGameObjectFromTree(GameObject* obj); //DEL_COM
 
 private:
 
@@ -61,9 +62,9 @@ public:
 	int nextGOId = 0;
 	bool showEnclosingBoxes = false;
 	bool showOrientedBoxes = false;
-	bool showTree = false;
+	bool showTree = true;
 
-	//JQuadTree* sceneTree = NULL; //DEL_COM
+	JQuadTree* sceneTree = NULL; //DEL_COM
 	//JOctree* sceneTree = NULL; //DEL_COM
 
 	GameObject* mainCamera = NULL;

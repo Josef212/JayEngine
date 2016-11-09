@@ -32,6 +32,9 @@ public:
 private:
 	void openDirWin();
 
+	//TMP
+	void tmp();
+
 public:
 	std::list<UI_Comp*> uiList;
 

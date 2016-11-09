@@ -5,6 +5,7 @@
 #include "ModuleManager.h"
 #include "ModuleFileSystem.h"
 #include "FileParser.h"
+#include "ModuleManager.h" //TMP
 
 #include "UI_Comp.h"
 #include "UI_Conf.h"
@@ -204,6 +205,8 @@ update_status ModuleEditor::update(float dt)
 	if (showDirWin)
 		openDirWin();
 
+	tmp();
+
 	return ret;
 }
 
@@ -268,6 +271,18 @@ void ModuleEditor::openDirWin()
 				showDirWin = !showDirWin;
 			}
 		}
+	}
+	ImGui::End();
+}
+
+void ModuleEditor::tmp()
+{
+	bool r = true;
+	if (ImGui::Begin("CreateEmpty", &r))
+	{
+		static float s[3];
+		ImGui::DragFloat3("Size", s, 0.5f);
+		if (ImGui::Button("Create")) app->manager->createEmptyGoWithAABB(s[0], s[1], s[2]);
 	}
 	ImGui::End();
 }

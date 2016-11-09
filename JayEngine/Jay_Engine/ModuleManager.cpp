@@ -68,6 +68,9 @@ bool ModuleManager::init(FileParser* conf)
 		_LOG(LOG_ERROR, "Error while Devil Init: %s\n", iluErrorString(devilError));
 	}
 
+	sceneTree = new JQuadTree();
+	sceneTree->setRoot(AABB::FromCenterAndSize(float3(0, 0, 0), float3(100, 10, 100)));
+
 	if (sceneRootObject)
 	{
 		mainCamera = createCamera();
@@ -129,6 +132,26 @@ GameObject* ModuleManager::createEmptyGO()
 			ret = selected->addChild();
 		else
 			ret = sceneRootObject->addChild();
+	}
+	else
+		_LOG(LOG_ERROR, "Can't create an empty game object because sceene root node is NULL.");
+
+	return ret;
+}
+
+GameObject* ModuleManager::createEmptyGoWithAABB(float xP, float yP, float zP) //TMP
+{
+	GameObject* ret = NULL;
+
+	if (sceneRootObject)
+	{
+		if (selected)
+			ret = selected->addChild();
+		else
+			ret = sceneRootObject->addChild();
+
+		ret->enclosingBox.SetFromCenterAndSize(float3(xP, yP, zP), float3(2, 2, 2));
+		insertGameObjectToTree(ret);
 	}
 	else
 		_LOG(LOG_ERROR, "Can't create an empty game object because sceene root node is NULL.");
@@ -337,7 +360,7 @@ void ModuleManager::drawDebug()
 	if (sceneRootObject)
 		sceneRootObject->drawDebug();
 
-	/*if (showTree && sceneTree)
+	if (showTree && sceneTree)
 	{
 		std::vector<AABB> boxes;
 		sceneTree->collectTreeBoxes(boxes);
@@ -353,7 +376,7 @@ void ModuleManager::drawDebug()
 		{
 			drawBoxDebug(boxes[i], Yellow);
 		}
-	}*///DEL_COM
+	}//DEL_COM
 }
 
 bool ModuleManager::deleteGameObject(GameObject* toDel)
@@ -420,7 +443,7 @@ void ModuleManager::makeGOShowOBoxRec(GameObject* obj, bool show)
 	}
 }
 
-/*void ModuleManager::insertGameObjectToTree(GameObject* obj)//DEL_COM
+void ModuleManager::insertGameObjectToTree(GameObject* obj)//DEL_COM
 {
 	if (sceneTree && obj)
 		sceneTree->insert(obj);
@@ -430,7 +453,7 @@ void ModuleManager::eraseGameObjectFromTree(GameObject* obj)//DEL_COM
 {
 	if (sceneTree && obj)
 		sceneTree->erase(obj);
-}*/
+}
 
 GameObject* ModuleManager::loadCube()//DEL_COM
 {
@@ -466,7 +489,7 @@ GameObject* ModuleManager::loadCube()//DEL_COM
 		1, 2, 7, 1, 7, 6	//Bottom
 	};
 
-	float normals[verticesNum]
+	float normals[verticesNum * 3]
 	{
 		1, 1, 1,
 		1, -1, 1,
