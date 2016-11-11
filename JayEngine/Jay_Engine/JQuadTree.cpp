@@ -133,7 +133,7 @@ bool treeNode::intersectsAllChilds(const AABB& _box)
 	unsigned int count = 0;
 
 	for (unsigned int i = 0; i < 4; ++i)
-		if (box.Intersects(_box)) //box.MinimalEnclosingAABB().Intersects()
+		if (childs[i]->box.Intersects(_box)) //box.MinimalEnclosingAABB().Intersects()
 			++count;
 
 	return count == 4;
