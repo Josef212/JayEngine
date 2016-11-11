@@ -4,15 +4,15 @@
 #define MAX_NODE_OBJECTS 8
 
 //---------------------------------------------------
-//---------------TreeNode----------------------------
+//---------------oTreeNode----------------------------
 //---------------------------------------------------
 
 
 oTreeNode::oTreeNode(const AABB& _box) : box(_box)
 {
-	parent = nullptr;
 	for (unsigned int i = 0; i < 8; ++i)
 		childs[i] = nullptr;
+	parent = nullptr;
 }
 
 oTreeNode::~oTreeNode()
@@ -157,17 +157,17 @@ bool oTreeNode::intersectsAllChilds(const AABB& _box)
 	unsigned int count = 0;
 
 	for (unsigned int i = 0; i < 8; ++i)
-		if (box.Intersects(_box)) //box.MinimalEnclosingAABB().Intersects()
+		if (childs[i]->box.Intersects(_box)) //box.MinimalEnclosingAABB().Intersects()
 			++count;
 
-	return count == 8;
+	return count == 4;
 }
 
 void oTreeNode::collectTreeBoxes(std::vector<AABB>& vec)
 {
 	vec.push_back(box);
 
-	for (unsigned int i = 0; i < 4; ++i)
+	for (unsigned int i = 0; i < 8; ++i)
 		if (childs[i]) childs[i]->collectTreeBoxes(vec);
 }
 
@@ -181,7 +181,6 @@ void oTreeNode::collectCandidates(std::vector<GameObject*>& vec, const Frustum& 
 	for (unsigned int i = 0; i < 8; ++i)
 		if (childs[i])childs[i]->collectCandidates(vec, frustum);
 }
-
 
 //---------------------------------------------------
 //---------------JOctree---------------------------
@@ -201,7 +200,7 @@ JOctree::~JOctree()
 void JOctree::insert(GameObject* obj)
 {
 	if (rootNode && obj)
-		if (rootNode->box.Intersects(obj->enclosingBox)) //box.MinimalEnclosingAABB().Intersects()
+		if (rootNode->box.Intersects(obj->enclosingBox))
 			rootNode->insert(obj);
 }
 
