@@ -68,8 +68,9 @@ bool ModuleManager::init(FileParser* conf)
 		_LOG(LOG_ERROR, "Error while Devil Init: %s\n", iluErrorString(devilError));
 	}
 
-	sceneTree = new JQuadTree();
-	sceneTree->setRoot(AABB::FromCenterAndSize(float3(0, 0, 0), float3(100, 10, 100)));
+	//sceneTree = new JQuadTree();
+	sceneTree = new JOctree();
+	sceneTree->setRoot(AABB::FromCenterAndSize(float3(0, 40, 0), float3(100, 100, 100)));
 
 	if (sceneRootObject)
 	{
@@ -346,6 +347,7 @@ GameObject* ModuleManager::loadObjects(aiNode* node, const aiScene* scene, GameO
 	}
 
 	ret->updateAABB();
+	insertGameObjectToTree(ret);
 
 	for (uint i = 0; i < node->mNumChildren; ++i)
 	{

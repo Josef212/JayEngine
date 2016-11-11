@@ -64,8 +64,8 @@ public:
 	bool showOrientedBoxes = false;
 	bool showTree = true;
 
-	JQuadTree* sceneTree = NULL; //DEL_COM
-	//JOctree* sceneTree = NULL; //DEL_COM
+	//JQuadTree* sceneTree = NULL; //DEL_COM
+	JOctree* sceneTree = NULL; //DEL_COM
 
 	GameObject* mainCamera = NULL;
 
