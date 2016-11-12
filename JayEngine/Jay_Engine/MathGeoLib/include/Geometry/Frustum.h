@@ -402,6 +402,7 @@ public:
 	bool Intersects(const Line &line) const;
 	bool Intersects(const LineSegment &lineSegment) const;
 	bool Intersects(const AABB &aabb) const;
+	bool IntersectsMathGeolibDefault(const AABB &aabb) const;
 	bool Intersects(const OBB &obb) const;
 	bool Intersects(const OBB &obb, float& in, float& out) const;
 	bool Intersects(const Plane &plane) const;
