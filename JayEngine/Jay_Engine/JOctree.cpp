@@ -50,6 +50,23 @@ void oTreeNode::erase(GameObject* obj)
 	if (childs[0] != nullptr)
 		for (unsigned int i = 0; i < 8; ++i)
 			if (childs[i])childs[i]->erase(obj);
+
+	/*if (childs[0]) //TODO: delete all tree boxes id are empty
+	{
+		bool delChilds = true;
+		for (unsigned int i = 0; i < 8; ++i)
+			if (childs[i] && !childs[i]->objects.empty())
+				delChilds = false;
+
+		//Delchilds is still true, delete all childs
+		if (delChilds)
+		{
+			for (unsigned int i = 0; i < 8; ++i)
+			{
+				delete childs[i];
+			}
+		}
+	}*/
 }
 
 void oTreeNode::coollectBoxes(std::vector<AABB>& vec)

@@ -347,7 +347,7 @@ GameObject* ModuleManager::loadObjects(aiNode* node, const aiScene* scene, GameO
 	}
 
 	ret->updateAABB();
-	insertGameObjectToTree(ret);
+	//insertGameObjectToTree(ret);
 
 	for (uint i = 0; i < node->mNumChildren; ++i)
 	{
@@ -413,6 +413,7 @@ bool ModuleManager::deleteGameObject(GameObject* toDel)
 		}		
 	}
 
+	eraseGameObjectFromTree(toDel);
 	RELEASE(toDel);
 	
 	if (!toDel)

@@ -283,6 +283,9 @@
     <ClCompile Include="jsoncpp\jsoncpp.cpp">
       <Filter>Core\3Party\jsoncpp</Filter>
     </ClCompile>
+    <ClCompile Include="UI_Tree.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.h">
@@ -612,6 +615,7 @@
     <ClInclude Include="jsoncpp\json\json-forwards.h">
       <Filter>Core\3Party\jsoncpp</Filter>
     </ClInclude>
+    <ClInclude Include="UI_Tree.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\include\Geometry\KDTree.inl">

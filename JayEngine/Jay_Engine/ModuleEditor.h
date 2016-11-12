@@ -10,6 +10,7 @@ class UI_Conf;
 class UI_Console;
 class UI_Hierarchy;
 class UI_Inspector;
+class UI_Tree;
 
 class ModuleEditor : public Module
 {
@@ -42,6 +43,7 @@ public:
 	UI_Console* console = NULL;
 	UI_Hierarchy* hieracy = NULL;
 	UI_Inspector* inspector = NULL;
+	UI_Tree* tree = NULL;
 
 private:
 	bool showImGuiDemo = false;
