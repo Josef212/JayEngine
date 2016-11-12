@@ -15,6 +15,8 @@
 #include "Material.h"
 #include "OpenGL.h"
 
+#include "Camera.h"
+
 #include "Assimp/include/cimport.h"
 #include "Assimp/include/scene.h"
 #include "Assimp/include/postprocess.h"
@@ -114,8 +116,20 @@ bool ModuleManager::cleanUp()
 
 void ModuleManager::draw()
 {
+	Camera* cam = (Camera*)mainCamera->findComponent(CAMERA)[0];//TODO use active camera and use it from module camera
+
 	if (sceneRootObject)
-		sceneRootObject->draw();
+	{
+		if (cam && cam->isCullingActive())
+		{
+			std::vector<GameObject*> vec;
+			sceneTree->collectCandidates(vec, cam->frustum);
+			for (uint i = 0; i < vec.size(); ++i)
+				vec[i]->draw(false);
+		}
+		else
+			sceneRootObject->draw(true);
+	}
 }
 
 GameObject* ModuleManager::getSceneroot()const

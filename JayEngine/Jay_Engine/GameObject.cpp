@@ -223,29 +223,19 @@ GameObject* GameObject::getParent() const
 	return parent;
 }
 
-void GameObject::draw()
+void GameObject::draw(bool drawChilds) //Only use this if culling is not active
 {
 	if (!isGOActive())
 		return;
 
-	//TODO: use tree to optimize culling
-	//Camera* cam = app->camera->cameraComp;
-	Camera* cam = (Camera*)app->manager->mainCamera->findComponent(CAMERA)[0];//TODO use active camera and use it from module camera
-	if (cam && cam->isCullingActive())
-	{
-		if (cam->frustum.Intersects(enclosingBox))
-		{
-			app->renderer3D->drawGameObject(this);
-		}
-	}
-	else
-	{
-		app->renderer3D->drawGameObject(this);
-	}
+	app->renderer3D->drawGameObject(this);
 		
-	for (uint i = 0; i < childrens.size(); ++i)
-		if (childrens[i])
-			childrens[i]->draw();
+	if (drawChilds)
+	{
+		for (uint i = 0; i < childrens.size(); ++i)
+			if (childrens[i])
+				childrens[i]->draw(true);
+	}
 }
 
 void GameObject::drawDebug()

@@ -22,7 +22,7 @@ public:
 	void update(float dt);
 	void cleanUp();
 
-	void draw();
+	void draw(bool drawChilds);
 
 	Component* addComponent(ComponentType type);
 	GameObject* addChild();
