@@ -18,6 +18,12 @@ void UI_Tree::draw()
 {
 	ImGui::Begin("Scene tree", &active);
 	{
+		if(ImGui::BeginMenu("Show"))
+		{
+			if (ImGui::MenuItem("Show tree")) app->manager->showTree = !app->manager->showTree;
+			ImGui::EndMenu();
+		}
+
 		if (app->manager->sceneTree)
 		{
 			if (ImGui::TreeNodeEx("Tree"))

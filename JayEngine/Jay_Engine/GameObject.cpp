@@ -278,7 +278,7 @@ void GameObject::updateAABB() //TODO: make enclose for all meshes
 	orientedBox.Transform(transform->getTransformMatrix().Transposed());
 	enclosingBox.SetFrom(orientedBox);
 
-	//TMP
+	//TMP / TODO: optimize this
 	app->manager->eraseGameObjectFromTree(this);
 	app->manager->insertGameObjectToTree(this);
 

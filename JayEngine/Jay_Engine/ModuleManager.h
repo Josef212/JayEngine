@@ -62,7 +62,7 @@ public:
 	int nextGOId = 0;
 	bool showEnclosingBoxes = false;
 	bool showOrientedBoxes = false;
-	bool showTree = true;
+	bool showTree = false;
 
 	//JQuadTree* sceneTree = NULL; //DEL_COM
 	JOctree* sceneTree = NULL; //DEL_COM

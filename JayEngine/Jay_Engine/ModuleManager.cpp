@@ -347,7 +347,7 @@ GameObject* ModuleManager::loadObjects(aiNode* node, const aiScene* scene, GameO
 	}
 
 	ret->updateAABB();
-	//insertGameObjectToTree(ret);
+	//insertGameObjectToTree(ret); //Commented for now because object already inserted on the tree on ret->updateAABB
 
 	for (uint i = 0; i < node->mNumChildren; ++i)
 	{
