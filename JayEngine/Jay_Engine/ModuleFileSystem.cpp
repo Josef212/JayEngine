@@ -55,10 +55,10 @@ bool ModuleFileSystem::init(FileParser* conf)
 	if (!exist("Library"))
 		makeDirectory("Library", "Data");
 
-	if (!exist("Meshes"))
+	if (!exist("Library/Meshes"))
 		makeDirectory("Library/Meshes", "Data");
 
-	if (!exist("Textures"))
+	if (!exist("Library/Textures"))
 		makeDirectory("Library/Textures", "Data");
 
 	_LOG(LOG_FS, "PHYS_FS base path: %s", getBasePath());
