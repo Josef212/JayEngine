@@ -2,7 +2,6 @@
 #define __MODULEIMPORTER_H__
 
 #include "Module.h"
-#include <vector>
 
 struct VertexInfo
 {
@@ -31,15 +30,13 @@ public:
 
 	bool init(FileParser* conf);
 	bool start();
-	update_status postUpdate(float dt);
 	bool cleanUp();
-	void loadFBX(const char* path, std::vector<VertexInfo>& vec);
-	void drawMeshes(std::vector<VertexInfo> vec);
+
+	void importFBX(const char* path);
 
 public:
 
 private:
-	std::vector<VertexInfo> meshes;
 };
 
 #endif // !__MODULEIMPORTER_H__
