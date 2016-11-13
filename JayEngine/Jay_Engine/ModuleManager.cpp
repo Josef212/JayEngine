@@ -17,6 +17,9 @@
 
 #include "Camera.h"
 
+//TMP
+#include "ModuleImporter.h"
+
 #include "Assimp/include/cimport.h"
 #include "Assimp/include/scene.h"
 #include "Assimp/include/postprocess.h"
@@ -483,7 +486,9 @@ GameObject* ModuleManager::loadCube()//DEL_COM
 
 	Mesh* mesh = (Mesh*)ret->addComponent(MESH);
 
-	const uint verticesNum = 24;
+	app->importer->loadMesh("cube.jof", mesh);
+
+	/*const uint verticesNum = 24;
 	const uint indicesNum = 36;
 	float s = 0.5;
 	float vertex[verticesNum] = {
@@ -564,7 +569,8 @@ GameObject* ModuleManager::loadCube()//DEL_COM
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mesh->numTexCoords, uvs, GL_STATIC_DRAW);
 
 	Material* mat = (Material*)ret->addComponent(MATERIAL);
-	mat->loadTexture("Lenna.png");
+	mat->loadTexture("Lenna.png");*/
+
 
 	return ret;
 }

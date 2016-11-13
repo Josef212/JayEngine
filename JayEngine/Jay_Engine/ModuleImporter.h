@@ -3,6 +3,8 @@
 
 #include "Module.h"
 
+class Mesh;
+
 struct VertexInfo
 {
 	uint idVertices = 0;
@@ -32,7 +34,11 @@ public:
 	bool start();
 	bool cleanUp();
 
-	void importFBX(const char* path);
+	void importFBX(const char* fileFBX, const char* pathFBX = NULL);
+
+	//TMP
+	void loadMesh(const char* file, const char* path = NULL);
+	void loadMesh(const char* file, Mesh* mesh);
 
 public:
 

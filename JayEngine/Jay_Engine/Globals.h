@@ -100,4 +100,6 @@ char* clearTexPath(char* path);
 #define DEFAULT_FB_PATH "Data/Assets/fbx"
 #define DEFAULT_TEXTURES_PATH "Data/Assets/textures"
 
+#define DEFAULT_MESH_SAVE_PATH "Data/Library/Meshes/"
+
 #endif
