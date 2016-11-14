@@ -41,7 +41,7 @@ bool ModuleWindow::init(FileParser* conf)
 		borderless = conf->getBool("borderless", false);
 		fullscreenDesktop = conf->getBool("fullscreen_desktop", false);
 
-		Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN;
+		Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_MAXIMIZED;
 
 		//Use OpenGL 3.1
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);

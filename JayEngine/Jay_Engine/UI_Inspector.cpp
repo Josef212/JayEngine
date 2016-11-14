@@ -32,8 +32,8 @@ void UI_Inspector::draw()
 
 	GameObject* selected = app->manager->getSelected();
 
-	ImGui::SetNextWindowPos(ImVec2(windowW - 300, 20));
-	ImGui::SetNextWindowSize(ImVec2(300, windowH - 20));
+	ImGui::SetNextWindowPos(ImVec2(windowW - 350, 20));
+	ImGui::SetNextWindowSize(ImVec2(350, windowH - 20));
 
 	ImGui::Begin("Inspector", &active);
 	{
@@ -198,6 +198,7 @@ void UI_Inspector::drawCamera(GameObject* selected, Camera* cam)
 {
 	if (cam)
 	{
+		ImGui::Text("Camera:");
 		ImGui::ColorEdit4("Background:", (float*)&cam->background, false);
 
 		float nearP = cam->getNearPlaneDist();

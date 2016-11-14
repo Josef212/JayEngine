@@ -94,6 +94,11 @@ void UI_Conf::draw()
 			if (ImGui::Checkbox("VSync", &vSync)) app->renderer3D->setVSync(vSync);
 		}
 
+		if (ImGui::CollapsingHeader("EditorCamera"))
+		{
+			ImGui::TextColored(ImVec4(1, 0, 0, 1), "Working on it...");
+		}
+
 		if (ImGui::CollapsingHeader("FileSystem"))
 		{
 			ImGui::Text("Base path: ");
