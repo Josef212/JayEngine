@@ -1,7 +1,7 @@
 #include "Material.h"
 
 #include "Application.h"
-#include "ModuleManager.h"
+#include "ModuleGOManager.h"
 #include "ModuleFileSystem.h"
 
 #include "Devil/include/il.h"
@@ -85,7 +85,7 @@ int Material::loadTexture(char* file, char* path)
 
 	uint id = 0;
 
-	for (std::map<std::string, uint>::iterator it = app->manager->texturesLoaded.begin(); it != app->manager->texturesLoaded.end(); ++it)
+	for (std::map<std::string, uint>::iterator it = app->goManager->texturesLoaded.begin(); it != app->goManager->texturesLoaded.end(); ++it)
 	{
 		if ((*it).first == realPath)
 		{
@@ -97,7 +97,7 @@ int Material::loadTexture(char* file, char* path)
 	if (id <= 0)
 	{
 		uint id = ilutGLLoadImage(realPath);
-		app->manager->texturesLoaded.insert(std::pair<std::string, uint>(std::string(realPath), id));
+		app->goManager->texturesLoaded.insert(std::pair<std::string, uint>(std::string(realPath), id));
 		if (id > 0)
 		{
 			textures.push_back(id);

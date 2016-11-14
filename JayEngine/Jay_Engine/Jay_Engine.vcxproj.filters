@@ -265,9 +265,6 @@
     <ClCompile Include="Transform.cpp">
       <Filter>Core\GameObjects\Components</Filter>
     </ClCompile>
-    <ClCompile Include="ModuleManager.cpp">
-      <Filter>Core\Modules</Filter>
-    </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>Core\GameObjects\Components</Filter>
     </ClCompile>
@@ -285,6 +282,9 @@
     </ClCompile>
     <ClCompile Include="UI_Tree.cpp">
       <Filter>Core\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleGOManager.cpp">
+      <Filter>Core\Modules</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -594,9 +594,6 @@
     <ClInclude Include="Transform.h">
       <Filter>Core\GameObjects\Components</Filter>
     </ClInclude>
-    <ClInclude Include="ModuleManager.h">
-      <Filter>Core\Modules</Filter>
-    </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>Core\GameObjects\Components</Filter>
     </ClInclude>
@@ -617,6 +614,9 @@
     </ClInclude>
     <ClInclude Include="UI_Tree.h">
       <Filter>Core\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleGOManager.h">
+      <Filter>Core\Modules</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

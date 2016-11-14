@@ -1,5 +1,5 @@
-#ifndef __MODULEMANAGER_H__
-#define __MODULEMANAGER_H__
+#ifndef __MODULEGOMANAGER_H__
+#define __MODULEGOMANAGER_H__
 
 #include "Module.h"
 #include <map>
@@ -13,11 +13,11 @@ struct aiMesh;
 class JQuadTree;
 class JOctree;
 
-class ModuleManager : public Module
+class ModuleGOManager : public Module
 {
 public:
-	ModuleManager(bool startEnabled = true);
-	virtual ~ModuleManager();
+	ModuleGOManager(bool startEnabled = true);
+	virtual ~ModuleGOManager();
 
 	bool init(FileParser* conf);
 	update_status preUpdate(float dt);
@@ -80,4 +80,4 @@ private:
 	uint indexGO = 0;
 };
 
-#endif // !__MODULEMANAGER_H__
+#endif // !__MODULEGOMANAGER_H__

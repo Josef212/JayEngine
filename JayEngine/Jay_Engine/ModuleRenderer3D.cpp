@@ -5,7 +5,7 @@
 #include "ModuleCamera3D.h"
 #include "ModuleEditor.h"
 #include "DrawDebug.h"
-#include "ModuleManager.h"
+#include "ModuleGOManager.h"
 #include "FileParser.h"
 
 #include "GameObject.h"
@@ -191,7 +191,7 @@ update_status ModuleRenderer3D::postUpdate(float dt)
 		floor.Render();
 	}
 
-	app->manager->draw();
+	app->goManager->draw();
 
 	if (/*app->debug*/true) //TODO: change debug system
 	{
@@ -258,7 +258,7 @@ void ModuleRenderer3D::drawGameObject(GameObject* obj)
 	if (!meshes[0] || !trans)
 		return;
 
-	bool selected = (app->manager->getSelected() == obj);
+	bool selected = (app->goManager->getSelected() == obj);
 
 	//First push transform matrix, remember to pop it at end of draw
 	//----------------------

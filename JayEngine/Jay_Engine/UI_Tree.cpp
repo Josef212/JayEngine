@@ -2,7 +2,7 @@
 #include "UI_Tree.h"
 #include "Globals.h"
 #include "JOctree.h"
-#include "ModuleManager.h"
+#include "ModuleGOManager.h"
 #include "GameObject.h"
 
 UI_Tree::UI_Tree()
@@ -20,16 +20,16 @@ void UI_Tree::draw()
 	{
 		if(ImGui::BeginMenu("Show"))
 		{
-			if (ImGui::MenuItem("Show tree")) app->manager->showTree = !app->manager->showTree;
+			if (ImGui::MenuItem("Show tree")) app->goManager->showTree = !app->goManager->showTree;
 			ImGui::EndMenu();
 		}
 
-		if (app->manager->sceneTree)
+		if (app->goManager->sceneTree)
 		{
 			if (ImGui::TreeNodeEx("Tree"))
 			{
 				//TODO / TMP
-				//recursiveDrawTree(app->manager->sceneTree->rootNode, 0);
+				//recursiveDrawTree(app->goManager->sceneTree->rootNode, 0);
 				ImGui::TreePop();
 			}
 		}
@@ -53,7 +53,7 @@ void UI_Tree::recursiveDrawTree(oTreeNode* treeNode, uint index)
 			{
 				ImGui::TreeNodeEx((*it)->getName(), ImGuiTreeNodeFlags_Leaf);
 				if (ImGui::IsItemClicked())
-					app->manager->select((*it));
+					app->goManager->select((*it));
 				ImGui::TreePop();
 			}
 

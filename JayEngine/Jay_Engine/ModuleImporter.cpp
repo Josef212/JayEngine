@@ -9,7 +9,7 @@
 #include "Mesh.h"
 //TMP
 #include "Timer.h"
-#include "ModuleManager.h"
+#include "ModuleGOManager.h"
 
 #include "Assimp\include\cimport.h"
 #include "Assimp\include\scene.h"

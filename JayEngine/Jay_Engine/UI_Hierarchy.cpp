@@ -1,7 +1,7 @@
 #include "Application.h"
 #include "UI_Hierarchy.h"
 
-#include "ModuleManager.h"
+#include "ModuleGOManager.h"
 #include "GameObject.h"
 #include "Component.h"
 #include "Transform.h"
@@ -29,8 +29,8 @@ void UI_Hierarchy::draw()
 	//ImGui::SetNextWindowSize(ImVec2(200, h / 2));
 	ImGui::Begin("Hierarchy", &active);
 	{
-		GameObject* root = app->manager->getSceneroot();
-		GameObject* selected = app->manager->getSelected();
+		GameObject* root = app->goManager->getSceneroot();
+		GameObject* selected = app->goManager->getSelected();
 
 		ImGuiTreeNodeFlags nodeFlags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
 		if (!selected)
@@ -41,7 +41,7 @@ void UI_Hierarchy::draw()
 			ImGui::PushStyleVar(ImGuiStyleVar_IndentSpacing, ImGui::GetFontSize() * 3); // Increase spacing to differentiate leaves from expanded contents.
 
 			if (ImGui::IsItemClicked())
-				app->manager->select(NULL);
+				app->goManager->select(NULL);
 
 			if (root)
 			{
@@ -72,7 +72,7 @@ void UI_Hierarchy::hierarchyRecursive(GameObject* node, GameObject* selected)
 	if (ImGui::TreeNodeEx(node->getName(), nodeFlags))
 	{
 		if (ImGui::IsItemClicked())
-			app->manager->select(node);
+			app->goManager->select(node);
 
 		for (uint i = 0; i < node->childrens.size(); ++i)
 		{

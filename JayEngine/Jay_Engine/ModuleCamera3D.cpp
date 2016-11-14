@@ -3,7 +3,7 @@
 #include "PhysBody3D.h"
 #include "ModuleCamera3D.h"
 #include "ModuleInput.h"
-#include "ModuleManager.h"
+#include "ModuleGOManager.h"
 
 #include "GameObject.h"
 #include "Camera.h"

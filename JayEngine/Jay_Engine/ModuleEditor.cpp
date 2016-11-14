@@ -2,10 +2,9 @@
 #include "Globals.h"
 #include "ModuleEditor.h"
 #include "ModuleWindow.h"
-#include "ModuleManager.h"
+#include "ModuleGOManager.h"
 #include "ModuleFileSystem.h"
 #include "FileParser.h"
-#include "ModuleManager.h" //TMP
 
 #include "UI_Comp.h"
 #include "UI_Conf.h"
@@ -17,7 +16,6 @@
 #include "ImGui/imgui.h"
 #include "ImGui/imgui_impl_sdl_gl3.h"
 
-#include "ModuleManager.h"
 #include "GameObject.h"
 
 ModuleEditor::ModuleEditor(bool startEnabled) : Module(startEnabled)
@@ -97,23 +95,23 @@ update_status ModuleEditor::update(float dt)
 
 		if (ImGui::BeginMenu("GameObject"))
 		{
-			if (ImGui::MenuItem("Create Empty Game object")) app->manager->createEmptyGO();
+			if (ImGui::MenuItem("Create Empty Game object")) app->goManager->createEmptyGO();
 			if (ImGui::BeginMenu("Primitives"))
 			{
-				if (ImGui::MenuItem("Cube")) app->manager->loadCube(); //DEL_COM: commented for delivery
+				if (ImGui::MenuItem("Cube")) app->goManager->loadCube(); //DEL_COM: commented for delivery
 
 				ImGui::EndMenu();
 			}
-			if (ImGui::MenuItem("Camera")) app->manager->createCamera();
+			if (ImGui::MenuItem("Camera")) app->goManager->createCamera();
 			ImGui::EndMenu();
 		}
 
 		if (ImGui::BeginMenu("Components"))
 		{
-			if (ImGui::MenuItem("Add transform"))app->manager->addTransform();
-			if (ImGui::MenuItem("Add mesh"))app->manager->addMesh();
-			if (ImGui::MenuItem("Add material"))app->manager->addMaterial();
-			if (ImGui::MenuItem("Add camera"))app->manager->addCamera();
+			if (ImGui::MenuItem("Add transform"))app->goManager->addTransform();
+			if (ImGui::MenuItem("Add mesh"))app->goManager->addMesh();
+			if (ImGui::MenuItem("Add material"))app->goManager->addMaterial();
+			if (ImGui::MenuItem("Add camera"))app->goManager->addCamera();
 			ImGui::EndMenu();
 		}
 
@@ -165,9 +163,9 @@ update_status ModuleEditor::update(float dt)
 		//TMP
 		if (ImGui::BeginMenu("FBX"))
 		{
-			if (ImGui::MenuItem("Load cube.fbx")) app->manager->loadFBX("Cube.fbx", NULL);//DEL_COM
-			if (ImGui::MenuItem("Load mecha.fbx")) app->manager->loadFBX("MechaT.fbx", NULL);
-			if (ImGui::MenuItem("Load town.fbx")) app->manager->loadFBX("Street environment_V01.FBX", NULL);
+			if (ImGui::MenuItem("Load cube.fbx")) app->goManager->loadFBX("Cube.fbx", NULL);//DEL_COM
+			if (ImGui::MenuItem("Load mecha.fbx")) app->goManager->loadFBX("MechaT.fbx", NULL);
+			if (ImGui::MenuItem("Load town.fbx")) app->goManager->loadFBX("Street environment_V01.FBX", NULL);
 			ImGui::EndMenu();
 		}
 		//---------------------
@@ -270,7 +268,7 @@ void ModuleEditor::openDirWin()
 			{
 				char file[64];
 				strcpy_s(file, 64, files[selected].c_str());
-				app->manager->loadFBX(file, NULL);
+				app->goManager->loadFBX(file, NULL);
 				showDirWin = !showDirWin;
 			}
 		}
@@ -285,7 +283,7 @@ void ModuleEditor::tmp()
 	{
 		static float s[3];
 		ImGui::DragFloat3("Size", s, 0.5f);
-		if (ImGui::Button("Create")) app->manager->createEmptyGoWithAABB(s[0], s[1], s[2]);
+		if (ImGui::Button("Create")) app->goManager->createEmptyGoWithAABB(s[0], s[1], s[2]);
 	}
 	ImGui::End();
 }

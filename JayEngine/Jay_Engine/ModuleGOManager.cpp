@@ -1,6 +1,6 @@
 #include "Globals.h"
 #include "Application.h"
-#include "ModuleManager.h"
+#include "ModuleGOManager.h"
 
 #include "ModuleFileSystem.h"
 
@@ -36,7 +36,7 @@
 #pragma comment(lib, "Devil/libx86/ILUT.lib")
 
 
-ModuleManager::ModuleManager(bool startEnabled) : Module(startEnabled)
+ModuleGOManager::ModuleGOManager(bool startEnabled) : Module(startEnabled)
 {
 	_LOG(LOG_STD, "Manager: Creation.");
 	name.assign("module_manager");
@@ -47,14 +47,14 @@ ModuleManager::ModuleManager(bool startEnabled) : Module(startEnabled)
 }
 
 
-ModuleManager::~ModuleManager()
+ModuleGOManager::~ModuleGOManager()
 {
 	_LOG(LOG_STD, "Manager: Destroying.");
 	if (sceneRootObject)
 		RELEASE(sceneRootObject);
 }
 
-bool ModuleManager::init(FileParser* conf)
+bool ModuleGOManager::init(FileParser* conf)
 {
 	_LOG(LOG_STD, "Manager: Init.");
 	//Log assimp info
@@ -87,13 +87,13 @@ bool ModuleManager::init(FileParser* conf)
 		return false;
 }
 
-update_status ModuleManager::preUpdate(float dt)
+update_status ModuleGOManager::preUpdate(float dt)
 {
 
 	return UPDATE_CONTINUE;
 }
 
-update_status ModuleManager::update(float dt)
+update_status ModuleGOManager::update(float dt)
 {
 	if (sceneRootObject)
 		sceneRootObject->update(dt);
@@ -101,12 +101,12 @@ update_status ModuleManager::update(float dt)
 	return UPDATE_CONTINUE;
 }
 
-update_status ModuleManager::postUpdate(float dt)
+update_status ModuleGOManager::postUpdate(float dt)
 {
 	return UPDATE_CONTINUE;
 }
 
-bool ModuleManager::cleanUp()
+bool ModuleGOManager::cleanUp()
 {
 	//Stop log stream
 	aiDetachAllLogStreams();
@@ -117,7 +117,7 @@ bool ModuleManager::cleanUp()
 	return true;
 }
 
-void ModuleManager::draw()
+void ModuleGOManager::draw()
 {
 	Camera* cam = (Camera*)mainCamera->findComponent(CAMERA)[0];//TODO use active camera and use it from module camera
 
@@ -135,12 +135,12 @@ void ModuleManager::draw()
 	}
 }
 
-GameObject* ModuleManager::getSceneroot()const
+GameObject* ModuleGOManager::getSceneroot()const
 {
 	return sceneRootObject;
 }
 
-GameObject* ModuleManager::createEmptyGO()
+GameObject* ModuleGOManager::createEmptyGO()
 {
 	GameObject* ret = NULL;
 	
@@ -157,7 +157,7 @@ GameObject* ModuleManager::createEmptyGO()
 	return ret;
 }
 
-GameObject* ModuleManager::createEmptyGoWithAABB(float xP, float yP, float zP) //TMP
+GameObject* ModuleGOManager::createEmptyGoWithAABB(float xP, float yP, float zP) //TMP
 {
 	GameObject* ret = NULL;
 
@@ -177,7 +177,7 @@ GameObject* ModuleManager::createEmptyGoWithAABB(float xP, float yP, float zP) /
 	return ret;
 }
 
-GameObject* ModuleManager::createCamera()
+GameObject* ModuleGOManager::createCamera()
 {
 	GameObject* ret = NULL;
 
@@ -196,7 +196,7 @@ GameObject* ModuleManager::createCamera()
 	return ret;
 }
 
-Component* ModuleManager::addTransform()
+Component* ModuleGOManager::addTransform()
 {
 	Transform* ret = NULL;
 
@@ -213,7 +213,7 @@ Component* ModuleManager::addTransform()
 	return ret;
 }
 
-Component* ModuleManager::addMesh()
+Component* ModuleGOManager::addMesh()
 {
 	Mesh* ret = NULL;
 
@@ -225,7 +225,7 @@ Component* ModuleManager::addMesh()
 	return ret;
 }
 
-Component* ModuleManager::addMaterial()
+Component* ModuleGOManager::addMaterial()
 {
 	Material* ret = NULL;
 
@@ -237,7 +237,7 @@ Component* ModuleManager::addMaterial()
 	return ret;
 }
 
-Component* ModuleManager::addCamera()
+Component* ModuleGOManager::addCamera()
 {
 	Material* ret = NULL;
 
@@ -249,17 +249,17 @@ Component* ModuleManager::addCamera()
 	return ret;
 }
 
-GameObject* ModuleManager::getSelected()const
+GameObject* ModuleGOManager::getSelected()const
 {
 	return selected;
 }
 
-void ModuleManager::select(GameObject* toSelect)
+void ModuleGOManager::select(GameObject* toSelect)
 {
 	selected = toSelect;
 }
 
-GameObject* ModuleManager::loadFBX(char* file, char* path)
+GameObject* ModuleGOManager::loadFBX(char* file, char* path)
 {
 	GameObject* root = NULL;
 
@@ -310,7 +310,7 @@ GameObject* ModuleManager::loadFBX(char* file, char* path)
 	return root;
 }
 
-GameObject* ModuleManager::loadObjects(aiNode* node, const aiScene* scene, GameObject* parent)
+GameObject* ModuleGOManager::loadObjects(aiNode* node, const aiScene* scene, GameObject* parent)
 {
 	GameObject* ret = NULL;
 
@@ -374,7 +374,7 @@ GameObject* ModuleManager::loadObjects(aiNode* node, const aiScene* scene, GameO
 	return ret;
 }
 
-void ModuleManager::drawDebug()
+void ModuleGOManager::drawDebug()
 {
 	if (sceneRootObject)
 		sceneRootObject->drawDebug();
@@ -398,7 +398,7 @@ void ModuleManager::drawDebug()
 	}//DEL_COM
 }
 
-bool ModuleManager::deleteGameObject(GameObject* toDel)
+bool ModuleGOManager::deleteGameObject(GameObject* toDel)
 {
 	bool ret = false;
 
@@ -439,7 +439,7 @@ bool ModuleManager::deleteGameObject(GameObject* toDel)
 	return ret;
 }
 
-void ModuleManager::makeGOShowAABoxRec(GameObject* obj, bool show)
+void ModuleGOManager::makeGOShowAABoxRec(GameObject* obj, bool show)
 {
 	if (obj)
 	{
@@ -451,7 +451,7 @@ void ModuleManager::makeGOShowAABoxRec(GameObject* obj, bool show)
 	}
 }
 
-void ModuleManager::makeGOShowOBoxRec(GameObject* obj, bool show)
+void ModuleGOManager::makeGOShowOBoxRec(GameObject* obj, bool show)
 {
 	if (obj)
 	{
@@ -463,19 +463,19 @@ void ModuleManager::makeGOShowOBoxRec(GameObject* obj, bool show)
 	}
 }
 
-void ModuleManager::insertGameObjectToTree(GameObject* obj)//DEL_COM
+void ModuleGOManager::insertGameObjectToTree(GameObject* obj)//DEL_COM
 {
 	if (sceneTree && obj)
 		sceneTree->insert(obj);
 }
 
-void ModuleManager::eraseGameObjectFromTree(GameObject* obj)//DEL_COM
+void ModuleGOManager::eraseGameObjectFromTree(GameObject* obj)//DEL_COM
 {
 	if (sceneTree && obj)
 		sceneTree->erase(obj);
 }
 
-GameObject* ModuleManager::loadCube()//DEL_COM
+GameObject* ModuleGOManager::loadCube()//DEL_COM
 {
 	GameObject* ret = NULL;
 

@@ -9,7 +9,7 @@
 #include "Material.h"
 #include "Camera.h"
 
-#include "ModuleManager.h"
+#include "ModuleGOManager.h"
 #include "ModuleWindow.h"
 #include "ModuleRenderer3D.h"
 
@@ -30,7 +30,7 @@ void UI_Inspector::draw()
 	windowW = io.DisplaySize.x;
 	windowH = io.DisplaySize.y;
 
-	GameObject* selected = app->manager->getSelected();
+	GameObject* selected = app->goManager->getSelected();
 
 	ImGui::SetNextWindowPos(ImVec2(windowW - 350, 20));
 	ImGui::SetNextWindowSize(ImVec2(350, windowH - 20));
@@ -47,12 +47,12 @@ void UI_Inspector::draw()
 			ImGui::Separator();
 
 			bool showAABB = selected->drawEnclosingAABB;
-			if (ImGui::Checkbox("Show enclosing AABB", &showAABB)) app->manager->makeGOShowAABoxRec(selected, showAABB);
+			if (ImGui::Checkbox("Show enclosing AABB", &showAABB)) app->goManager->makeGOShowAABoxRec(selected, showAABB);
 			ImGui::SameLine();
 			bool showOBB = selected->drawOrientedBox;
-			if (ImGui::Checkbox("Show oriented box", &showOBB)) app->manager->makeGOShowOBoxRec(selected, showOBB);
+			if (ImGui::Checkbox("Show oriented box", &showOBB)) app->goManager->makeGOShowOBoxRec(selected, showOBB);
 
-			if (ImGui::Button("Delete.")) app->manager->deleteGameObject(selected);
+			if (ImGui::Button("Delete.")) app->goManager->deleteGameObject(selected);
 
 			ImGui::Separator();
 

@@ -10,7 +10,7 @@
 #include "Material.h"
 #include "Camera.h"
 
-#include "ModuleManager.h"
+#include "ModuleGOManager.h"
 
 
 GameObject::GameObject(GameObject* parent, int id) : parent(parent), id(id)
@@ -150,9 +150,9 @@ GameObject* GameObject::addChild()
 {
 	GameObject* ret = NULL;
 
-	ret = new GameObject(this, app->manager->nextGOId);
+	ret = new GameObject(this, app->goManager->nextGOId);
 	childrens.push_back(ret);
-	++app->manager->nextGOId;
+	++app->goManager->nextGOId;
 
 	return ret;
 }
@@ -269,8 +269,8 @@ void GameObject::updateAABB() //TODO: make enclose for all meshes
 	enclosingBox.SetFrom(orientedBox);
 
 	//TMP / TODO: optimize this
-	app->manager->eraseGameObjectFromTree(this);
-	app->manager->insertGameObjectToTree(this);
+	app->goManager->eraseGameObjectFromTree(this);
+	app->goManager->insertGameObjectToTree(this);
 
 	for (std::vector<GameObject*>::iterator it = childrens.begin(); it != childrens.end(); ++it)
 		(*it)->updateAABB();
