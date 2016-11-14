@@ -29,7 +29,7 @@ ModuleInput::~ModuleInput()
 bool ModuleInput::init(FileParser* conf)
 {
 	_LOG(LOG_STD, "Input: Init.");
-	_LOG(LOG_INPUT, "Init SDL input event system");
+	_LOG(LOG_INFO, "Init SDL input event system");
 	bool ret = true;
 
 	SDL_Init(0);
@@ -136,7 +136,7 @@ update_status ModuleInput::preUpdate(float dt)
 bool ModuleInput::cleanUp()
 {
 	_LOG(LOG_STD, "Input: CleanUp.");
-	_LOG(LOG_INPUT, "Quitting SDL input event subsystem");
+	_LOG(LOG_INFO, "Quitting SDL input event subsystem");
 	SDL_QuitSubSystem(SDL_INIT_EVENTS);
 	return true;
 }

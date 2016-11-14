@@ -6,20 +6,13 @@
 
 enum logType
 {
-	LOG_STD,
-	LOG_ERROR,
-	LOG_WARN,
-	LOG_CMD,
-	LOG_AUDIO,
-	LOG_CAMERA,
-	LOG_EDITOR,
-	LOG_FS,
-	LOG_IMPORT,
-	LOG_INPUT,
-	LOG_MANAGER,
-	LOG_PHYSICS,
-	LOG_REN,
-	LOG_WIN
+	LOG_STD,		//WHITE - Standar info
+	LOG_ERROR,		//RED - Error info
+	LOG_WARN,		//YELLOW - Warning info
+	LOG_CMD,		//BLUE - Commands info
+	LOG_INFO,		//GREEN - Info more important than standard
+	LOG_INFO_REM,	//ORANGE - Info even more remarkable than INFO logs	//255-128-0
+	LOG_NONE		//??? - Dont really know what this would be usefull for but always better have an error for logs... (Dont really know what I'm doing here xD)
 };
 
 #define _LOG(type, format, ...) _log(type, __FILE__, __LINE__, format, __VA_ARGS__);

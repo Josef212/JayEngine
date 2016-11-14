@@ -40,7 +40,7 @@ ModuleRenderer3D::~ModuleRenderer3D()
 bool ModuleRenderer3D::init(FileParser* conf)
 {
 	_LOG(LOG_STD, "Renderer3D: Init.");
-	_LOG(LOG_REN, "Creating 3D Renderer context");
+	_LOG(LOG_INFO, "Creating 3D Renderer context");
 	bool ret = true;
 
 	vsync = conf->getBool("vsync", true);
@@ -62,16 +62,16 @@ bool ModuleRenderer3D::init(FileParser* conf)
 			ret = false;
 		}
 		else
-			_LOG(LOG_REN, "Using Glew %s", glewGetString(GLEW_VERSION));
+			_LOG(LOG_INFO, "Using Glew %s", glewGetString(GLEW_VERSION));
 	}
 
 	if (ret == true)
 	{
 		// get version info
-		_LOG(LOG_REN,"Vendor: %s", glGetString(GL_VENDOR));
-		_LOG(LOG_REN,"Renderer: %s", glGetString(GL_RENDERER));
-		_LOG(LOG_REN,"OpenGL version supported %s", glGetString(GL_VERSION));
-		_LOG(LOG_REN, "GLSL: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
+		_LOG(LOG_INFO,"Vendor: %s", glGetString(GL_VENDOR));
+		_LOG(LOG_INFO,"Renderer: %s", glGetString(GL_RENDERER));
+		_LOG(LOG_INFO,"OpenGL version supported %s", glGetString(GL_VERSION));
+		_LOG(LOG_INFO, "GLSL: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
 
 		//Use Vsync
 		setVSync(vsync);

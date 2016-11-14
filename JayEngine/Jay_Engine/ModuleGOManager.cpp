@@ -298,7 +298,7 @@ GameObject* ModuleGOManager::loadFBX(char* file, char* path)
 
 	if (scene && scene->HasMeshes())
 	{
-		_LOG(LOG_MANAGER, "Loading fbx from %s.", realPath);
+		_LOG(LOG_INFO, "Loading fbx from %s.", realPath);
 		root = loadObjects(scene->mRootNode, scene, sceneRootObject);
 
 		aiReleaseImport(scene);
@@ -324,7 +324,7 @@ GameObject* ModuleGOManager::loadObjects(aiNode* node, const aiScene* scene, Gam
 
 	ret->setName(name);
 
-	_LOG(LOG_MANAGER, "Loading new game obejct: %i. ===================", indexGO);
+	_LOG(LOG_INFO, "Loading new game obejct: %i. ===================", indexGO);
 	++indexGO;
 
 	//Set transformation
@@ -338,7 +338,7 @@ GameObject* ModuleGOManager::loadObjects(aiNode* node, const aiScene* scene, Gam
 	//Set material
 	for (uint i = 0; i < node->mNumMeshes; ++i)
 	{
-		_LOG(LOG_MANAGER, "Loading new mesh. ------------------");
+		_LOG(LOG_INFO, "Loading new mesh. ------------------");
 		Mesh* m = (Mesh*)ret->addComponent(MESH);
 		m->loadMesh(scene->mMeshes[node->mMeshes[i]], true);
 		//node->mMeshes is an uint array with the index of the mesh in scene->mMesh

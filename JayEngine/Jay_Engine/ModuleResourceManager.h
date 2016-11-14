@@ -3,26 +3,16 @@
 
 #include "Module.h"
 
-class Mesh;
+#include <map>
 
-struct VertexInfo
-{
-	uint idVertices = 0;
-	uint numVertices = 0;
-	uint* indices = NULL;
+class Resource;
+class ResourceMesh;
+class ResourceMaterial;
+enum ResourceTypes;
 
-	uint idIndices = 0;
-	uint numIndices = 0;
-	float* vertices = NULL;
-
-	uint idNormals = 0;
-	uint numNormals = 0; //Each vertex has a normal vec and this var is the size of normals vec(numVertices*3)
-	float* normals = NULL;
-
-	uint idTexCoords = 0;
-	uint numTexCoords = 0;
-	float* texCoords = NULL;
-};
+class Importer;
+class ImporterMesh;
+class ImporterMaterial;
 
 class ModuleResourceManager : public Module
 {
@@ -34,9 +24,19 @@ public:
 	bool start();
 	bool cleanUp();
 
-public:
+	uint getNewUID();
+
+	Resource* createNewResource(ResourceTypes type);
 
 private:
+
+public:
+	ImporterMesh* meshImporter = NULL;
+	ImporterMaterial* materialImporter = NULL;
+
+private:
+	std::map<uint, Resource*> resources;
+
 };
 
 #endif // !__MODULERESOURCEMANAGER_H__

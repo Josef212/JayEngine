@@ -59,35 +59,11 @@ void UI_Console::logUi(const char* str, logType type)
 	case LOG_CMD:
 		lastLogColor = ImColor(51, 153, 255);
 		break;
-	case LOG_AUDIO:
+	case LOG_INFO:
 		lastLogColor = ImColor(15, 149, 0);
 		break;
-	case LOG_CAMERA:
-		lastLogColor = ImColor(15, 149, 0);
-		break;
-	case LOG_EDITOR:
-		lastLogColor = ImColor(15, 149, 0);
-		break;
-	case LOG_FS:
-		lastLogColor = ImColor(15, 149, 0);
-		break;
-	case LOG_IMPORT:
-		lastLogColor = ImColor(15, 149, 0);
-		break;
-	case LOG_INPUT:
-		lastLogColor = ImColor(15, 149, 0);
-		break;
-	case LOG_MANAGER:
-		lastLogColor = ImColor(15, 149, 0);
-		break;
-	case LOG_PHYSICS:
-		lastLogColor = ImColor(15, 149, 0);
-		break;
-	case LOG_REN:
-		lastLogColor = ImColor(15, 149, 0);
-		break;
-	case LOG_WIN:
-		lastLogColor = ImColor(15, 149, 0);
+	case LOG_INFO_REM:
+		lastLogColor = ImColor(255, 128, 0);
 		break;
 	default:
 		lastLogColor = ImColor(255, 255, 255);

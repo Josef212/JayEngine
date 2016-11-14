@@ -46,7 +46,7 @@ bool ModuleFileSystem::init(FileParser* conf)
 	}
 	else
 	{
-		_LOG(LOG_FS, "Writing directory is %s\n", writePath);
+		_LOG(LOG_INFO, "Writing directory is %s\n", writePath);
 		addPath(writePath, getSaveDirectory());
 	}
 
@@ -61,7 +61,7 @@ bool ModuleFileSystem::init(FileParser* conf)
 	if (!exist("Library/Textures"))
 		makeDirectory("Library/Textures", "Data");
 
-	_LOG(LOG_FS, "PHYS_FS base path: %s", getBasePath());
+	_LOG(LOG_INFO, "PHYS_FS base path: %s", getBasePath());
 
 	return ret;
 }
@@ -116,7 +116,7 @@ bool ModuleFileSystem::makeDirectory(const char* dir, const char* mount)
 	}
 	else
 	{
-		_LOG(LOG_FS, "Just created a dir: %s.", newDir);
+		_LOG(LOG_INFO, "Just created a dir: %s.", newDir);
 		ret = true;
 	}
 

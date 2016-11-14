@@ -141,16 +141,8 @@ update_status ModuleEditor::update(float dt)
 				if (ImGui::MenuItem("Error")) _LOG(LOG_ERROR, "Test log.");
 				if (ImGui::MenuItem("Warning")) _LOG(LOG_WARN, "Test log.");
 				if (ImGui::MenuItem("Command")) _LOG(LOG_CMD, "Test log.");
-				if (ImGui::MenuItem("Audio")) _LOG(LOG_AUDIO, "Test log.");
-				if (ImGui::MenuItem("Camera")) _LOG(LOG_CAMERA, "Test log.");
-				if (ImGui::MenuItem("Editor")) _LOG(LOG_EDITOR, "Test log.");
-				if (ImGui::MenuItem("FS")) _LOG(LOG_FS, "Test log.");
-				if (ImGui::MenuItem("Import")) _LOG(LOG_IMPORT, "Test log.");
-				if (ImGui::MenuItem("Input")) _LOG(LOG_INPUT, "Test log.");
-				if (ImGui::MenuItem("Manager")) _LOG(LOG_MANAGER, "Test log.");
-				if (ImGui::MenuItem("Physics")) _LOG(LOG_PHYSICS, "Test log.");
-				if (ImGui::MenuItem("Render")) _LOG(LOG_REN, "Test log.");
-				if (ImGui::MenuItem("Window")) _LOG(LOG_WIN, "Test log.");
+				if (ImGui::MenuItem("Info")) _LOG(LOG_INFO, "Test log.");
+				if (ImGui::MenuItem("Info remarkable")) _LOG(LOG_INFO_REM, "Test log.");
 
 				ImGui::EndMenu();
 			}
@@ -213,7 +205,7 @@ update_status ModuleEditor::update(float dt)
 
 bool ModuleEditor::cleanUp()
 {
-	_LOG(LOG_EDITOR, "Editor: CleanUp.");
+	_LOG(LOG_INFO, "Editor: CleanUp.");
 
 	std::list<UI_Comp*>::iterator it = uiList.begin();
 	for (; it != uiList.end(); ++it)
