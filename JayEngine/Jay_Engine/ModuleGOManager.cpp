@@ -18,7 +18,7 @@
 #include "Camera.h"
 
 //TMP
-#include "ModuleImporter.h"
+#include "ModuleResourceManager.h"
 
 #include "Assimp/include/cimport.h"
 #include "Assimp/include/scene.h"
@@ -485,8 +485,6 @@ GameObject* ModuleGOManager::loadCube()//DEL_COM
 	ret = sceneRootObject->addChild();
 
 	Mesh* mesh = (Mesh*)ret->addComponent(MESH);
-
-	app->importer->loadMesh("cube.jof", mesh);
 
 	/*const uint verticesNum = 24;
 	const uint indicesNum = 36;

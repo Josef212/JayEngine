@@ -59,6 +59,15 @@
     <Filter Include="Core\3Party\jsoncpp">
       <UniqueIdentifier>{5c7a4122-7566-4ffe-bff6-fe66757a8612}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core\ResourceManagement">
+      <UniqueIdentifier>{c3014f0c-db72-40ac-abf1-747fc856cd1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\ResourceManagement\Importers">
+      <UniqueIdentifier>{1817c93f-646b-4c51-820f-ffdf514c59d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\ResourceManagement\Resources">
+      <UniqueIdentifier>{28ee5cda-3881-46f8-883b-2c2151216319}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -138,9 +147,6 @@
     </ClCompile>
     <ClCompile Include="HrdInfo.cpp">
       <Filter>Core\Helpers</Filter>
-    </ClCompile>
-    <ClCompile Include="ModuleImporter.cpp">
-      <Filter>Core\Modules</Filter>
     </ClCompile>
     <ClCompile Include="SceneTry.cpp">
       <Filter>Core\Scenes</Filter>
@@ -286,6 +292,12 @@
     <ClCompile Include="ModuleGOManager.cpp">
       <Filter>Core\Modules</Filter>
     </ClCompile>
+    <ClCompile Include="Resource.cpp">
+      <Filter>Core\ResourceManagement\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleResourceManager.cpp">
+      <Filter>Core\Modules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.h">
@@ -383,9 +395,6 @@
     </ClInclude>
     <ClInclude Include="OpenGLDraws.h">
       <Filter>Core\Helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="ModuleImporter.h">
-      <Filter>Core\Modules</Filter>
     </ClInclude>
     <ClInclude Include="SceneTry.h">
       <Filter>Core\Scenes</Filter>
@@ -616,6 +625,12 @@
       <Filter>Core\UI</Filter>
     </ClInclude>
     <ClInclude Include="ModuleGOManager.h">
+      <Filter>Core\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Core\ResourceManagement\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleResourceManager.h">
       <Filter>Core\Modules</Filter>
     </ClInclude>
   </ItemGroup>

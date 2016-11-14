@@ -11,7 +11,7 @@
 #include "ModuleCamera3D.h"
 //#include "ModulePhysics3D.h"
 #include "ModuleEditor.h"
-#include "ModuleImporter.h"
+#include "ModuleResourceManager.h"
 #include "ModuleGOManager.h"
 
 #include "FileParser.h"
@@ -36,7 +36,7 @@ Application::Application()
 	renderer3D = new ModuleRenderer3D();
 	//physics = new ModulePhysics3D();
 	editor = new ModuleEditor();
-	importer = new ModuleImporter();
+	resourceManager = new ModuleResourceManager();
 	goManager = new ModuleGOManager();
 
 	sceneTry = new SceneTry();
@@ -50,7 +50,7 @@ Application::Application()
 	//addModule(physics);
 	addModule(editor);
 	addModule(goManager);
-	addModule(importer);
+	addModule(resourceManager);
 	
 	// Scenes
 	addModule(sceneTry);

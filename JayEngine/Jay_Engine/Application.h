@@ -16,7 +16,7 @@ class ModuleCamera3D;
 class ModulePhysics3D;
 class ModuleEditor;
 class ModuleFileSystem;
-class ModuleImporter;
+class ModuleResourceManager;
 class ModuleGOManager;
 
 class SceneTry;
@@ -36,7 +36,7 @@ public:
 	ModuleCamera3D* camera = NULL;
 	ModulePhysics3D* physics = NULL;
 	ModuleEditor* editor = NULL;
-	ModuleImporter* importer = NULL;
+	ModuleResourceManager* resourceManager = NULL;
 	ModuleGOManager* goManager = NULL;
 
 	SceneTry* sceneTry = NULL;
