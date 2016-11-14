@@ -4,7 +4,6 @@
 
 #include "ModuleFileSystem.h"
 
-#include "JQuadTree.h"
 #include "JOctree.h"
 #include "DrawDebug.h"
 
