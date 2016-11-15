@@ -190,14 +190,21 @@ void ImporterMesh::importMesh(aiMesh* mesh, ResourceMesh* resMesh)
 	memcpy(cursor, resMesh->vertices, bytes);
 
 	//Fourth store normals
-	cursor += bytes;
-	bytes = sizeof(float) * resMesh->numNormals * 3;
-	memcpy(cursor, resMesh->normals, bytes);
+	if (resMesh->normals)
+	{
+		cursor += bytes;
+		bytes = sizeof(float) * resMesh->numNormals * 3;
+		memcpy(cursor, resMesh->normals, bytes);
+	}
 
 	//Fifth store uv's
-	cursor += bytes;
-	bytes = sizeof(float) * resMesh->numTexCoords * 2;
-	memcpy(cursor, resMesh->texCoords, bytes);
+	if (resMesh->texCoords)
+	{
+		cursor += bytes;
+		bytes = sizeof(float) * resMesh->numTexCoords * 2;
+		memcpy(cursor, resMesh->texCoords, bytes);
+	}
+
 
 	//Sixth stroe colors //TODO
 
@@ -207,7 +214,7 @@ void ImporterMesh::importMesh(aiMesh* mesh, ResourceMesh* resMesh)
 
 #pragma region TMP log
 
-	/*//TMP-----------------------------------------------------
+	//TMP-----------------------------------------------------
 	//Lets check if something has changed
 
 	_LOG(LOG_INFO, "Mesh data.");
@@ -251,5 +258,117 @@ void ImporterMesh::importMesh(aiMesh* mesh, ResourceMesh* resMesh)
 
 void ImporterMesh::loadMesh(const char* fileName, ResourceMesh* resMesh)
 {
+	if (!fileName || !resMesh)
+	{
+		_LOG(LOG_ERROR, "Error loading a mesh .jof: Invalid file name or mesh resource.");
+		return;
+	}
 
+	std::string realName(DEFAULT_MESH_SAVE_PATH);
+	realName.append(fileName);
+
+	_LOG(LOG_INFO, "Loading mesh: %s.", realName.c_str());
+
+	char* data;
+	uint size = app->fs->load(realName.c_str(), &data);
+
+	if (data && size > 0)
+	{
+		uint ranges[5];
+		char* cursor = data;
+		uint bytes = sizeof(ranges);
+
+		//Ranges
+		memcpy(ranges, cursor, bytes);
+
+		resMesh->numIndices = ranges[0];
+		resMesh->numVertices = ranges[1];
+		resMesh->numNormals = ranges[2];
+		resMesh->numTexCoords = ranges[3];
+
+		//Indices
+		cursor += bytes;
+		bytes = sizeof(uint) * resMesh->numIndices;
+
+		resMesh->indices = new uint[resMesh->numIndices];
+		memcpy(resMesh->indices, cursor, bytes);
+
+		//Vertices
+		cursor += bytes;
+		bytes = sizeof(float) * resMesh->numVertices * 3;
+
+		resMesh->vertices = new float[resMesh->numVertices * 3];
+		memcpy(resMesh->vertices, cursor, bytes);
+
+		//Normals
+		if (ranges[2] > 0)
+		{
+			cursor += bytes;
+			bytes = sizeof(float) * resMesh->numNormals * 3;
+
+			resMesh->normals = new float[resMesh->numNormals * 3];
+			memcpy(resMesh->vertices, cursor, bytes);
+		}
+
+		//UV's
+		if (ranges[3])
+		{
+			cursor += bytes;
+			bytes = sizeof(float) * resMesh->numTexCoords * 2;
+
+			resMesh->texCoords = new float[resMesh->numTexCoords * 2];
+			memcpy(resMesh->texCoords, cursor, bytes);
+		}
+
+
+#pragma region TMP log
+
+		//TMP-----------------------------------------------------
+		//Lets check if something has changed
+
+		_LOG(LOG_INFO, "Mesh data.");
+
+		for (uint i = 0; i < 5; ++i)
+		{
+			_LOG(LOG_INFO_REM, "Raqnge %d: %d.", i, ranges[i]);
+		}
+
+		_LOG(LOG_INFO, "Mesh indices.");
+		for (uint i = 0; i < resMesh->numIndices; ++i)
+		{
+			_LOG(LOG_INFO_REM, "Indice %d: %d.", i, resMesh->indices[i]);
+		}
+
+		_LOG(LOG_INFO, "Mesh vertices.");
+		for (uint i = 0; i < resMesh->numVertices * 3; ++i)
+		{
+			if (i % 3 == 0)
+				_LOG(LOG_STD, "----------------------");
+			_LOG(LOG_INFO_REM, "Vertice %d: %f.", i, resMesh->vertices[i]);
+		}
+
+		_LOG(LOG_INFO, "Mesh normals.");
+		for (uint i = 0; i < resMesh->numNormals * 3; ++i)
+		{
+			if (i % 3 == 0)
+				_LOG(LOG_STD, "----------------------");
+			_LOG(LOG_INFO_REM, "Normal %d: %f.", i, resMesh->normals[i]);
+		}
+		_LOG(LOG_INFO, "Mesh uv's.");
+		for (uint i = 0; i < resMesh->numTexCoords * 2; ++i)
+		{
+			if (i % 3 == 0)
+				_LOG(LOG_STD, "----------------------");
+			_LOG(LOG_INFO_REM, "UV %d: %f.", i, resMesh->texCoords[i]);
+		}
+
+		//TMP-----------------------------------------------------*/
+
+#pragma endregion
+	}
+	else
+		_LOG(LOG_ERROR, "Error loading the mesh: '%s'.", realName.c_str());
+
+
+	RELEASE_ARRAY(data);
 }

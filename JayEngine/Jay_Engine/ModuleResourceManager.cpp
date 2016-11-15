@@ -51,6 +51,13 @@ bool ModuleResourceManager::start()
 	meshImporter->importFBX("Cube.fbx");
 	_LOG(LOG_WARN, "Importing lasted: %dms.", timer.Read());
 
+
+	Timer timer2;
+	timer2.Start();
+	ResourceMesh* res = (ResourceMesh*)createNewResource(RESOURCE_MESH);
+	meshImporter->loadMesh("1770508919.jof", res);
+	_LOG(LOG_WARN, "Importing lasted: %dms.", timer2.Read());
+
 	return true;
 }
 
