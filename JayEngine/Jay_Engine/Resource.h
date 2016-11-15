@@ -2,8 +2,9 @@
 #define __RESOURCE_H__
 
 #include "Globals.h"
+#include <string>
 
-enum ResourceTypes
+enum ResourceType
 {
 	RESOURCE_UNKNOWN = -1,
 	RESOURCE_MESH = 0,
@@ -13,16 +14,29 @@ enum ResourceTypes
 class Resource
 {
 public:
-	Resource(uint UID);
+	Resource(UID uuid);
 	virtual ~Resource();
+
+	ResourceType getResourceType()const;
+	UID getUID()const;
+	const char* getOriginalFile();
+	const char* getExportedFile();
+	bool isInMemory()const;
+	bool loadToMemory();
+	bool removeFromMemory();
+	uint countReferences()const;
 
 private:
 
 public:
+	std::string originalFile;
+	std::string exportedFile;
 
 protected:
-	ResourceTypes resType = RESOURCE_UNKNOWN;
-	uint UID = 0;
+	ResourceType resType = RESOURCE_UNKNOWN;
+	UID uuid = 0;
+
+	uint instancesInMemory = 0;
 };
 
 #endif // !__RESOURCE_H__

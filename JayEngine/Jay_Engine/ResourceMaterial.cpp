@@ -2,7 +2,7 @@
 
 
 
-ResourceMaterial::ResourceMaterial(uint UID) : Resource(UID)
+ResourceMaterial::ResourceMaterial(UID uuid) : Resource(uuid)
 {
 	resType = RESOURCE_MATERIAL;
 }
@@ -10,4 +10,16 @@ ResourceMaterial::ResourceMaterial(uint UID) : Resource(UID)
 
 ResourceMaterial::~ResourceMaterial()
 {
+}
+
+bool ResourceMaterial::loadToMemory()
+{
+	bool ret = false;
+
+	return ret;
+}
+
+bool ResourceMaterial::removeFromMemory()
+{
+	return false;
 }

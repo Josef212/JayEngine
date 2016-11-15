@@ -5,8 +5,11 @@
 class ResourceMaterial : public Resource
 {
 public:
-	ResourceMaterial(uint UID);
+	ResourceMaterial(UID uuid);
 	virtual ~ResourceMaterial();
+
+	bool loadToMemory();
+	bool removeFromMemory();
 };
 
 #endif // !__RESOURCEMATERIAL_H__
