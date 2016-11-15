@@ -8,7 +8,7 @@
 class Resource;
 class ResourceMesh;
 class ResourceMaterial;
-enum ResourceTypes;
+enum ResourceType;
 
 class Importer;
 class ImporterMesh;
@@ -24,9 +24,10 @@ public:
 	bool start();
 	bool cleanUp();
 
-	uint getNewUID();
+	UID getNewUID();
 
-	Resource* createNewResource(ResourceTypes type);
+	Resource* createNewResource(ResourceType type);
+	Resource* getResourceFromUID(UID uuid);
 
 private:
 
@@ -35,7 +36,7 @@ public:
 	ImporterMaterial* materialImporter = NULL;
 
 private:
-	std::map<uint, Resource*> resources;
+	std::map<UID, Resource*> resources;
 
 };
 

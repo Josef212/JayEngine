@@ -9,16 +9,12 @@
 #include "ResourceMesh.h"
 #include "ResourceMaterial.h"
 
+//TMP
+#include "Timer.h"
+
 #include "Importer.h"
 #include "ImporterMesh.h"
 #include "ImporterMaterial.h"
-
-#include "Assimp\include\cimport.h"
-#include "Assimp\include\scene.h"
-#include "Assimp\include\postprocess.h"
-#include "Assimp\include\cfileio.h"
-
-#pragma comment (lib, "Assimp/libx86/assimp.lib")
 
 
 ModuleResourceManager::ModuleResourceManager(bool startEnabled) : Module(startEnabled)
@@ -42,18 +38,18 @@ bool ModuleResourceManager::init(FileParser* conf)
 {
 	_LOG(LOG_STD, "Resource manager: Init.");
 	bool ret = true;
-
-	//Log assimp info
-	struct aiLogStream stream;
-	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
-	aiAttachLogStream(&stream);
-
+	
 	return ret;
 }
 
 bool ModuleResourceManager::start()
 {
 	_LOG(LOG_STD, "Importer: Start.");
+
+	Timer timer;
+	timer.Start();
+	meshImporter->importFBX("Cube.fbx");
+	_LOG(LOG_WARN, "Importing lasted: %dms.", timer.Read());
 
 	return true;
 }
@@ -62,33 +58,31 @@ bool ModuleResourceManager::cleanUp()
 {
 	_LOG(LOG_STD, "Resource manager: CleanUp.");
 	bool ret = true;
-
-	//Stop log stream
-	aiDetachAllLogStreams();
-
+	
 	return ret;
 }
 
-uint ModuleResourceManager::getNewUID()
+UID ModuleResourceManager::getNewUID()
 {
 	return app->random->getRandInt();
 }
 
-Resource* ModuleResourceManager::createNewResource(ResourceTypes type)
+Resource* ModuleResourceManager::createNewResource(ResourceType type)
 {
 	Resource* ret = NULL;
+	UID uuid = getNewUID();
 
 	switch (type)
 	{
 		case RESOURCE_MESH:
 		{
-			ret = new ResourceMesh(getNewUID());
+			ret = new ResourceMesh(uuid);
 		}
 		break;
 
 		case RESOURCE_MATERIAL:
 		{
-			ret = new ResourceMaterial(getNewUID());
+			ret = new ResourceMaterial(uuid);
 		}
 		break;
 
@@ -97,5 +91,15 @@ Resource* ModuleResourceManager::createNewResource(ResourceTypes type)
 		break;
 	}
 
+	if (ret)
+		resources[uuid] = ret;
+
 	return ret;
+}
+
+Resource* ModuleResourceManager::getResourceFromUID(UID uuid)
+{
+	std::map<UID, Resource*>::iterator it = resources.find(uuid);
+
+	return (it != resources.end()) ? ((*it).second) : (NULL);
 }
