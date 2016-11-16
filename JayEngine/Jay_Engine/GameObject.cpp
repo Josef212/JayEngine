@@ -10,6 +10,8 @@
 #include "Material.h"
 #include "Camera.h"
 
+#include "ResourceMesh.h"
+
 #include "ModuleGOManager.h"
 
 
@@ -262,7 +264,7 @@ void GameObject::updateAABB() //TODO: make enclose for all meshes
 
 	Mesh* m = (Mesh*)findComponent(MESH)[0];
 	if (m)
-		enclosingBox.Enclose((float3*)m->vertices, m->numVertices);
+		enclosingBox.Enclose((float3*)m->meshResource->vertices, m->meshResource->numVertices);
 
 	orientedBox = enclosingBox;
 	orientedBox.Transform(transform->getTransformMatrix().Transposed());

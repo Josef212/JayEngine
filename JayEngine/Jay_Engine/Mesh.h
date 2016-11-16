@@ -4,6 +4,7 @@
 #include "Component.h"
 
 struct aiMesh;
+class ResourceMesh;
 
 class Mesh : public Component
 {
@@ -21,12 +22,14 @@ public:
 	bool loadMesh(aiMesh* mesh, bool loadToRAM = true);
 	bool loadToOpenGl();
 
+	ResourceMesh* createAnEmptyMeshRes();
+
 	void clearMesh();
 
 private:
 
 public:
-	uint idVertices = 0;
+	/*uint idVertices = 0;
 	uint numVertices = 0;
 	uint* indices = NULL;
 
@@ -40,7 +43,9 @@ public:
 
 	uint idTexCoords = 0;
 	uint numTexCoords = 0; //Same texCoords as num of vertices but here will save numVertices*3 because each texCoord has 3 components, actually uv's are 2D but keep the 3rd variable
-	float* texCoords = NULL;
+	float* texCoords = NULL;*/
+
+	ResourceMesh* meshResource = NULL;
 
 	/**Will use a similar system as assimp, each mesh has the id of each texture, 
 	the id is the index of the textures array in the material component of the game object. */

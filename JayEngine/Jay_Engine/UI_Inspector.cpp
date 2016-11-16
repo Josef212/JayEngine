@@ -9,6 +9,8 @@
 #include "Material.h"
 #include "Camera.h"
 
+#include "ResourceMesh.h"
+
 #include "ModuleGOManager.h"
 #include "ModuleWindow.h"
 #include "ModuleRenderer3D.h"
@@ -125,19 +127,19 @@ void UI_Inspector::drawMesh(GameObject* selected, Mesh* mesh) //TODO: must itera
 
 	ImGui::Text("Number of vertices: ");
 	ImGui::SameLine();
-	ImGui::TextColored(ImColor(255, 153, 51), "%d", mesh->numVertices);
+	ImGui::TextColored(ImColor(255, 153, 51), "%d", mesh->meshResource->numVertices);
 
 	ImGui::Text("Number of indices: ");
 	ImGui::SameLine();
-	ImGui::TextColored(ImColor(255, 153, 51), "%d", mesh->numIndices);
+	ImGui::TextColored(ImColor(255, 153, 51), "%d", mesh->meshResource->numIndices);
 
 	ImGui::Text("Number of normals: ");
 	ImGui::SameLine();
-	ImGui::TextColored(ImColor(255, 153, 51), "%d", mesh->numNormals / 3);
+	ImGui::TextColored(ImColor(255, 153, 51), "%d", mesh->meshResource->numNormals / 3);
 
 	ImGui::Text("Number of texture coords: ");
 	ImGui::SameLine();
-	ImGui::TextColored(ImColor(255, 153, 51), "%d", mesh->numTexCoords / 2);
+	ImGui::TextColored(ImColor(255, 153, 51), "%d", mesh->meshResource->numTexCoords / 2);
 
 	ImGui::Text("Texture ID: ");
 	ImGui::SameLine();

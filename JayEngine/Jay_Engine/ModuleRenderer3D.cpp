@@ -13,6 +13,8 @@
 #include "Mesh.h"
 #include "Material.h"
 
+#include "ResourceMesh.h"
+
 #include "Primitive.h"
 #include "Camera.h"
 
@@ -279,7 +281,7 @@ void ModuleRenderer3D::drawGameObject(GameObject* obj)
 
 		//Now pass vertices
 		glEnableClientState(GL_VERTEX_ARRAY);
-		glBindBuffer(GL_ARRAY_BUFFER, mesh->idVertices);
+		glBindBuffer(GL_ARRAY_BUFFER, mesh->meshResource->idVertices);
 		glVertexPointer(3, GL_FLOAT, 0, NULL);
 
 		if (mesh->renderWireframe)
@@ -289,17 +291,17 @@ void ModuleRenderer3D::drawGameObject(GameObject* obj)
 		else
 		{
 			//Render normals
-			if (mesh->renderNormals && mesh->numNormals > 0)
+			if (mesh->renderNormals && mesh->meshResource->numNormals > 0)
 			{
 				glDisable(GL_LIGHTING);
 				glLineWidth(0.7f);
 				glBegin(GL_LINES);
 				glColor4f(0.4f, 0.1f, 0.f, 1.f);
 
-				for (uint i = 0; i < mesh->numVertices; ++i)
+				for (uint i = 0; i < mesh->meshResource->numVertices; ++i)
 				{
-					glVertex3f(mesh->vertices[i * 3], mesh->vertices[i * 3 + 1], mesh->vertices[i * 3 + 2]);
-					glVertex3f(mesh->vertices[i * 3] + mesh->normals[i * 3], mesh->vertices[i * 3 + 1] + mesh->normals[i * 3 + 1], mesh->vertices[i * 3 + 2] + mesh->normals[i * 3 + 2]);
+					glVertex3f(mesh->meshResource->vertices[i * 3], mesh->meshResource->vertices[i * 3 + 1], mesh->meshResource->vertices[i * 3 + 2]);
+					glVertex3f(mesh->meshResource->vertices[i * 3] + mesh->meshResource->normals[i * 3], mesh->meshResource->vertices[i * 3 + 1] + mesh->meshResource->normals[i * 3 + 1], mesh->meshResource->vertices[i * 3 + 2] + mesh->meshResource->normals[i * 3 + 2]);
 				}
 
 				glEnd();
@@ -308,10 +310,10 @@ void ModuleRenderer3D::drawGameObject(GameObject* obj)
 			}
 
 			//Set normals
-			if (mesh->idNormals > 0)
+			if (mesh->meshResource->idNormals > 0)
 			{
 				glEnableClientState(GL_NORMAL_ARRAY);
-				glBindBuffer(GL_ARRAY_BUFFER, mesh->idNormals);
+				glBindBuffer(GL_ARRAY_BUFFER, mesh->meshResource->idNormals);
 				glNormalPointer(GL_FLOAT, 0, NULL);
 			}
 
@@ -329,10 +331,10 @@ void ModuleRenderer3D::drawGameObject(GameObject* obj)
 					}
 
 					//Set UV's
-					if (mesh->idTexCoords > 0)
+					if (mesh->meshResource->idTexCoords > 0)
 					{
 						glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-						glBindBuffer(GL_ARRAY_BUFFER, mesh->idTexCoords);
+						glBindBuffer(GL_ARRAY_BUFFER, mesh->meshResource->idTexCoords);
 						glTexCoordPointer(2, GL_FLOAT, 0, NULL);
 					}
 				}
@@ -344,13 +346,13 @@ void ModuleRenderer3D::drawGameObject(GameObject* obj)
 		}
 
 		//Finally set indices and draw elements
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->idIndices);
-		glDrawElements(GL_TRIANGLES, mesh->numIndices, GL_UNSIGNED_INT, NULL);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->meshResource->idIndices);
+		glDrawElements(GL_TRIANGLES, mesh->meshResource->numIndices, GL_UNSIGNED_INT, NULL);
 
 		if (selected && !mesh->renderWireframe)
 		{
 			drawWireframe(selected);
-			glDrawElements(GL_TRIANGLES, mesh->numIndices, GL_UNSIGNED_INT, NULL);
+			glDrawElements(GL_TRIANGLES, mesh->meshResource->numIndices, GL_UNSIGNED_INT, NULL);
 		}
 
 		//Cleaning

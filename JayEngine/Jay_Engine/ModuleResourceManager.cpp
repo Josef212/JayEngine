@@ -55,9 +55,6 @@ bool ModuleResourceManager::start()
 	Timer timer2;
 	timer2.Start();
 	ResourceMesh* res = (ResourceMesh*)createNewResource(RESOURCE_MESH);
-	//meshImporter->loadMesh("1291398982.jof", res);
-	//meshImporter->loadMesh("881250254.jof", res);
-	meshImporter->loadMesh("1121724989.jof", res);
 	_LOG(LOG_WARN, "Importing lasted: %dms.", timer2.Read());
 
 	return true;

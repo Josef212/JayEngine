@@ -167,7 +167,7 @@ void ImporterMesh::importMesh(aiMesh* mesh, ResourceMesh* resMesh)
 	};
 
 	uint size = sizeof(ranges) + sizeof(uint) * resMesh->numIndices + sizeof(float) * resMesh->numVertices * 3;
-	//if (resMesh->normals) size += sizeof(float) * resMesh->numNormals * 3;
+	if (resMesh->normals) size += sizeof(float) * resMesh->numNormals * 3;
 	//if (resMesh->texCoords) size += sizeof(float) * resMesh->numTexCoords * 2;
 	//TODO: Colors
 
@@ -190,12 +190,12 @@ void ImporterMesh::importMesh(aiMesh* mesh, ResourceMesh* resMesh)
 	memcpy(cursor, resMesh->vertices, bytes);
 
 	//Fourth store normals
-	/*if (resMesh->normals)
+	if (resMesh->normals)
 	{
 		cursor += bytes;
 		bytes = sizeof(float) * resMesh->numNormals * 3;
 		memcpy(cursor, resMesh->normals, bytes);
-	}*/
+	}
 
 	//Fifth store uv's
 	/*if (resMesh->texCoords)
@@ -232,14 +232,14 @@ void ImporterMesh::importMesh(aiMesh* mesh, ResourceMesh* resMesh)
 		_LOG(LOG_INFO_REM, "Vertice %d: %f.", i, resMesh->vertices[i]);
 	}
 
-	/*_LOG(LOG_INFO, "Mesh normals.");
+	_LOG(LOG_INFO, "Mesh normals.");
 	for (uint i = 0; i < resMesh->numNormals * 3; ++i)
 	{
 		if (i % 3 == 0)
 			_LOG(LOG_STD, "----------------------");
 		_LOG(LOG_INFO_REM, "Normal %d: %f.", i, resMesh->normals[i]);
 	}
-	_LOG(LOG_INFO, "Mesh uv's.");
+	/*_LOG(LOG_INFO, "Mesh uv's.");
 	for (uint i = 0; i < resMesh->numTexCoords * 2; ++i)
 	{
 		if (i % 3 == 0)
@@ -308,10 +308,10 @@ void ImporterMesh::loadMesh(const char* fileName, ResourceMesh* resMesh)
 
 			resMesh->normals = new float[resMesh->numNormals * 3];
 			memcpy(resMesh->vertices, cursor, bytes);
-		}
+		}*/
 
 		//UV's
-		if (ranges[3])
+		/*if (ranges[3])
 		{
 			cursor += bytes;
 			bytes = sizeof(float) * resMesh->numTexCoords * 2;

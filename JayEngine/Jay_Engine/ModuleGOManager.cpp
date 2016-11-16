@@ -18,6 +18,7 @@
 
 //TMP
 #include "ModuleResourceManager.h"
+#include "ImporterMesh.h"
 
 #include "Assimp/include/cimport.h"
 #include "Assimp/include/scene.h"
@@ -484,6 +485,10 @@ GameObject* ModuleGOManager::loadCube()//DEL_COM
 	ret = sceneRootObject->addChild();
 
 	Mesh* mesh = (Mesh*)ret->addComponent(MESH);
+	mesh->createAnEmptyMeshRes();
+	//app->resourceManager->meshImporter->loadMesh("142988795.jof", mesh->meshResource);
+	app->resourceManager->meshImporter->loadMesh("761552650.jof", mesh->meshResource);
+	mesh->loadToOpenGl();
 
 	/*const uint verticesNum = 24;
 	const uint indicesNum = 36;
