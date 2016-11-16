@@ -167,8 +167,8 @@ void ImporterMesh::importMesh(aiMesh* mesh, ResourceMesh* resMesh)
 	};
 
 	uint size = sizeof(ranges) + sizeof(uint) * resMesh->numIndices + sizeof(float) * resMesh->numVertices * 3;
-	if (resMesh->normals) size += sizeof(float) * resMesh->numNormals * 3;
-	if (resMesh->texCoords) size += sizeof(float) * resMesh->numTexCoords * 2;
+	//if (resMesh->normals) size += sizeof(float) * resMesh->numNormals * 3;
+	//if (resMesh->texCoords) size += sizeof(float) * resMesh->numTexCoords * 2;
 	//TODO: Colors
 
 	//Allocate memory
@@ -190,20 +190,20 @@ void ImporterMesh::importMesh(aiMesh* mesh, ResourceMesh* resMesh)
 	memcpy(cursor, resMesh->vertices, bytes);
 
 	//Fourth store normals
-	if (resMesh->normals)
+	/*if (resMesh->normals)
 	{
 		cursor += bytes;
 		bytes = sizeof(float) * resMesh->numNormals * 3;
 		memcpy(cursor, resMesh->normals, bytes);
-	}
+	}*/
 
 	//Fifth store uv's
-	if (resMesh->texCoords)
+	/*if (resMesh->texCoords)
 	{
 		cursor += bytes;
 		bytes = sizeof(float) * resMesh->numTexCoords * 2;
 		memcpy(cursor, resMesh->texCoords, bytes);
-	}
+	}*/
 
 
 	//Sixth stroe colors //TODO
@@ -232,7 +232,7 @@ void ImporterMesh::importMesh(aiMesh* mesh, ResourceMesh* resMesh)
 		_LOG(LOG_INFO_REM, "Vertice %d: %f.", i, resMesh->vertices[i]);
 	}
 
-	_LOG(LOG_INFO, "Mesh normals.");
+	/*_LOG(LOG_INFO, "Mesh normals.");
 	for (uint i = 0; i < resMesh->numNormals * 3; ++i)
 	{
 		if (i % 3 == 0)
@@ -301,7 +301,7 @@ void ImporterMesh::loadMesh(const char* fileName, ResourceMesh* resMesh)
 		memcpy(resMesh->vertices, cursor, bytes);
 
 		//Normals
-		if (ranges[2] > 0)
+		/*if (ranges[2] > 0)
 		{
 			cursor += bytes;
 			bytes = sizeof(float) * resMesh->numNormals * 3;
@@ -318,7 +318,7 @@ void ImporterMesh::loadMesh(const char* fileName, ResourceMesh* resMesh)
 
 			resMesh->texCoords = new float[resMesh->numTexCoords * 2];
 			memcpy(resMesh->texCoords, cursor, bytes);
-		}
+		}*/
 
 
 #pragma region TMP log
@@ -347,7 +347,7 @@ void ImporterMesh::loadMesh(const char* fileName, ResourceMesh* resMesh)
 			_LOG(LOG_INFO_REM, "Vertice %d: %f.", i, resMesh->vertices[i]);
 		}
 
-		_LOG(LOG_INFO, "Mesh normals.");
+		/*_LOG(LOG_INFO, "Mesh normals.");
 		for (uint i = 0; i < resMesh->numNormals * 3; ++i)
 		{
 			if (i % 3 == 0)
