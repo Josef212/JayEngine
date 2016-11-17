@@ -1,4 +1,8 @@
+#include "Globals.h"
+#include "Application.h"
 #include "ResourceMesh.h"
+
+#include "ModuleFileSystem.h"
 
 #include "OpenGL.h"
 
@@ -11,6 +15,78 @@ ResourceMesh::ResourceMesh(UID uuid) : Resource(uuid)
 ResourceMesh::~ResourceMesh()
 {
 	clearResMesh();
+}
+
+void ResourceMesh::loadMeshResource(const char* fileName)
+{
+	if (!fileName)
+	{
+		_LOG(LOG_ERROR, "Error loading a mesh .jof: Invalid file name or mesh resource.");
+		return;
+	}
+
+	std::string realName(DEFAULT_MESH_SAVE_PATH);
+	realName.append(fileName);
+
+	_LOG(LOG_INFO, "Loading mesh: %s.", realName.c_str());
+
+	char* data;
+	uint size = app->fs->load(realName.c_str(), &data);
+
+	if (data && size > 0)
+	{
+		uint ranges[5];
+		char* cursor = data;
+		uint bytes = sizeof(ranges);
+
+		//Ranges
+		memcpy(ranges, cursor, bytes);
+
+		numIndices = ranges[0];
+		numVertices = ranges[1];
+		numNormals = ranges[2];
+		numTexCoords = ranges[3];
+
+		//Indices
+		cursor += bytes;
+		bytes = sizeof(uint) * numIndices;
+
+		indices = new uint[numIndices];
+		memcpy(indices, cursor, bytes);
+
+		//Vertices
+		cursor += bytes;
+		bytes = sizeof(float) * numVertices * 3;
+
+		vertices = new float[numVertices * 3];
+		memcpy(vertices, cursor, bytes);
+
+		//Normals
+		if (ranges[2] > 0)
+		{
+			cursor += bytes;
+			bytes = sizeof(float) * numNormals * 3;
+
+			normals = new float[numNormals * 3];
+			memcpy(normals, cursor, bytes);
+		}
+
+		//UV's
+		if (ranges[3])
+		{
+			cursor += bytes;
+			bytes = sizeof(float) * numTexCoords * 2;
+
+			texCoords = new float[numTexCoords * 2];
+			memcpy(texCoords, cursor, bytes);
+		}
+
+	}
+	else
+		_LOG(LOG_ERROR, "Error loading the mesh: '%s'.", realName.c_str());
+
+
+	RELEASE_ARRAY(data);
 }
 
 bool ResourceMesh::loadToMemory()

@@ -9,6 +9,7 @@ public:
 	ResourceMesh(uint UID);
 	virtual ~ResourceMesh();
 
+	void loadMeshResource(const char* fileName);
 	bool loadToMemory();
 	bool removeFromMemory();
 

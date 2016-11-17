@@ -135,11 +135,11 @@ void UI_Inspector::drawMesh(GameObject* selected, Mesh* mesh) //TODO: must itera
 
 	ImGui::Text("Number of normals: ");
 	ImGui::SameLine();
-	ImGui::TextColored(ImColor(255, 153, 51), "%d", mesh->meshResource->numNormals / 3);
+	ImGui::TextColored(ImColor(255, 153, 51), "%d", mesh->meshResource->numNormals);
 
 	ImGui::Text("Number of texture coords: ");
 	ImGui::SameLine();
-	ImGui::TextColored(ImColor(255, 153, 51), "%d", mesh->meshResource->numTexCoords / 2);
+	ImGui::TextColored(ImColor(255, 153, 51), "%d", mesh->meshResource->numTexCoords);
 
 	ImGui::Text("Texture ID: ");
 	ImGui::SameLine();

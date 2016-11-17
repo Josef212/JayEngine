@@ -16,8 +16,8 @@ void UI_Console::draw()
 	int w = ImGui::GetIO().DisplaySize.x;
 	int h = ImGui::GetIO().DisplaySize.y;
 
-	/*ImGui::SetNextWindowPos(ImVec2(0, h - (h / 3)));
-	ImGui::SetNextWindowSize(ImVec2(w / 3, h / 3));*/
+	ImGui::SetNextWindowPos(ImVec2(0, h - (h / 3)));
+	ImGui::SetNextWindowSize(ImVec2(w / 3, h / 3));
 	ImGui::Begin("Console", &active);
 	{
 		//ImGui::TextUnformatted(logs.begin());
