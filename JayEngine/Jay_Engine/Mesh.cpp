@@ -48,25 +48,13 @@ void Mesh::update(float dt)
 
 void Mesh::cleanUp()
 {
-	clearMesh();
+	if(meshResource)
+		clearMesh();
 }
 
 void Mesh::clearMesh()
 {
-	/*if (idIndices > 0) glDeleteBuffers(1, &idIndices);
-	if (idVertices > 0) glDeleteBuffers(1, &idVertices);
-	if (idNormals > 0) glDeleteBuffers(1, &idNormals);
-	if (idTexCoords > 0) glDeleteBuffers(1, &idTexCoords);
-
-	numIndices = 0;
-	numVertices = 0;
-	numNormals = 0;
-	numTexCoords = 0;
-
-	RELEASE_ARRAY(indices);
-	RELEASE_ARRAY(vertices);
-	RELEASE_ARRAY(normals);
-	RELEASE_ARRAY(texCoords);*/
+	RELEASE(meshResource);
 }
 
 bool Mesh::loadMesh(aiMesh* mesh, bool loadToRAM)
@@ -106,17 +94,17 @@ bool Mesh::loadMesh(aiMesh* mesh, bool loadToRAM)
 
 		if (mesh->HasNormals())
 		{
-			meshResource->numNormals = meshResource->numVertices * 3;
-			meshResource->normals = new float[meshResource->numNormals];
-			memcpy(meshResource->normals, mesh->mNormals, sizeof(float) * meshResource->numNormals);
+			meshResource->numNormals = meshResource->numVertices;
+			meshResource->normals = new float[meshResource->numNormals * 3];
+			memcpy(meshResource->normals, mesh->mNormals, sizeof(float) * meshResource->numNormals * 3);
 
-			_LOG(LOG_STD, "Mesh %s has %d normal.", getName(), meshResource->numNormals / 3);
+			_LOG(LOG_STD, "Mesh %s has %d normal.", getName(), meshResource->numNormals);
 		}
 
 		if (mesh->HasTextureCoords(0))//Difuse 
 		{
-			meshResource->numTexCoords = meshResource->numVertices * 2;
-			meshResource->texCoords = new float[meshResource->numTexCoords];
+			meshResource->numTexCoords = meshResource->numVertices;
+			meshResource->texCoords = new float[meshResource->numTexCoords * 2];
 			aiVector3D* tmp = mesh->mTextureCoords[0];
 			for (int i = 0; i < meshResource->numTexCoords; i += 2)
 			{
@@ -124,7 +112,7 @@ bool Mesh::loadMesh(aiMesh* mesh, bool loadToRAM)
 				meshResource->texCoords[i + 1] = tmp->y;
 				++tmp;
 			}
-			_LOG(LOG_STD, "Mesh %s has %d texture coords.", getName(), meshResource->numTexCoords / 2);
+			_LOG(LOG_STD, "Mesh %s has %d texture coords.", getName(), meshResource->numTexCoords);
 		}
 
 		ret = true;
@@ -167,14 +155,14 @@ bool Mesh::loadToOpenGl()
 		{
 			glGenBuffers(1, (GLuint*)&meshResource->idNormals);
 			glBindBuffer(GL_ARRAY_BUFFER, meshResource->idNormals);
-			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * meshResource->numNormals, meshResource->normals, GL_STATIC_DRAW);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * meshResource->numNormals * 3, meshResource->normals, GL_STATIC_DRAW);
 		}
 	
 		if (meshResource->numTexCoords> 0)
 		{
 			glGenBuffers(1, (GLuint*)&meshResource->idTexCoords);
 			glBindBuffer(GL_ARRAY_BUFFER, meshResource->idTexCoords);
-			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * meshResource->numTexCoords, meshResource->texCoords, GL_STATIC_DRAW);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * meshResource->numTexCoords * 2, meshResource->texCoords, GL_STATIC_DRAW);
 		}
 
 		ret = true;

@@ -115,7 +115,7 @@ void ImporterMesh::importMesh(aiMesh* mesh, ResourceMesh* resMesh)
 				memcpy(&resMesh->indices[i * 3], mesh->mFaces[i].mIndices, sizeof(uint) * 3);
 			}
 		}
-		_LOG(LOG_STD, "Mesh has %d indices.", resMesh->numIndices);
+		//_LOG(LOG_STD, "Mesh has %d indices.", resMesh->numIndices);
 	}
 	//----------------------------------------------
 
@@ -123,7 +123,7 @@ void ImporterMesh::importMesh(aiMesh* mesh, ResourceMesh* resMesh)
 	resMesh->vertices = new float[resMesh->numVertices * 3];
 	memcpy(resMesh->vertices, mesh->mVertices, sizeof(float) * resMesh->numVertices * 3);
 
-	_LOG(LOG_STD, "Mesh has %d vertices.", resMesh->numVertices);
+	//_LOG(LOG_STD, "Mesh has %d vertices.", resMesh->numVertices);
 
 	//----------------------------------------------
 
@@ -133,7 +133,7 @@ void ImporterMesh::importMesh(aiMesh* mesh, ResourceMesh* resMesh)
 		resMesh->normals = new float[resMesh->numNormals * 3];
 		memcpy(resMesh->normals, mesh->mNormals, sizeof(float) * resMesh->numNormals * 3);
 
-		_LOG(LOG_STD, "Mesh has %d normals.", resMesh->numNormals);
+		//_LOG(LOG_STD, "Mesh has %d normals.", resMesh->numNormals);
 	}
 
 	//----------------------------------------------
@@ -150,7 +150,7 @@ void ImporterMesh::importMesh(aiMesh* mesh, ResourceMesh* resMesh)
 			++tmp;
 		}
 
-		_LOG(LOG_STD, "Mesh has %d UV's.", resMesh->numTexCoords);
+		//_LOG(LOG_STD, "Mesh has %d UV's.", resMesh->numTexCoords);
 	}
 
 	//----------------------------------------------
@@ -168,7 +168,7 @@ void ImporterMesh::importMesh(aiMesh* mesh, ResourceMesh* resMesh)
 
 	uint size = sizeof(ranges) + sizeof(uint) * resMesh->numIndices + sizeof(float) * resMesh->numVertices * 3;
 	if (resMesh->normals) size += sizeof(float) * resMesh->numNormals * 3;
-	//if (resMesh->texCoords) size += sizeof(float) * resMesh->numTexCoords * 2;
+	if (resMesh->texCoords) size += sizeof(float) * resMesh->numTexCoords * 2;
 	//TODO: Colors
 
 	//Allocate memory
@@ -198,60 +198,18 @@ void ImporterMesh::importMesh(aiMesh* mesh, ResourceMesh* resMesh)
 	}
 
 	//Fifth store uv's
-	/*if (resMesh->texCoords)
+	if (resMesh->texCoords)
 	{
 		cursor += bytes;
 		bytes = sizeof(float) * resMesh->numTexCoords * 2;
 		memcpy(cursor, resMesh->texCoords, bytes);
-	}*/
+	}
 
 
 	//Sixth stroe colors //TODO
 
 	if (app->fs->save(outName.c_str(), data, size) != size)
 		_LOG(LOG_ERROR, "ERROR saving the mesh.");
-
-
-#pragma region TMP log
-
-	//TMP-----------------------------------------------------
-	//Lets check if something has changed
-
-	_LOG(LOG_INFO, "Mesh data.");
-	_LOG(LOG_INFO, "Mesh indices.");
-	for (uint i = 0; i < resMesh->numIndices; ++i)
-	{
-		_LOG(LOG_INFO_REM, "Indice %d: %d.", i, resMesh->indices[i]);
-	}
-
-	_LOG(LOG_INFO, "Mesh vertices.");
-	for (uint i = 0; i < resMesh->numVertices * 3; ++i)
-	{
-		if (i % 3 == 0)
-			_LOG(LOG_STD, "----------------------");
-		_LOG(LOG_INFO_REM, "Vertice %d: %f.", i, resMesh->vertices[i]);
-	}
-
-	_LOG(LOG_INFO, "Mesh normals.");
-	for (uint i = 0; i < resMesh->numNormals * 3; ++i)
-	{
-		if (i % 3 == 0)
-			_LOG(LOG_STD, "----------------------");
-		_LOG(LOG_INFO_REM, "Normal %d: %f.", i, resMesh->normals[i]);
-	}
-	/*_LOG(LOG_INFO, "Mesh uv's.");
-	for (uint i = 0; i < resMesh->numTexCoords * 2; ++i)
-	{
-		if (i % 3 == 0)
-			_LOG(LOG_STD, "----------------------");
-		_LOG(LOG_INFO_REM, "UV %d: %f.", i, resMesh->texCoords[i]);
-	}
-
-	//TMP-----------------------------------------------------*/
-
-#pragma endregion
-
-
 
 	RELEASE_ARRAY(data);
 }
@@ -301,70 +259,25 @@ void ImporterMesh::loadMesh(const char* fileName, ResourceMesh* resMesh)
 		memcpy(resMesh->vertices, cursor, bytes);
 
 		//Normals
-		/*if (ranges[2] > 0)
+		if (ranges[2] > 0)
 		{
 			cursor += bytes;
 			bytes = sizeof(float) * resMesh->numNormals * 3;
 
 			resMesh->normals = new float[resMesh->numNormals * 3];
-			memcpy(resMesh->vertices, cursor, bytes);
-		}*/
+			memcpy(resMesh->normals, cursor, bytes);
+		}
 
 		//UV's
-		/*if (ranges[3])
+		if (ranges[3])
 		{
 			cursor += bytes;
 			bytes = sizeof(float) * resMesh->numTexCoords * 2;
 
 			resMesh->texCoords = new float[resMesh->numTexCoords * 2];
 			memcpy(resMesh->texCoords, cursor, bytes);
-		}*/
-
-
-#pragma region TMP log
-
-		//TMP-----------------------------------------------------
-		//Lets check if something has changed
-
-		_LOG(LOG_INFO, "Mesh data.");
-
-		for (uint i = 0; i < 5; ++i)
-		{
-			_LOG(LOG_INFO_REM, "Raqnge %d: %d.", i, ranges[i]);
 		}
 
-		_LOG(LOG_INFO, "Mesh indices.");
-		for (uint i = 0; i < resMesh->numIndices; ++i)
-		{
-			_LOG(LOG_INFO_REM, "Indice %d: %d.", i, resMesh->indices[i]);
-		}
-
-		_LOG(LOG_INFO, "Mesh vertices.");
-		for (uint i = 0; i < resMesh->numVertices * 3; ++i)
-		{
-			if (i % 3 == 0)
-				_LOG(LOG_STD, "----------------------");
-			_LOG(LOG_INFO_REM, "Vertice %d: %f.", i, resMesh->vertices[i]);
-		}
-
-		/*_LOG(LOG_INFO, "Mesh normals.");
-		for (uint i = 0; i < resMesh->numNormals * 3; ++i)
-		{
-			if (i % 3 == 0)
-				_LOG(LOG_STD, "----------------------");
-			_LOG(LOG_INFO_REM, "Normal %d: %f.", i, resMesh->normals[i]);
-		}
-		_LOG(LOG_INFO, "Mesh uv's.");
-		for (uint i = 0; i < resMesh->numTexCoords * 2; ++i)
-		{
-			if (i % 3 == 0)
-				_LOG(LOG_STD, "----------------------");
-			_LOG(LOG_INFO_REM, "UV %d: %f.", i, resMesh->texCoords[i]);
-		}
-
-		//TMP-----------------------------------------------------*/
-
-#pragma endregion
 	}
 	else
 		_LOG(LOG_ERROR, "Error loading the mesh: '%s'.", realName.c_str());

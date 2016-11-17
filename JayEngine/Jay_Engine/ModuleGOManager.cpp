@@ -486,8 +486,8 @@ GameObject* ModuleGOManager::loadCube()//DEL_COM
 
 	Mesh* mesh = (Mesh*)ret->addComponent(MESH);
 	mesh->createAnEmptyMeshRes();
-	//app->resourceManager->meshImporter->loadMesh("142988795.jof", mesh->meshResource);
-	app->resourceManager->meshImporter->loadMesh("761552650.jof", mesh->meshResource);
+	//app->resourceManager->meshImporter->loadMesh("142988795.jof", mesh->meshResource); //TMP
+	app->resourceManager->meshImporter->loadMesh("428466960.jof", mesh->meshResource); //TMP
 	mesh->loadToOpenGl();
 
 	/*const uint verticesNum = 24;

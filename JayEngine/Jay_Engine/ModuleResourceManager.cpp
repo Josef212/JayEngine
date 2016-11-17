@@ -48,14 +48,14 @@ bool ModuleResourceManager::start()
 
 	Timer timer;
 	timer.Start();
-	meshImporter->importFBX("Cube.fbx");
-	_LOG(LOG_WARN, "Importing lasted: %dms.", timer.Read());
+	//meshImporter->importFBX("MechaT.fbx");
+	//_LOG(LOG_WARN, "Importing lasted: %dms.", timer.Read());
 
 
 	Timer timer2;
 	timer2.Start();
 	ResourceMesh* res = (ResourceMesh*)createNewResource(RESOURCE_MESH);
-	_LOG(LOG_WARN, "Importing lasted: %dms.", timer2.Read());
+	//_LOG(LOG_WARN, "Importing lasted: %dms.", timer2.Read());
 
 	return true;
 }

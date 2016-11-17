@@ -157,6 +157,7 @@ update_status ModuleEditor::update(float dt)
 		{
 			if (ImGui::MenuItem("Load cube.fbx")) app->goManager->loadFBX("Cube.fbx", NULL);//DEL_COM
 			if (ImGui::MenuItem("Load mecha.fbx")) app->goManager->loadFBX("MechaT.fbx", NULL);
+			if (ImGui::MenuItem("Load brute.fbx")) app->goManager->loadFBX("Brute.fbx", NULL);
 			if (ImGui::MenuItem("Load town.fbx")) app->goManager->loadFBX("Street environment_V01.FBX", NULL);
 			ImGui::EndMenu();
 		}
