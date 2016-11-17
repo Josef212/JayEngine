@@ -292,9 +292,6 @@
     <ClCompile Include="ResourceMesh.cpp">
       <Filter>Core\ResourceManagement\Resources</Filter>
     </ClCompile>
-    <ClCompile Include="ResourceMaterial.cpp">
-      <Filter>Core\ResourceManagement\Resources</Filter>
-    </ClCompile>
     <ClCompile Include="ModuleResourceManager.cpp">
       <Filter>Core\ResourceManagement</Filter>
     </ClCompile>
@@ -304,14 +301,17 @@
     <ClCompile Include="Importer.cpp">
       <Filter>Core\ResourceManagement\Importers</Filter>
     </ClCompile>
-    <ClCompile Include="ImporterMaterial.cpp">
-      <Filter>Core\ResourceManagement\Importers</Filter>
-    </ClCompile>
     <ClCompile Include="Main.cpp">
       <Filter>Core\MAIN</Filter>
     </ClCompile>
     <ClCompile Include="Application.cpp">
       <Filter>Core\MAIN</Filter>
+    </ClCompile>
+    <ClCompile Include="ImporterTexture.cpp">
+      <Filter>Core\ResourceManagement\Importers</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceTexture.cpp">
+      <Filter>Core\ResourceManagement\Resources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -639,16 +639,10 @@
     <ClInclude Include="ResourceMesh.h">
       <Filter>Core\ResourceManagement\Resources</Filter>
     </ClInclude>
-    <ClInclude Include="ResourceMaterial.h">
-      <Filter>Core\ResourceManagement\Resources</Filter>
-    </ClInclude>
     <ClInclude Include="ModuleResourceManager.h">
       <Filter>Core\ResourceManagement</Filter>
     </ClInclude>
     <ClInclude Include="ImporterMesh.h">
-      <Filter>Core\ResourceManagement\Importers</Filter>
-    </ClInclude>
-    <ClInclude Include="ImporterMaterial.h">
       <Filter>Core\ResourceManagement\Importers</Filter>
     </ClInclude>
     <ClInclude Include="Importer.h">
@@ -656,6 +650,12 @@
     </ClInclude>
     <ClInclude Include="Application.h">
       <Filter>Core\MAIN</Filter>
+    </ClInclude>
+    <ClInclude Include="ImporterTexture.h">
+      <Filter>Core\ResourceManagement\Importers</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceTexture.h">
+      <Filter>Core\ResourceManagement\Resources</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

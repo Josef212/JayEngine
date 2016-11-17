@@ -138,7 +138,7 @@
     <ClCompile Include="imGUI\imgui_demo.cpp" />
     <ClCompile Include="imGUI\imgui_draw.cpp" />
     <ClCompile Include="imGUI\imgui_impl_sdl_gl3.cpp" />
-    <ClCompile Include="ImporterMaterial.cpp" />
+    <ClCompile Include="ImporterTexture.cpp" />
     <ClCompile Include="Importer.cpp" />
     <ClCompile Include="ImporterMesh.cpp" />
     <ClCompile Include="JOctree.cpp" />
@@ -193,7 +193,7 @@
     <ClCompile Include="Primitive.cpp" />
     <ClCompile Include="RandGen.cpp" />
     <ClCompile Include="Resource.cpp" />
-    <ClCompile Include="ResourceMaterial.cpp" />
+    <ClCompile Include="ResourceTexture.cpp" />
     <ClCompile Include="ResourceMesh.cpp" />
     <ClCompile Include="SceneTry.cpp" />
     <ClCompile Include="Material.cpp" />
@@ -224,7 +224,7 @@
     <ClInclude Include="imGUI\stb_rect_pack.h" />
     <ClInclude Include="imGUI\stb_textedit.h" />
     <ClInclude Include="imGUI\stb_truetype.h" />
-    <ClInclude Include="ImporterMaterial.h" />
+    <ClInclude Include="ImporterTexture.h" />
     <ClInclude Include="Importer.h" />
     <ClInclude Include="ImporterMesh.h" />
     <ClInclude Include="JOctree.h" />
@@ -309,7 +309,7 @@
     <ClInclude Include="Primitive.h" />
     <ClInclude Include="RandGen.h" />
     <ClInclude Include="Resource.h" />
-    <ClInclude Include="ResourceMaterial.h" />
+    <ClInclude Include="ResourceTexture.h" />
     <ClInclude Include="ResourceMesh.h" />
     <ClInclude Include="SceneTry.h" />
     <ClInclude Include="Material.h" />

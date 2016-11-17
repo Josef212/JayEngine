@@ -19,6 +19,7 @@
 //TMP
 #include "ModuleResourceManager.h"
 #include "ImporterMesh.h"
+#include "ResourceMesh.h"
 
 #include "Assimp/include/cimport.h"
 #include "Assimp/include/scene.h"
@@ -57,7 +58,7 @@ ModuleGOManager::~ModuleGOManager()
 bool ModuleGOManager::init(FileParser* conf)
 {
 	_LOG(LOG_STD, "Manager: Init.");
-	//Log assimp info
+	//Log assimp info //TODO: remove
 	struct aiLogStream stream;
 	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
 	aiAttachLogStream(&stream);
@@ -486,8 +487,8 @@ GameObject* ModuleGOManager::loadCube()//DEL_COM
 
 	Mesh* mesh = (Mesh*)ret->addComponent(MESH);
 	mesh->createAnEmptyMeshRes();
-	//app->resourceManager->meshImporter->loadMesh("142988795.jof", mesh->meshResource); //TMP
-	app->resourceManager->meshImporter->loadMesh("428466960.jof", mesh->meshResource); //TMP
+	mesh->meshResource->loadMeshResource("428466960.jof"); //TMP
+	//mesh->meshResource->loadMeshResource("142988795.jof"); //TMP
 	mesh->loadToOpenGl();
 
 	/*const uint verticesNum = 24;

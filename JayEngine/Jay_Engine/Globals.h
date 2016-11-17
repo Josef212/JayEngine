@@ -95,8 +95,9 @@ char* clearTexPath(char* path);
 #define DEFAULT_TEXTURES_PATH "Data/Assets/textures"
 
 #define DEFAULT_MESH_SAVE_PATH "Data/Library/Meshes/"
-#define DEFAULT_MATERIAL_SAVE_PATH "Data/Library/Textures/"
+#define DEFAULT_TEXTURE_SAVE_PATH "Data/Library/Textures/"
 
 #define MESH_EXTENSION ".jof"
+#define TEXTURE_EXTENSION ".dds"
 
 #endif
