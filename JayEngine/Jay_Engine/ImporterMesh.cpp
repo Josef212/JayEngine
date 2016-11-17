@@ -31,7 +31,7 @@ ImporterMesh::~ImporterMesh()
 	aiDetachAllLogStreams();
 }
 
-void ImporterMesh::importFBX(const char* fbxName)
+void ImporterMesh::importFBX(const char* fbxName, std::string& outputName) //Prob this should be in resource management
 {
 	if (!fbxName)
 	{
@@ -39,16 +39,16 @@ void ImporterMesh::importFBX(const char* fbxName)
 		return;
 	}
 
-	std::string realFBXPath(DEFAULT_FB_PATH);
-	realFBXPath.append("/");
-	realFBXPath.append(fbxName);
+	outputName.assign(DEFAULT_FB_PATH);
+	outputName.append("/");
+	outputName.append(fbxName);
 	//TODO: clear fbx name file here or the parameter is already cleaned
 	//For now will add the Assets/fbx path here
 
-	_LOG(LOG_INFO, "Loading fbx: %s.", realFBXPath.c_str());
+	_LOG(LOG_INFO, "Loading fbx: %s.", outputName.c_str());
 
 	char* buffer;
-	uint fileSize = app->fs->load(realFBXPath.c_str(), &buffer);
+	uint fileSize = app->fs->load(outputName.c_str(), &buffer);
 	const aiScene* scene = NULL;
 	if (buffer && fileSize > 0)
 	{
@@ -56,7 +56,7 @@ void ImporterMesh::importFBX(const char* fbxName)
 	}
 	else
 	{
-		_LOG(LOG_ERROR, "Error while loading fbx: %s.", realFBXPath.c_str());
+		_LOG(LOG_ERROR, "Error while loading fbx: %s.", outputName.c_str());
 		return;
 	}
 
@@ -71,7 +71,7 @@ void ImporterMesh::importFBX(const char* fbxName)
 			ResourceMesh* resMesh = (ResourceMesh*)app->resourceManager->createNewResource(RESOURCE_MESH);
 			if (resMesh)
 			{
-				resMesh->originalFile.assign(realFBXPath);
+				resMesh->originalFile.assign(outputName);
 				importMesh(scene->mMeshes[i], resMesh);
 			}
 			else
@@ -210,78 +210,6 @@ void ImporterMesh::importMesh(aiMesh* mesh, ResourceMesh* resMesh)
 
 	if (app->fs->save(outName.c_str(), data, size) != size)
 		_LOG(LOG_ERROR, "ERROR saving the mesh.");
-
-	RELEASE_ARRAY(data);
-}
-
-void ImporterMesh::loadMesh(const char* fileName, ResourceMesh* resMesh)
-{
-	if (!fileName || !resMesh)
-	{
-		_LOG(LOG_ERROR, "Error loading a mesh .jof: Invalid file name or mesh resource.");
-		return;
-	}
-
-	std::string realName(DEFAULT_MESH_SAVE_PATH);
-	realName.append(fileName);
-
-	_LOG(LOG_INFO, "Loading mesh: %s.", realName.c_str());
-
-	char* data;
-	uint size = app->fs->load(realName.c_str(), &data);
-
-	if (data && size > 0)
-	{
-		uint ranges[5];
-		char* cursor = data;
-		uint bytes = sizeof(ranges);
-
-		//Ranges
-		memcpy(ranges, cursor, bytes);
-
-		resMesh->numIndices = ranges[0];
-		resMesh->numVertices = ranges[1];
-		resMesh->numNormals = ranges[2];
-		resMesh->numTexCoords = ranges[3];
-
-		//Indices
-		cursor += bytes;
-		bytes = sizeof(uint) * resMesh->numIndices;
-
-		resMesh->indices = new uint[resMesh->numIndices];
-		memcpy(resMesh->indices, cursor, bytes);
-
-		//Vertices
-		cursor += bytes;
-		bytes = sizeof(float) * resMesh->numVertices * 3;
-
-		resMesh->vertices = new float[resMesh->numVertices * 3];
-		memcpy(resMesh->vertices, cursor, bytes);
-
-		//Normals
-		if (ranges[2] > 0)
-		{
-			cursor += bytes;
-			bytes = sizeof(float) * resMesh->numNormals * 3;
-
-			resMesh->normals = new float[resMesh->numNormals * 3];
-			memcpy(resMesh->normals, cursor, bytes);
-		}
-
-		//UV's
-		if (ranges[3])
-		{
-			cursor += bytes;
-			bytes = sizeof(float) * resMesh->numTexCoords * 2;
-
-			resMesh->texCoords = new float[resMesh->numTexCoords * 2];
-			memcpy(resMesh->texCoords, cursor, bytes);
-		}
-
-	}
-	else
-		_LOG(LOG_ERROR, "Error loading the mesh: '%s'.", realName.c_str());
-
 
 	RELEASE_ARRAY(data);
 }

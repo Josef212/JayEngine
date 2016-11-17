@@ -7,14 +7,14 @@
 
 #include "Resource.h"
 #include "ResourceMesh.h"
-#include "ResourceMaterial.h"
+#include "ResourceTexture.h"
 
 //TMP
 #include "Timer.h"
 
 #include "Importer.h"
 #include "ImporterMesh.h"
-#include "ImporterMaterial.h"
+#include "ImporterTexture.h"
 
 
 ModuleResourceManager::ModuleResourceManager(bool startEnabled) : Module(startEnabled)
@@ -24,7 +24,7 @@ ModuleResourceManager::ModuleResourceManager(bool startEnabled) : Module(startEn
 
 	//TODO: only if mode editor
 	meshImporter = new ImporterMesh();
-	materialImporter = new ImporterMaterial();
+	textureImporter = new ImporterTexture();
 	//----------------------------- endif
 }
 
@@ -86,9 +86,9 @@ Resource* ModuleResourceManager::createNewResource(ResourceType type)
 		}
 		break;
 
-		case RESOURCE_MATERIAL:
+		case RESOURCE_TEXTURE:
 		{
-			ret = new ResourceMaterial(uuid);
+			ret = new ResourceTexture(uuid);
 		}
 		break;
 

@@ -8,7 +8,7 @@ enum ResourceType
 {
 	RESOURCE_UNKNOWN = -1,
 	RESOURCE_MESH = 0,
-	RESOURCE_MATERIAL
+	RESOURCE_TEXTURE
 };
 
 class Resource

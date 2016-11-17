@@ -2,6 +2,7 @@
 #define __IMPORTERMESH_H__
 
 #include "Importer.h"
+#include <string>
 
 class Resource;
 class ResourceMesh;
@@ -13,9 +14,8 @@ public:
 	ImporterMesh();
 	virtual ~ImporterMesh();
 
-	void importFBX(const char* fbxName);
+	void importFBX(const char* fbxName, std::string& outputName);
 	void importMesh(aiMesh* mesh, ResourceMesh* resMesh);
-	void loadMesh(const char* fileName, ResourceMesh* resMesh);
 
 };
 

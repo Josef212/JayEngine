@@ -7,12 +7,12 @@
 
 class Resource;
 class ResourceMesh;
-class ResourceMaterial;
+class ResourceTexture;
 enum ResourceType;
 
 class Importer;
 class ImporterMesh;
-class ImporterMaterial;
+class ImporterTexture;
 
 class ModuleResourceManager : public Module
 {
@@ -33,7 +33,7 @@ private:
 
 public:
 	ImporterMesh* meshImporter = NULL;
-	ImporterMaterial* materialImporter = NULL;
+	ImporterTexture* textureImporter = NULL;
 
 private:
 	std::map<UID, Resource*> resources;
