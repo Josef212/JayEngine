@@ -5,6 +5,7 @@
 
 FileParser::FileParser()
 {
+	root = Json::Value((Json::objectValue));
 	root.begin();
 }
 
@@ -124,10 +125,7 @@ bool FileParser::addString(const char* name, const char* value)
 bool FileParser::addBool(const char* name, bool value)
 {
 	if (name)
-	{
-		if (root.empty())
-			root.append(Json::Value(Json::booleanValue));
-		
+	{		
 		root[name] = value; //TODO: check if value is initialized
 		return true;
 	}
