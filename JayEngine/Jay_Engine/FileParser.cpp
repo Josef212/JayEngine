@@ -110,6 +110,12 @@ float FileParser::getFloat(const char* name, float defaultFloat, int index)
 //---------------Setters--------------------------
 //------------------------------------------------
 
+bool FileParser::addSection(const char* sectionName)
+{
+	
+	return false;
+}
+
 bool FileParser::addString(const char* name, const char* value)
 {
 	return true;
@@ -119,7 +125,10 @@ bool FileParser::addBool(const char* name, bool value)
 {
 	if (name)
 	{
-		root[name] = value;
+		if (root.empty())
+			root.append(Json::Value(Json::booleanValue));
+		
+		root[name] = value; //TODO: check if value is initialized
 		return true;
 	}
 
@@ -151,59 +160,39 @@ bool FileParser::addFloat(const char* name, float value)
 
 //--------------------------------------
 
-void FileParser::writeJson(const char* buffer, bool fastMode)
+uint FileParser::writeJson(std::string& stream, bool fastMode)
 {
-	uint ret = 0;
+	/*uint ret = 0;
 
 	if (fastMode)
-		ret = writeFast(buffer);
+		ret = writeFast(stream);
 	else
-		writeStyled(buffer);
+		ret = writeStyled(stream);
 	
-	//return ret;
-	//return (fastMode) ? (writeFast(buffer)) : (writeStyled(buffer));
+	return ret;*/
+	return (fastMode) ? (writeFast(stream)) : (writeStyled(stream));
 }
 
-uint FileParser::writeFast(const char* buffer)
+uint FileParser::writeFast(std::string& stream)
 {
 	uint ret = 0;
 
 	Json::FastWriter writer;
-	std::string data = writer.write(root);
-	if (data.size() > 0)
-	{
-		ret = data.size();
-		buffer = new char[ret];
+	stream.assign(writer.write(root));
 
-		if (!buffer)
-			_LOG(LOG_ERROR, "Error writing json.");
-
-		memcpy(&buffer, data.c_str(), ret);
-	}
-	else
-		_LOG(LOG_ERROR, "Error writing json: invalid size.");
+	ret = stream.size();
 
 	return ret;
 }
 
-uint FileParser::writeStyled(const char* buffer)
+uint FileParser::writeStyled(std::string& stream)
 {
 	uint ret = 0;
 
 	Json::StyledWriter writer;
-	std::string data = writer.write(root);
-	if (data.size() > 0)
-	{
-		ret = data.size();
-		buffer = new char[ret];
+	stream.assign(writer.write(root));
 
-		if (!buffer)
-			_LOG(LOG_ERROR, "Error writing json.");
-
-		memcpy(&buffer, data.c_str(), ret);
-	}
-	else
-		_LOG(LOG_ERROR, "Error writing json: invalid size.");
+	ret = stream.size();
 
 	return ret;
 }

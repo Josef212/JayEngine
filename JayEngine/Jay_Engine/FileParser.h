@@ -15,6 +15,7 @@ public:
 	virtual ~FileParser();
 
 	FileParser getSection(const char* sectionName);
+	bool addSection(const char* sectionName);
 
 	const char* getString(const char* name, const char* defaultStr, int index = -1);//TODO
 	std::string getStdString(const char* name, const char* defaultStr, int index = -1);
@@ -45,15 +46,15 @@ public:
 	//addArrayString...
 
 	//uint writeJson(const char* buffer, bool fastMode = true);
-	void writeJson(const char* buffer, bool fastMode = true);
-	uint writeStyled(const char* buffer);
+	uint writeJson(std::string& stream, bool fastMode = true);
 
 private:
-	uint writeFast(const char* buffer);
+	uint writeStyled(std::string& stream);
+	uint writeFast(std::string& stream);
 
 public:
 //private:
-	Json::Value root = NULL;
+	Json::Value root;
 };
 
 

@@ -288,15 +288,18 @@ bool Application::saveGameNow()
 
 	_LOG(LOG_INFO_REM, "SAVING!!!");
 
-	char* buffer = NULL;
-	uint size = fs->load("config.json", SETTINGS_PATH, &buffer);
+	char* buffer = NULL;//
+	uint size = fs->load("config.json", SETTINGS_PATH, &buffer); //
 
-	FileParser conf(buffer);
+	//FileParser conf(buffer);//
+	FileParser conf;
+	conf.addBool("try", true); 
+	//RELEASE_ARRAY(buffer); //TODO: necesery to load the existing config file or directly load all the data
 
-	conf.addBool("try", true);
-	RELEASE_ARRAY(buffer);
-	size = 	conf.writeStyled(buffer);
-	app->fs->save("Data/c.json", buffer, size);
+	std::string stream;
+	size = conf.writeJson(stream, false);
+
+	app->fs->save("Data/Settings/c.json", stream.c_str(), size);
 
 	saveNextFrame = false;
 
