@@ -116,6 +116,12 @@ void Application::prepareUpdate()
 // ---------------------------------------------
 void Application::finishUpdate()
 {
+	if (saveNextFrame)
+		saveGameNow();
+
+	if (loadNextFrame)
+		loadGameNow();
+
 	++frames;
 	++fpsCounter;
 
@@ -264,4 +270,45 @@ void Application::readConfig(FileParser* conf)
 	organitzation.assign(str);
 	str.assign(conf->getStdString("app_name", "Jay_Engine"));
 	setTitle(str.c_str());
+}
+
+void Application::saveGame()
+{
+	saveNextFrame = true;
+}
+
+void Application::loadGame()
+{
+	loadNextFrame = true;
+}
+
+bool Application::saveGameNow()
+{
+	bool ret = false;
+
+	_LOG(LOG_INFO_REM, "SAVING!!!");
+
+	char* buffer = NULL;
+	uint size = fs->load("config.json", SETTINGS_PATH, &buffer);
+
+	FileParser conf(buffer);
+
+	conf.addBool("try", true);
+	RELEASE_ARRAY(buffer);
+	size = 	conf.writeStyled(buffer);
+	app->fs->save("Data/c.json", buffer, size);
+
+	saveNextFrame = false;
+
+	return ret;
+}
+
+bool Application::loadGameNow()
+{
+	bool ret = false;
+
+	_LOG(LOG_INFO_REM, "LOADING!!!");
+	loadNextFrame = false;
+
+	return ret;
 }

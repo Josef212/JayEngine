@@ -78,6 +78,8 @@ update_status ModuleEditor::update(float dt)
 	{
 		if (ImGui::BeginMenu("File"))
 		{
+			if (ImGui::MenuItem("Load")) app->loadGame(); //TODO: open file browser etc
+			if (ImGui::MenuItem("Save")) app->saveGame();
 			if (ImGui::MenuItem("Serch files")) showDirWin = !showDirWin;
 			if (ImGui::MenuItem("Quit")) app->quit = true;
 			ImGui::EndMenu();

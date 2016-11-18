@@ -5,6 +5,7 @@
 
 FileParser::FileParser()
 {
+	root.begin();
 }
 
 FileParser::FileParser(const char* buffer)
@@ -23,7 +24,12 @@ FileParser::FileParser(Json::Value& sectionObject) : root(sectionObject)
 
 FileParser::~FileParser()
 {
+	root.end();
 }
+
+//------------------------------------------------
+//---------------Getters--------------------------
+//------------------------------------------------
 
 FileParser FileParser::getSection(const char* sectionName)
 {
@@ -42,7 +48,7 @@ const char* FileParser::getString(const char* name, const char* defaultStr, int 
 	{
 		Json::Value array = root[name];
 		return array[index].asCString();
-	}*/
+	}*/ //TODO: why this doesnt work??
 	return defaultStr;
 }
 
@@ -100,7 +106,104 @@ float FileParser::getFloat(const char* name, float defaultFloat, int index)
 
 //--------------------------------------
 
-Json::Value* FileParser::getValue(const char* name, int index)
+//------------------------------------------------
+//---------------Setters--------------------------
+//------------------------------------------------
+
+bool FileParser::addString(const char* name, const char* value)
 {
-	return &root.get(name, "error");
+	return true;
+}
+
+bool FileParser::addBool(const char* name, bool value)
+{
+	if (name)
+	{
+		root[name] = value;
+		return true;
+	}
+
+	return false;
+}
+
+bool FileParser::addInt(const char* name, int value)
+{
+	if (name)
+	{
+		root[name] = value;
+		return true;
+	}
+
+	return false;
+}
+
+bool FileParser::addFloat(const char* name, float value)
+{
+	if (name)
+	{
+		root[name] = value;
+		return true;
+	}
+
+	return false;
+}
+
+
+//--------------------------------------
+
+void FileParser::writeJson(const char* buffer, bool fastMode)
+{
+	uint ret = 0;
+
+	if (fastMode)
+		ret = writeFast(buffer);
+	else
+		writeStyled(buffer);
+	
+	//return ret;
+	//return (fastMode) ? (writeFast(buffer)) : (writeStyled(buffer));
+}
+
+uint FileParser::writeFast(const char* buffer)
+{
+	uint ret = 0;
+
+	Json::FastWriter writer;
+	std::string data = writer.write(root);
+	if (data.size() > 0)
+	{
+		ret = data.size();
+		buffer = new char[ret];
+
+		if (!buffer)
+			_LOG(LOG_ERROR, "Error writing json.");
+
+		memcpy(&buffer, data.c_str(), ret);
+	}
+	else
+		_LOG(LOG_ERROR, "Error writing json: invalid size.");
+
+	return ret;
+}
+
+uint FileParser::writeStyled(const char* buffer)
+{
+	uint ret = 0;
+
+	Json::StyledWriter writer;
+	std::string data = writer.write(root);
+	if (data.size() > 0)
+	{
+		ret = data.size();
+		buffer = new char[ret];
+
+		if (!buffer)
+			_LOG(LOG_ERROR, "Error writing json.");
+
+		memcpy(&buffer, data.c_str(), ret);
+	}
+	else
+		_LOG(LOG_ERROR, "Error writing json: invalid size.");
+
+	return ret;
 }

@@ -62,6 +62,9 @@ private:
 	std::string			organitzation;
 	std::string			logs;
 
+	bool saveNextFrame = false;
+	bool loadNextFrame = false;
+
 public:
 
 	Application();
@@ -84,12 +87,18 @@ public:
 	void log(const char* str, logType type);
 	void browse(const char* url) const;
 
+	void saveGame();//TODO: saves files etc
+	void loadGame();
+
 private:
 	void addModule(Module* mod);
 	void prepareUpdate();
 	void finishUpdate();
 
 	void readConfig(FileParser* conf);
+
+	bool saveGameNow();
+	bool loadGameNow();
 };
 
 extern Application* app;
