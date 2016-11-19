@@ -142,7 +142,6 @@
     <ClCompile Include="Importer.cpp" />
     <ClCompile Include="ImporterMesh.cpp" />
     <ClCompile Include="JOctree.cpp" />
-    <ClCompile Include="jsoncpp\jsoncpp.cpp" />
     <ClCompile Include="Light.cpp" />
     <ClCompile Include="Globals.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -189,6 +188,7 @@
     <ClCompile Include="ModulePhysics3D.cpp" />
     <ClCompile Include="ModuleRenderer3D.cpp" />
     <ClCompile Include="ModuleWindow.cpp" />
+    <ClCompile Include="parson\parson.c" />
     <ClCompile Include="PhysBody3D.cpp" />
     <ClCompile Include="Primitive.cpp" />
     <ClCompile Include="RandGen.cpp" />
@@ -228,8 +228,6 @@
     <ClInclude Include="Importer.h" />
     <ClInclude Include="ImporterMesh.h" />
     <ClInclude Include="JOctree.h" />
-    <ClInclude Include="jsoncpp\json\json-forwards.h" />
-    <ClInclude Include="jsoncpp\json\json.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="MathGeoLib\include\Algorithm\Random\LCG.h" />
@@ -305,6 +303,7 @@
     <ClInclude Include="ModuleRenderer3D.h" />
     <ClInclude Include="ModuleWindow.h" />
     <ClInclude Include="OpenGL.h" />
+    <ClInclude Include="parson\parson.h" />
     <ClInclude Include="PhysBody3D.h" />
     <ClInclude Include="Primitive.h" />
     <ClInclude Include="RandGen.h" />

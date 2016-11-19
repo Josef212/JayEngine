@@ -2,16 +2,17 @@
 #define __FILEPARSER_H__
 
 #include "Globals.h"
-#include "jsoncpp\json\json.h"
-#include <string>
-//struct Value;
+
+typedef struct json_object_t JSON_Object;
+typedef struct json_value_t  JSON_Value;
+//typedef struct json_array_t  JSON_Array;
 
 class FileParser
 {
 public:
 	FileParser();
 	FileParser(const char* buffer);
-	FileParser(void* t);
+	FileParser(JSON_Object* section);
 	virtual ~FileParser();
 
 	FileParser getSection(const char* sectionName);
@@ -44,17 +45,17 @@ public:
 	//addArrayFloat
 	//addArrayString...
 
-	//uint writeJson(const char* buffer, bool fastMode = true);
-	uint writeJson(std::string& stream, bool fastMode = true);
-
-	void test();
+	uint writeJson(char** buffer, bool fastMode = true);
 
 private:
-	uint writeStyled(std::string& stream);
-	uint writeFast(std::string& stream);
+	JSON_Value* getVal(const char* valName, int index);
+	uint writeStyled(char** buffer);
+	uint writeFast(char** buffer);
 
 public:
 //private:
+	JSON_Object* objRoot;
+	JSON_Value* valRoot;
 };
 
 

@@ -19,7 +19,6 @@
 #include "SceneTry.h"
 
 //TMP
-#include "jsoncpp\json\json.h"
 
 Application::Application()
 {
@@ -77,7 +76,7 @@ bool Application::init()
 
 	FileParser conf(buffer);
 
-	//readConfig(&conf.getSection("app"));
+	readConfig(&conf.getSection("app"));
 
 	//NOTE/TODO: For now will pass Config on init but maybe will pass on start too
 
@@ -266,10 +265,9 @@ void Application::browse(const char * url) const
 
 void Application::readConfig(FileParser* conf)
 {
-	//std::string str = conf->getStdString("organitzation", "Josef21296");
-	organitzation.assign("Josef21296");
-	//str.assign(conf->getStdString("app_name", "Jay_Engine"));
-	setTitle("JayEgine");
+	setOrganitzation(conf->getString("organitzation", "Josef21296"));
+	setTitle(conf->getString("app_name", "JayEngine"));
+	setMaxFPS(conf->getInt("fps_limit", 0));
 }
 
 void Application::saveGame()
@@ -288,15 +286,21 @@ bool Application::saveGameNow() //TODO: pass the file name in order to select it
 
 	_LOG(LOG_INFO_REM, "SAVING!!!");
 
-	std::string stream;
-
 	FileParser conf;
+	conf.addBool("test", true);
+	conf.addInt("test2", 2);
+	/*FileParser p = conf.addSection("appTest");
+	p.addInt("int test", 4);*/
 
 	/*for (std::list<Module*>::iterator it = modules.begin(); it != modules.end(); ++it)
 		(*it)->save(&conf.addSection((*it)->name.c_str()));*/
 	
-	uint size = conf.writeJson(stream, false);
-	app->fs->save("Data/Settings/c.json", stream.c_str(), size);
+	char* buffer;
+	uint size = conf.writeJson(&buffer, false);
+	if (app->fs->save("Data/Settings/config.json", buffer, size) != size)
+		_LOG(LOG_ERROR, "Could not save json.");
+
+	RELEASE_ARRAY(buffer);
 
 	saveNextFrame = false;
 

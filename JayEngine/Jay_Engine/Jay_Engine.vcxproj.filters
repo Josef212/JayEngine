@@ -35,9 +35,6 @@
     <Filter Include="Core\GameObjects\Components">
       <UniqueIdentifier>{83993b50-fe3d-429a-b80b-5574287b5911}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Core\3Party\jsoncpp">
-      <UniqueIdentifier>{5c7a4122-7566-4ffe-bff6-fe66757a8612}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Core\ResourceManagement">
       <UniqueIdentifier>{c3014f0c-db72-40ac-abf1-747fc856cd1f}</UniqueIdentifier>
     </Filter>
@@ -70,6 +67,9 @@
     </Filter>
     <Filter Include="Core\MAIN">
       <UniqueIdentifier>{e8a6f1b9-ee91-472d-a10a-82b857c25408}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\3Party\parson">
+      <UniqueIdentifier>{5c7a4122-7566-4ffe-bff6-fe66757a8612}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -277,9 +277,6 @@
     <ClCompile Include="FileParser.cpp">
       <Filter>Core\Tools</Filter>
     </ClCompile>
-    <ClCompile Include="jsoncpp\jsoncpp.cpp">
-      <Filter>Core\3Party\jsoncpp</Filter>
-    </ClCompile>
     <ClCompile Include="UI_Tree.cpp">
       <Filter>Core\UI</Filter>
     </ClCompile>
@@ -312,6 +309,9 @@
     </ClCompile>
     <ClCompile Include="ResourceTexture.cpp">
       <Filter>Core\ResourceManagement\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="parson\parson.c">
+      <Filter>Core\3Party\parson</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -621,12 +621,6 @@
     <ClInclude Include="FileParser.h">
       <Filter>Core\Tools</Filter>
     </ClInclude>
-    <ClInclude Include="jsoncpp\json\json.h">
-      <Filter>Core\3Party\jsoncpp</Filter>
-    </ClInclude>
-    <ClInclude Include="jsoncpp\json\json-forwards.h">
-      <Filter>Core\3Party\jsoncpp</Filter>
-    </ClInclude>
     <ClInclude Include="UI_Tree.h">
       <Filter>Core\UI</Filter>
     </ClInclude>
@@ -656,6 +650,9 @@
     </ClInclude>
     <ClInclude Include="ResourceTexture.h">
       <Filter>Core\ResourceManagement\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="parson\parson.h">
+      <Filter>Core\3Party\parson</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

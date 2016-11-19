@@ -50,7 +50,7 @@ bool ModuleEditor::init(FileParser* conf)
 	_LOG(LOG_STD, "Editor: Init.");
 	ImGui_ImplSdlGL3_Init(app->window->getWindow());
 
-	engineVersion.assign("0.1.3-Alpha"/*conf->getStdString("version", "0.1.0-V")*/);
+	engineVersion.assign(conf->getString("version", "0.1.0-V"));
 
 	return true;
 }

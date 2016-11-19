@@ -32,14 +32,14 @@ bool ModuleWindow::init(FileParser* conf)
 	}
 	else
 	{
-		winSize = 1;// conf->getInt("screen_size", 1);
-		width = 1920;// conf->getInt("width", 1280) * winSize;
-		height = 1080;// conf->getInt("height", 1024) * winSize;
+		winSize = conf->getInt("screen_size", 1);
+		width = conf->getInt("width", 1280) * winSize;
+		height = conf->getInt("height", 1024) * winSize;
 
-		fullscreen = false;// conf->getBool("fullscreen", true);
-		resizable = true;// conf->getBool("resizable", true);
-		borderless = false;// conf->getBool("borderless", false);
-		fullscreenDesktop = false;// conf->getBool("fullscreen_desktop", false);
+		fullscreen = conf->getBool("fullscreen", true);
+		resizable = conf->getBool("resizable", true);
+		borderless = conf->getBool("borderless", false);
+		fullscreenDesktop = conf->getBool("fullscreen_desktop", false);
 
 		Uint32 flags = SDL_WINDOW_OPENGL | SDL_WINDOW_SHOWN | SDL_WINDOW_MAXIMIZED;
 
