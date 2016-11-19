@@ -3,6 +3,7 @@
 
 #include "Globals.h"
 #include "Timer.h"
+#include "Event.h"
 
 #include <string>
 #include <list>
@@ -103,6 +104,8 @@ public:
 	bool isEditorState();
 	bool isPlaySate();
 	bool isPauseState();
+
+	void sendGlobalEvent(const Event& e);
 
 private:
 	void addModule(Module* mod);

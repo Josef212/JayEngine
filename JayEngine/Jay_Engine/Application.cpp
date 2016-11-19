@@ -338,3 +338,12 @@ bool Application::isPauseState()
 {
 	return state == PAUSE;
 }
+
+void Application::sendGlobalEvent(const Event& e)
+{
+	for (std::list<Module*>::iterator it = modules.begin(); it != modules.end(); ++it)
+	{
+		if ((*it)->isEnabled())
+			(*it)->onGlobalEvent(e);
+	}
+}

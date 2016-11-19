@@ -181,6 +181,7 @@
     <ClCompile Include="ModuleAudio.cpp" />
     <ClCompile Include="ModuleCamera3D.cpp" />
     <ClCompile Include="ModuleEditor.cpp" />
+    <ClCompile Include="ModuleEventSystem.cpp" />
     <ClCompile Include="ModuleFileSystem.cpp" />
     <ClCompile Include="ModuleResourceManager.cpp" />
     <ClCompile Include="ModuleInput.cpp" />
@@ -212,6 +213,7 @@
     <ClInclude Include="Color.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="DrawDebug.h" />
+    <ClInclude Include="Event.h" />
     <ClInclude Include="FileParser.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="glmath.h" />
@@ -295,6 +297,7 @@
     <ClInclude Include="ModuleAudio.h" />
     <ClInclude Include="ModuleCamera3D.h" />
     <ClInclude Include="ModuleEditor.h" />
+    <ClInclude Include="ModuleEventSystem.h" />
     <ClInclude Include="ModuleFileSystem.h" />
     <ClInclude Include="ModuleResourceManager.h" />
     <ClInclude Include="ModuleInput.h" />

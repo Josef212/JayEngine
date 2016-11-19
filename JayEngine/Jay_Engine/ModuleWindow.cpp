@@ -418,6 +418,11 @@ void ModuleWindow::setIcon(SDL_Surface* icon)
 		_LOG(LOG_ERROR, "Error setting window icon, window pointer is NULL.");
 }
 
+void ModuleWindow::onGlobalEvent(const Event& e)
+{
+	//TODO
+}
+
 /*void ModuleWindow::setIcon(const char* file) //TODO: can use it when textures are ready
 {
 	if (window)

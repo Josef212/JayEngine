@@ -313,6 +313,9 @@
     <ClCompile Include="parson\parson.c">
       <Filter>Core\3Party\parson</Filter>
     </ClCompile>
+    <ClCompile Include="ModuleEventSystem.cpp">
+      <Filter>Core\Modules</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.h">
@@ -653,6 +656,12 @@
     </ClInclude>
     <ClInclude Include="parson\parson.h">
       <Filter>Core\3Party\parson</Filter>
+    </ClInclude>
+    <ClInclude Include="Event.h">
+      <Filter>Core\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleEventSystem.h">
+      <Filter>Core\Modules</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

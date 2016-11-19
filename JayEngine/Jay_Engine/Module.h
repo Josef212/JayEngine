@@ -2,6 +2,7 @@
 #define __MODULE_H__
 
 #include <string>
+#include "Event.h"
 
 class FileParser;
 struct PhysBody3D;
@@ -92,6 +93,9 @@ public:
 	}
 
 	virtual void onCollision(PhysBody3D* body1, PhysBody3D* body2)
+	{}
+
+	virtual void onGlobalEvent(const Event& e)
 	{}
 };
 

@@ -34,6 +34,8 @@ public:
 	void setActiveCamera(Camera* activeCamera);
 	Camera* getActiveCamera()const;
 
+	void onGlobalEvent(const Event& e);
+
 private:
 	void updateProjectionMat(Camera* cam);
 

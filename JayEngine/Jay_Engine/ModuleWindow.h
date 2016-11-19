@@ -64,6 +64,8 @@ public:
 	void getRange(int& minW, int& minH, int& maxW, int& maxH);
 	int getRefresh();
 
+	void onGlobalEvent(const Event& e);
+
 	void setIcon(SDL_Surface* icon);
 	//void setIcon(const char* file);
 

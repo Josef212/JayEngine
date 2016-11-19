@@ -276,6 +276,18 @@ void ModuleRenderer3D::updateProjectionMat(Camera* cam)
 	glLoadIdentity();
 }
 
+void ModuleRenderer3D::onGlobalEvent(const Event& e)
+{
+	switch (e.type)
+	{
+	case Event::eventType::WIN_RESIZE:
+		onResize(e.point2d.x, e.point2d.y);
+		break;
+	default:
+		break;
+	}
+}
+
 //---------------------------------
 
 void ModuleRenderer3D::drawGameObject(GameObject* obj)
