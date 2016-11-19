@@ -59,7 +59,6 @@ public:
 private:
 
 public:
-	int nextGOId = 0;
 	bool showEnclosingBoxes = false;
 	bool showOrientedBoxes = false;
 	bool showTree = false;

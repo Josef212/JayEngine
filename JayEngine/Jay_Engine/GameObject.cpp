@@ -4,6 +4,7 @@
 #include "DrawDebug.h"
 #include "ModuleCamera3D.h"
 #include "ModuleRenderer3D.h"
+#include "RandGen.h"
 
 #include "Transform.h"
 #include "Mesh.h"
@@ -15,7 +16,7 @@
 #include "ModuleGOManager.h"
 
 
-GameObject::GameObject(GameObject* parent, int id) : parent(parent), id(id)
+GameObject::GameObject(GameObject* parent, uint32 id) : parent(parent), id(id)
 {
 	name.assign("Game Object");
 	init();
@@ -152,9 +153,8 @@ GameObject* GameObject::addChild()
 {
 	GameObject* ret = NULL;
 
-	ret = new GameObject(this, app->goManager->nextGOId);
+	ret = new GameObject(this, app->random->getRandInt());
 	childrens.push_back(ret);
-	++app->goManager->nextGOId;
 
 	return ret;
 }

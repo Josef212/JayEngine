@@ -42,8 +42,7 @@ ModuleGOManager::ModuleGOManager(bool startEnabled) : Module(startEnabled)
 	_LOG(LOG_STD, "Manager: Creation.");
 	name.assign("module_manager");
 
-	sceneRootObject = new GameObject(NULL, nextGOId);
-	++nextGOId;
+	sceneRootObject = new GameObject(NULL, 0);
 	sceneRootObject->setName("SceneRootNode");
 }
 

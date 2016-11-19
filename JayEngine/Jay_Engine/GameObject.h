@@ -15,7 +15,7 @@ class Cmaera;
 class GameObject
 {
 public:
-	GameObject(GameObject* parent, int id);
+	GameObject(GameObject* parent, uint32 id);
 	virtual ~GameObject();
 
 	void init();
@@ -64,7 +64,7 @@ public:
 private:
 	std::string name;
 	int nextCompId = 0;
-	int id = -1;
+	uint32 id = 0;
 	GameObject* parent = NULL;
 	bool goActive = true;
 
