@@ -62,10 +62,7 @@ public:
 	bool showOrientedBoxes = false;
 	bool showTree = false;
 
-	//JQuadTree* sceneTree = NULL; //DEL_COM
-	JOctree* sceneTree = NULL; //DEL_COM
-
-	GameObject* mainCamera = NULL;
+	JOctree* sceneTree = NULL;
 
 	//-------
 	std::map<std::string, uint> texturesLoaded;  //textures paths and idBuffers

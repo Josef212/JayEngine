@@ -5,6 +5,8 @@
 #include "ModuleFileSystem.h"
 #include "ModuleInput.h"
 #include "HrdInfo.h"
+#include "ModuleCamera3D.h"
+#include "Camera.h"
 
 UI_Conf::UI_Conf() : UI_Comp()
 {
@@ -96,7 +98,19 @@ void UI_Conf::draw()
 
 		if (ImGui::CollapsingHeader("EditorCamera"))
 		{
-			ImGui::TextColored(ImVec4(1, 0, 0, 1), "Working on it...");
+			Camera* cam = app->camera->getCamera();
+			ImGui::ColorEdit4("Background:", (float*)&cam->background, false);
+
+			float nearP = cam->getNearPlaneDist();
+			float farP = cam->getFarPlaneDist();
+			float fov = cam->getFOV();
+
+			if (ImGui::DragFloat("Near plane:", &nearP)) cam->setNearPlaneDist(nearP);
+			if (ImGui::DragFloat("Far plane:", &farP))cam->setFarPlaneDist(farP);
+			if (ImGui::DragFloat("Field of view:", &fov))cam->setFOV(fov);
+
+			bool culling = cam->isCullingActive();
+			if (ImGui::Checkbox("Culling", &culling))cam->setCulling(culling);
 		}
 
 		if (ImGui::CollapsingHeader("FileSystem"))
@@ -104,6 +118,14 @@ void UI_Conf::draw()
 			ImGui::Text("Base path: ");
 			ImGui::SameLine();
 			ImGui::TextColored(ImVec4(1, 1, 0, 1), app->fs->getBasePath());
+
+			ImGui::Text("Read path: ");
+			ImGui::SameLine();
+			ImGui::TextColored(ImVec4(1, 1, 0, 1), "./");
+
+			ImGui::Text("Wite path: ");
+			ImGui::SameLine();
+			ImGui::TextColored(ImVec4(1, 1, 0, 1), "./");
 		}
 
 		if (ImGui::CollapsingHeader("Input"))

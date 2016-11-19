@@ -268,6 +268,7 @@ void Application::readConfig(FileParser* conf)
 	setOrganitzation(conf->getString("organitzation", "Josef21296"));
 	setTitle(conf->getString("app_name", "JayEngine"));
 	setMaxFPS(conf->getInt("fps_limit", 0));
+	state = EDITOR; //TODO: check in config
 }
 
 void Application::saveGame()
@@ -316,4 +317,24 @@ bool Application::loadGameNow()
 	loadNextFrame = false;
 
 	return ret;
+}
+
+gameState Application::getGameState()const
+{
+	return state;
+}
+
+bool Application::isEditorState()
+{
+	return state == EDITOR;
+}
+
+bool Application::isPlaySate()
+{
+	return state == PLAY;
+}
+
+bool Application::isPauseState()
+{
+	return state == PAUSE;
 }

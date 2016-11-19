@@ -25,6 +25,13 @@ class HrdInfo;
 class RandGen;
 class FileParser;
 
+enum gameState
+{
+	EDITOR = 0,
+	PLAY,
+	PAUSE
+};
+
 class Application
 {
 public:
@@ -46,6 +53,8 @@ public:
 
 	bool debug = false;
 	bool quit = false;
+
+	gameState state = EDITOR;
 
 private:
 	Timer	msTimer;
@@ -89,6 +98,11 @@ public:
 
 	void saveGame();//TODO: saves files etc
 	void loadGame();
+
+	gameState getGameState()const;
+	bool isEditorState();
+	bool isPlaySate();
+	bool isPauseState();
 
 private:
 	void addModule(Module* mod);

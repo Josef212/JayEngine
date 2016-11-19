@@ -14,15 +14,16 @@ ModuleCamera3D::ModuleCamera3D(bool startEnabled) : Module(startEnabled)
 
 	name.assign("module_camera3d");
 
-	calculateViewMatrix();
+	if (!defaultCamera)
+		defaultCamera = new GameObject(NULL, 0); 
+	//NOTE: editor camera is not in the scene tree so must be deleted manually.
+	//This camera should never be the camera of the game!!!
 
-	X = vec3(1.0f, 0.0f, 0.0f);
-	Y = vec3(0.0f, 1.0f, 0.0f);
-	Z = vec3(0.0f, 0.0f, 1.0f);
-
-	position = vec3(1.0f, 1.0f, 0.0f);
-	reference = vec3(0.0f, 0.0f, 0.0f);
-
+	if (defaultCamera)
+	{
+		defaultCamera->setName("Editor camera");
+		defaultCameraComp = (Camera*)defaultCamera->addComponent(CAMERA);
+	}
 }
 
 ModuleCamera3D::~ModuleCamera3D()
@@ -32,15 +33,9 @@ ModuleCamera3D::~ModuleCamera3D()
 
 bool ModuleCamera3D::init(FileParser* conf)
 {
-	/*if (!defaultCamera)
-		defaultCamera = app->manager->createCamera();
-
-	if (defaultCamera)
-		cameraComp = (Camera*)defaultCamera->findComponent(CAMERA)[0];
-
-	if (!cameraComp)
+	if (!defaultCamera || !defaultCameraComp)
 		return false;
-	else*/
+	else
 		return true;
 }
 
@@ -57,8 +52,8 @@ bool ModuleCamera3D::cleanUp()
 {
 	_LOG(LOG_STD, "Camera3D: CleanUp.");
 
-	//defaultCamera = NULL;
-	//cameraComp = NULL;
+	defaultCamera->cleanUp();
+	RELEASE(defaultCamera);
 
 	return true;
 }
@@ -66,7 +61,7 @@ bool ModuleCamera3D::cleanUp()
 // -----------------------------------------------------------------
 update_status ModuleCamera3D::update(float dt)
 {
-	vec3 newPos(0, 0, 0);
+	/*vec3 newPos(0, 0, 0);
 	float speed = 25.0f * dt;
 	if (app->input->getKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
 		speed = 8.0f * dt;
@@ -81,8 +76,8 @@ update_status ModuleCamera3D::update(float dt)
 	if (app->input->getKey(SDL_SCANCODE_A) == KEY_REPEAT) newPos -= X * speed;
 	if (app->input->getKey(SDL_SCANCODE_D) == KEY_REPEAT) newPos += X * speed;
 
-	position += newPos;
-	reference += newPos;
+	//position += newPos;
+	//reference += newPos;
 
 	// Mouse motion ----------------
 
@@ -93,23 +88,23 @@ update_status ModuleCamera3D::update(float dt)
 
 		float Sensitivity = 0.25f;
 
-		position -= reference;
+		//position -= reference;
 
 		if (dx != 0)
 		{
 			float DeltaX = (float)dx * Sensitivity;
 
-			X = rotate(X, DeltaX, vec3(0.0f, 1.0f, 0.0f));
-			Y = rotate(Y, DeltaX, vec3(0.0f, 1.0f, 0.0f));
-			Z = rotate(Z, DeltaX, vec3(0.0f, 1.0f, 0.0f));
+			//X = rotate(X, DeltaX, vec3(0.0f, 1.0f, 0.0f));
+			//Y = rotate(Y, DeltaX, vec3(0.0f, 1.0f, 0.0f));
+			//Z = rotate(Z, DeltaX, vec3(0.0f, 1.0f, 0.0f));
 		}
 
 		if (dy != 0)
 		{
 			float DeltaY = (float)dy * Sensitivity;
 
-			Y = rotate(Y, DeltaY, X);
-			Z = rotate(Z, DeltaY, X);
+			//Y = rotate(Y, DeltaY, X);
+			//Z = rotate(Z, DeltaY, X);
 
 			if (Y.y < 0.0f)
 			{
@@ -122,67 +117,47 @@ update_status ModuleCamera3D::update(float dt)
 	}
 
 	// Recalculate matrix -------------
-	calculateViewMatrix();
+	calculateViewMatrix();*/
 
 	return UPDATE_CONTINUE;
 }
 
 // -----------------------------------------------------------------
-void ModuleCamera3D::look(const vec3 &position, const vec3 &reference, bool rotateAroundReference)
+void ModuleCamera3D::look(const float3& position, const float3& reference, bool rotateAroundReference)
 {
-	this->position = position;
-	this->reference = reference;
-
-	Z = normalize(this->position - this->reference);
-	X = normalize(cross(vec3(0.0f, 1.0f, 0.0f), Z));
-	Y = cross(Z, X);
-
-	if (!rotateAroundReference)
-	{
-		this->reference = this->position;
-		this->position += Z * 0.05f;
-	}
-
-	calculateViewMatrix();
+	defaultCameraComp->look(position, reference);
 }
 
 // -----------------------------------------------------------------
-void ModuleCamera3D::lookAt( const vec3 &spot)
+void ModuleCamera3D::lookAt( const float3& spot)
 {
-	reference = spot;
-
-	Z = normalize(position - reference);
-	X = normalize(cross(vec3(0.0f, 1.0f, 0.0f), Z));
-	Y = cross(Z, X);
-
-	calculateViewMatrix();
+	defaultCameraComp->lookAt(spot);
 }
 
 
 // -----------------------------------------------------------------
-void ModuleCamera3D::move(const vec3 &movement)
+void ModuleCamera3D::move(float dt)
 {
-	position += movement;
-	reference += movement;
-
-	calculateViewMatrix();
+	
 }
 
-void ModuleCamera3D::setPos(const vec3 &pos)
+void ModuleCamera3D::setPos(const float3& pos)
 {
-	position = pos;
-	lookAt(reference);
+	
 }
 
-// -----------------------------------------------------------------
-float* ModuleCamera3D::getViewMatrix()
+void ModuleCamera3D::orbit(const float3 ref, float dt)
 {
-	return &viewMatrix;
+
 }
 
-// -----------------------------------------------------------------
-void ModuleCamera3D::calculateViewMatrix()
+//=================================================================
+GameObject* ModuleCamera3D::getEditorCameraObj()const
 {
-	viewMatrix = mat4x4(X.x, Y.x, Z.x, 0.0f, X.y, Y.y, Z.y, 0.0f, X.z, Y.z, Z.z, 0.0f, -dot(X, position), -dot(Y, position), -dot(Z, position), 1.0f);
-	viewMatrixInverse = inverse(viewMatrix);
+	return defaultCamera;
+}
+
+Camera* ModuleCamera3D::getCamera()
+{
+	return defaultCameraComp;
 }

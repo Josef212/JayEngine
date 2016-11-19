@@ -5,6 +5,8 @@
 #include "Math.h"
 #include "Color.h"
 
+class Transform;
+
 class Camera : public Component
 {
 public:
@@ -30,7 +32,7 @@ public:
 	void getBackground(float& r, float& g, float& b, float& a);
 	void setBackground(float r, float g, float b, float a);
 
-	void move();
+	void updateTransform(Transform* trans);
 
 	//View matrix must update every frame
 	float* getGLViewMatrix();

@@ -146,12 +146,9 @@ bool ModuleRenderer3D::init(FileParser* conf)
 		//glShadeModel(GL_SMOOTH);		 // Enables Smooth Shading
 	}
 
-	//TMP
-	if (app->goManager->mainCamera)
-	{
-		std::vector<Component*> vec = app->goManager->mainCamera->findComponent(CAMERA);
-		activeCamera = (Camera*)vec[0];
-	}
+	//TODO: Check this
+	if (app->isPlaySate())
+		;//TODO: get active camera from config
 
 	onResize(app->window->getWidth(), app->window->getHeight());
 
@@ -169,23 +166,25 @@ bool ModuleRenderer3D::start()
 // PreUpdate: clear buffer
 update_status ModuleRenderer3D::preUpdate(float dt)
 {
-	if (activeCamera && activeCamera->projectMatrixChanged)
+	Camera* cam = (app->isPlaySate()) ? (activeCamera) : (app->camera->getCamera());
+
+	if (cam && cam->projectMatrixChanged)
 	{
-		updateProjectionMat();
-		activeCamera->projectMatrixChanged = false;
+		updateProjectionMat(cam);
+		cam->projectMatrixChanged = false;
 	}
 
+	Color col = cam->background;
+	glClearColor(col.r, col.g, col.b, col.a);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 	
-	//TODO
-	
 	glMatrixMode(GL_MODELVIEW);
-	glLoadMatrixf(activeCamera->getGLViewMatrix());
-	//glLoadMatrixf(app->camera->getViewMatrix());
+	glLoadMatrixf(cam->getGLViewMatrix());
 
 	// light 0 on cam pos
-	lights[0].SetPos(app->camera->position.x, app->camera->position.y, app->camera->position.z);
+	// TODO: if game is on play should be a lighton the camera or only the lights in the game
+	lights[0].SetPos(cam->frustum.pos.x, cam->frustum.pos.y, cam->frustum.pos.z);
 
 	for(uint i = 0; i < MAX_LIGHTS; ++i)
 		lights[i].Render();
@@ -234,19 +233,12 @@ bool ModuleRenderer3D::cleanUp()
 
 void ModuleRenderer3D::onResize(int width, int height)
 {
-	/*glViewport(0, 0, width, height);
+	Camera* cam = (app->isPlaySate()) ? (activeCamera) : (app->camera->getCamera());
 
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	projectionMatrix = perspective(60.0f, (float)width / (float)height, 0.125f, 512.0f);
-	glLoadMatrixf(&projectionMatrix);
-
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();*/
-	activeCamera->setAspectRatio((float)width / (float)height);
+	cam->setAspectRatio((float)width / (float)height);
 	glViewport(0, 0, width, height);
 
-	updateProjectionMat();
+	updateProjectionMat(cam);
 }
 
 bool ModuleRenderer3D::getVSync() const
@@ -264,11 +256,21 @@ void ModuleRenderer3D::setVSync(bool vsync)
 	}
 }
 
-void ModuleRenderer3D::updateProjectionMat()
+void ModuleRenderer3D::setActiveCamera(Camera* activeCamera)
+{
+	this->activeCamera = activeCamera;
+}
+
+Camera* ModuleRenderer3D::getActiveCamera()const
+{
+	return activeCamera;
+}
+
+void ModuleRenderer3D::updateProjectionMat(Camera* cam)
 {
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glLoadMatrixf((GLfloat*)activeCamera->getGLProjectMatrix());
+	glLoadMatrixf((GLfloat*)cam->getGLProjectMatrix());
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();

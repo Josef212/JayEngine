@@ -123,14 +123,13 @@ void Camera::setBackground(float r, float g, float b, float a)
 	background.Set(r, g, b, a);
 }
 
-void Camera::move()
+void Camera::updateTransform(Transform* trans)
 {
-	Transform* trans = object->getTransform();
 	if (!trans)
 		return;
+
 	float4x4 mat = trans->getTransformMatrix().Transposed();
 
-	//frustum.pos = (float3)trans->getPosition();
 	frustum.pos = mat.TranslatePart();
 	frustum.front = mat.WorldZ();
 	frustum.up = mat.WorldY();

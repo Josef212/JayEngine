@@ -4,6 +4,7 @@
 #include "Module.h"
 #include "Globals.h"
 #include "glmath.h"
+#include "Math.h"
 
 class GameObject;
 class Camera;
@@ -19,27 +20,25 @@ public:
 	update_status update(float dt);
 	bool cleanUp();
 
-	void look(const vec3 &position, const vec3 &reference, bool rotateAroundReference = false);
-	void lookAt(const vec3 &spot);
-	void move(const vec3 &movement);
-	void setPos(const vec3 &pos);
-	float* getViewMatrix();
+	void look(const float3& position, const float3& reference, bool rotateAroundReference = false);
+	void lookAt(const float3& spot);
+	void move(float dt);
+	void setPos(const float3& pos);
+	void orbit(const float3 ref, float dt);
+
+	GameObject* getEditorCameraObj()const;
+	Camera* getCamera();
 
 private:
-
-	void calculateViewMatrix();
 
 public:
-	
-	float maxDistanceToVehicle = 25.0f;
-	vec3 X, Y, Z, position, reference;
-
-	//TMP
-	/*GameObject* defaultCamera = NULL;
-	Camera* cameraComp = NULL;*/
+	float moveSpeed = 10.f;
+	float rotSpeed = 10.f; //TODO: read this from config
+	float distToReference = 10.f;
 
 private:
-	mat4x4 viewMatrix, viewMatrixInverse;
+	GameObject* defaultCamera = NULL;
+	Camera* defaultCameraComp = NULL;
 
 };
 

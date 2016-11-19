@@ -31,9 +31,11 @@ public:
 	void drawGameObject(GameObject* obj);
 	void drawWireframe(bool selected);
 
+	void setActiveCamera(Camera* activeCamera);
+	Camera* getActiveCamera()const;
 
 private:
-	void updateProjectionMat();
+	void updateProjectionMat(Camera* cam);
 
 public:
 	Light lights[MAX_LIGHTS];

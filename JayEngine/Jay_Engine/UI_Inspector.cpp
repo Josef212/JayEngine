@@ -214,7 +214,9 @@ void UI_Inspector::drawCamera(GameObject* selected, Camera* cam)
 		bool culling = cam->isCullingActive();
 		if (ImGui::Checkbox("Culling", &culling))cam->setCulling(culling);
 
-		if (ImGui::Button("Make this active."));
+		if (ImGui::Button("Make this active."))app->renderer3D->setActiveCamera(cam);
+		if (app->renderer3D->getActiveCamera() == cam)
+			ImGui::TextColored(ImVec4(1, 0, 0, 1), "This is the active camera!");
 
 		ImGui::Separator();
 		

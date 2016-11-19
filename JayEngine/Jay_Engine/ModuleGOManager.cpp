@@ -3,6 +3,8 @@
 #include "ModuleGOManager.h"
 
 #include "ModuleFileSystem.h"
+#include "ModuleRenderer3D.h"
+#include "ModuleCamera3D.h"
 
 #include "JOctree.h"
 #include "DrawDebug.h"
@@ -78,11 +80,7 @@ bool ModuleGOManager::init(FileParser* conf)
 	sceneTree->setRoot(AABB::FromCenterAndSize(float3(0, 40, 0), float3(100, 100, 100)));
 
 	if (sceneRootObject)
-	{
-		mainCamera = createCamera();
-		mainCamera->setName("Main camera");
 		return true;
-	}
 	else
 		return false;
 }
@@ -119,9 +117,9 @@ bool ModuleGOManager::cleanUp()
 
 void ModuleGOManager::draw()
 {
-	Camera* cam = (Camera*)mainCamera->findComponent(CAMERA)[0];//TODO use active camera and use it from module camera
+	Camera* cam = (app->isPlaySate()) ? (app->renderer3D->getActiveCamera()) : (app->camera->getCamera());
 
-	if (sceneRootObject)
+	if (sceneRootObject && cam)
 	{
 		if (cam && cam->isCullingActive())
 		{
@@ -404,13 +402,6 @@ bool ModuleGOManager::deleteGameObject(GameObject* toDel)
 
 	if (!toDel)
 		return ret;
-
-	if (toDel == mainCamera)
-	{
-		_LOG(LOG_WARN, "Trying to delete main camera.");
-		_LOG(LOG_WARN, "You can change or delete main camera yet, wait for further realeases."); //TODO
-		return ret;
-	}
 
 	if (selected == toDel)
 		select(NULL);
