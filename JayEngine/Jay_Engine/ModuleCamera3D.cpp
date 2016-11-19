@@ -61,63 +61,13 @@ bool ModuleCamera3D::cleanUp()
 // -----------------------------------------------------------------
 update_status ModuleCamera3D::update(float dt)
 {
-	/*vec3 newPos(0, 0, 0);
-	float speed = 25.0f * dt;
-	if (app->input->getKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
-		speed = 8.0f * dt;
-
-	if (app->input->getKey(SDL_SCANCODE_R) == KEY_REPEAT) newPos.y += speed;
-	if (app->input->getKey(SDL_SCANCODE_F) == KEY_REPEAT) newPos.y -= speed;
-
-	if (app->input->getKey(SDL_SCANCODE_W) == KEY_REPEAT) newPos -= Z * speed;
-	if (app->input->getKey(SDL_SCANCODE_S) == KEY_REPEAT) newPos += Z * speed;
-
-
-	if (app->input->getKey(SDL_SCANCODE_A) == KEY_REPEAT) newPos -= X * speed;
-	if (app->input->getKey(SDL_SCANCODE_D) == KEY_REPEAT) newPos += X * speed;
-
-	//position += newPos;
-	//reference += newPos;
-
-	// Mouse motion ----------------
-
-	if (app->input->getMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
-	{
-		int dx = -app->input->getMouseXMotion();
-		int dy = -app->input->getMouseYMotion();
-
-		float Sensitivity = 0.25f;
-
-		//position -= reference;
-
-		if (dx != 0)
-		{
-			float DeltaX = (float)dx * Sensitivity;
-
-			//X = rotate(X, DeltaX, vec3(0.0f, 1.0f, 0.0f));
-			//Y = rotate(Y, DeltaX, vec3(0.0f, 1.0f, 0.0f));
-			//Z = rotate(Z, DeltaX, vec3(0.0f, 1.0f, 0.0f));
-		}
-
-		if (dy != 0)
-		{
-			float DeltaY = (float)dy * Sensitivity;
-
-			//Y = rotate(Y, DeltaY, X);
-			//Z = rotate(Z, DeltaY, X);
-
-			if (Y.y < 0.0f)
-			{
-				Z = vec3(0.0f, Z.y > 0.0f ? 1.0f : -1.0f, 0.0f);
-				Y = cross(Z, X);
-			}
-		}
-
-		position = reference + Z * length(position);
-	}
-
-	// Recalculate matrix -------------
-	calculateViewMatrix();*/
+	//TODO: check if imgui is using the keyboard
+	move(dt);
+	//TODO: check if imgui is using the mouse
+	rotate(dt);
+	//TODO: mouse wheel
+	zoom(dt);
+	//TODO: picking
 
 	return UPDATE_CONTINUE;
 }
@@ -138,7 +88,56 @@ void ModuleCamera3D::lookAt( const float3& spot)
 // -----------------------------------------------------------------
 void ModuleCamera3D::move(float dt)
 {
-	
+	Frustum* frust = &defaultCameraComp->frustum;
+
+	float speed;
+	if (app->input->getKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
+		speed = moveSpeed / 2;
+	else
+		speed = moveSpeed;
+
+	float3 movement(float3::zero);
+	float3 forw(frust->front);
+	float3 right(frust->WorldRight());
+
+	if (app->input->getKey(SDL_SCANCODE_W) == KEY_REPEAT) movement += forw;
+	if (app->input->getKey(SDL_SCANCODE_S) == KEY_REPEAT) movement -= forw;
+	if (app->input->getKey(SDL_SCANCODE_D) == KEY_REPEAT) movement += right;
+	if (app->input->getKey(SDL_SCANCODE_A) == KEY_REPEAT) movement -= right;
+	if (app->input->getKey(SDL_SCANCODE_R) == KEY_REPEAT) movement += float3::unitY;
+	if (app->input->getKey(SDL_SCANCODE_F) == KEY_REPEAT) movement -= float3::unitY;
+
+	if (!movement.Equals(float3::zero))
+	{
+		movement *= (speed * dt);
+		frust->Translate(movement);
+	}
+}
+
+void ModuleCamera3D::rotate(float dt)
+{
+	if (app->input->getMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
+	{
+		int motX = app->input->getMouseXMotion();
+		int motY = app->input->getMouseYMotion();
+
+		if (!(motX != 0 && motY != 0))
+			return;
+
+		float speed;
+		if (app->input->getKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
+			speed = rotSpeed / 2;
+		else
+			speed = rotSpeed;
+
+		float x = (float)-motX * speed * dt;
+		float y = (float)-motY * speed * dt;
+
+		if (app->input->getKey(SDL_SCANCODE_LALT) == KEY_REPEAT)
+			orbit(x, y);
+		else
+			lookAt(x, y);
+	}
 }
 
 void ModuleCamera3D::setPos(const float3& pos)
@@ -146,9 +145,65 @@ void ModuleCamera3D::setPos(const float3& pos)
 	
 }
 
-void ModuleCamera3D::orbit(const float3 ref, float dt)
+void ModuleCamera3D::orbit(float dx, float dy)
 {
+	//TODO: improve this: better orbit rotation and rotate with an object reference
+	float3 reference = defaultCameraComp->frustum.pos + defaultCameraComp->frustum.front * distToReference;
+	Quat roty(defaultCameraComp->frustum.up, dx);
+	Quat rotx(defaultCameraComp->frustum.WorldRight(), dx);
+	float3 vec = defaultCameraComp->frustum.pos - reference;
 
+	vec = rotx.Transform(vec);
+	vec = roty.Transform(vec);
+
+	defaultCameraComp->frustum.pos = vec + reference;
+	lookAt(reference);
+}
+
+void ModuleCamera3D::lookAt(float dx, float dy)
+{
+	//dx will be rotation along x axis
+	if (dx != 0.f)
+	{
+		Quat rot = Quat::RotateY(dx);
+		defaultCameraComp->frustum.front = rot.Mul(defaultCameraComp->frustum.front).Normalized();
+		defaultCameraComp->frustum.up = rot.Mul(defaultCameraComp->frustum.up).Normalized();
+	}
+
+	//dy will be rotation along y axis
+	//more complex as the frustum up changes
+	if (dy != 0.f)
+	{
+		Quat rot = Quat::RotateAxisAngle(defaultCameraComp->frustum.WorldRight(), dy);
+
+		defaultCameraComp->frustum.front = rot.Mul(defaultCameraComp->frustum.front).Normalized();
+		defaultCameraComp->frustum.up = rot.Mul(defaultCameraComp->frustum.up).Normalized();
+	}
+}
+
+void ModuleCamera3D::zoom(float dt)
+{
+	if (app->input->getWheelYMotion() != 0)
+	{
+		Frustum* frust = &defaultCameraComp->frustum;
+
+		float speed;
+		if (app->input->getKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
+			speed = zoomSpeed / 2;
+		else
+			speed = zoomSpeed;
+
+		float3 movement(float3::zero);
+		float3 forw(frust->front);
+
+		movement += (forw * app->input->getWheelYMotion());
+
+		if (!movement.Equals(float3::zero))
+		{
+			movement *= (speed * dt);
+			frust->Translate(movement);
+		}
+	}
 }
 
 //=================================================================

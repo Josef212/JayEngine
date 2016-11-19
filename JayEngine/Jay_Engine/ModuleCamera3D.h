@@ -22,9 +22,12 @@ public:
 
 	void look(const float3& position, const float3& reference, bool rotateAroundReference = false);
 	void lookAt(const float3& spot);
+	void lookAt(float dx, float dy);
 	void move(float dt);
+	void rotate(float dt);
 	void setPos(const float3& pos);
-	void orbit(const float3 ref, float dt);
+	void orbit(float dx, float dy);
+	void zoom(float dt);
 
 	GameObject* getEditorCameraObj()const;
 	Camera* getCamera();
@@ -33,7 +36,8 @@ private:
 
 public:
 	float moveSpeed = 10.f;
-	float rotSpeed = 10.f; //TODO: read this from config
+	float rotSpeed = 3.f; //TODO: read this from config
+	float zoomSpeed = 500.f;
 	float distToReference = 10.f;
 
 private:
