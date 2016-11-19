@@ -11,14 +11,13 @@ class FileParser
 public:
 	FileParser();
 	FileParser(const char* buffer);
-	FileParser(Json::Value& sectionObject);
+	FileParser(void* t);
 	virtual ~FileParser();
 
 	FileParser getSection(const char* sectionName);
-	bool addSection(const char* sectionName);
+	FileParser addSection(const char* sectionName);
 
 	const char* getString(const char* name, const char* defaultStr, int index = -1);//TODO
-	std::string getStdString(const char* name, const char* defaultStr, int index = -1);
 	bool getBool(const char* name, bool defaultBool, int index = -1);
 	int getInt(const char* name, int defaultInt, int index = -1);
 	float getFloat(const char* name, float defaultFloat, int index = -1);
@@ -48,13 +47,14 @@ public:
 	//uint writeJson(const char* buffer, bool fastMode = true);
 	uint writeJson(std::string& stream, bool fastMode = true);
 
+	void test();
+
 private:
 	uint writeStyled(std::string& stream);
 	uint writeFast(std::string& stream);
 
 public:
 //private:
-	Json::Value root;
 };
 
 

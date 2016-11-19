@@ -45,7 +45,7 @@ bool ModuleRenderer3D::init(FileParser* conf)
 	_LOG(LOG_INFO, "Creating 3D Renderer context");
 	bool ret = true;
 
-	vsync = conf->getBool("vsync", true);
+	vsync = true;//conf->getBool("vsync", true);
 
 	//Create context
 	context = SDL_GL_CreateContext(app->window->getWindow());

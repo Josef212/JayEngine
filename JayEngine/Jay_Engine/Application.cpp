@@ -77,7 +77,7 @@ bool Application::init()
 
 	FileParser conf(buffer);
 
-	readConfig(&conf.getSection("app"));
+	//readConfig(&conf.getSection("app"));
 
 	//NOTE/TODO: For now will pass Config on init but maybe will pass on start too
 
@@ -266,10 +266,10 @@ void Application::browse(const char * url) const
 
 void Application::readConfig(FileParser* conf)
 {
-	std::string str = conf->getStdString("organitzation", "Josef21296");
-	organitzation.assign(str);
-	str.assign(conf->getStdString("app_name", "Jay_Engine"));
-	setTitle(str.c_str());
+	//std::string str = conf->getStdString("organitzation", "Josef21296");
+	organitzation.assign("Josef21296");
+	//str.assign(conf->getStdString("app_name", "Jay_Engine"));
+	setTitle("JayEgine");
 }
 
 void Application::saveGame()
@@ -282,23 +282,20 @@ void Application::loadGame()
 	loadNextFrame = true;
 }
 
-bool Application::saveGameNow()
+bool Application::saveGameNow() //TODO: pass the file name in order to select it from the app
 {
 	bool ret = false;
 
 	_LOG(LOG_INFO_REM, "SAVING!!!");
 
-	char* buffer = NULL;//
-	uint size = fs->load("config.json", SETTINGS_PATH, &buffer); //
-
-	//FileParser conf(buffer);//
-	FileParser conf;
-	conf.addBool("try", true); 
-	//RELEASE_ARRAY(buffer); //TODO: necesery to load the existing config file or directly load all the data
-
 	std::string stream;
-	size = conf.writeJson(stream, false);
 
+	FileParser conf;
+
+	/*for (std::list<Module*>::iterator it = modules.begin(); it != modules.end(); ++it)
+		(*it)->save(&conf.addSection((*it)->name.c_str()));*/
+	
+	uint size = conf.writeJson(stream, false);
 	app->fs->save("Data/Settings/c.json", stream.c_str(), size);
 
 	saveNextFrame = false;

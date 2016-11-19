@@ -2,6 +2,8 @@
 #include "Application.h"
 #include "ModuleAudio.h"
 
+#include "FileParser.h"
+
 #include "SDL_mixer/include/SDL_mixer.h"
 #pragma comment( lib, "SDL_mixer/libx86/SDL2_mixer.lib" )
 
@@ -160,4 +162,12 @@ bool ModuleAudio::playFx(unsigned int id, int repeat)
 	}
 	*/
 	return ret;
+}
+
+bool ModuleAudio::save(FileParser* sect)
+{
+	sect->addBool("test", true);
+	sect->addInt("teste", 10);
+	
+	return true;
 }

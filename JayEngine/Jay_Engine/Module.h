@@ -76,6 +76,16 @@ public:
 		return true; 
 	}
 
+	virtual bool save(FileParser* sect)
+	{
+		return true;
+	}
+
+	virtual bool load(FileParser* sect)
+	{
+		return true;
+	}
+
 	virtual void drawDebug()
 	{
 	

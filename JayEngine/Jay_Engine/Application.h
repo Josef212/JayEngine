@@ -97,8 +97,8 @@ private:
 
 	void readConfig(FileParser* conf);
 
-	bool saveGameNow();
-	bool loadGameNow();
+	bool saveGameNow(); //Basically for config, if in any module needs to save a json just save it there
+	bool loadGameNow(); //same as in save but loading
 };
 
 extern Application* app;
