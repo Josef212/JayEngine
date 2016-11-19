@@ -109,6 +109,11 @@ void UI_Conf::draw()
 			if (ImGui::DragFloat("Far plane:", &farP))cam->setFarPlaneDist(farP);
 			if (ImGui::DragFloat("Field of view:", &fov))cam->setFOV(fov);
 
+			ImGui::DragFloat("Move speed: ", &app->camera->moveSpeed);
+			ImGui::DragFloat("Rotation speed: ", &app->camera->rotSpeed);
+			ImGui::DragFloat("Zoom speed: ", &app->camera->zoomSpeed);
+			ImGui::DragFloat("Orbiting distance: ", &app->camera->distToReference);
+
 			bool culling = cam->isCullingActive();
 			if (ImGui::Checkbox("Culling", &culling))cam->setCulling(culling);
 		}
