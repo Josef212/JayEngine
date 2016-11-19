@@ -37,6 +37,9 @@ public:
 	//Projection matrix every time camera is changed like fov or window is resized
 	float* getGLProjectMatrix();
 
+	void lookAt(const float3 spot);
+	void look(const float3 spot, const float3 pos);
+
 	void debugDraw();
 
 private:

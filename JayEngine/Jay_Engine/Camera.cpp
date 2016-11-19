@@ -24,6 +24,9 @@ Camera::Camera(GameObject* gObj, int id) : Component(gObj, id)
 	frustum.farPlaneDistance = farPlaneDist;
 	setFOV(FOV);
 	setAspectRatio(aspectRatio);
+
+	//TMP
+	look(float3::zero, float3(0, 10, 10));
 }
 
 Camera::~Camera()
@@ -125,9 +128,10 @@ void Camera::move()
 	Transform* trans = object->getTransform();
 	if (!trans)
 		return;
-	float4x4 mat = trans->getTransformMatrix();
+	float4x4 mat = trans->getTransformMatrix().Transposed();
 
-	frustum.pos = (float3)trans->getPosition();
+	//frustum.pos = (float3)trans->getPosition();
+	frustum.pos = mat.TranslatePart();
 	frustum.front = mat.WorldZ();
 	frustum.up = mat.WorldY();
 
@@ -136,14 +140,16 @@ void Camera::move()
 
 float* Camera::getGLViewMatrix()
 {
-	static float4x4 ret = frustum.ViewMatrix();
+	static float4x4 ret;
+	ret = frustum.ViewMatrix();
 	ret.Transpose();
 	return (float*)ret.v;
 }
 
 float* Camera::getGLProjectMatrix()
 {
-	static float4x4 ret = frustum.ProjectionMatrix();
+	static float4x4 ret;
+	ret = frustum.ProjectionMatrix();
 	ret.Transpose();
 	return (float*)ret.v;
 }
@@ -152,4 +158,20 @@ void Camera::debugDraw()
 {
 	if(app->debug)
 		drawFrustumDebug(frustum);
+}
+
+void Camera::lookAt(const float3 spot)
+{
+	float3 direction = spot - frustum.pos;
+	float3x3 mat = float3x3::LookAt(frustum.front, direction.Normalized(), frustum.up, float3::unitY);
+
+	frustum.front = mat.MulDir(frustum.front).Normalized();
+	frustum.up = mat.MulDir(frustum.up).Normalized();
+}
+
+void Camera::look(const float3 spot, const float3 pos)
+{
+	frustum.pos = pos;
+	lookAt(spot);
+	projectMatrixChanged = true;
 }

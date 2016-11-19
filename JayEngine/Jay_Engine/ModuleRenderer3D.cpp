@@ -12,11 +12,11 @@
 #include "Transform.h"
 #include "Mesh.h"
 #include "Material.h"
+#include "Camera.h"
 
 #include "ResourceMesh.h"
 
 #include "Primitive.h"
-#include "Camera.h"
 
 #include "OpenGL.h"
 
@@ -146,6 +146,13 @@ bool ModuleRenderer3D::init(FileParser* conf)
 		//glShadeModel(GL_SMOOTH);		 // Enables Smooth Shading
 	}
 
+	//TMP
+	if (app->goManager->mainCamera)
+	{
+		std::vector<Component*> vec = app->goManager->mainCamera->findComponent(CAMERA);
+		activeCamera = (Camera*)vec[0];
+	}
+
 	onResize(app->window->getWidth(), app->window->getHeight());
 
 	return ret;
@@ -162,13 +169,20 @@ bool ModuleRenderer3D::start()
 // PreUpdate: clear buffer
 update_status ModuleRenderer3D::preUpdate(float dt)
 {
+	if (activeCamera && activeCamera->projectMatrixChanged)
+	{
+		updateProjectionMat();
+		activeCamera->projectMatrixChanged = false;
+	}
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 	
 	//TODO
 	
 	glMatrixMode(GL_MODELVIEW);
-	glLoadMatrixf(app->camera->getViewMatrix());
+	glLoadMatrixf(activeCamera->getGLViewMatrix());
+	//glLoadMatrixf(app->camera->getViewMatrix());
 
 	// light 0 on cam pos
 	lights[0].SetPos(app->camera->position.x, app->camera->position.y, app->camera->position.z);
@@ -220,7 +234,7 @@ bool ModuleRenderer3D::cleanUp()
 
 void ModuleRenderer3D::onResize(int width, int height)
 {
-	glViewport(0, 0, width, height);
+	/*glViewport(0, 0, width, height);
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -228,7 +242,11 @@ void ModuleRenderer3D::onResize(int width, int height)
 	glLoadMatrixf(&projectionMatrix);
 
 	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
+	glLoadIdentity();*/
+	activeCamera->setAspectRatio((float)width / (float)height);
+	glViewport(0, 0, width, height);
+
+	updateProjectionMat();
 }
 
 bool ModuleRenderer3D::getVSync() const
@@ -244,6 +262,16 @@ void ModuleRenderer3D::setVSync(bool vsync)
 		if (SDL_GL_SetSwapInterval(vsync ? 1 : 0) < 0)
 			_LOG(LOG_WARN, "Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
 	}
+}
+
+void ModuleRenderer3D::updateProjectionMat()
+{
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glLoadMatrixf((GLfloat*)activeCamera->getGLProjectMatrix());
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
 }
 
 //---------------------------------

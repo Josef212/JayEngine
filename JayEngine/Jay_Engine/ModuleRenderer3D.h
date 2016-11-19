@@ -7,6 +7,7 @@
 #include "Light.h"
 
 class GameObject;
+class Camera;
 
 #define MAX_LIGHTS 8
 
@@ -32,6 +33,7 @@ public:
 
 
 private:
+	void updateProjectionMat();
 
 public:
 	Light lights[MAX_LIGHTS];
@@ -42,6 +44,7 @@ public:
 
 private:
 	bool vsync;
+	Camera* activeCamera = NULL;
 
 };
 

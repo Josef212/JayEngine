@@ -10,7 +10,6 @@ struct aiScene;
 struct aiNode;
 struct aiMesh;
 
-class JQuadTree;
 class JOctree;
 
 class ModuleGOManager : public Module
