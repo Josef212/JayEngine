@@ -1,6 +1,7 @@
 #ifndef __APPLICATION_H_
 #define __APPLICATION_H_
 
+#include "Time.h"
 #include "Globals.h"
 #include "Timer.h"
 #include "Event.h"
@@ -105,7 +106,12 @@ public:
 	bool isPlaySate();
 	bool isPauseState();
 
+	void setPlay();
+	void setPause();
+	void setStop();
+
 	void sendGlobalEvent(const Event& e);
+	void onGlobalEvent(const Event& e);
 
 private:
 	void addModule(Module* mod);

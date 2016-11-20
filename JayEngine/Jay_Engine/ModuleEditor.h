@@ -34,6 +34,7 @@ private:
 	void openDirWin();
 	void playMenu();
 	void setStyle();
+	void timeDisplay();
 
 public:
 	std::list<UI_Comp*> uiList;
@@ -49,6 +50,7 @@ private:
 	bool showConfig = false;
 	bool showAbout = false;
 	bool showDirWin = false;
+	bool showTimeDisplay = true;
 	std::string engineVersion ;
 
 };

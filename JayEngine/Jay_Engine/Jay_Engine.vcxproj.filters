@@ -316,6 +316,9 @@
     <ClCompile Include="ModuleEventSystem.cpp">
       <Filter>Core\Modules</Filter>
     </ClCompile>
+    <ClCompile Include="Time.cpp">
+      <Filter>Core\Tools</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.h">
@@ -662,6 +665,9 @@
     </ClInclude>
     <ClInclude Include="ModuleEventSystem.h">
       <Filter>Core\Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Time.h">
+      <Filter>Core\Tools</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

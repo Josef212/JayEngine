@@ -204,6 +204,9 @@ update_status ModuleEditor::update(float dt)
 	if (showDirWin)
 		openDirWin();
 
+	if (showTimeDisplay)
+		timeDisplay();
+
 	playMenu();
 
 	return ret;
@@ -271,38 +274,6 @@ void ModuleEditor::openDirWin()
 			}
 		}
 	}
-	ImGui::End();
-}
-
-void ModuleEditor::playMenu()
-{
-	static bool b = true;
-	int w = ImGui::GetIO().DisplaySize.x;
-	int winSize = 300;
-	ImGui::SetNextWindowPos(ImVec2((w/2) - (winSize / 2), 20));
-	ImGui::SetNextWindowSize(ImVec2(winSize, 40));
-	if (!ImGui::Begin("Example: Fixed Overlay", &b, ImVec2(0, 0), 0.3f, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
-	{
-		ImGui::End();
-		return;
-	}
-
-	if (!app->isPlaySate())
-	{
-		if (ImGui::Button("Play"));
-	}
-	else
-	{
-		if (ImGui::Button("Pause"));
-		ImGui::SameLine();
-		if (ImGui::Button("Stop"));
-	}
-
-	ImGui::SameLine();
-	ImGui::Checkbox("Show grid", &app->renderer3D->showGrid);
-	ImGui::SameLine();
-	ImGui::Checkbox("Draw Debug", &app->debug);
-
 	ImGui::End();
 }
 
@@ -377,4 +348,95 @@ void ModuleEditor::setStyle()
 	style.Colors[41] -- Text selected background
 	style.Colors[42] -- Modal window darkening	
 	*/
+}
+
+void ModuleEditor::playMenu()
+{
+	static bool b = true;
+	int w = ImGui::GetIO().DisplaySize.x;
+	int winSize = 300;
+	ImGui::SetNextWindowPos(ImVec2((w / 2) - (winSize / 2), 20));
+	ImGui::SetNextWindowSize(ImVec2(winSize, 40));
+	if (!ImGui::Begin("Example: Fixed Overlay", &b, ImVec2(0, 0), 0.3f, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
+	{
+		ImGui::End();
+		return;
+	}
+
+	if (!app->isPlaySate() && !app->isPauseState())
+	{
+		if (ImGui::Button("Play")) app->setPlay();
+	}
+	else
+	{
+		if(app->isPauseState())
+			if (ImGui::Button("Play")) app->setPlay();
+		
+		if(app->isPlaySate())
+			if (ImGui::Button("Pause")) app->setPause();
+
+		ImGui::SameLine();
+		if (ImGui::Button("Stop"))app->setStop();
+	}
+
+	ImGui::SameLine();
+	ImGui::Checkbox("Show grid", &app->renderer3D->showGrid);
+	ImGui::SameLine();
+	ImGui::Checkbox("Draw Debug", &app->debug);
+
+	ImGui::End();
+}
+
+void ModuleEditor::timeDisplay()
+{
+	ImGui::Begin("Time", &showTimeDisplay);
+	{
+		ImGui::TextColored(ImVec4(1, 0, 0, 1), "Real:");
+		ImGui::Separator();
+
+		ImGui::Text("Real dt: ");
+		ImGui::SameLine();
+		ImGui::TextColored(ImVec4(1, 1, 0, 1), "%f", time->editorDT());
+
+		ImGui::Text("Frames: ");
+		ImGui::SameLine();
+		ImGui::TextColored(ImVec4(1, 1, 0, 1), "%d", time->editorFrames());
+		
+
+		ImGui::TextColored(ImVec4(1, 0, 0, 1), "Game:");
+		ImGui::Separator();
+
+		ImGui::Text("Game dt: ");
+		ImGui::SameLine();
+		ImGui::TextColored(ImVec4(1, 1, 0, 1), "%f", time->DT());
+
+		ImGui::Text("Game frames: ");
+		ImGui::SameLine();
+		ImGui::TextColored(ImVec4(1, 1, 0, 1), "%d", time->gameFrames());
+
+		ImGui::Separator();
+
+		ImGui::Text("Game state:");
+		ImGui::SameLine();
+		switch (app->getGameState())
+		{
+			case gameState::PLAY:
+				ImGui::TextColored(ImVec4(1, 1, 0, 1), "PLAY");
+			break;
+
+			case gameState::PAUSE:
+				ImGui::TextColored(ImVec4(1, 1, 0, 1), "PAUSE");
+			break;
+
+			case gameState::EDITOR:
+				ImGui::TextColored(ImVec4(1, 1, 0, 1), "EDITOR");
+			break;
+
+			default:
+				ImGui::TextColored(ImVec4(1, 1, 0, 1), "ERROR");
+			break;
+		}
+
+		ImGui::End();
+	}
 }

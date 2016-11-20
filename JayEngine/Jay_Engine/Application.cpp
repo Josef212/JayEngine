@@ -19,10 +19,13 @@
 #include "SceneTry.h"
 
 //TMP
+#include "Time.h"
 
 Application::Application()
 {
 	_LOG(LOG_STD, "Application Constructor --------------");
+
+	time = new Time();
 
 	info = new HrdInfo();
 	random = new RandGen();
@@ -108,6 +111,11 @@ bool Application::init()
 // ---------------------------------------------
 void Application::prepareUpdate()
 {
+	time->updateTime();
+
+	if (isPlaySate())
+		time->updateGameTime();
+
 	dt = (float)msTimer.ReadSec();
 	msTimer.Start();
 }
@@ -341,9 +349,55 @@ bool Application::isPauseState()
 
 void Application::sendGlobalEvent(const Event& e)
 {
+	onGlobalEvent(e);
+
 	for (std::list<Module*>::iterator it = modules.begin(); it != modules.end(); ++it)
 	{
 		if ((*it)->isEnabled())
 			(*it)->onGlobalEvent(e);
+	}
+}
+
+void Application::setPlay()
+{
+	Event ev(Event::eventType::PLAY);
+	sendGlobalEvent(ev);
+	state = PLAY;
+}
+
+void Application::setPause()
+{
+	Event ev(Event::eventType::PAUSE);
+	sendGlobalEvent(ev);
+	state = PAUSE;
+}
+
+void Application::setStop()
+{
+	Event ev(Event::eventType::STOP);
+	sendGlobalEvent(ev);
+	state = EDITOR;
+}
+
+void Application::onGlobalEvent(const Event& e)
+{
+	switch (e.type)
+	{
+		case Event::eventType::PLAY:
+			if (state == PAUSE)				//Can do this if's because we change the game state after this 
+				time->startGameTimer();
+			else if(state == EDITOR)
+				time->restartGameTimer();
+		break;
+
+		case Event::eventType::PAUSE:
+			if(state == PLAY)
+				time->stopGameTimer();
+
+		break;
+
+		case Event::eventType::STOP:
+			time->cleanGameTimer();
+		break;
 	}
 }

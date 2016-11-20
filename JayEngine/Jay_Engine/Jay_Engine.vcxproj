@@ -198,6 +198,7 @@
     <ClCompile Include="ResourceMesh.cpp" />
     <ClCompile Include="SceneTry.cpp" />
     <ClCompile Include="Material.cpp" />
+    <ClCompile Include="Time.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Transform.cpp" />
     <ClCompile Include="UI_Comp.cpp" />
@@ -315,6 +316,7 @@
     <ClInclude Include="ResourceMesh.h" />
     <ClInclude Include="SceneTry.h" />
     <ClInclude Include="Material.h" />
+    <ClInclude Include="Time.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="UI_Comp.h" />

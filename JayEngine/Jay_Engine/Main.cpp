@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include "Globals.h"
 #include "Application.h"
+#include "Time.h"
 
 #include "SDL/include/SDL.h"
 #pragma comment( lib, "SDL/lib/win32/SDL2.lib" )
@@ -16,6 +17,7 @@ enum main_states
 };
 
 Application* app = NULL;
+Time* time = NULL;
 
 int main(int argc, char ** argv)
 {
