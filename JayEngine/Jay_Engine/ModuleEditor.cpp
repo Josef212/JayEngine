@@ -4,6 +4,7 @@
 #include "ModuleWindow.h"
 #include "ModuleGOManager.h"
 #include "ModuleFileSystem.h"
+#include "ModuleRenderer3D.h"
 #include "FileParser.h"
 
 #include "UI_Comp.h"
@@ -51,6 +52,8 @@ bool ModuleEditor::init(FileParser* conf)
 	ImGui_ImplSdlGL3_Init(app->window->getWindow());
 
 	engineVersion.assign(conf->getString("version", "0.1.0-V"));
+	
+	setStyle(); //TODO: config??
 
 	return true;
 }
@@ -201,7 +204,7 @@ update_status ModuleEditor::update(float dt)
 	if (showDirWin)
 		openDirWin();
 
-	tmp();
+	playMenu();
 
 	return ret;
 }
@@ -271,14 +274,107 @@ void ModuleEditor::openDirWin()
 	ImGui::End();
 }
 
-void ModuleEditor::tmp()
+void ModuleEditor::playMenu()
 {
-	bool r = true;
-	if (ImGui::Begin("CreateEmpty", &r))
+	static bool b = true;
+	int w = ImGui::GetIO().DisplaySize.x;
+	int winSize = 300;
+	ImGui::SetNextWindowPos(ImVec2((w/2) - (winSize / 2), 20));
+	ImGui::SetNextWindowSize(ImVec2(winSize, 40));
+	if (!ImGui::Begin("Example: Fixed Overlay", &b, ImVec2(0, 0), 0.3f, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove))
 	{
-		static float s[3];
-		ImGui::DragFloat3("Size", s, 0.5f);
-		if (ImGui::Button("Create")) app->goManager->createEmptyGoWithAABB(s[0], s[1], s[2]);
+		ImGui::End();
+		return;
 	}
+
+	if (!app->isPlaySate())
+	{
+		if (ImGui::Button("Play"));
+	}
+	else
+	{
+		if (ImGui::Button("Pause"));
+		ImGui::SameLine();
+		if (ImGui::Button("Stop"));
+	}
+
+	ImGui::SameLine();
+	ImGui::Checkbox("Show grid", &app->renderer3D->showGrid);
+	ImGui::SameLine();
+	ImGui::Checkbox("Draw Debug", &app->debug);
+
 	ImGui::End();
+}
+
+void ModuleEditor::setStyle()
+{
+	ImGuiStyle& style = ImGui::GetStyle();
+
+	style.Colors[0] = ImVec4(1, 1, 1, 1); //Text
+	style.Colors[1] = ImVec4(1, 1, 1, 1); //Text
+	style.Colors[2] = ImVec4(0.156f, 0.172f, 0.211f, 1); //Win bg
+	style.Colors[3] = ImVec4(0, 0, 0, 0.5f); //Child
+
+	style.Colors[4] = ImVec4(0.117f, 0.494f, 0.478f, 1); //Menu items
+
+
+	style.Colors[10] = ImVec4(0.254f, 0.282f, 0.341f, 1); //Title
+	style.Colors[11] = ImVec4(0.254f, 0.282f, 0.341f, 0.5f); //Title
+	style.Colors[12] = ImVec4(0.254f, 0.282f, 0.341f, 1); //Title
+	style.Colors[13] = ImVec4(0.360f, 0.396f, 0.478f, 1); //Menu bg
+
+	style.Colors[14] = ImVec4(0.117f, 0.494f, 0.478f, 1); //bg
+	style.Colors[15] = ImVec4(0.007f, 0.784f, 0.835f, 1); //thumb grab
+	style.Colors[16] = ImVec4(0.015f, 0.686f, 0.749f, 1); //thumb h
+	style.Colors[17] = ImVec4(0.015f, 0.686f, 0.749f, 1); //thumb ac
+
+	style.Colors[22] = ImVec4(0.294f, 0.356f, 0.364f, 1); //Button
+	style.Colors[23] = ImVec4(0.792f, 0.898f, 0.984f, 1); //Button
+	style.Colors[24] = ImVec4(0.411f, 0.509f, 0.537f, 1); //Button
+
+	/*
+	style.Colors[0] -- Text color
+	style.Colors[1] -- Text disabled
+	style.Colors[2] -- Window background (Not the title bar)
+	style.Colors[3] -- Child window background
+	style.Colors[4] -- Popup background //Menu items
+	style.Colors[5] -- Border
+	style.Colors[6] -- Border shadow
+	style.Colors[7] -- Frame background //Checkbox, text box...
+	style.Colors[8] -- Frame background hovered
+	style.Colors[9] -- Frame background active
+	style.Colors[10] -- Title background
+	style.Colors[11] -- Title background collapsed
+	style.Colors[12] -- Title background active
+	style.Colors[13] -- Menu bar background
+	style.Colors[14] -- Scroll bar background
+	style.Colors[15] -- Scroll thumb grab
+	style.Colors[16] -- Scroll thumb hovered
+	style.Colors[17] -- Scroll thumb grab active
+	style.Colors[18] -- Combo background
+	style.Colors[19] -- Check mark
+	style.Colors[20] -- Slider grab
+	style.Colors[21] -- Slider grab active
+	style.Colors[22] -- Button
+	style.Colors[23] -- Button hovered
+	style.Colors[24] -- Button active
+	style.Colors[25] -- Header //For the inspector tree
+	style.Colors[26] -- Header hovered
+	style.Colors[27] -- Header active
+	style.Colors[28] -- Column ***
+	style.Colors[29] -- Column hovered
+	style.Colors[30] -- Column active
+	style.Colors[31] -- Resize grip
+	style.Colors[32] -- Resize grip hovered
+	style.Colors[33] -- Resize grip active
+	style.Colors[34] -- Close button
+	style.Colors[35] -- Close button hovered
+	style.Colors[36] -- Close button active
+	style.Colors[37] -- Plot lines
+	style.Colors[38] -- Plot lines hovered
+	style.Colors[39] -- Plot histogram
+	style.Colors[40] -- Plot histogram hovered
+	style.Colors[41] -- Text selected background
+	style.Colors[42] -- Modal window darkening	
+	*/
 }

@@ -39,7 +39,6 @@ void UI_Inspector::draw()
 
 	ImGui::Begin("Inspector", &active);
 	{
-		ImGui::Checkbox("ShowGrid", &app->renderer3D->showGrid);
 		if (selected)
 		{
 			char name[128];
@@ -111,7 +110,7 @@ void UI_Inspector::drawTransformation(GameObject* selected)
 	ImGui::Separator();
 }
 
-void UI_Inspector::drawMesh(GameObject* selected, Mesh* mesh) //TODO: must iterate all meshes to show components info in inspector
+void UI_Inspector::drawMesh(GameObject* selected, Mesh* mesh)
 {
 	char meshName[60];
 	strcpy_s(meshName, 60, mesh->getName());
@@ -154,7 +153,7 @@ void UI_Inspector::drawMesh(GameObject* selected, Mesh* mesh) //TODO: must itera
 	ImGui::Separator();
 }
 
-void UI_Inspector::drawMaterial(GameObject* selected, Material* mat) //TODO: must iterate all materials to show components info in inspector
+void UI_Inspector::drawMaterial(GameObject* selected, Material* mat)
 {
 	char matName[60];
 	strcpy_s(matName, 60, mat->getName());
