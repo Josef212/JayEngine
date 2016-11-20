@@ -23,6 +23,8 @@ ModuleCamera3D::ModuleCamera3D(bool startEnabled) : Module(startEnabled)
 	{
 		defaultCamera->setName("Editor camera");
 		defaultCameraComp = (Camera*)defaultCamera->addComponent(CAMERA);
+		if(defaultCameraComp)
+			defaultCameraComp->look(float3::zero, float3(0, 10, 10));
 	}
 }
 

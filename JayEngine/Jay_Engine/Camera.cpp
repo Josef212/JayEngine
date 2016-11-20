@@ -24,9 +24,6 @@ Camera::Camera(GameObject* gObj, int id) : Component(gObj, id)
 	frustum.farPlaneDistance = farPlaneDist;
 	setFOV(FOV);
 	setAspectRatio(aspectRatio);
-
-	//TMP
-	look(float3::zero, float3(0, 10, 10));
 }
 
 Camera::~Camera()
