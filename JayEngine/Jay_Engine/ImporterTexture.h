@@ -12,7 +12,7 @@ public:
 	ImporterTexture();
 	virtual ~ImporterTexture();
 	//TODO: change import to bool, in mesh importer too
-	void importTexture(const char* fileName, std::string& outputName); //NOTE: Import from extern format 
+	void importTexture(const char* fileName, ResourceTexture* resTex); //NOTE: Import from extern format 
 };
 
 #endif // !__IMPORTERTEXTURE_H__

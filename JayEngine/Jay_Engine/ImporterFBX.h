@@ -7,6 +7,8 @@ struct aiNode;
 struct aiScene;
 class FileParser;
 
+class GameObject;
+
 class ImporterFBX :	public Importer
 {
 public:
@@ -16,7 +18,7 @@ public:
 	bool importFBX(const char* fullPath, const char* fileName);
 
 private:
-	void importFBXRec(aiNode* node, const aiScene* scene, UID parent, FileParser* file);
+	GameObject* importFBXRec(aiNode* node, const aiScene* scene, GameObject* parent);
 };
 
 #endif // !__IMPORTERFBX_H__

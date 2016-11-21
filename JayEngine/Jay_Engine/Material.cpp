@@ -6,6 +6,9 @@
 #include "ModuleGOManager.h"
 #include "ModuleFileSystem.h"
 
+#include "ResourceTexture.h"
+#include "ModuleResourceManager.h"
+
 #include "Devil/include/il.h"
 #include "Devil/include/ilu.h"
 #include "Devil/include/ilut.h"
@@ -139,6 +142,14 @@ int Material::getTexture(int index)
 	return ret;
 }
 
+ResourceTexture* Material::createAnEmptyMaterialRes()
+{
+	if(!textureResource)
+		textureResource = (ResourceTexture*)app->resourceManager->createNewResource(RESOURCE_TEXTURE);
+
+	return textureResource;
+}
+
 bool Material::saveCMP(FileParser* sect)
 {
 	bool ret = true;
@@ -148,14 +159,13 @@ bool Material::saveCMP(FileParser* sect)
 	sect->addInt("UUID", id);
 	sect->addInt("go_UUID", object->getGOId());
 	sect->addColor("mat_col", color);
-	//TODO: textures as resource
 
-	/*if (texResource)
+	if (textureResource)
 	{
-		sect->addInt("resource_id", texResource->getUID());
-		sect->addString("resource_exported_file", texResource->getExportedFile());
-		sect->addString("resource_original_file", texResource->getOriginalFile());
-	}*/
+		sect->addInt("resource_id", textureResource->getUID());
+		sect->addString("resource_exported_file", textureResource->getExportedFile());
+		sect->addString("resource_original_file", textureResource->getOriginalFile());
+	}
 
 	return ret;
 }

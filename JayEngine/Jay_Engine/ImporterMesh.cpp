@@ -96,6 +96,9 @@ void ImporterMesh::importMesh(aiMesh* mesh, ResourceMesh* resMesh)
 	std::string outName(DEFAULT_MESH_SAVE_PATH + std::to_string(resMesh->getUID()) + MESH_EXTENSION);
 	//Will also put the uuid at the start of the file in order to not get the uuid from the file name
 
+	//TODO: set origin file
+	resMesh->exportedFile.assign(std::to_string(resMesh->getUID()) + MESH_EXTENSION);
+
 	_LOG(LOG_INFO_REM, "New mesh is going to be serialized: %s.", outName.c_str());
 
 #pragma region Filling mesh resource

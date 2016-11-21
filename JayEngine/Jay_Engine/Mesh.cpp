@@ -59,7 +59,7 @@ void Mesh::clearMesh()
 	RELEASE(meshResource);
 }
 
-bool Mesh::loadMesh(aiMesh* mesh, bool loadToRAM)
+bool Mesh::loadMesh(aiMesh* mesh, bool loadToRAM) //TODO: must remove this
 {
 	bool ret = false;
 

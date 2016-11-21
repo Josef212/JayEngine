@@ -7,6 +7,7 @@
 #include <map>
 #include <string>
 
+class ResourceTexture;
 class FileParser;
 
 class Material : public Component
@@ -29,6 +30,8 @@ public:
 		return textures.size();
 	}
 
+	ResourceTexture* createAnEmptyMaterialRes();
+
 	bool saveCMP(FileParser* sect);
 	bool loadCMP(FileParser* sect);
 
@@ -38,6 +41,8 @@ public:
 	Color color;
 	std::vector<uint> textures;
 	std::map<std::string, int> paths;
+
+	ResourceTexture* textureResource = NULL; //Vector if normal map, light map, etc.
 
 private:
 };

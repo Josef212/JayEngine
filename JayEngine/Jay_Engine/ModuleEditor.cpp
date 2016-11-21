@@ -19,6 +19,10 @@
 
 #include "GameObject.h"
 
+//TMP
+#include "ModuleResourceManager.h"
+#include "ImporterFBX.h"
+
 ModuleEditor::ModuleEditor(bool startEnabled) : Module(startEnabled)
 {
 	_LOG(LOG_STD, "Editor: Creation.");
@@ -167,6 +171,7 @@ update_status ModuleEditor::update(float dt)
 			if (ImGui::MenuItem("Load mecha.fbx")) app->goManager->loadFBX("MechaT.fbx", NULL);
 			if (ImGui::MenuItem("Load brute.fbx")) app->goManager->loadFBX("Brute.fbx", NULL);
 			if (ImGui::MenuItem("Load town.fbx")) app->goManager->loadFBX("Street environment_V01.FBX", NULL);
+			if (ImGui::MenuItem("Load test-cube.fbx")) app->resourceManager->fbxImporter->importFBX("Data\/Assets\/fbx\/MechaT.fbx", "Mecha");
 			ImGui::EndMenu();
 		}
 		//---------------------

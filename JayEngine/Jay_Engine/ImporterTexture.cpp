@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "ImporterTexture.h"
 
+#include "ResourceTexture.h"
 #include "ModuleResourceManager.h"
 #include "ModuleFileSystem.h"
 
@@ -36,18 +37,20 @@ ImporterTexture::~ImporterTexture()
 	ilShutDown();
 }
 
-void ImporterTexture::importTexture(const char* fileName, std::string& outputName) //Note in texture case the output name will be a new UID + extension
+void ImporterTexture::importTexture(const char* fileName, ResourceTexture* resTex) //Note in texture case the output name will be a new UID + extension
 {//TODO: outputName should be the original file with all the path? The new file? Which extension should have the outputName
-	if (!fileName)
+	if (!fileName || !resTex)
 	{
 		_LOG(LOG_ERROR, "Error loading texture: invalid file name.");
 		return;
 	}
 
 	//TODO: Assign the path directly here? Assume file name is clear?... For now the fileName is clear and the path is added here
-	outputName.assign(DEFAULT_TEXTURES_PATH);
+	std::string outputName(DEFAULT_TEXTURES_PATH);
 	outputName.append("/");
 	outputName.append(fileName);
+
+	resTex->originalFile.assign(outputName);
 
 	_LOG(LOG_INFO, "Loading a new texture: %s.", outputName.c_str());
 
@@ -98,6 +101,7 @@ void ImporterTexture::importTexture(const char* fileName, std::string& outputNam
 					else
 					{
 						_LOG(LOG_INFO, "New dds created: %s.", savePath.c_str());
+						resTex->exportedFile.assign(savePath);
 					}
 				}
 
