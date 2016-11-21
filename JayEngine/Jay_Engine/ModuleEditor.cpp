@@ -81,7 +81,9 @@ update_status ModuleEditor::update(float dt)
 	{
 		if (ImGui::BeginMenu("File"))
 		{
-			if (ImGui::MenuItem("Load")) app->loadGame(); //TODO: open file browser etc
+			if (ImGui::MenuItem("LoadConf")) app->loadGame();
+			if (ImGui::MenuItem("SaveConf")) app->saveGame();
+			if (ImGui::MenuItem("Load")) showLoadWin = !showLoadWin; //TODO: open file browser etc
 			if (ImGui::MenuItem("Save")) showSaveWin = !showSaveWin;
 			if (ImGui::MenuItem("Serch files")) showDirWin = !showDirWin;
 			if (ImGui::MenuItem("Quit")) app->quit = true;
@@ -204,6 +206,11 @@ update_status ModuleEditor::update(float dt)
 	if (showDirWin)
 		openDirWin("Assets/fbx");
 
+	if (showSaveWin)
+		openSaveBrowser("Data/Assets");
+
+	if (showLoadWin)
+		openLoadBrowser("Data/Assets/fbx");
 
 	if (showTimeDisplay)
 		timeDisplay();
@@ -392,10 +399,10 @@ void ModuleEditor::openSaveBrowser(const char* path)
 {
 	std::vector<std::string> files;
 	app->fs->getFilesOnDir(path, files);
-	if (ImGui::Begin("Save", &showDirWin))
+	ImGui::Begin("Save", &showSaveWin);
 	{
 		static int selected = -1;
-		ImGui::BeginChild("Directory:", ImVec2(200, 0), true);
+		ImGui::BeginChild("Directory:", ImVec2(500, 300), true);
 		{
 			for (int i = 0; i < files.size(); ++i)
 			{
@@ -405,19 +412,10 @@ void ModuleEditor::openSaveBrowser(const char* path)
 		}
 		ImGui::EndChild();
 
-		char fileName[64];
+		static char fileName[64];
 		ImGui::InputText("", fileName, 64);
 		ImGui::SameLine();
 
-		if (selected > -1 && selected < files.size())
-		{
-			ImGui::TextColored(ImVec4(1, 0, 0, 1), "This will overwrite current file!");
-			strcpy_s(fileName, 64, files[selected].c_str());
-		}
-		else
-		{
-
-		}
 		if (ImGui::Button("Save"))
 		{
 			if (fileName[0] == '\0')
@@ -426,19 +424,83 @@ void ModuleEditor::openSaveBrowser(const char* path)
 			}
 			else
 			{//TODO: input will be clean??
-			//app->goManager->loadFBX(file, NULL); //TODO: add goManager save scene
+			 //app->goManager->loadFBX(file, NULL); //TODO: add goManager save scene
+				_LOG(LOG_INFO, "Saving file, name: %s.", fileName);
 				showSaveWin = !showSaveWin;
 			}
 		}
 
+		if (ImGui::Button("Clear"))
+		{
+			selected = -1;
+			fileName[0] = '\0';
+		}
 
+		if (selected > -1 && selected < files.size())
+		{
+			ImGui::SameLine();
+			ImGui::TextColored(ImVec4(1, 0, 0, 1), "This will overwrite current file!");
+			strcpy_s(fileName, 64, files[selected].c_str());
+		}
+		else
+		{
+
+		}
 	}
 	ImGui::End();
 }
 
 void ModuleEditor::openLoadBrowser(const char* path)
 {
+	std::vector<std::string> files;
+	app->fs->getFilesOnDir(path, files);
+	ImGui::Begin("Save", &showLoadWin);
+	{
+		static int selected = -1;
+		ImGui::BeginChild("Directory:", ImVec2(500, 300), true);
+		{
+			for (int i = 0; i < files.size(); ++i)
+			{
+				if (ImGui::Selectable(files[i].c_str(), selected == i))
+					selected = i;
+			}
+		}
+		ImGui::EndChild();
 
+		static char fileName[64];
+		ImGui::InputText("", fileName, 64);
+		ImGui::SameLine();
+
+		if (ImGui::Button("Load"))
+		{
+			if (fileName[0] == '\0')
+			{
+				ImGui::TextColored(ImVec4(1, 0, 0, 1), "MUST select a file!");
+			}
+			else
+			{//TODO: input will be clean??
+			 //app->goManager->loadFBX(file, NULL); //TODO: add goManager save scene
+				_LOG(LOG_INFO, "Loading file, name: %s.", fileName);
+				showLoadWin = !showLoadWin;
+			}
+		}
+
+		if (ImGui::Button("Clear"))
+		{
+			selected = -1;
+			fileName[0] = '\0';
+		}
+
+		if (selected > -1 && selected < files.size())
+		{
+			strcpy_s(fileName, 64, files[selected].c_str());
+		}
+		else
+		{
+
+		}
+	}
+	ImGui::End();
 }
 
 void ModuleEditor::timeDisplay()
