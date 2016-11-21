@@ -189,6 +189,9 @@ bool Camera::saveCMP(FileParser* sect)
 	//TODO: add float3(pos)
 	//Front?? Right???
 
+	sect->addFloat3("cam_pos", frustum.pos);
+	sect->addColor("bg_color", background);
+
 	return ret;
 }
 

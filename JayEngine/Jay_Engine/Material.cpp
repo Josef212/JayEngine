@@ -147,7 +147,7 @@ bool Material::saveCMP(FileParser* sect)
 	sect->addBool("active", active);
 	sect->addInt("UUID", id);
 	sect->addInt("go_UUID", object->getGOId());
-	//TODO: add color
+	sect->addColor("mat_col", color);
 	//TODO: textures as resource
 
 	/*if (texResource)

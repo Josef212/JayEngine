@@ -273,6 +273,9 @@ bool Transform::saveCMP(FileParser* sect)
 	sect->addInt("go_UUID", object->getGOId());
 
 	//TODO: add float3 and quaternion
+	sect->addFloat3("position", position);
+	sect->addFloat3("scale", scale);
+	sect->addFloatArray("rotation", rotation.ptr(), 4);
 
 	return ret;
 }
