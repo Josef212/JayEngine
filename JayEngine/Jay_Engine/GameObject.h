@@ -10,7 +10,9 @@
 class Transform;
 class Mesh;
 class Material;
-class Cmaera;
+class Camera;
+
+class FileParser;
 
 class GameObject
 {
@@ -46,6 +48,9 @@ public:
 	void drawDebug();
 
 	void updateAABB();
+
+	//TMP
+	bool saveGO(FileParser* go);
 
 private:
 

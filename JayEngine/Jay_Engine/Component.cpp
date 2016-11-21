@@ -73,3 +73,13 @@ void Component::debugDraw()
 {
 
 }
+
+bool Component::saveCMP(FileParser* go)
+{
+	return true;
+}
+
+bool Component::loadCMP(FileParser* go)
+{
+	return true;
+}

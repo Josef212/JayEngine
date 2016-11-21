@@ -15,6 +15,9 @@
 
 #include "ModuleGOManager.h"
 
+//TMP
+#include "FileParser.h"
+
 
 GameObject::GameObject(GameObject* parent, uint32 id) : parent(parent), id(id)
 {
@@ -278,4 +281,29 @@ void GameObject::updateAABB() //TODO: make enclose for all meshes
 		(*it)->updateAABB();
 
 	transform->transformUpdated = false;
+}
+
+
+
+//TMP
+bool GameObject::saveGO(FileParser* go)
+{
+	bool ret = true;
+
+	if (go)
+	{
+		go->addString("name", getName());
+		go->addInt("UUID", id);
+		go->addInt("parent_UUID", parent->getGOId());
+
+		for(uint i = 0; i < components.size(); ++i)
+		{
+			if (components[i])
+				components[i]->saveCMP(&go->addSection(std::to_string(components[i]->getId()).c_str()));
+		}
+	}
+	else
+		ret = false;
+
+	return ret;
 }

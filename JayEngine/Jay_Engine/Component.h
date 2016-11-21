@@ -5,6 +5,7 @@
 #include <string>
 
 class GameObject;
+class FileParser;
 
 enum ComponentType
 {
@@ -35,6 +36,9 @@ public:
 	int getId();
 
 	virtual void debugDraw();
+
+	virtual bool saveCMP(FileParser* go);
+	virtual bool loadCMP(FileParser* go);
 
 public:
 	ComponentType type = UNKNOWN;

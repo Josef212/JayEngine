@@ -31,7 +31,9 @@ public:
 	void log(const char* str, logType type);
 
 private:
-	void openDirWin();
+	void openDirWin(const char* path);
+	void openSaveBrowser(const char* path);
+	void openLoadBrowser(const char* path);
 	void playMenu();
 	void setStyle();
 	void timeDisplay();
@@ -50,6 +52,8 @@ private:
 	bool showConfig = false;
 	bool showAbout = false;
 	bool showDirWin = false;
+	bool showSaveWin = false;
+	bool showLoadWin = false;
 	bool showTimeDisplay = true;
 	std::string engineVersion ;
 

@@ -82,7 +82,7 @@ update_status ModuleEditor::update(float dt)
 		if (ImGui::BeginMenu("File"))
 		{
 			if (ImGui::MenuItem("Load")) app->loadGame(); //TODO: open file browser etc
-			if (ImGui::MenuItem("Save")) app->saveGame();
+			if (ImGui::MenuItem("Save")) showSaveWin = !showSaveWin;
 			if (ImGui::MenuItem("Serch files")) showDirWin = !showDirWin;
 			if (ImGui::MenuItem("Quit")) app->quit = true;
 			ImGui::EndMenu();
@@ -202,7 +202,8 @@ update_status ModuleEditor::update(float dt)
 	}
 
 	if (showDirWin)
-		openDirWin();
+		openDirWin("Assets/fbx");
+
 
 	if (showTimeDisplay)
 		timeDisplay();
@@ -246,10 +247,10 @@ void ModuleEditor::log(const char* str, logType type)
 		console->logUi(str, type);
 }
 
-void ModuleEditor::openDirWin()
+void ModuleEditor::openDirWin(const char* path)
 {
 	std::vector<std::string> files;
-	app->fs->getFilesOnDir("Assets/fbx", files);
+	app->fs->getFilesOnDir(path, files);
 	if (ImGui::Begin("Dir", &showDirWin))
 	{
 		static int selected = -1;
@@ -385,6 +386,59 @@ void ModuleEditor::playMenu()
 	ImGui::Checkbox("Draw Debug", &app->debug);
 
 	ImGui::End();
+}
+
+void ModuleEditor::openSaveBrowser(const char* path)
+{
+	std::vector<std::string> files;
+	app->fs->getFilesOnDir(path, files);
+	if (ImGui::Begin("Save", &showDirWin))
+	{
+		static int selected = -1;
+		ImGui::BeginChild("Directory:", ImVec2(200, 0), true);
+		{
+			for (int i = 0; i < files.size(); ++i)
+			{
+				if (ImGui::Selectable(files[i].c_str(), selected == i))
+					selected = i;
+			}
+		}
+		ImGui::EndChild();
+
+		char fileName[64];
+		ImGui::InputText("", fileName, 64);
+		ImGui::SameLine();
+
+		if (selected > -1 && selected < files.size())
+		{
+			ImGui::TextColored(ImVec4(1, 0, 0, 1), "This will overwrite current file!");
+			strcpy_s(fileName, 64, files[selected].c_str());
+		}
+		else
+		{
+
+		}
+		if (ImGui::Button("Save"))
+		{
+			if (fileName[0] == '\0')
+			{
+				ImGui::TextColored(ImVec4(1, 0, 0, 1), "MUST add a name!");
+			}
+			else
+			{//TODO: input will be clean??
+			//app->goManager->loadFBX(file, NULL); //TODO: add goManager save scene
+				showSaveWin = !showSaveWin;
+			}
+		}
+
+
+	}
+	ImGui::End();
+}
+
+void ModuleEditor::openLoadBrowser(const char* path)
+{
+
 }
 
 void ModuleEditor::timeDisplay()

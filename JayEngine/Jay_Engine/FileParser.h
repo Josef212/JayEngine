@@ -52,10 +52,9 @@ private:
 	uint writeStyled(char** buffer);
 	uint writeFast(char** buffer);
 
-public:
-//private:
-	JSON_Object* objRoot;
-	JSON_Value* valRoot;
+private:
+	JSON_Object* objRoot = NULL;
+	JSON_Value* valRoot = NULL;
 };
 
 
