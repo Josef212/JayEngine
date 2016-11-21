@@ -6,6 +6,7 @@
 #include "Color.h"
 
 class Transform;
+class FileParser;
 
 class Camera : public Component
 {
@@ -43,6 +44,9 @@ public:
 	void look(const float3 spot, const float3 pos);
 
 	void debugDraw();
+
+	bool saveCMP(FileParser* sect);
+	bool loadCMP(FileParser* sect);
 
 private:
 

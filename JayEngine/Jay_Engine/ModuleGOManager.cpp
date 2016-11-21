@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "ModuleGOManager.h"
 
+#include "FileParser.h"
 #include "ModuleFileSystem.h"
 #include "ModuleRenderer3D.h"
 #include "ModuleCamera3D.h"
@@ -464,6 +465,40 @@ void ModuleGOManager::eraseGameObjectFromTree(GameObject* obj)//DEL_COM
 {
 	if (sceneTree && obj)
 		sceneTree->erase(obj);
+}
+
+void ModuleGOManager::saveScene(const char* name)
+{
+	//TODO: Supose for now that name is already usable
+	if (sceneRootObject)
+	{
+		FileParser scene;
+		//TODO: add some meta before go??
+		if (sceneRootObject->saveGO(&scene))
+		{
+			char* buf;
+			uint size = scene.writeJson(&buf, false);
+			if (app->fs->save(name, buf, size) != size)
+			{
+				_LOG(LOG_ERROR, "Error saving the scene!");
+			}
+			else
+			{
+				_LOG(LOG_INFO, "Successfully save the scene: %s.", name);
+			}
+		}
+		else
+		{
+			_LOG(LOG_ERROR, "Error saving the scene!");
+		}
+	}
+	else
+		_LOG(LOG_WARN, "No scene to save.");
+}
+
+void ModuleGOManager::loadScene(const char* name)
+{
+
 }
 
 GameObject* ModuleGOManager::loadCube()//DEL_COM

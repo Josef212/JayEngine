@@ -81,6 +81,7 @@ update_status ModuleEditor::update(float dt)
 	{
 		if (ImGui::BeginMenu("File"))
 		{
+			if (ImGui::MenuItem("TMP")) app->goManager->saveScene("Data/Scenes/scene.json");
 			if (ImGui::MenuItem("LoadConf")) app->loadGame();
 			if (ImGui::MenuItem("SaveConf")) app->saveGame();
 			if (ImGui::MenuItem("Load")) showLoadWin = !showLoadWin; //TODO: open file browser etc

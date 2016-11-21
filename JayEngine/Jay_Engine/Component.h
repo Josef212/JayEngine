@@ -37,8 +37,8 @@ public:
 
 	virtual void debugDraw();
 
-	virtual bool saveCMP(FileParser* go);
-	virtual bool loadCMP(FileParser* go);
+	virtual bool saveCMP(FileParser* sect);
+	virtual bool loadCMP(FileParser* sect);
 
 public:
 	ComponentType type = UNKNOWN;

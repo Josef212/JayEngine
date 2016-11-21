@@ -1,5 +1,8 @@
 #include "Transform.h"
+
+#include "FileParser.h"
 #include "GameObject.h"
+
 #include "Assimp/include/cimport.h"
 #include "Assimp/include/scene.h"
 #include "Assimp/include/postprocess.h"
@@ -258,4 +261,25 @@ void Transform::updateTransform(float4x4& parentMat)
 		}
 	}
 	transformUpdated = true;
+}
+
+bool Transform::saveCMP(FileParser* sect)
+{
+	bool ret = true;
+
+	sect->addInt("comp_type", (int)type);
+	sect->addBool("active", active);
+	sect->addInt("UUID", id);
+	sect->addInt("go_UUID", object->getGOId());
+
+	//TODO: add float3 and quaternion
+
+	return ret;
+}
+
+bool Transform::loadCMP(FileParser* sect)
+{
+	bool ret = true;
+
+	return ret;
 }

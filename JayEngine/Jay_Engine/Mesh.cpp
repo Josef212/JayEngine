@@ -1,6 +1,8 @@
 #include "Application.h"
 #include "Mesh.h"
 
+#include "FileParser.h"
+#include "GameObject.h"
 #include "ModuleResourceManager.h"
 #include "ResourceMesh.h"
 #include "OpenGL.h"
@@ -186,4 +188,33 @@ ResourceMesh* Mesh::createAnEmptyMeshRes()
 	}
 	
 	return meshResource;
+}
+
+bool Mesh::saveCMP(FileParser* sect)
+{
+	bool ret = true;
+
+	sect->addInt("comp_type", (int)type);
+	sect->addBool("active", active);
+	sect->addInt("UUID", id);
+	sect->addInt("go_UUID", object->getGOId());
+
+	if (meshResource)
+	{
+		sect->addInt("resource_id", meshResource->getUID());
+		sect->addString("resource_exported_file", meshResource->getExportedFile());
+		sect->addString("resource_original_file", meshResource->getOriginalFile());
+	}
+
+	sect->addBool("wireframe", renderWireframe);
+	sect->addBool("normals", renderNormals);
+
+	return ret;
+}
+
+bool Mesh::loadCMP(FileParser* sect)
+{
+	bool ret = true;
+
+	return ret;
 }

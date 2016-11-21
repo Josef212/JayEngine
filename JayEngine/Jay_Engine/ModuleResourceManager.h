@@ -11,6 +11,7 @@ class ResourceTexture;
 enum ResourceType;
 
 class Importer;
+class ImporterFBX;
 class ImporterMesh;
 class ImporterTexture;
 
@@ -24,6 +25,8 @@ public:
 	bool start();
 	bool cleanUp();
 
+	bool importFBX(const char* name, const char* path = NULL);
+
 	UID getNewUID();
 
 	Resource* createNewResource(ResourceType type);
@@ -32,6 +35,7 @@ public:
 private:
 
 public:
+	ImporterFBX* fbxImporter = NULL;
 	ImporterMesh* meshImporter = NULL;
 	ImporterTexture* textureImporter = NULL;
 

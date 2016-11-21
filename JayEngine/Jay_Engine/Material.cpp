@@ -1,6 +1,8 @@
 #include "Material.h"
 
 #include "Application.h"
+#include "FileParser.h"
+#include "GameObject.h"
 #include "ModuleGOManager.h"
 #include "ModuleFileSystem.h"
 
@@ -133,6 +135,34 @@ int Material::getTexture(int index)
 
 	if (isEnable() && IS_INSIDE(index, textures.size() - 1, 0))
 		ret = textures[index];
+
+	return ret;
+}
+
+bool Material::saveCMP(FileParser* sect)
+{
+	bool ret = true;
+
+	sect->addInt("comp_type", (int)type);
+	sect->addBool("active", active);
+	sect->addInt("UUID", id);
+	sect->addInt("go_UUID", object->getGOId());
+	//TODO: add color
+	//TODO: textures as resource
+
+	/*if (texResource)
+	{
+		sect->addInt("resource_id", texResource->getUID());
+		sect->addString("resource_exported_file", texResource->getExportedFile());
+		sect->addString("resource_original_file", texResource->getOriginalFile());
+	}*/
+
+	return ret;
+}
+
+bool Material::loadCMP(FileParser* sect)
+{
+	bool ret = true;
 
 	return ret;
 }

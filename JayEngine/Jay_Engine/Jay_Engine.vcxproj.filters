@@ -319,6 +319,9 @@
     <ClCompile Include="Time.cpp">
       <Filter>Core\Tools</Filter>
     </ClCompile>
+    <ClCompile Include="ImporterFBX.cpp">
+      <Filter>Core\ResourceManagement\Importers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.h">
@@ -668,6 +671,9 @@
     </ClInclude>
     <ClInclude Include="Time.h">
       <Filter>Core\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="ImporterFBX.h">
+      <Filter>Core\ResourceManagement\Importers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

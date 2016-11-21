@@ -3,6 +3,7 @@
 #include "Transform.h"
 
 #include "Application.h"
+#include "FileParser.h"
 
 #include "DrawDebug.h"
 
@@ -170,4 +171,30 @@ void Camera::look(const float3 spot, const float3 pos)
 	frustum.pos = pos;
 	lookAt(spot);
 	projectMatrixChanged = true;
+}
+
+bool Camera::saveCMP(FileParser* sect)
+{
+	bool ret = true;
+
+	sect->addInt("comp_type", (int)type);
+	sect->addBool("active", active);
+	sect->addInt("UUID", id);
+	sect->addInt("go_UUID", object->getGOId());
+
+	sect->addFloat("near_plane", nearPlaneDist);
+	sect->addFloat("far_plane", farPlaneDist);
+	sect->addFloat("fov", FOV);
+	sect->addFloat("aspect_ratio", aspectRatio);
+	//TODO: add float3(pos)
+	//Front?? Right???
+
+	return ret;
+}
+
+bool Camera::loadCMP(FileParser* sect)
+{
+	bool ret = true;
+
+	return ret;
 }

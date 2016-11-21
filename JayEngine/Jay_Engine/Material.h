@@ -7,6 +7,8 @@
 #include <map>
 #include <string>
 
+class FileParser;
+
 class Material : public Component
 {
 public:
@@ -27,6 +29,8 @@ public:
 		return textures.size();
 	}
 
+	bool saveCMP(FileParser* sect);
+	bool loadCMP(FileParser* sect);
 
 private:
 

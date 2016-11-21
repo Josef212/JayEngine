@@ -5,6 +5,7 @@
 
 struct aiMesh;
 class ResourceMesh;
+class FileParser;
 
 class Mesh : public Component
 {
@@ -26,25 +27,12 @@ public:
 
 	void clearMesh();
 
+	bool saveCMP(FileParser* sect);
+	bool loadCMP(FileParser* sect);
+
 private:
 
 public:
-	/*uint idVertices = 0;
-	uint numVertices = 0;
-	uint* indices = NULL;
-
-	uint idIndices = 0;
-	uint numIndices = 0;
-	float* vertices = NULL;
-
-	uint idNormals = 0;
-	uint numNormals = 0; //Each vertex has a normal vec and this var is the size of normals vec(numVertices*3)
-	float* normals = NULL;
-
-	uint idTexCoords = 0;
-	uint numTexCoords = 0; //Same texCoords as num of vertices but here will save numVertices*3 because each texCoord has 3 components, actually uv's are 2D but keep the 3rd variable
-	float* texCoords = NULL;*/
-
 	ResourceMesh* meshResource = NULL;
 
 	/**Will use a similar system as assimp, each mesh has the id of each texture, 

@@ -5,6 +5,7 @@
 #include "Math.h"
 
 struct aiNode;
+class FileParser;
 
 class Transform : public Component
 {
@@ -42,6 +43,9 @@ public:
 	float4x4 getTransformMatrix();
 	float4x4 getLocalMatrix();
 	void updateTransform(float4x4& parentMat);
+
+	bool saveCMP(FileParser* sect);
+	bool loadCMP(FileParser* sect);
 
 private:
 

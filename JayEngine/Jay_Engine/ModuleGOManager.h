@@ -45,7 +45,7 @@ public:
 
 	bool deleteGameObject(GameObject* toDel);
 
-	GameObject* loadCube(); //DEL_COM
+	GameObject* loadCube();
 
 	void drawDebug();
 
@@ -54,6 +54,9 @@ public:
 
 	void insertGameObjectToTree(GameObject* obj);
 	void eraseGameObjectFromTree(GameObject* obj); //DEL_COM
+
+	void saveScene(const char* name);
+	void loadScene(const char* name);
 
 private:
 

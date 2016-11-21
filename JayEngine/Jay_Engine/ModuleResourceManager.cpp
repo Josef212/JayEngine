@@ -13,6 +13,7 @@
 #include "Timer.h"
 
 #include "Importer.h"
+#include "ImporterFBX.h"
 #include "ImporterMesh.h"
 #include "ImporterTexture.h"
 
@@ -23,6 +24,7 @@ ModuleResourceManager::ModuleResourceManager(bool startEnabled) : Module(startEn
 	name.assign("module_importer");
 
 	//TODO: only if mode editor
+	fbxImporter = new ImporterFBX();
 	meshImporter = new ImporterMesh();
 	textureImporter = new ImporterTexture();
 	//----------------------------- endif
@@ -111,4 +113,30 @@ Resource* ModuleResourceManager::getResourceFromUID(UID uuid)
 	std::map<UID, Resource*>::iterator it = resources.find(uuid);
 
 	return (it != resources.end()) ? ((*it).second) : (NULL);
+}
+
+bool ModuleResourceManager::importFBX(const char* name, const char* path)
+{
+	bool ret = true;
+
+	if (name)
+	{
+		char fullPath[64];
+		if (path)
+			strcpy_s(fullPath, 64, path);
+		else
+			strcpy_s(fullPath, 64, DEFAULT_FB_PATH);
+
+		strcat_s(fullPath, 64, "/");
+		strcat_s(fullPath, 64, name);
+
+		ret = fbxImporter->importFBX(fullPath, name);
+	}
+	else
+	{
+		_LOG(LOG_ERROR, "Invalid fbx name!");
+		ret = false;
+	}
+
+	return ret;
 }

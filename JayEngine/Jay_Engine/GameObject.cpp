@@ -286,24 +286,45 @@ void GameObject::updateAABB() //TODO: make enclose for all meshes
 
 
 //TMP
-bool GameObject::saveGO(FileParser* go)
+bool GameObject::saveGO(FileParser* file)
 {
 	bool ret = true;
 
-	if (go)
+	if (file)
 	{
-		go->addString("name", getName());
-		go->addInt("UUID", id);
-		go->addInt("parent_UUID", parent->getGOId());
+		FileParser ob = file->addSection(std::to_string(id).c_str());
+		ob.addString("name", getName());
+		ob.addInt("UUID", id);
+		if(parent)
+			ob.addInt("parent_UUID", parent->getGOId());
+		else
+			ob.addInt("parent_UUID", 0); //ROOT
+		//TODO: array of childs UUID?
+
+		ob.addBool("active", goActive);
+		//TODO: AABB
 
 		for(uint i = 0; i < components.size(); ++i)
 		{
 			if (components[i])
-				components[i]->saveCMP(&go->addSection(std::to_string(components[i]->getId()).c_str()));
+				components[i]->saveCMP(&ob.addSection(std::to_string(components[i]->getId()).c_str()));
+		}
+
+		for (uint i = 0; i < childrens.size(); ++i)
+		{
+			if (childrens[i])
+				childrens[i]->saveGO(file);
 		}
 	}
 	else
 		ret = false;
+
+	return ret;
+}
+
+bool GameObject::loadGO(FileParser* file)
+{
+	bool ret = true;
 
 	return ret;
 }
