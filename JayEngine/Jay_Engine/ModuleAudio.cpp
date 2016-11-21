@@ -168,7 +168,11 @@ bool ModuleAudio::save(FileParser* sect)
 {
 	sect->addBool("test", true);
 	sect->addInt("teste", 10);
+	float a[4] = { 0.f, 1.f, 2.f, 3.f };
+	sect->addFloatArray("test_ar", a, 4);
 	
+	sect->addFloat3("test_float3", float3(2, 1, 2));
+
 	return true;
 }
 
@@ -178,6 +182,13 @@ bool ModuleAudio::load(FileParser* sect)
 
 	_LOG(LOG_WARN, "Getting a bool from audio module: %d.", b);
 	_LOG(LOG_WARN, "Getting an int from audio module: %d.", sect->getInt("teste", 0));
+
+	_LOG(LOG_INFO_REM, "Getting float array: %f.", sect->getFloat("test_ar", 0.f, 2));
+
+	float3 g = sect->getFloat3("test_float3", float3(0, 0, 0));
+	_LOG(LOG_INFO_REM, "Getting float3.x: %f.", g.x);
+	_LOG(LOG_INFO_REM, "Getting float3.y: %f.", g.y);
+	_LOG(LOG_INFO_REM, "Getting float3.z: %f.", g.z);
 
 	return true;
 }

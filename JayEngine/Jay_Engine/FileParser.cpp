@@ -8,8 +8,11 @@
 FileParser::FileParser()
 {
 	valRoot = json_value_init_object();
-	objRoot = json_value_get_object(valRoot);
-	//TODO: Memory???
+	if (valRoot)
+	{
+		objRoot = json_value_get_object(valRoot);
+		clean = true;
+	}
 }
 
 FileParser::FileParser(const char* buffer)
@@ -17,8 +20,11 @@ FileParser::FileParser(const char* buffer)
 	if (buffer)
 	{
 		valRoot = json_parse_string(buffer);
-		objRoot = json_value_get_object(valRoot);
-		//TODO: Memory???
+		if (valRoot)
+		{
+			objRoot = json_value_get_object(valRoot);
+			clean = true;
+		}
 	}
 }
 
@@ -28,8 +34,8 @@ FileParser::FileParser(JSON_Object* section) : objRoot(section)
 
 FileParser::~FileParser()
 {
-	/*if(valRoot)
-		json_value_free(valRoot);*/
+	if(clean && valRoot)
+		json_value_free(valRoot);
 }
 
 //------------------------------------------------
@@ -74,7 +80,32 @@ int FileParser::getInt(const char* name, int defaultInt, int index)
 float FileParser::getFloat(const char* name, float defaultFloat, int index)
 {
 	JSON_Value* val = getVal(name, index);
-	return (val) ? ((int)json_value_get_number(val)) : (defaultFloat);
+	return (val) ? ((float)json_value_get_number(val)) : (defaultFloat);
+}
+
+double FileParser::getDouble(const char* name, double defaultDouble, int index)
+{
+	JSON_Value* val = getVal(name, index);
+	return (val) ? ((double)json_value_get_number(val)) : (defaultDouble);
+}
+
+float* FileParser::getFloatArray(const char* name)
+{
+	//For now we can get a float or any value type from array using the float getter + index
+	return NULL;
+}
+
+float3 FileParser::getFloat3(const char* name, float3 default)
+{
+	return float3(getFloat(name, default.x, 0), getFloat(name, default.y, 1), getFloat(name, default.z, 2));
+}
+
+Color FileParser::getColor(const char* name, Color default)
+{
+	return Color(getFloat(name, default.r, 0),
+		getFloat(name, default.g, 1),
+		getFloat(name, default.b, 2),
+		getFloat(name, default.a, 3));
 }
 
 //--------------------------------------
@@ -109,6 +140,80 @@ bool FileParser::addFloat(const char* name, float value)
 	return json_object_set_number(objRoot, name, (double)value) == JSONSuccess;
 }
 
+bool FileParser::addDouble(const char* name, double value)
+{
+	return json_object_set_number(objRoot, name, value) == JSONSuccess;
+}
+
+bool FileParser::addIntArray(const char* name, int* fArray, uint size)
+{
+	if (!name || !fArray || size <= 0)
+		return false;
+
+	JSON_Value* val = json_value_init_array();
+	JSON_Array* ar = json_value_get_array(val);
+	for (uint i = 0; i < size; ++i)
+		json_array_append_number(ar, fArray[i]);
+
+	json_object_set_value(objRoot, name, val);
+
+	return true;
+}
+
+bool FileParser::addFloatArray(const char* name, float* iArray, uint size)
+{
+	if (!name || !iArray || size <= 0)
+		return false;
+
+	JSON_Value* val = json_value_init_array();
+	JSON_Array* ar = json_value_get_array(val);
+	for (uint i = 0; i < size; ++i)
+		json_array_append_number(ar, iArray[i]);
+
+	json_object_set_value(objRoot, name, val);
+	
+	return true;
+}
+
+bool FileParser::addBoolArray(const char* name, bool* bArray, uint size)
+{
+	if (!name || !bArray || size <= 0)
+		return false;
+
+	JSON_Value* val = json_value_init_array();
+	JSON_Array* ar = json_value_get_array(val);
+	for (uint i = 0; i < size; ++i)
+		json_array_append_boolean(ar, bArray[i]);
+
+	json_object_set_value(objRoot, name, val);
+
+	return true;
+}
+
+bool FileParser::addStringArray(const char* name, const char** sArray, uint size)
+{
+	if (!name || !sArray || size <= 0)
+		return false;
+
+	JSON_Value* val = json_value_init_array();
+	JSON_Array* ar = json_value_get_array(val);
+	for (uint i = 0; i < size; ++i)
+		json_array_append_string(ar, sArray[i]);
+
+	json_object_set_value(objRoot, name, val);
+
+	return true;
+}
+
+bool FileParser::addFloat3(const char* name, float3 vec)
+{
+	return addFloatArray(name, vec.ptr(), 3);
+}
+
+bool FileParser::addColor(const char* name, Color col)
+{
+	return addFloatArray(name, &col, 4);
+}
 
 //--------------------------------------
 
