@@ -33,10 +33,10 @@ bool ModuleWindow::init(FileParser* conf)
 	else
 	{
 		winSize = conf->getInt("screen_size", 1);
-		width = conf->getInt("width", 1280) * winSize;
-		height = conf->getInt("height", 1024) * winSize;
+		width = conf->getInt("width", 1920) * winSize;
+		height = conf->getInt("height", 1080) * winSize;
 
-		fullscreen = conf->getBool("fullscreen", true);
+		fullscreen = conf->getBool("fullscreen", false);
 		resizable = conf->getBool("resizable", true);
 		borderless = conf->getBool("borderless", false);
 		fullscreenDesktop = conf->getBool("fullscreen_desktop", false);

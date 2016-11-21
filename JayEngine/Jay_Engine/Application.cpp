@@ -295,22 +295,17 @@ bool Application::saveGameNow() //TODO: pass the file name in order to select it
 
 	_LOG(LOG_INFO_REM, "SAVING!!!");
 
-	/*FileParser conf;
-	conf.addBool("test", true);
-	conf.addInt("test2", 2);*/
-	/*FileParser p = conf.addSection("appTest");
-	p.addInt("int test", 4);*/
+	FileParser conf;
 
-	/*for (std::list<Module*>::iterator it = modules.begin(); it != modules.end(); ++it)
-		(*it)->save(&conf.addSection((*it)->name.c_str()));*/
+	for (std::list<Module*>::iterator it = modules.begin(); it != modules.end(); ++it)
+		(*it)->save(&conf.addSection((*it)->name.c_str()));
 	
-	//char* buffer;
-	//uint size = conf.writeJson(&buffer, false);
-	//uint size = conf.Save(&buffer, "None");
-	//if (app->fs->save("Data/Settings/c.json", buffer, size) != size)
-		//_LOG(LOG_ERROR, "Could not save json.");
+	char* buffer;
+	uint size = conf.writeJson(&buffer, false);
+	if (app->fs->save("Data/Settings/c.json", buffer, size) != size)
+		_LOG(LOG_ERROR, "Could not save json.");
 
-	//RELEASE_ARRAY(buffer);
+	RELEASE_ARRAY(buffer);
 
 	saveNextFrame = false;
 
@@ -321,6 +316,14 @@ bool Application::loadGameNow()
 {
 	bool ret = false;
 
+	char* buffer = NULL;
+	uint size = fs->load("c.json", SETTINGS_PATH, &buffer);
+
+	FileParser conf(buffer);
+
+	for (std::list<Module*>::iterator it = modules.begin(); it != modules.end(); ++it)
+		(*it)->load(&conf.getSection((*it)->name.c_str()));
+	
 	_LOG(LOG_INFO_REM, "LOADING!!!");
 	loadNextFrame = false;
 

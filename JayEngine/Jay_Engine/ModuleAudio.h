@@ -16,6 +16,7 @@ public:
 	bool init(FileParser* conf);
 	bool cleanUp();
 	bool save(FileParser* sect);
+	bool load(FileParser* sect);
 
 	// Play a music file
 	bool playMusic(const char* path, float fade_time = DEFAULT_MUSIC_FADE_TIME);

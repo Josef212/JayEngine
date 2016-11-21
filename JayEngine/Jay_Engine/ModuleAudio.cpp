@@ -171,3 +171,13 @@ bool ModuleAudio::save(FileParser* sect)
 	
 	return true;
 }
+
+bool ModuleAudio::load(FileParser* sect)
+{
+	int b = (int)sect->getBool("test", false);
+
+	_LOG(LOG_WARN, "Getting a bool from audio module: %d.", b);
+	_LOG(LOG_WARN, "Getting an int from audio module: %d.", sect->getInt("teste", 0));
+
+	return true;
+}
