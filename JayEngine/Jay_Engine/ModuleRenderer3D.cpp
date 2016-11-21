@@ -174,18 +174,21 @@ update_status ModuleRenderer3D::preUpdate(float dt)
 		cam->projectMatrixChanged = false;
 	}
 
-	Color col = cam->background;
-	glClearColor(col.r, col.g, col.b, col.a);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glLoadIdentity();
-	
-	glMatrixMode(GL_MODELVIEW);
-	glLoadMatrixf(cam->getGLViewMatrix());
+	if (cam)
+	{
+		Color col = cam->background;
+		glClearColor(col.r, col.g, col.b, col.a);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glLoadIdentity();
 
-	// light 0 on cam pos
-	// TODO: if game is on play should be a lighton the camera or only the lights in the game
-	lights[0].SetPos(cam->frustum.pos.x, cam->frustum.pos.y, cam->frustum.pos.z);
+		glMatrixMode(GL_MODELVIEW);
+		glLoadMatrixf(cam->getGLViewMatrix());
 
+
+		// light 0 on cam pos
+		// TODO: if game is on play should be a lighton the camera or only the lights in the game
+		lights[0].SetPos(cam->frustum.pos.x, cam->frustum.pos.y, cam->frustum.pos.z);
+	}
 	for(uint i = 0; i < MAX_LIGHTS; ++i)
 		lights[i].Render();
 
