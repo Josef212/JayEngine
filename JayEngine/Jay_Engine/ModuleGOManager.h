@@ -27,6 +27,8 @@ public:
 	void draw();
 
 	GameObject* getSceneroot()const;
+	GameObject* getGameObjectFromId(UID id);
+
 	GameObject* createEmptyGO();
 	GameObject* createEmptyGoWithAABB(float xP, float yP, float zP); //TMP
 	GameObject* createCamera();
@@ -61,6 +63,7 @@ public:
 	void loadScene(const char* name);
 
 private:
+	GameObject* recFindGO(UID id, GameObject* go);
 
 public:
 	bool showEnclosingBoxes = false;

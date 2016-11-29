@@ -33,6 +33,8 @@ public:
 	int hasComponent(ComponentType type);
 
 	GameObject* getParent() const;
+	void setNewParent(GameObject* newParent);
+
 	int getGOId()const;
 	const char* getName()const;
 	void setName(const char* str);

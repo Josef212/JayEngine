@@ -283,6 +283,23 @@ void GameObject::updateAABB() //TODO: make enclose for all meshes
 	transform->transformUpdated = false;
 }
 
+void GameObject::setNewParent(GameObject* newParent)
+{
+	if (newParent == parent || !newParent)
+		return;
+
+	if (parent)
+	{
+		std::vector<GameObject*>::iterator it = std::find(parent->childrens.begin(), parent->childrens.end(), this);
+		if(it != parent->childrens.end())
+			parent->childrens.erase(it);
+
+		parent = newParent;
+		parent->childrens.push_back(this);
+
+		//TODO: recalc transform
+	}
+}
 
 
 //TMP
@@ -331,6 +348,7 @@ bool GameObject::loadGO(FileParser& file)
 
 	name.assign(file.getString("name", "no-name"));
 	goActive = file.getBool("active", true);
+	id = file.getInt("UUID", 0);
 
 	//TODO: AABB
 

@@ -467,6 +467,28 @@ void ModuleGOManager::eraseGameObjectFromTree(GameObject* obj)//DEL_COM
 		sceneTree->erase(obj);
 }
 
+GameObject* ModuleGOManager::getGameObjectFromId(UID id)
+{
+	return (id != 0) ? (recFindGO(id, sceneRootObject)) : (NULL);
+}
+
+GameObject* ModuleGOManager::recFindGO(UID id, GameObject* go)
+{
+	if (go->getGOId() == id)
+		return go;
+
+	GameObject* ret = NULL;
+	
+	
+	for (uint i = 0; i < go->childrens.size(); ++i)
+	{
+		ret = recFindGO(id, go->childrens[i]);
+	}
+	
+
+	return ret;
+}
+
 void ModuleGOManager::saveScene(const char* name)
 {
 	//TODO: Supose for now that name is already usable
@@ -532,11 +554,30 @@ GameObject* ModuleGOManager::loadPrefab(const char* file, const char* path)
 	{
 		FileParser file(buffer);
 
+		std::vector<GameObject*> tmpGO;
+
 		int goCount = file.getArraySize("GameObjects");
 		for (uint i = 0; i < goCount; ++i)
 		{
-			GameObject* gO = sceneRootObject->addChild();//new GameObject(sceneRootObject, 0); //FOR now all will be child of root
+			GameObject* gO = sceneRootObject->addChild();//new GameObject(sceneRootObject, 0);
 			gO->loadGO(file.getArray("GameObjects", i));
+			tmpGO.push_back(gO);
+		}
+
+		for (uint i = 0; i < goCount; ++i)
+		{
+			FileParser p = file.getArray("GameObjects", i);
+			UID pID = p.getInt("parent_UUID", 0);
+			if (pID != 0)
+			{
+				GameObject* tmp = getGameObjectFromId(pID);
+				if (tmp)
+				{
+					tmpGO[i]->setNewParent(tmp);
+				}
+			}
+			else
+				tmpGO[i]->setNewParent(sceneRootObject);
 		}
 
 		//TODO: relations
