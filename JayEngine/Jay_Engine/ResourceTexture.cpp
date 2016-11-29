@@ -13,7 +13,7 @@ ResourceTexture::~ResourceTexture()
 {
 }
 
-void ResourceTexture::loadTexture(const char* fileName)
+void ResourceTexture::loadTexture(const char* fileName, const char* path)
 {
 	if (!fileName)
 	{
@@ -22,7 +22,13 @@ void ResourceTexture::loadTexture(const char* fileName)
 	}
 
 	//Assume fileName is clear
-	std::string realPath(DEFAULT_TEXTURE_SAVE_PATH);
+	std::string realPath;
+
+	if(!path)
+		realPath.assign(DEFAULT_TEXTURE_SAVE_PATH);
+	else
+		realPath.assign(path);
+
 	realPath.append(fileName);
 
 	_LOG(LOG_INFO, "Loading texture: %s.", realPath.c_str());

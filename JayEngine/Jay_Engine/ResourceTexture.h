@@ -9,7 +9,7 @@ public:
 	ResourceTexture(UID uuid);
 	virtual ~ResourceTexture();
 
-	void loadTexture(const char* fileName);
+	void loadTexture(const char* fileName, const char* path = NULL);
 
 	bool loadToMemory();
 	bool removeFromMemory();

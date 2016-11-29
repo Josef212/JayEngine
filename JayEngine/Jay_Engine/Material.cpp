@@ -150,29 +150,44 @@ ResourceTexture* Material::createAnEmptyMaterialRes()
 	return textureResource;
 }
 
-bool Material::saveCMP(FileParser* sect)
+bool Material::saveCMP(FileParser& sect)
 {
 	bool ret = true;
 
-	sect->addInt("comp_type", (int)type);
-	sect->addBool("active", active);
-	sect->addInt("UUID", id);
-	sect->addInt("go_UUID", object->getGOId());
-	sect->addColor("mat_col", color);
+	sect.addInt("comp_type", (int)type);
+	sect.addBool("active", active);
+	sect.addInt("UUID", id);
+	sect.addInt("go_UUID", object->getGOId());
+	sect.addColor("mat_col", color);
 
 	if (textureResource)
 	{
-		sect->addInt("resource_id", textureResource->getUID());
-		sect->addString("resource_exported_file", textureResource->getExportedFile());
-		sect->addString("resource_original_file", textureResource->getOriginalFile());
+		sect.addBool("have_res", true);
+		sect.addInt("resource_id", textureResource->getUID());
+		sect.addString("resource_exported_file", textureResource->getExportedFile());
+		sect.addString("resource_original_file", textureResource->getOriginalFile());
 	}
+	else
+		sect.addBool("have_res", false);
 
 	return ret;
 }
 
-bool Material::loadCMP(FileParser* sect)
+bool Material::loadCMP(FileParser& sect)
 {
 	bool ret = true;
+
+	active = sect.getBool("active", true);
+	id = sect.getInt("UUID", 0);
+
+	color = sect.getColor("mat_color", Yellow);
+
+	if (sect.getBool("have_res", false))
+	{
+		//TODO: load it from resource manager
+		createAnEmptyMaterialRes();
+		textureResource->loadTexture(sect.getString("resource_exported_file", NULL));
+	}
 
 	return ret;
 }

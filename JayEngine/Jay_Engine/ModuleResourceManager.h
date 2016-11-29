@@ -3,6 +3,7 @@
 
 #include "Module.h"
 
+#include <string>
 #include <map>
 
 class Resource;
@@ -32,6 +33,9 @@ public:
 	Resource* createNewResource(ResourceType type);
 	Resource* getResourceFromUID(UID uuid);
 
+	bool addResource(Resource* res, UID uuid);
+	bool addPrefab(const char* originalFile, const char* exportedFile); //Both will be raw file names, path must be added
+
 private:
 
 public:
@@ -41,6 +45,7 @@ public:
 
 private:
 	std::map<UID, Resource*> resources;
+	std::map<const char*, std::string> prefabs;
 
 };
 

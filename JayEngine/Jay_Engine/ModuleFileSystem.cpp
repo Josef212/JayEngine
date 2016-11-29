@@ -61,6 +61,9 @@ bool ModuleFileSystem::init(FileParser* conf)
 	if (!exist("Library/Textures"))
 		makeDirectory("Library/Textures", "Data");
 
+	if (!exist("Library/Prefabs"))
+		makeDirectory("Library/Prefabs", "Data");
+
 	_LOG(LOG_INFO, "PHYS_FS base path: %s", getBasePath());
 
 	return ret;

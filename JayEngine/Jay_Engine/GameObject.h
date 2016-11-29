@@ -50,8 +50,8 @@ public:
 	void updateAABB();
 
 	//TMP
-	bool saveGO(FileParser* file);
-	bool loadGO(FileParser* file);
+	bool saveGO(FileParser& file);
+	bool loadGO(FileParser& file);
 
 private:
 

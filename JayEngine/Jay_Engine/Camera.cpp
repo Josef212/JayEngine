@@ -173,31 +173,42 @@ void Camera::look(const float3 spot, const float3 pos)
 	projectMatrixChanged = true;
 }
 
-bool Camera::saveCMP(FileParser* sect)
+bool Camera::saveCMP(FileParser& sect)
 {
 	bool ret = true;
 
-	sect->addInt("comp_type", (int)type);
-	sect->addBool("active", active);
-	sect->addInt("UUID", id);
-	sect->addInt("go_UUID", object->getGOId());
+	sect.addInt("comp_type", (int)type);
+	sect.addBool("active", active);
+	sect.addInt("UUID", id);
+	sect.addInt("go_UUID", object->getGOId());
 
-	sect->addFloat("near_plane", nearPlaneDist);
-	sect->addFloat("far_plane", farPlaneDist);
-	sect->addFloat("fov", FOV);
-	sect->addFloat("aspect_ratio", aspectRatio);
+	sect.addFloat("near_plane", nearPlaneDist);
+	sect.addFloat("far_plane", farPlaneDist);
+	sect.addFloat("fov", FOV);
+	sect.addFloat("aspect_ratio", aspectRatio);
 	//TODO: add float3(pos)
 	//Front?? Right???
 
-	sect->addFloat3("cam_pos", frustum.pos);
-	sect->addColor("bg_color", background);
+	sect.addFloat3("cam_pos", frustum.pos);
+	sect.addColor("bg_color", background);
 
 	return ret;
 }
 
-bool Camera::loadCMP(FileParser* sect)
+bool Camera::loadCMP(FileParser& sect)
 {
 	bool ret = true;
+
+	active = sect.getBool("active", true);
+	id = sect.getInt("UUID", 0);
+
+	nearPlaneDist = sect.getFloat("near_plane", 0.f);
+	farPlaneDist = sect.getFloat("far_plane", 0.f);
+	FOV = sect.getFloat("fov", 0.f);
+	setAspectRatio(sect.getFloat("aspect_ratio", 1.3f));
+
+	frustum.pos = sect.getFloat3("cam_pos", float3::zero);
+	background = sect.getColor("bg_color", Black);
 
 	return ret;
 }

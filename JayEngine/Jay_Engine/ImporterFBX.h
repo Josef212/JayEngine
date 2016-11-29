@@ -18,7 +18,7 @@ public:
 	bool importFBX(const char* fullPath, const char* fileName);
 
 private:
-	GameObject* importFBXRec(aiNode* node, const aiScene* scene, GameObject* parent);
+	GameObject* importFBXRec(aiNode* node, const aiScene* scene, GameObject* parent, const char* originalFBX);
 };
 
 #endif // !__IMPORTERFBX_H__

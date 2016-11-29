@@ -474,7 +474,7 @@ void ModuleGOManager::saveScene(const char* name)
 	{
 		FileParser scene;
 		//TODO: add some meta before go??
-		if (sceneRootObject->saveGO(&scene))
+		if (sceneRootObject->saveGO(scene))
 		{
 			char* buf;
 			uint size = scene.writeJson(&buf, false);
@@ -499,6 +499,56 @@ void ModuleGOManager::saveScene(const char* name)
 void ModuleGOManager::loadScene(const char* name)
 {
 
+}
+
+GameObject* ModuleGOManager::loadPrefab(const char* file, const char* path)
+{
+	GameObject* ret = NULL;
+
+	//-------------------------------------------------
+
+	if (!file)
+	{
+		_LOG(LOG_ERROR, "Invalid file name.");
+		return ret;
+	}
+
+	char fullPath[128];
+	if (!path)
+		sprintf_s(fullPath, "%s", DEFAULT_PREF_SAVE_PATHS);
+	else
+		sprintf_s(fullPath, "%s", path);
+
+	strcat_s(fullPath, file);
+	
+	_LOG(LOG_INFO, "Loading a prefab: %s.", fullPath);
+
+	//-------------------------------------------------
+
+	char* buffer = NULL;
+	uint size = app->fs->load(fullPath, &buffer);
+
+	if (size > 0 && buffer)
+	{
+		FileParser file(buffer);
+
+		int goCount = file.getArraySize("GameObjects");
+		for (uint i = 0; i < goCount; ++i)
+		{
+			GameObject* gO = sceneRootObject->addChild();//new GameObject(sceneRootObject, 0); //FOR now all will be child of root
+			gO->loadGO(file.getArray("GameObjects", i));
+		}
+
+		//TODO: relations
+	}
+	else
+	{
+		_LOG(LOG_ERROR, "Could not load the prefab: %s.", fullPath);
+	}
+
+	RELEASE_ARRAY(buffer);
+
+	return ret;
 }
 
 GameObject* ModuleGOManager::loadCube()//DEL_COM

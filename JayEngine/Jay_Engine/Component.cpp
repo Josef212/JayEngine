@@ -74,12 +74,12 @@ void Component::debugDraw()
 
 }
 
-bool Component::saveCMP(FileParser* sect)
+bool Component::saveCMP(FileParser& sect)
 {
 	return true;
 }
 
-bool Component::loadCMP(FileParser* sect)
+bool Component::loadCMP(FileParser& sect)
 {
 	return true;
 }

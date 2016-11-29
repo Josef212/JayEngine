@@ -263,26 +263,38 @@ void Transform::updateTransform(float4x4& parentMat)
 	transformUpdated = true;
 }
 
-bool Transform::saveCMP(FileParser* sect)
+bool Transform::saveCMP(FileParser& sect)
 {
 	bool ret = true;
 
-	sect->addInt("comp_type", (int)type);
-	sect->addBool("active", active);
-	sect->addInt("UUID", id);
-	sect->addInt("go_UUID", object->getGOId());
+	sect.addInt("comp_type", (int)type);
+	sect.addBool("active", active);
+	sect.addInt("UUID", id);
+	sect.addInt("go_UUID", object->getGOId());
 
 	//TODO: add float3 and quaternion
-	sect->addFloat3("position", position);
-	sect->addFloat3("scale", scale);
-	sect->addFloatArray("rotation", rotation.ptr(), 4);
+	sect.addFloat3("position", position);
+	sect.addFloat3("scale", scale);
+	sect.addFloatArray("rotation", rotation.ptr(), 4);
 
 	return ret;
 }
 
-bool Transform::loadCMP(FileParser* sect)
+bool Transform::loadCMP(FileParser& sect)
 {
 	bool ret = true;
+
+	active = sect.getBool("active", true);
+	id = sect.getInt("UUID", 0);
+
+	position = sect.getFloat3("position", float3::zero);
+	scale = sect.getFloat3("scale", float3(1, 1, 1));
+	rotation.x = sect.getFloat("rotation", 0.f, 0);
+	rotation.y = sect.getFloat("rotation", 0.f, 1);
+	rotation.z = sect.getFloat("rotation", 0.f, 2);
+	rotation.w = sect.getFloat("rotation", 0.f, 3);
+
+	transformUpdated = true;
 
 	return ret;
 }

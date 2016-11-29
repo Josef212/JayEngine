@@ -7,7 +7,7 @@
 
 typedef struct json_object_t JSON_Object;
 typedef struct json_value_t  JSON_Value;
-//typedef struct json_array_t  JSON_Array;
+typedef struct json_array_t  JSON_Array;
 
 class FileParser
 {
@@ -28,6 +28,9 @@ public:
 	double getDouble(const char* name, double defaultDouble, int index = -1);
 	float* getFloatArray(const char* name); //Get floats from array  with index
 
+	FileParser getArray(const char* name, int index)const;
+	int getArraySize(const char* name)const;
+
 	float3 getFloat3(const char* name, float3 default);
 	Color getColor(const char* name, Color default);
 	//getArray
@@ -39,6 +42,9 @@ public:
 	bool addInt(const char* name, int value);
 	bool addFloat(const char* name, float value);
 	bool addDouble(const char* name, double value);
+
+	bool addArray(const char* name);
+	bool addArrayEntry(const FileParser& file);
 
 	bool addFloat3(const char* name, float3 vec);
 	bool addColor(const char* name, Color col);
@@ -61,6 +67,7 @@ private:
 private:
 	JSON_Object* objRoot = NULL;
 	JSON_Value* valRoot = NULL;
+	JSON_Array* array = NULL;
 	bool clean = false;
 };
 

@@ -95,6 +95,23 @@ float* FileParser::getFloatArray(const char* name)
 	return NULL;
 }
 
+FileParser FileParser::getArray(const char* name, int index)const
+{
+	JSON_Array* array = json_object_get_array(objRoot, name);
+	if (array)
+		return FileParser(json_array_get_object(array, index));
+	return FileParser((JSON_Object*)NULL);
+}
+
+int FileParser::getArraySize(const char* name)const
+{
+	int ret = -1;
+	JSON_Array* array = json_object_get_array(objRoot, name);
+	if (array)
+		ret = json_array_get_count(array);
+	return ret;
+}
+
 float3 FileParser::getFloat3(const char* name, float3 default)
 {
 	return float3(getFloat(name, default.x, 0), getFloat(name, default.y, 1), getFloat(name, default.z, 2));
@@ -143,6 +160,21 @@ bool FileParser::addFloat(const char* name, float value)
 bool FileParser::addDouble(const char* name, double value)
 {
 	return json_object_set_number(objRoot, name, value) == JSONSuccess;
+}
+
+bool FileParser::addArray(const char* name)
+{
+	JSON_Value* val = json_value_init_array();
+	array = json_value_get_array(val);
+
+	return json_object_set_value(objRoot, name, val) == JSONSuccess;
+}
+
+bool FileParser::addArrayEntry(const FileParser& file)
+{
+	if (array)
+		return json_array_append_value(array, json_value_deep_copy(file.valRoot)) == JSONSuccess;
+	return false;
 }
 
 bool FileParser::addIntArray(const char* name, int* fArray, uint size)

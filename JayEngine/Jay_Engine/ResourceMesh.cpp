@@ -17,7 +17,7 @@ ResourceMesh::~ResourceMesh()
 	clearResMesh();
 }
 
-void ResourceMesh::loadMeshResource(const char* fileName)
+void ResourceMesh::loadMeshResource(const char* fileName, const char* path)
 {
 	if (!fileName)
 	{
@@ -25,7 +25,12 @@ void ResourceMesh::loadMeshResource(const char* fileName)
 		return;
 	}
 
-	std::string realName(DEFAULT_MESH_SAVE_PATH);
+	std::string realName;
+	if(!path)
+		realName.assign(DEFAULT_MESH_SAVE_PATH);
+	else
+		realName.assign(path);
+
 	realName.append(fileName);
 
 	_LOG(LOG_INFO, "Loading mesh: %s.", realName.c_str());

@@ -190,31 +190,48 @@ ResourceMesh* Mesh::createAnEmptyMeshRes()
 	return meshResource;
 }
 
-bool Mesh::saveCMP(FileParser* sect)
+bool Mesh::saveCMP(FileParser& sect)
 {
 	bool ret = true;
 
-	sect->addInt("comp_type", (int)type);
-	sect->addBool("active", active);
-	sect->addInt("UUID", id);
-	sect->addInt("go_UUID", object->getGOId());
+	sect.addInt("comp_type", (int)type);
+	sect.addBool("active", active);
+	sect.addInt("UUID", id);
+	sect.addInt("go_UUID", object->getGOId());
 
 	if (meshResource)
 	{
-		sect->addInt("resource_id", meshResource->getUID());
-		sect->addString("resource_exported_file", meshResource->getExportedFile());
-		sect->addString("resource_original_file", meshResource->getOriginalFile());
+		sect.addBool("have_res", true);
+		sect.addInt("resource_id", meshResource->getUID());
+		sect.addString("resource_exported_file", meshResource->getExportedFile());
+		sect.addString("resource_original_file", meshResource->getOriginalFile());
 	}
+	else
+		sect.addBool("have_res", false);
 
-	sect->addBool("wireframe", renderWireframe);
-	sect->addBool("normals", renderNormals);
+	sect.addBool("wireframe", renderWireframe);
+	sect.addBool("normals", renderNormals);
 
 	return ret;
 }
 
-bool Mesh::loadCMP(FileParser* sect)
+bool Mesh::loadCMP(FileParser& sect)
 {
 	bool ret = true;
+
+	active = sect.getBool("active", true);
+	id = sect.getInt("UUID", 0);
+
+	if (sect.getBool("have_res", false))
+	{
+		createAnEmptyMeshRes();
+		meshResource->loadMeshResource(sect.getString("resource_exported_file", NULL)); //TODO: get the resource from resource manager
+		meshResource->loadToMemory();
+
+	}
+
+	renderWireframe = sect.getBool("wireframe", false);
+	renderNormals = sect.getBool("normals", false);
 
 	return ret;
 }

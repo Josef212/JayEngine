@@ -52,7 +52,7 @@ bool ModuleResourceManager::start()
 	std::string name;
 	timer.Start();
 	//textureImporter->importTexture("Lenna.png", name);
-	_LOG(LOG_WARN, "Importing lasted: %dms.", timer.Read());
+	//_LOG(LOG_WARN, "Importing lasted: %dms.", timer.Read());
 
 
 	Timer timer2;
@@ -115,11 +115,28 @@ Resource* ModuleResourceManager::getResourceFromUID(UID uuid)
 	return (it != resources.end()) ? ((*it).second) : (NULL);
 }
 
+
+/** 
+	-Name: Must be the fbx name with extension.			Ex: example.fbx
+	-Path: Must be the realtive path of the file.		Ex: Data/Assets/fbx
+
+
+	-Exported name: Will be the final exported file.		Ex: example.json
+	-Fullpath: Will be the full path of original file.		Ex: Data/Assets/fbx/example.fbx
+*/
 bool ModuleResourceManager::importFBX(const char* name, const char* path)
 {
 	bool ret = true;
 
-	if (name)
+	if (!name)
+	{
+		_LOG(LOG_ERROR, "Invalid fbx name!");
+		ret = false;
+	}
+
+	std::map<const char*, std::string>::iterator it = prefabs.find(name);
+
+	if (ret && it == prefabs.end()) //TODO: Instead of not loading the fbx load it and update all resources. Also check if the resources of all meshes and textures are in the library
 	{
 		char fullPath[64];
 		if (path)
@@ -130,12 +147,75 @@ bool ModuleResourceManager::importFBX(const char* name, const char* path)
 		strcat_s(fullPath, 64, "/");
 		strcat_s(fullPath, 64, name);
 
-		ret = fbxImporter->importFBX(fullPath, name);
+
+		char exported[64];
+		strcpy_s(exported, 64, name);
+		//Clean the extension--------------
+		uint s = strlen(name);
+		if (s > 0)
+		{
+			char* it = exported;
+			it += s;
+
+			while (*it != '.')
+			{
+				--it;
+				--s;
+			}
+
+			if(s < strlen(exported))
+				exported[s] = '\0';
+
+			strcat_s(exported, 64, ".json");
+		}
+
+		//--------------------------
+
+		ret = fbxImporter->importFBX(fullPath, exported);
+
+		if (ret)
+		{
+			addPrefab(name, exported);
+		}
 	}
 	else
 	{
-		_LOG(LOG_ERROR, "Invalid fbx name!");
+		_LOG(LOG_WARN, "FBX already imported into prefab. Original: %s. Exported: %s.", name, (*it).second.c_str());
 		ret = false;
+	}
+
+	return ret;
+}
+
+bool ModuleResourceManager::addResource(Resource* res, UID uuid)
+{
+	bool ret = true;
+
+	if (res && uuid != 0)
+	{
+		resources.insert(std::pair<UID, Resource*>(uuid, res)); //TODO: Check if resource already exist?
+	}
+	else
+		ret = false;
+
+	return ret;
+}
+
+bool ModuleResourceManager::addPrefab(const char* originalFile, const char* exportedFile)
+{
+	bool ret = true;
+
+	std::map<const char*, std::string>::iterator it = prefabs.find(originalFile);
+
+	if (it != prefabs.end())
+	{
+		_LOG(LOG_ERROR, "Prefab '%s' already imported to '%s'.", originalFile, (*it).second.c_str());
+		ret = false;
+	}
+	else
+	{
+		prefabs.insert(std::pair<const char*, std::string>(originalFile, exportedFile));
+		_LOG(LOG_INFO, "New prefab exported. Original: %s. Exported: %s.", originalFile, exportedFile);
 	}
 
 	return ret;

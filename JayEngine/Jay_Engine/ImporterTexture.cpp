@@ -101,7 +101,31 @@ void ImporterTexture::importTexture(const char* fileName, ResourceTexture* resTe
 					else
 					{
 						_LOG(LOG_INFO, "New dds created: %s.", savePath.c_str());
-						resTex->exportedFile.assign(savePath);
+
+						//------
+						char exported[64];
+						strcpy_s(exported, 64, fileName);
+						//Clean the extension--------------
+						uint s = strlen(fileName);
+						if (s > 0)
+						{
+							char* it = exported;
+							it += s;
+
+							while (*it != '.')
+							{
+								--it;
+								--s;
+							}
+
+							if (s < strlen(exported))
+								exported[s] = '\0';
+
+							strcat_s(exported, 64, ".dds");
+						}
+						//------
+
+						resTex->exportedFile.assign(exported);
 					}
 				}
 

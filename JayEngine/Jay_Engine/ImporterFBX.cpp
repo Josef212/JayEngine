@@ -64,23 +64,23 @@ bool ImporterFBX::importFBX(const char* fullPath, const char* fileName) //TODO: 
 	if (scene && scene->HasMeshes())
 	{
 		FileParser file;
+		file.addArray("GameObjects");
 		_LOG(LOG_STD, "Loading fbx: %s.", fullPath);
 
 		GameObject* root = new GameObject(NULL, app->resourceManager->getNewUID());
 
-		importFBXRec(scene->mRootNode, scene, root);
+		importFBXRec(scene->mRootNode, scene, root, fullPath);
 
 		//Saving the file
 
-		root->saveGO(&file);
+		root->saveGO(file);
 
 		char* buf;
 		uint jSize = file.writeJson(&buf, false);
 
 		char jFileName[128];
-		strcpy_s(jFileName, 128, DEFAULT_SCENE_SAVE_PATH);
-		strcat_s(jFileName, 128, fileName); //TODO!!: Clean file name
-		strcat_s(jFileName, 128, ".json");
+		strcpy_s(jFileName, 128, DEFAULT_PREF_SAVE_PATHS);
+		strcat_s(jFileName, 128, fileName);
 
 		if (app->fs->save(jFileName, buf, jSize) != jSize)
 		{
@@ -101,7 +101,7 @@ bool ImporterFBX::importFBX(const char* fullPath, const char* fileName) //TODO: 
 }
 
 
-GameObject* ImporterFBX::importFBXRec(aiNode* node, const aiScene* scene, GameObject* parent)
+GameObject* ImporterFBX::importFBXRec(aiNode* node, const aiScene* scene, GameObject* parent, const char* originalFBX)
 {
 	GameObject* ret = NULL;
 
@@ -131,6 +131,8 @@ GameObject* ImporterFBX::importFBXRec(aiNode* node, const aiScene* scene, GameOb
 		ResourceMesh* resMesh = cpMesh->createAnEmptyMeshRes();
 
 		app->resourceManager->meshImporter->importMesh(aMesh, resMesh); //TODO: set origin file to resource
+		resMesh->originalFile.assign(originalFBX);
+
 		//All this should first check if the meshes or the textures are already imported
 		if (scene->HasMaterials())
 		{
@@ -158,7 +160,7 @@ GameObject* ImporterFBX::importFBXRec(aiNode* node, const aiScene* scene, GameOb
 
 	for (uint i = 0; i < node->mNumChildren; ++i)
 	{
-		importFBXRec(node->mChildren[i], scene, ret);
+		importFBXRec(node->mChildren[i], scene, ret, originalFBX);
 	}
 
 	return ret;

@@ -44,16 +44,6 @@ void UI_Inspector::draw()
 	{
 		if (selected)
 		{
-			//TMP
-			if (ImGui::Button("Save GO"))
-			{
-				FileParser p;
-				selected->saveGO(&p.addSection("game_object"));
-				char* buffer;
-				uint size = p.writeJson(&buffer, false);
-				app->fs->save("Data/go.json", buffer, size);
-			}
-
 			char name[128];
 			sprintf_s(name, 128, selected->getName());
 			if (ImGui::InputText("Name", name, 128)) selected->setName(name);

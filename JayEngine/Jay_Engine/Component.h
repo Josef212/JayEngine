@@ -9,7 +9,7 @@ class FileParser;
 
 enum ComponentType
 {
-	UNKNOWN = 0,
+	UNKNOWN = -1,
 	TRANSFORMATION,
 	MESH,
 	MATERIAL,
@@ -37,8 +37,8 @@ public:
 
 	virtual void debugDraw();
 
-	virtual bool saveCMP(FileParser* sect);
-	virtual bool loadCMP(FileParser* sect);
+	virtual bool saveCMP(FileParser& sect);
+	virtual bool loadCMP(FileParser& sect);
 
 public:
 	ComponentType type = UNKNOWN;

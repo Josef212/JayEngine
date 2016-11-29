@@ -42,6 +42,8 @@ public:
 	GameObject* loadFBX(char* file, char* path);
 	GameObject* loadObjects(aiNode* node, const aiScene* scene, GameObject* parent);
 
+	GameObject* loadPrefab(const char* file, const char* path = NULL); //Must be a json wich contains all .jof and .dds, etc
+
 
 	bool deleteGameObject(GameObject* toDel);
 

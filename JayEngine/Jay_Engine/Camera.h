@@ -45,8 +45,8 @@ public:
 
 	void debugDraw();
 
-	bool saveCMP(FileParser* sect);
-	bool loadCMP(FileParser* sect);
+	bool saveCMP(FileParser& sect);
+	bool loadCMP(FileParser& sect);
 
 private:
 
