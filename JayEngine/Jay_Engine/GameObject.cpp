@@ -4,6 +4,7 @@
 #include "DrawDebug.h"
 #include "ModuleCamera3D.h"
 #include "ModuleRenderer3D.h"
+#include "ModuleResourceManager.h"
 #include "RandGen.h"
 
 #include "Transform.h"
@@ -305,28 +306,35 @@ bool GameObject::saveGO(FileParser& file)
 {
 	bool ret = true;
 
-	FileParser ob;// = file->addSection(std::to_string(id).c_str());
-	ob.addString("name", getName());
-	ob.addInt("UUID", id);
-	if(parent)
-		ob.addInt("parent_UUID", parent->getGOId());
-	else
-		ob.addInt("parent_UUID", 0); //ROOT
-	//TODO: array of childs UUID?
-
-	ob.addBool("active", goActive);
-	//TODO: AABB
-
-	ob.addArray("Components");
-	for(uint i = 0; i < components.size(); ++i)
+	if (this != app->goManager->getSceneroot())
 	{
-		if (components[i])
+		FileParser ob;// = file->addSection(std::to_string(id).c_str());
+		ob.addString("name", getName());
+		//In order to have  a proper save and load i will refact all go id
+		id = app->resourceManager->getNewUID();
+		ob.addInt("UUID", id);
+		if (parent)
+			ob.addInt("parent_UUID", parent->getGOId());
+		else
+			ob.addInt("parent_UUID", 0); //ROOT
+		//TODO: array of childs UUID?
+
+		ob.addBool("active", goActive);
+		//TODO: AABB
+
+		ob.addArray("Components");
+		for (uint i = 0; i < components.size(); ++i)
 		{
-			//components[i]->saveCMP(&ob.addSection(std::to_string(components[i]->getId()).c_str()));
-			FileParser cmp;
-			components[i]->saveCMP(cmp);
-			ob.addArrayEntry(cmp);
+			if (components[i])
+			{
+				//components[i]->saveCMP(&ob.addSection(std::to_string(components[i]->getId()).c_str()));
+				FileParser cmp;
+				components[i]->saveCMP(cmp);
+				ob.addArrayEntry(cmp);
+			}
 		}
+
+		file.addArrayEntry(ob);
 	}
 
 	for (uint i = 0; i < childrens.size(); ++i)
@@ -334,8 +342,6 @@ bool GameObject::saveGO(FileParser& file)
 		if (childrens[i])
 			childrens[i]->saveGO(file);
 	}
-	
-	file.addArrayEntry(ob);
 
 	return ret;
 }

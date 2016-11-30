@@ -203,8 +203,8 @@ bool Mesh::saveCMP(FileParser& sect)
 	{
 		sect.addBool("have_res", true);
 		sect.addInt("resource_id", meshResource->getUID());
-		sect.addString("resource_exported_file", meshResource->getExportedFile());
-		sect.addString("resource_original_file", meshResource->getOriginalFile());
+		sect.addString("resource_exported_file", meshResource->exportedFile.c_str());
+		sect.addString("resource_original_file", meshResource->originalFile.c_str());
 	}
 	else
 		sect.addBool("have_res", false);
@@ -226,6 +226,7 @@ bool Mesh::loadCMP(FileParser& sect)
 	{
 		createAnEmptyMeshRes();
 		meshResource->loadMeshResource(sect.getString("resource_exported_file", NULL)); //TODO: get the resource from resource manager
+		meshResource->originalFile.assign(sect.getString("resource_original_file", NULL));
 		meshResource->loadToMemory();
 
 	}

@@ -25,6 +25,8 @@ void ResourceMesh::loadMeshResource(const char* fileName, const char* path)
 		return;
 	}
 
+	exportedFile.assign(fileName);
+
 	std::string realName;
 	if(!path)
 		realName.assign(DEFAULT_MESH_SAVE_PATH);

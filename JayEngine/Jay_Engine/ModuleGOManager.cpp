@@ -529,6 +529,9 @@ void ModuleGOManager::loadSceneOrPrefabs(FileParser& file)
 		if (pID != 0)
 		{
 			GameObject* tmp = recFindGO(pID, rootTMP);
+			if (!tmp)
+				tmp = getGameObjectFromId(pID);
+
 			if (tmp)
 			{
 				tmpGO[i]->setNewParent(tmp);
