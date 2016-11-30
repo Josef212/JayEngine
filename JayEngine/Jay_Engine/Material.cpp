@@ -180,7 +180,7 @@ bool Material::loadCMP(FileParser& sect)
 	active = sect.getBool("active", true);
 	id = sect.getInt("UUID", 0);
 
-	color = sect.getColor("mat_color", Yellow);
+	color = sect.getColor("mat_col", Yellow);
 
 	if (sect.getBool("have_res", false))
 	{
