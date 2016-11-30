@@ -40,6 +40,8 @@ public:
 	float* getRotation();//Don't use it
 	float* getEulerRot();
 
+	void setLocalTransform(const float4x4 trans);
+
 	float4x4 getTransformMatrix();
 	float4x4 getLocalMatrix();
 	void updateTransform(float4x4& parentMat);

@@ -230,6 +230,13 @@ float* Transform::getEulerRot()
 	return (float*)&rotationEuler;
 }
 
+void Transform::setLocalTransform(const float4x4 trans)
+{
+	trans.Decompose(position, rotation, scale);
+	rotationEuler = rotation.ToEulerXYZ().Abs();
+	transformUpdated = true;
+}
+
 float4x4 Transform::getTransformMatrix()
 {
 	if (isEnable())
@@ -293,6 +300,14 @@ bool Transform::loadCMP(FileParser& sect)
 	rotation.y = sect.getFloat("rotation", 0.f, 1);
 	rotation.z = sect.getFloat("rotation", 0.f, 2);
 	rotation.w = sect.getFloat("rotation", 0.f, 3);
+
+	localTransform = float4x4::FromTRS(position, rotation, scale);
+
+	if (object->getParent())
+	{
+		parentTransform = object->getParent()->getTransform()->getTransformMatrix().Inverted();
+		worldTransform = parentTransform * localTransform;
+	}
 
 	transformUpdated = true;
 

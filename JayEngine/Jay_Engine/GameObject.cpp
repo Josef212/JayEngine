@@ -299,6 +299,7 @@ void GameObject::setNewParent(GameObject* newParent)
 		parent->childrens.push_back(this);
 
 		//TODO: recalc transform
+		transform->setLocalTransform(transform->getTransformMatrix().Transposed() * newParent->transform->getTransformMatrix().Inverted());
 	}
 }
 

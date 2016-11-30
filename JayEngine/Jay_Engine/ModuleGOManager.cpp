@@ -540,7 +540,7 @@ void ModuleGOManager::loadSceneOrPrefabs(FileParser& file)
 		else
 			tmpGO[i]->setNewParent(sceneRootObject);
 	}
-	sceneRootObject->updateAABB(); //TODO: FIX transform problems after changing parent
+	sceneRootObject->getTransform()->updateTransform(sceneRootObject->getTransform()->getTransformMatrix());
 	RELEASE(rootTMP);
 }
 
