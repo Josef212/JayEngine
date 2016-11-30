@@ -41,9 +41,6 @@ public:
 	GameObject* getSelected()const;
 	void select(GameObject* toSelect);
 
-	GameObject* loadFBX(char* file, char* path);
-	GameObject* loadObjects(aiNode* node, const aiScene* scene, GameObject* parent);
-
 	GameObject* loadPrefab(const char* file, const char* path = NULL); //Must be a json wich contains all .jof and .dds, etc
 
 
@@ -59,11 +56,12 @@ public:
 	void insertGameObjectToTree(GameObject* obj);
 	void eraseGameObjectFromTree(GameObject* obj); //DEL_COM
 
-	void saveScene(const char* name);
-	void loadScene(const char* name);
+	bool saveScene(const char* name, const char* path = NULL);
+	bool loadScene(const char* name, const char* path = NULL);
 
 private:
 	GameObject* recFindGO(UID id, GameObject* go);
+	void loadSceneOrPrefabs(FileParser& file);
 
 public:
 	bool showEnclosingBoxes = false;

@@ -258,121 +258,6 @@ void ModuleGOManager::select(GameObject* toSelect)
 	selected = toSelect;
 }
 
-GameObject* ModuleGOManager::loadFBX(char* file, char* path)
-{
-	GameObject* root = NULL;
-
-	if (!file)
-	{
-		_LOG(LOG_ERROR, "Error while loading fbx: file is NULL.");
-		return root; //If path is NULL dont do nothing
-	}
-
-	char* realPath = new char[256];
-
-	if (!path)
-	{
-		//Maybe in future take a default path
-		strcpy_s(realPath, 256, DEFAULT_FB_PATH);
-	}
-	else
-		strcpy_s(realPath, 256, path);
-
-	strcat_s(realPath, 256, "/");
-	strcat_s(realPath, 256, file);
-
-	char* buffer;
-	uint fileSize = app->fs->load(realPath, &buffer);
-	const aiScene* scene = NULL;
-	if (buffer && fileSize > 0)
-	{
-		scene = aiImportFileFromMemory(buffer, fileSize, aiProcessPreset_TargetRealtime_MaxQuality, "fbx");
-	}
-	else
-	{
-		_LOG(LOG_ERROR, "Error while loading fbx.");
-		return NULL;
-	}
-	//const aiScene* scene = aiImportFile(realPath, aiProcessPreset_TargetRealtime_MaxQuality);//TODO: fit this with own format system
-
-	if (scene && scene->HasMeshes())
-	{
-		_LOG(LOG_INFO, "Loading fbx from %s.", realPath);
-		root = loadObjects(scene->mRootNode, scene, sceneRootObject);
-
-		aiReleaseImport(scene);
-	}
-
-	RELEASE_ARRAY(buffer);
-	RELEASE_ARRAY(realPath);
-
-	return root;
-}
-
-GameObject* ModuleGOManager::loadObjects(aiNode* node, const aiScene* scene, GameObject* parent)
-{
-	GameObject* ret = NULL;
-
-	if (!parent)
-		return ret;
-
-	ret = parent->addChild();
-
-	char name[256];
-	sprintf_s(name, 256, "%s %d", node->mName.C_Str(), indexGO);
-
-	ret->setName(name);
-
-	_LOG(LOG_INFO, "Loading new game obejct: %i. ===================", indexGO);
-	++indexGO;
-
-	//Set transformation
-	Transform* trans = ret->getTransform();
-	if(!trans)
-		trans = (Transform*)ret->findComponent(TRANSFORMATION)[0];
-
-	if (trans)
-		trans->setTransform(node);
-
-	//Set material
-	for (uint i = 0; i < node->mNumMeshes; ++i)
-	{
-		_LOG(LOG_INFO, "Loading new mesh. ------------------");
-		Mesh* m = (Mesh*)ret->addComponent(MESH);
-		m->loadMesh(scene->mMeshes[node->mMeshes[i]], true);
-		//node->mMeshes is an uint array with the index of the mesh in scene->mMesh
-		if (scene->HasMaterials())
-		{
-			Material* mat = (Material*)ret->addComponent(MATERIAL);
-			//TODO: Clear tex path
-			char* path = new char[256];
-			aiString str;
-			scene->mMaterials[scene->mMeshes[node->mMeshes[i]]->mMaterialIndex]->GetTexture(aiTextureType_DIFFUSE, 0, &str);
-			if (str.length > 0)
-			{
-				strcpy_s(path, 256, str.C_Str());
-				m->idTexture = mat->loadTexture(clearTexPath(path));
-			}
-
-			aiColor4D col;
-			scene->mMaterials[scene->mMeshes[node->mMeshes[i]]->mMaterialIndex]->Get(AI_MATKEY_COLOR_DIFFUSE, col);
-			mat->color.Set(col.r, col.g, col.b, col.a);
-
-			RELEASE_ARRAY(path);
-		}
-	}
-
-	ret->updateAABB();
-	//insertGameObjectToTree(ret); //Commented for now because object already inserted on the tree on ret->updateAABB
-
-	for (uint i = 0; i < node->mNumChildren; ++i)
-	{
-		loadObjects(node->mChildren[i], scene, ret);
-	}
-
-	return ret;
-}
-
 void ModuleGOManager::drawDebug()
 {
 	if (sceneRootObject)
@@ -480,7 +365,7 @@ GameObject* ModuleGOManager::recFindGO(UID id, GameObject* go)
 	GameObject* ret = NULL;
 	
 	
-	for (uint i = 0; i < go->childrens.size(); ++i)
+	for (uint i = 0; !ret && i < go->childrens.size(); ++i)
 	{
 		ret = recFindGO(id, go->childrens[i]);
 	}
@@ -489,24 +374,45 @@ GameObject* ModuleGOManager::recFindGO(UID id, GameObject* go)
 	return ret;
 }
 
-void ModuleGOManager::saveScene(const char* name)
+
+/**
+	saveScene and loadScene must be used to load and save full scenes.
+*/
+bool ModuleGOManager::saveScene(const char* name, const char* path)
 {
-	//TODO: Supose for now that name is already usable
+	bool ret = false;
+
+	if (!name)
+	{
+		_LOG(LOG_ERROR, "Error saving scene, invalid name.");
+		return ret;
+	}
+
 	if (sceneRootObject)
 	{
+		char fullPath[128];
+		if (!path)
+			sprintf_s(fullPath, "%s%s", DEFAULT_SCENE_SAVE_PATH, name);
+		else
+			sprintf_s(fullPath, "%s%s", path, name);
+
+		_LOG(LOG_INFO, "Saving scene: %s.", fullPath);
+
 		FileParser scene;
+		scene.addArray("GameObjects");
 		//TODO: add some meta before go??
 		if (sceneRootObject->saveGO(scene))
 		{
 			char* buf;
 			uint size = scene.writeJson(&buf, false);
-			if (app->fs->save(name, buf, size) != size)
+			if (app->fs->save(fullPath, buf, size) != size)
 			{
 				_LOG(LOG_ERROR, "Error saving the scene!");
 			}
 			else
 			{
-				_LOG(LOG_INFO, "Successfully save the scene: %s.", name);
+				_LOG(LOG_INFO, "Successfully save the scene: %s.", fullPath);
+				ret = true;
 			}
 		}
 		else
@@ -516,13 +422,50 @@ void ModuleGOManager::saveScene(const char* name)
 	}
 	else
 		_LOG(LOG_WARN, "No scene to save.");
+
+	return ret;
 }
 
-void ModuleGOManager::loadScene(const char* name)
+bool ModuleGOManager::loadScene(const char* name, const char* path)
 {
+	bool ret = false;
+	if (!name)
+	{
+		_LOG(LOG_ERROR, "Error loading scene, invalid name.");
+		return ret;
+	}
 
+	char fullPath[128];
+	if (!path)
+		sprintf_s(fullPath, "%s%s", DEFAULT_SCENE_SAVE_PATH, name);
+	else
+		sprintf_s(fullPath, "%s%s", path, name);
+
+	_LOG(LOG_INFO, "Loading scene: %s.", fullPath);
+
+	char* buffer = NULL;
+	uint size = app->fs->load(fullPath, &buffer);
+
+	if (size > 0 && buffer)
+	{
+		FileParser file(buffer);
+
+		loadSceneOrPrefabs(file);
+	}
+	else
+	{
+		_LOG(LOG_ERROR, "Could not load the prefab: %s.", fullPath);
+	}
+
+	RELEASE_ARRAY(buffer);
+
+	return ret;
 }
 
+
+/**
+	loadPrefabs should be used to load objects like fbx that have been exported.
+*/
 GameObject* ModuleGOManager::loadPrefab(const char* file, const char* path)
 {
 	GameObject* ret = NULL;
@@ -554,33 +497,7 @@ GameObject* ModuleGOManager::loadPrefab(const char* file, const char* path)
 	{
 		FileParser file(buffer);
 
-		std::vector<GameObject*> tmpGO;
-
-		int goCount = file.getArraySize("GameObjects");
-		for (uint i = 0; i < goCount; ++i)
-		{
-			GameObject* gO = sceneRootObject->addChild();//new GameObject(sceneRootObject, 0);
-			gO->loadGO(file.getArray("GameObjects", i));
-			tmpGO.push_back(gO);
-		}
-
-		for (uint i = 0; i < goCount; ++i)
-		{
-			FileParser p = file.getArray("GameObjects", i);
-			UID pID = p.getInt("parent_UUID", 0);
-			if (pID != 0)
-			{
-				GameObject* tmp = getGameObjectFromId(pID);
-				if (tmp)
-				{
-					tmpGO[i]->setNewParent(tmp);
-				}
-			}
-			else
-				tmpGO[i]->setNewParent(sceneRootObject);
-		}
-
-		//TODO: relations
+		loadSceneOrPrefabs(file);
 	}
 	else
 	{
@@ -590,6 +507,38 @@ GameObject* ModuleGOManager::loadPrefab(const char* file, const char* path)
 	RELEASE_ARRAY(buffer);
 
 	return ret;
+}
+
+void ModuleGOManager::loadSceneOrPrefabs(FileParser& file)
+{
+	std::vector<GameObject*> tmpGO;
+
+	int goCount = file.getArraySize("GameObjects");
+	GameObject* rootTMP = new GameObject(NULL, 0);
+	for (uint i = 0; i < goCount; ++i)
+	{
+		GameObject* gO = rootTMP->addChild();
+		gO->loadGO(file.getArray("GameObjects", i));
+		tmpGO.push_back(gO);
+	}
+
+	for (uint i = 0; i < goCount; ++i)
+	{
+		FileParser p = file.getArray("GameObjects", i);
+		UID pID = p.getInt("parent_UUID", 0);
+		if (pID != 0)
+		{
+			GameObject* tmp = recFindGO(pID, rootTMP);
+			if (tmp)
+			{
+				tmpGO[i]->setNewParent(tmp);
+			}
+		}
+		else
+			tmpGO[i]->setNewParent(sceneRootObject);
+	}
+	sceneRootObject->updateAABB(); //TODO: FIX transform problems after changing parent
+	RELEASE(rootTMP);
 }
 
 GameObject* ModuleGOManager::loadCube()//DEL_COM

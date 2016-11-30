@@ -85,7 +85,8 @@ update_status ModuleEditor::update(float dt)
 	{
 		if (ImGui::BeginMenu("File"))
 		{
-			if (ImGui::MenuItem("TMP")) app->goManager->saveScene("Data/Scenes/scene.json");
+			if (ImGui::MenuItem("TMP:Save scene")) app->goManager->saveScene("scene.json");
+			if (ImGui::MenuItem("TMP:Load scene")) app->goManager->loadScene("scene.json");
 			if (ImGui::MenuItem("LoadConf")) app->loadGame();
 			if (ImGui::MenuItem("SaveConf")) app->saveGame();
 			if (ImGui::MenuItem("Load")) showLoadWin = !showLoadWin; //TODO: open file browser etc
@@ -167,10 +168,10 @@ update_status ModuleEditor::update(float dt)
 		//TMP
 		if (ImGui::BeginMenu("FBX"))
 		{
-			if (ImGui::MenuItem("Load cube.fbx")) app->goManager->loadFBX("Cube.fbx", NULL);//DEL_COM
-			if (ImGui::MenuItem("Load mecha.fbx")) app->goManager->loadFBX("MechaT.fbx", NULL);
-			if (ImGui::MenuItem("Load brute.fbx")) app->goManager->loadFBX("Brute.fbx", NULL);
-			if (ImGui::MenuItem("Load town.fbx")) app->goManager->loadFBX("Street environment_V01.FBX", NULL);
+			//if (ImGui::MenuItem("Load cube.fbx")) app->goManager->loadFBX("Cube.fbx", NULL);//DEL_COM
+			//if (ImGui::MenuItem("Load mecha.fbx")) app->goManager->loadFBX("MechaT.fbx", NULL);
+			//if (ImGui::MenuItem("Load brute.fbx")) app->goManager->loadFBX("Brute.fbx", NULL);
+			//if (ImGui::MenuItem("Load town.fbx")) app->goManager->loadFBX("Street environment_V01.FBX", NULL);
 			if (ImGui::MenuItem("Load fbx to prefab")) app->resourceManager->importFBX("MechaT.fbx", "Data/Assets/fbx");
 			if (ImGui::MenuItem("Load mesh.json")) app->goManager->loadPrefab("MechaT.json", NULL);
 			
@@ -285,7 +286,7 @@ void ModuleEditor::openDirWin(const char* path)
 			{
 				char file[64];
 				strcpy_s(file, 64, files[selected].c_str());
-				app->goManager->loadFBX(file, NULL);
+				//TODO: actualy load something
 				showDirWin = !showDirWin;
 			}
 		}

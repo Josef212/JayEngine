@@ -301,8 +301,6 @@ void GameObject::setNewParent(GameObject* newParent)
 	}
 }
 
-
-//TMP
 bool GameObject::saveGO(FileParser& file)
 {
 	bool ret = true;

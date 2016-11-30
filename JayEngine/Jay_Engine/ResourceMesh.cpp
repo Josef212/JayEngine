@@ -86,12 +86,11 @@ void ResourceMesh::loadMeshResource(const char* fileName, const char* path)
 			memcpy(texCoords, cursor, bytes);
 		}
 
+		RELEASE_ARRAY(data);
 	}
 	else
 		_LOG(LOG_ERROR, "Error loading the mesh: '%s'.", realName.c_str());
 
-
-	RELEASE_ARRAY(data);
 }
 
 bool ResourceMesh::loadToMemory()

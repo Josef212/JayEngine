@@ -67,7 +67,7 @@ bool ImporterFBX::importFBX(const char* fullPath, const char* fileName) //TODO: 
 		file.addArray("GameObjects");
 		_LOG(LOG_STD, "Loading fbx: %s.", fullPath);
 
-		GameObject* root = new GameObject(NULL, app->resourceManager->getNewUID());
+		GameObject* root = new GameObject(NULL, app->resourceManager->getNewUID()); //TODO: Should clean this because it adds a new GO
 
 		importFBXRec(scene->mRootNode, scene, root, fullPath);
 
