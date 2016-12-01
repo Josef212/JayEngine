@@ -56,7 +56,7 @@ void GameObject::update(float dt)
 	{
 		updateAABB();
 
-		//TODO: make this less hard
+		//TODO: make this less hard. May be check in camera update if objects->transform->transformUpdate is true
 		std::vector<Component*> vec = findComponent(CAMERA);
 		for (uint i = 0; i < vec.size(); ++i)
 		{

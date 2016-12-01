@@ -2,6 +2,7 @@
 #define __MODULEGOMANAGER_H__
 
 #include "Module.h"
+#include <string>
 #include <map>
 
 class GameObject;
@@ -45,6 +46,7 @@ public:
 
 
 	bool deleteGameObject(GameObject* toDel);
+	void cleanRoot();
 
 	GameObject* loadCube();
 
@@ -59,9 +61,18 @@ public:
 	bool saveScene(const char* name, const char* path = NULL);
 	bool loadScene(const char* name, const char* path = NULL);
 
+	bool setCurrentScene(const char* scene);
+	const char* getCurrentScene();
+
+	void onGlobalEvent(const Event& e);
+
 private:
 	GameObject* recFindGO(UID id, GameObject* go);
 	void loadSceneOrPrefabs(FileParser& file);
+
+	void onPlay();
+	void onPause();
+	void onStop();
 
 public:
 	bool showEnclosingBoxes = false;
@@ -78,7 +89,11 @@ private:
 	GameObject* sceneRootObject = NULL;
 	GameObject* selected = NULL;
 
-	uint indexGO = 0;
+	std::string currentScene;
+	//TODO: List/Map of all scenes?? Should a scene be a resource and the list/map be managed as a resource?
+	/**
+		For now as a scene is basically a root game object, will leave it here but must check this in the future.
+	*/
 };
 
 #endif // !__MODULEGOMANAGER_H__

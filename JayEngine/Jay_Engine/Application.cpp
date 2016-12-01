@@ -387,7 +387,7 @@ void Application::onGlobalEvent(const Event& e)
 	switch (e.type)
 	{
 		case Event::eventType::PLAY:
-			if (state == PAUSE)				//Can do this if's because we change the game state after this 
+			if (state == PAUSE)				//Can do this ifs because we change the game state after this 
 				time->startGameTimer();
 			else if(state == EDITOR)
 				time->restartGameTimer();

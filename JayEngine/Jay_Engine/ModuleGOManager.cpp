@@ -296,8 +296,7 @@ bool ModuleGOManager::deleteGameObject(GameObject* toDel)
 
 	if (parent)
 	{
-		uint i = 0;
-		for (; i < parent->childrens.size(); ++i)
+		for (uint i = 0; i < parent->childrens.size(); ++i)
 		{
 			if (parent->childrens[i] == toDel)
 			{
@@ -435,6 +434,8 @@ bool ModuleGOManager::loadScene(const char* name, const char* path)
 		return ret;
 	}
 
+	setCurrentScene(name); //TMP
+
 	char fullPath[128];
 	if (!path)
 		sprintf_s(fullPath, "%s%s", DEFAULT_SCENE_SAVE_PATH, name);
@@ -544,20 +545,124 @@ void ModuleGOManager::loadSceneOrPrefabs(FileParser& file)
 	RELEASE(rootTMP);
 }
 
-GameObject* ModuleGOManager::loadCube()//DEL_COM
+void ModuleGOManager::cleanRoot() //TODO: Should destroy all scene directly or wait until next update.
+{
+	//NOTE-REALLY IMPORTANT: Check all pointer references of game objects in all the code
+	//Probably should be in game objects and components deletes
+
+	for (uint i = 0; i < sceneRootObject->childrens.size(); ++i)
+	{
+		if (sceneRootObject->childrens[i])
+		{
+			if (sceneRootObject->childrens[i] == selected)
+				select(NULL);
+
+			RELEASE(sceneRootObject->childrens[i]);
+		}
+	}
+	sceneRootObject->childrens.clear();
+}
+
+void ModuleGOManager::onGlobalEvent(const Event& e)
+{
+	switch (e.type)
+	{
+	case Event::eventType::PLAY:
+		onPlay();
+		break;
+
+	case Event::eventType::STOP:
+		onStop();
+		break;
+
+	case Event::eventType::PAUSE:
+		onPause();
+		break;
+
+	default:
+		_LOG(LOG_WARN, "Module manager: Could not recognize the event type.");
+		break;
+	}
+}
+
+/**
+	On play scene should be automatically save.
+*/
+void ModuleGOManager::onPlay()
+{
+	saveScene(currentScene.c_str());
+}
+
+/**
+	TODO: What scene should do on pause.
+*/
+void ModuleGOManager::onPause()
+{
+
+}
+
+/**
+	On stop clean the scene and current scene should be automatically load to recover the editor state.
+*/
+void ModuleGOManager::onStop()
+{
+	//First clean the scene
+	cleanRoot();
+
+	//Second load the scene
+	loadScene(currentScene.c_str());
+}
+
+/**
+	TODO: Is this usefull for something. Not for now...
+	For now this is just a setter for the current scene string that is stored in the module.
+	This string is used to reload the scene on play-stop.
+*/
+bool ModuleGOManager::setCurrentScene(const char* scene)
+{
+	bool ret = false;
+
+	if (!scene)
+	{
+		_LOG(LOG_WARN, "Invalid scene name to load.");
+		ret = false;
+	}
+	else
+	{
+		if (currentScene == scene)
+		{
+			_LOG(LOG_WARN, "This scene is the current scene: %s.", scene); //TODO: Maybe if we want to load the current scene again we should reload it.
+		}
+		else
+		{
+			currentScene.assign(scene); //TODO: Load the new scene???
+			_LOG(LOG_INFO, "Current scene has changed: %s.", scene);
+			ret = true;
+		}
+	}
+
+	return ret;
+}
+
+const char* ModuleGOManager::getCurrentScene()
+{
+	return currentScene.c_str();
+}
+
+GameObject* ModuleGOManager::loadCube()//TODO: Resource manager?? Save primitives there, etc.
 {
 	GameObject* ret = NULL;
 
 	if (!sceneRootObject)
 		return ret;
 
-	ret = sceneRootObject->addChild();
+	//ret = sceneRootObject->addChild();
 
-	Mesh* mesh = (Mesh*)ret->addComponent(MESH);
-	mesh->createAnEmptyMeshRes();
-	mesh->meshResource->loadMeshResource("428466960.jof"); //TMP
+	//Mesh* mesh = (Mesh*)ret->addComponent(MESH);
+	//mesh->createAnEmptyMeshRes();
+	//mesh->meshResource->loadMeshResource("428466960.jof"); //TMP
 	//mesh->meshResource->loadMeshResource("142988795.jof"); //TMP
-	mesh->loadToOpenGl();
+	//mesh->loadToOpenGl();
 
 	/*const uint verticesNum = 24;
 	const uint indicesNum = 36;
