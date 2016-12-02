@@ -3,6 +3,12 @@
 
 #include "Resource.h"
 
+/**
+	TODO: Image format?????????????
+	Image info???????????
+	Probably when is start using shaders if i use normal maps or anything like that format will be important
+*/
+
 class ResourceTexture : public Resource
 {
 public:

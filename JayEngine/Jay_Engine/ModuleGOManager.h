@@ -20,6 +20,7 @@ public:
 	virtual ~ModuleGOManager();
 
 	bool init(FileParser* conf);
+	bool start();
 	update_status preUpdate(float dt);
 	update_status update(float dt);
 	update_status postUpdate(float dt);

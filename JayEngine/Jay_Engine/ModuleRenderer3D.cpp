@@ -15,6 +15,7 @@
 #include "Camera.h"
 
 #include "ResourceMesh.h"
+#include "ResourceTexture.h"
 
 #include "Primitive.h"
 
@@ -166,7 +167,7 @@ bool ModuleRenderer3D::start()
 // PreUpdate: clear buffer
 update_status ModuleRenderer3D::preUpdate(float dt)
 {
-	Camera* cam = (app->isPlaySate()) ? (activeCamera) : (app->camera->getCamera());
+	Camera* cam = (app->isPlaySate()) ? (activeCamera) : (app->camera->getCamera());  //TODO: When active camera is NULL and play state, strange things happen
 
 	if (cam && cam->projectMatrixChanged)
 	{
@@ -367,12 +368,13 @@ void ModuleRenderer3D::drawGameObject(GameObject* obj)
 			{
 				glEnable(GL_TEXTURE_2D);
 				glColor4f(mat->color.r, mat->color.g, mat->color.b, mat->color.a);
-				if (mesh->idTexture > -1)
+				ResourceTexture* tex = mat->textureResource;
+				if (tex)
 				{
-					uint tex = mat->getTexture(mesh->idTexture);
-					if (tex > 0)
+					uint texID = tex->textureGlID;
+					if (texID > 0)
 					{
-						glBindTexture(GL_TEXTURE_2D, tex);
+						glBindTexture(GL_TEXTURE_2D, texID);
 					}
 
 					//Set UV's

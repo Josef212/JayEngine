@@ -47,6 +47,7 @@ ModuleGOManager::ModuleGOManager(bool startEnabled) : Module(startEnabled)
 
 	sceneRootObject = new GameObject(NULL, 0);
 	sceneRootObject->setName("SceneRootNode");
+	currentScene.assign("scene.json");
 }
 
 
@@ -84,6 +85,20 @@ bool ModuleGOManager::init(FileParser* conf)
 		return true;
 	else
 		return false;
+}
+
+bool ModuleGOManager::start()
+{
+	bool ret = true;
+
+	GameObject* cam = createCamera();
+	if (cam)
+	{
+		cam->setName("Main Camera");
+		app->renderer3D->setActiveCamera((Camera*)cam->findComponent(CAMERA)[0]);
+	}
+
+	return ret;
 }
 
 update_status ModuleGOManager::preUpdate(float dt)
@@ -427,6 +442,12 @@ bool ModuleGOManager::saveScene(const char* name, const char* path)
 
 bool ModuleGOManager::loadScene(const char* name, const char* path)
 {
+	//TMP: Dont know if should do this here.
+	//-------------------
+	saveScene(currentScene.c_str()); //TODO: Instead od saving diretly should ask in editor if user want to save scene and name etc...
+	cleanRoot();
+	//-------------------
+
 	bool ret = false;
 	if (!name)
 	{
@@ -549,6 +570,9 @@ void ModuleGOManager::cleanRoot() //TODO: Should destroy all scene directly or w
 {
 	//NOTE-REALLY IMPORTANT: Check all pointer references of game objects in all the code
 	//Probably should be in game objects and components deletes
+
+	select(NULL);
+	app->renderer3D->setActiveCamera(NULL);
 
 	for (uint i = 0; i < sceneRootObject->childrens.size(); ++i)
 	{

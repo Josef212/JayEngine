@@ -93,7 +93,8 @@ void ImporterTexture::importTexture(const char* fileName, ResourceTexture* resTe
 				//6-Save the image with the correct format and save it with file system
 				if (ilSaveL(IL_DDS, data, size) > 0)
 				{
-					std::string savePath(DEFAULT_TEXTURE_SAVE_PATH + std::to_string(app->resourceManager->getNewUID()) + TEXTURE_EXTENSION);
+					uint tmpId = app->resourceManager->getNewUID();
+					std::string savePath(DEFAULT_TEXTURE_SAVE_PATH + std::to_string(tmpId) + TEXTURE_EXTENSION);
 					if (app->fs->save(savePath.c_str(), (const char*)data, size) != size)
 					{
 						_LOG(LOG_ERROR, "ERROR saving the dds texture.");
@@ -123,9 +124,9 @@ void ImporterTexture::importTexture(const char* fileName, ResourceTexture* resTe
 
 							strcat_s(exported, 64, ".dds");
 						}
-						//------
+						//------//NOTE: This is really cool but realized that resTex->exportedFile should be the same us save path but without full path
 
-						resTex->exportedFile.assign(exported);
+						resTex->exportedFile.assign(std::to_string(tmpId) + TEXTURE_EXTENSION);
 					}
 				}
 
