@@ -580,7 +580,7 @@ void ModuleGOManager::onGlobalEvent(const Event& e)
 		break;
 
 	default:
-		_LOG(LOG_WARN, "Module manager: Could not recognize the event type.");
+		_LOG(LOG_WARN, "Module GO manager: Could not recognize the event type.");
 		break;
 	}
 }
