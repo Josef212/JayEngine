@@ -37,6 +37,7 @@ private:
 	void playMenu();
 	void setStyle();
 	void timeDisplay();
+	void prefabsLoad();
 
 public:
 	std::list<UI_Comp*> uiList;
@@ -47,7 +48,7 @@ public:
 	UI_Inspector* inspector = NULL;
 	UI_Tree* tree = NULL;
 
-private:
+private: //TODO: So many booleans are needed????
 	bool showImGuiDemo = false;
 	bool showConfig = false;
 	bool showAbout = false;
@@ -55,6 +56,8 @@ private:
 	bool showSaveWin = false;
 	bool showLoadWin = false;
 	bool showTimeDisplay = true;
+	bool showLoadFBX = false;
+
 	std::string engineVersion ;
 
 };

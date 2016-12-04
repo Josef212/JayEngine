@@ -168,22 +168,12 @@ update_status ModuleEditor::update(float dt)
 			ImGui::EndMenu();
 		}
 
-		//---------------------
-		//TMP
 		if (ImGui::BeginMenu("FBX"))
 		{
-			//if (ImGui::MenuItem("Load cube.fbx")) app->goManager->loadFBX("Cube.fbx", NULL);//DEL_COM
-			//if (ImGui::MenuItem("Load mecha.fbx")) app->goManager->loadFBX("MechaT.fbx", NULL);
-			//if (ImGui::MenuItem("Load brute.fbx")) app->goManager->loadFBX("Brute.fbx", NULL);
-			//if (ImGui::MenuItem("Load town.fbx")) app->goManager->loadFBX("Street environment_V01.FBX", NULL);
-			if (ImGui::MenuItem("Import mecha")) app->resourceManager->importFBX("MechaT.fbx", "Data/Assets/fbx");
-			if (ImGui::MenuItem("Impor town")) app->resourceManager->importFBX("Street environment_V01.FBX");
-			if (ImGui::MenuItem("Load mesh.json")) app->goManager->loadPrefab("MechaT.json", NULL);
-			if (ImGui::MenuItem("Load town.json")) app->goManager->loadPrefab("Street environment_V01.json");
+			if (ImGui::MenuItem("Load prefab")) showLoadFBX = !showLoadFBX;
 			
 			ImGui::EndMenu();
 		}
-		//---------------------
 
 		ImGui::EndMainMenuBar();
 	}
@@ -222,13 +212,16 @@ update_status ModuleEditor::update(float dt)
 		openDirWin("Assets/fbx");
 
 	if (showSaveWin)
-		openSaveBrowser("Data/Assets");
+		openSaveBrowser("Data/Scenes/");
 
 	if (showLoadWin)
-		openLoadBrowser("Data/Assets/fbx");
+		openLoadBrowser("Data/Scenes/");
 
 	if (showTimeDisplay)
 		timeDisplay();
+
+	if (showLoadFBX)
+		prefabsLoad();
 
 	playMenu();
 
@@ -570,4 +563,36 @@ void ModuleEditor::timeDisplay()
 
 		ImGui::End();
 	}
+}
+
+void ModuleEditor::prefabsLoad()
+{
+	std::vector<std::string> files;
+	app->fs->getFilesOnDir(DEFAULT_PREF_SAVE_PATHS, files);
+
+	ImGui::SetNextWindowSize(ImVec2(500, 300));
+	if (ImGui::Begin(DEFAULT_PREF_SAVE_PATHS, &showLoadFBX))
+	{
+		static int selected = -1;
+		ImGui::BeginChild("Files", ImVec2(480, 230), true);
+		{
+			for (int i = 0; i < files.size(); ++i)
+			{
+				if (ImGui::Selectable(files[i].c_str(), selected == i))
+					selected = i;
+			}
+		}
+		ImGui::EndChild();
+		if (selected > -1 && selected < files.size())
+		{
+			if (ImGui::Button("Load"))
+			{
+				char file[64];
+				strcpy_s(file, 64, files[selected].c_str());
+				app->goManager->loadPrefab(file);
+				showLoadFBX = !showLoadFBX;
+			}
+		}
+	}
+	ImGui::End();
 }
