@@ -24,21 +24,6 @@
 #include "ImporterMesh.h"
 #include "ResourceMesh.h"
 
-#include "Assimp/include/cimport.h"
-#include "Assimp/include/scene.h"
-#include "Assimp/include/postprocess.h"
-#include "Assimp/include/cfileio.h"
-
-#include "Devil/include/il.h"
-#include "Devil/include/ilu.h"
-#include "Devil/include/ilut.h"
-
-
-#pragma comment (lib, "Assimp/libx86/assimp.lib")
-#pragma comment(lib, "Devil/libx86/DevIL.lib")
-#pragma comment(lib, "Devil/libx86/ILU.lib")
-#pragma comment(lib, "Devil/libx86/ILUT.lib")
-
 
 ModuleGOManager::ModuleGOManager(bool startEnabled) : Module(startEnabled)
 {
@@ -61,21 +46,6 @@ ModuleGOManager::~ModuleGOManager()
 bool ModuleGOManager::init(FileParser* conf)
 {
 	_LOG(LOG_STD, "Manager: Init.");
-	//Log assimp info //TODO: remove
-	struct aiLogStream stream;
-	stream = aiGetPredefinedLogStream(aiDefaultLogStream_DEBUGGER, nullptr);
-	aiAttachLogStream(&stream);
-
-	ilInit();
-	iluInit();
-	ilutInit();
-	ilutRenderer(ILUT_OPENGL);
-
-	ILuint devilError = ilGetError();
-	if (devilError != IL_NO_ERROR)
-	{
-		_LOG(LOG_ERROR, "Error while Devil Init: %s\n", iluErrorString(devilError));
-	}
 
 	//sceneTree = new JQuadTree();
 	sceneTree = new JOctree();
@@ -122,10 +92,6 @@ update_status ModuleGOManager::postUpdate(float dt)
 
 bool ModuleGOManager::cleanUp()
 {
-	//Stop log stream
-	aiDetachAllLogStreams();
-	ilShutDown();
-
 	RELEASE(sceneRootObject);
 
 	return true;
