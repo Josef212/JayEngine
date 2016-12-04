@@ -115,7 +115,7 @@ update_status ModuleEditor::update(float dt)
 			if (ImGui::MenuItem("Create Empty Game object")) app->goManager->createEmptyGO();
 			if (ImGui::BeginMenu("Primitives"))
 			{
-				if (ImGui::MenuItem("Cube")) app->goManager->loadCube(); //DEL_COM: commented for delivery
+				//if (ImGui::MenuItem("Cube")) app->goManager->loadCube(); //DEL_COM: commented for delivery
 
 				ImGui::EndMenu();
 			}

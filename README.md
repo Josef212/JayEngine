@@ -7,13 +7,15 @@ GitHub: https://github.com/Josef212/JayEngine
 Releases: https://github.com/Josef212/JayEngine/releases
 
 Assignment instructions:
-    ·Run the engine.
-    ·Go to "FBX" menu "Load town" to load the teacher material.
-    ·Hierarchy should be seen on left and inspector on right, if not check on "View" above to see how to open those 
+    ·Run the engine and all fbx will be imported to the proper format.
+    ·Go to "FBX" menu "Load prefab", select the "Street environmentV01.json" and click "Load" to load the material from the teacher.
+    ·Hierarchy should be seen on left and inspector on right, if not check on "View" to see how to open those 
     windows.
     ·Move around hierarchy menu and try inspector options, try moving scaling and rotating, etc.
-    ·Engine create a default camera called "main camera". Select it and active "Culling", move the camera from inspector 
-    and see if it culls...
+    ·Engine create a default camera called "main camera" and is the active camera by default so on play this will be the used camera.
+    ·Click on "Play" to start and then click "Pause" or "Stop" to recover the editing status.
+    ·On "View"->"Scene tree" then "Show"->"Show tree" to display the scene octree. Do the same again to stop showing it.
+
 
 -Instalation:
     ·Download latest release, extract files and run Jay_Engine.exe.
@@ -21,17 +23,28 @@ Assignment instructions:
     ·Download latest source code version and complie it by yourself.
 
 -How to use it:
-On the latest version of the engine you can basically load fbx on the engine and load all its information into a game object
-and components organitzation.
+On the latest version of the engine all fbx on "Data/Assets/fbx/" are imported to own format (json, binaty meshes and dds), 
+you can load the prefabs already imported to the scene. Scene can be serielized into json. You can play and stop the engine.
+Camera can cul optimitzated by an octree.
+
+Resource management makes only load once any texture or mesh.
 
 ·Move the camera with WASD RF.
 ·Rotate the camera using mouse right click and drag.
+·Orbit using mouse right click and drag + L_ALT(This is a bit strange and must be inproved).
 
-·Press F1 to see some debug info such as frustum from the camera.
+·Press F1 to see some debug info such as frustum from the camera(Also able to active on the checkbox next to play button).
 
 ##Menus
 
 ###File
+    ·TMP: Save scene: Manually saves the scene into "Data/Scenes/scene.json"
+    ·TMP: Load scene: Manually load the scene from "Data/Scenes/scene.json"
+    ·LoadConf: Load the configuration if have been saved before. (Not full functionality)
+    ·SaveConf: Save configuration. (Not full functionality)
+    ·Load: (Working on)
+    ·Save: (Working on)
+    ·Search files: (Working on)
     ·Quit: Just exit the engine.
 
 ###View
@@ -39,6 +52,7 @@ and components organitzation.
     ·Console: Open or close console window.
     ·Hierarchy: Open or close hierarchy window.
     ·Inspector: Open or close inspector window.
+    ·Scene tree: Open or close tree window.
 
 ###GameObject
     ·Create empty game object: creates an empty game object.
@@ -63,8 +77,7 @@ and components organitzation.
     ·About: Open or close a window with some basic info.
 
 ###FBX
-    ·Load mech.fbx: Loads a mecha fbx.
-    ·Load town.fbx: Loads a town fbx asked for first delivery.
+    ·Load prefab: Open a window with all prefabs that can be loaded to the scene.
 
 ##Hierarchy
     ·Here you can see all the scene hierarchy with all game objects on the current scene.
@@ -106,6 +119,15 @@ and components organitzation.
     ·Make this active: Nothing for now.
     ·NOTE: Press 'F1' to show the frustum(Yellow).
 
+##Play menu
+    ·Play: Start the game after saving the scene.
+    ·Pause: Pause the game.
+    ·Stop: Stops the game and recover the editor status.
+    ·Show grid: Show or not the grid. On play it's hidden.
+    ·Draw debug: Display debug info (Shortcut: F1).
+
+##Time 
+    ·Display real time clock and game clock and engine status (Editor, play or play). (Still working on to add more)
 
 ##License
 
