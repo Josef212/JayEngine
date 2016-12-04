@@ -37,6 +37,8 @@ public:
 	bool addPrefab(const char* originalFile, const char* exportedFile); //Both will be raw file names, path must be added
 
 private:
+	bool autoImportFBX();
+	bool checkAllPrefabs();
 
 public:
 	ImporterFBX* fbxImporter = NULL;

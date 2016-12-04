@@ -2,6 +2,7 @@
 #include "Globals.h"
 #include "ModuleResourceManager.h"
 
+#include "FileParser.h"
 #include "ModuleFileSystem.h"
 #include "RandGen.h"
 
@@ -48,19 +49,8 @@ bool ModuleResourceManager::start()
 {
 	_LOG(LOG_STD, "Importer: Start.");
 
-	Timer timer;
-	std::string name;
-	timer.Start();
-	//textureImporter->importTexture("Lenna.png", name);
-	//_LOG(LOG_WARN, "Importing lasted: %dms.", timer.Read());
-
-
-	Timer timer2;
-	timer2.Start();
-	ResourceMesh* res = (ResourceMesh*)createNewResource(RESOURCE_MESH);
-	//_LOG(LOG_WARN, "Importing lasted: %dms.", timer2.Read());
-
-
+	//checkAllPrefabs();
+	autoImportFBX();
 
 	return true;
 }
@@ -216,6 +206,115 @@ bool ModuleResourceManager::addPrefab(const char* originalFile, const char* expo
 	{
 		prefabs.insert(std::pair<const char*, std::string>(originalFile, exportedFile));
 		_LOG(LOG_INFO, "New prefab exported. Original: %s. Exported: %s.", originalFile, exportedFile);
+	}
+
+	return ret;
+}
+
+/** 
+	On engine start check all fbx and import them if havent been imported yet.
+	//TODO: This might be done every certain time in order to check if new files have been dropped directly to the folder.
+*/
+bool ModuleResourceManager::autoImportFBX()
+{
+	bool ret = true;
+
+	std::vector<std::string> fbxs;
+	uint fbxCount = app->fs->getFilesOnDir(DEFAULT_FB_PATH, fbxs);
+
+	if (fbxCount > 0)
+	{
+		std::vector<std::string> prefabs;
+		uint prefabsCount = app->fs->getFilesOnDir(DEFAULT_PREF_SAVE_PATHS, prefabs);
+
+		if (prefabsCount > 0) /** Must check individually all fbx and prefabs. */
+		{
+			for (uint i = 0; i < fbxCount; ++i) //Here will need to generate the file name should have after the importation in order to search it in prefabs vector.
+			{
+				char exported[64];
+				strcpy_s(exported, 64, fbxs[i].c_str());
+				//Clean the extension--------------
+				uint s = strlen(exported);
+				if (s > 0)
+				{
+					char* it = exported;
+					it += s;
+
+					while (*it != '.')
+					{
+						--it;
+						--s;
+					}
+
+					if (s < strlen(exported))
+						exported[s] = '\0';
+
+					strcat_s(exported, 64, ".json");
+				}
+				//--------------------------
+
+				//Now we have the name of the file after importation so search it on prefabs vector, if found add it to prefabs map if not import it.
+				
+				std::vector<std::string>::iterator it = std::find(prefabs.begin(), prefabs.end(), exported);
+				if (it != prefabs.end())
+				{
+					addPrefab(fbxs[i].c_str(), exported);
+				}
+				else
+				{
+					importFBX(fbxs[i].c_str());
+				}
+			}
+		}
+		else /** Directly import all fbx because none have been imported. */
+		{
+			for (uint i = 0; i < fbxCount; ++i)
+			{
+				importFBX(fbxs[i].c_str()); //As this method automatically creates the exported file name and adds it to the map just do this.
+			}
+		}
+	}
+
+	return ret;
+}
+
+bool ModuleResourceManager::checkAllPrefabs() //Is this really important??? //TODO: Instead of doing this why not serialitzate the prefabs map and check files from there??
+{
+	bool ret = true;
+
+	std::vector<std::string> prefabs;
+	uint count = app->fs->getFilesOnDir(DEFAULT_PREF_SAVE_PATHS, prefabs);
+
+	/**
+		If there are files in this directory lets check all and see if all the resources they need exist.
+	*/
+	if (count > 0)
+	{
+		for (uint i = 0; i < count; ++i)
+		{
+			//TODO: search for fbx original file, if it no longer exist delete all the files involved in this prefab.
+
+			std::string fileName(DEFAULT_PREF_SAVE_PATHS + prefabs[i]);
+			char* buffer = NULL;
+			uint size = app->fs->load(fileName.c_str(), &buffer);
+
+			if (size > 0 && buffer)
+			{
+				FileParser file(buffer);
+				int goCount = file.getArraySize("GameObjects");
+				for (uint j = 0; j < goCount; ++j)
+				{
+					FileParser go = file.getArray("GameObjects", j);
+					int cmpCount = file.getArraySize("Components");
+					for (uint t = 0; t < cmpCount; ++t)
+					{
+						FileParser cmp(file.getArray("Components", t));
+						//TODO: Check here all resources.
+					}
+				}
+			}
+
+		}
 	}
 
 	return ret;
