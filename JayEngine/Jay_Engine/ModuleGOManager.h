@@ -82,9 +82,6 @@ public:
 
 	JOctree* sceneTree = NULL;
 
-	//-------
-	std::map<std::string, uint> texturesLoaded;  //textures paths and idBuffers
-
 private:
 
 	GameObject* sceneRootObject = NULL;

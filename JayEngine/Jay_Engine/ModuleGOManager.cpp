@@ -442,13 +442,8 @@ bool ModuleGOManager::saveScene(const char* name, const char* path)
 
 bool ModuleGOManager::loadScene(const char* name, const char* path)
 {
-	//TMP: Dont know if should do this here.
-	//-------------------
-	saveScene(currentScene.c_str()); //TODO: Instead od saving diretly should ask in editor if user want to save scene and name etc...
-	cleanRoot();
-	//-------------------
-
 	bool ret = false;
+
 	if (!name)
 	{
 		_LOG(LOG_ERROR, "Error loading scene, invalid name.");
