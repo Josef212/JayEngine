@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "ResourceMesh.h"
 
+#include "ModuleResourceManager.h"
 #include "ModuleFileSystem.h"
 
 #include "OpenGL.h"
@@ -14,6 +15,7 @@ ResourceMesh::ResourceMesh(UID uuid) : Resource(uuid)
 
 ResourceMesh::~ResourceMesh()
 {
+	removeFromMemory();
 	clearResMesh();
 }
 
@@ -88,6 +90,9 @@ void ResourceMesh::loadMeshResource(const char* fileName, const char* path)
 			memcpy(texCoords, cursor, bytes);
 		}
 
+		addInstance();
+		app->resourceManager->addResource(this, uuid);
+
 		RELEASE_ARRAY(data);
 	}
 	else
@@ -141,9 +146,6 @@ bool ResourceMesh::loadToMemory()
 
 void ResourceMesh::clearResMesh()
 {
-	if(isInMemory())
-		removeFromMemory();
-
 	numIndices = 0;
 	numVertices = 0;
 	numNormals = 0;

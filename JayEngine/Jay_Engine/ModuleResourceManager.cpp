@@ -191,6 +191,25 @@ bool ModuleResourceManager::addResource(Resource* res, UID uuid)
 	return ret;
 }
 
+bool ModuleResourceManager::removeResource(UID uuid)
+{
+	bool ret = false;
+
+	Resource* res = getResourceFromUID(uuid);
+
+	if (res)
+	{
+		if (res->countReferences() <= 0)
+		{
+			//Must remove it from the map and clean the info
+			resources.erase(uuid);
+			RELEASE(res);
+		}
+	}
+
+	return ret;
+}
+
 bool ModuleResourceManager::addPrefab(const char* originalFile, const char* exportedFile)
 {
 	bool ret = true;

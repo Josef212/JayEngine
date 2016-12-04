@@ -143,10 +143,6 @@ void UI_Inspector::drawMesh(GameObject* selected, Mesh* mesh)
 	ImGui::SameLine();
 	ImGui::TextColored(ImColor(255, 153, 51), "%d", mesh->meshResource->numTexCoords);
 
-	ImGui::Text("Texture ID: ");
-	ImGui::SameLine();
-	ImGui::TextColored(ImColor(255, 153, 51), "%d", mesh->idTexture);
-
 	bool wire = mesh->renderWireframe;
 	if (ImGui::Checkbox("Wireframe", &wire)) mesh->renderWireframe = wire;
 

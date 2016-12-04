@@ -188,6 +188,9 @@ bool ImporterTexture::loadTexture(ResourceTexture* resTex)
 			resTex->textureGlID = ilutGLBindTexImage();
 			ilDeleteImages(1, &image);
 			ret = true;
+
+			resTex->addInstance();
+			app->resourceManager->addResource(resTex, resTex->getUID());
 		}
 	}
 	else

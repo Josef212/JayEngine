@@ -34,6 +34,8 @@ public:
 	Resource* getResourceFromUID(UID uuid);
 
 	bool addResource(Resource* res, UID uuid);
+	bool removeResource(UID uuid);
+
 	bool addPrefab(const char* originalFile, const char* exportedFile); //Both will be raw file names, path must be added
 
 private:

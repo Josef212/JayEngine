@@ -18,13 +18,21 @@ public:
 	virtual ~Resource();
 
 	ResourceType getResourceType()const;
+
 	UID getUID()const;
+	void setUID(UID uid); //NOTE: Care when use it. //TODO: Check for other ways
+
 	const char* getOriginalFile();
 	const char* getExportedFile();
+
 	bool isInMemory()const;
 	bool loadToMemory();
+
 	bool removeFromMemory();
 	uint countReferences()const;
+
+	void addInstance();
+	void removeInstance();
 
 private:
 

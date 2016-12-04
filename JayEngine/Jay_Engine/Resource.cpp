@@ -21,6 +21,12 @@ UID Resource::getUID()const
 	return uuid;
 }
 
+void Resource::setUID(UID uid)
+{
+	if (uid > 0)
+		uuid = uid;
+}
+
 const char* Resource::getOriginalFile()
 {
 	return originalFile.c_str();
@@ -49,4 +55,14 @@ bool Resource::removeFromMemory()
 uint Resource::countReferences()const
 {
 	return instancesInMemory;
+}
+
+void Resource::addInstance()
+{
+	++instancesInMemory;
+}
+
+void Resource::removeInstance()
+{
+	--instancesInMemory;
 }

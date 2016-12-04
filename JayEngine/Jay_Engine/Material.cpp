@@ -20,6 +20,7 @@ Material::Material(GameObject* gObj, int id) : Component(gObj, id)
 
 Material::~Material()
 {
+	app->resourceManager->removeResource(textureResource->getUID());
 }
 
 void Material::enable()
@@ -100,11 +101,23 @@ bool Material::loadCMP(FileParser& sect)
 
 	if (sect.getBool("have_res", false))
 	{
-		//TODO: load it from resource manager
-		createAnEmptyMaterialRes();
-		textureResource->exportedFile.assign(sect.getString("resource_exported_file", NULL));
-		textureResource->originalFile.assign(sect.getString("resource_original_file", NULL));
-		app->resourceManager->textureImporter->loadTexture(textureResource); //TODO: Dont load it directly, ask to resource manager for the tex id, if already loaded will return the id if not will load it
+		uint id = sect.getInt("resource_id", 0);
+		ResourceTexture* tmp = (ResourceTexture*)app->resourceManager->getResourceFromUID(id);
+		if (tmp)
+			textureResource = tmp;
+		else
+		{
+
+			createAnEmptyMaterialRes();
+
+			if (id > 0)
+				textureResource->setUID(id);
+
+			textureResource->exportedFile.assign(sect.getString("resource_exported_file", NULL));
+			textureResource->originalFile.assign(sect.getString("resource_original_file", NULL));
+			app->resourceManager->textureImporter->loadTexture(textureResource);
+
+		}
 	}
 
 	return ret;
