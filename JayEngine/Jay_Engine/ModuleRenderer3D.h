@@ -45,6 +45,7 @@ public:
 	mat3x3 normalMatrix;
 	mat4x4 modelMatrix, viewMatrix, projectionMatrix;
 	bool showGrid = true;
+	bool editorShowGrid = showGrid;
 
 private:
 	bool vsync;

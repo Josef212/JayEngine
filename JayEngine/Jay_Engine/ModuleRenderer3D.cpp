@@ -287,6 +287,20 @@ void ModuleRenderer3D::onGlobalEvent(const Event& e)
 	case Event::eventType::WIN_RESIZE:
 		onResize(e.point2d.x, e.point2d.y);
 		break;
+
+	case Event::eventType::PLAY:
+		editorShowGrid = showGrid;
+		showGrid = false;
+		break;
+
+	case Event::eventType::PAUSE:
+		showGrid = editorShowGrid;
+		break;
+
+	case Event::eventType::STOP:
+		showGrid = editorShowGrid;
+		break;
+
 	default:
 		break;
 	}
