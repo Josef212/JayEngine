@@ -23,12 +23,7 @@ public:
 	void update(float dt);
 	void cleanUp();
 
-	int loadTexture(char* file, char* path = NULL);
 	int getTexture(int index);
-	uint getTexxturesSize()
-	{
-		return textures.size();
-	}
 
 	ResourceTexture* createAnEmptyMaterialRes();
 
@@ -39,8 +34,6 @@ private:
 
 public:
 	Color color;
-	std::vector<uint> textures;
-	std::map<std::string, int> paths;
 
 	ResourceTexture* textureResource = NULL; //Vector if normal map, light map, etc.
 

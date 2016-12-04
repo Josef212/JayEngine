@@ -146,11 +146,12 @@ GameObject* ImporterFBX::importFBXRec(aiNode* node, const aiScene* scene, GameOb
 
 			aiString str;
 			scene->mMaterials[scene->mMeshes[node->mMeshes[i]]->mMaterialIndex]->GetTexture(aiTextureType_DIFFUSE, 0, &str);
-
-			char texPath[128];
-			strcpy_s(texPath, 128, str.C_Str());
-			app->resourceManager->textureImporter->importTexture(clearTexPath(texPath), resTex); //TODO: check if already in memory
-
+			if (str.length > 0)
+			{
+				char texPath[128];
+				strcpy_s(texPath, 128, str.C_Str());
+				app->resourceManager->textureImporter->importTexture(clearTexPath(texPath), resTex); //TODO: check if already in memory
+			}
 			//TODO: Mesh should have an index of the texture??
 
 		}

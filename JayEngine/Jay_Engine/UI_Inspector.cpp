@@ -169,31 +169,8 @@ void UI_Inspector::drawMaterial(GameObject* selected, Material* mat)
 
 	if (ImGui::Button("Remove material")) selected->removeComponent(mat);
 
-	ImGui::Text("Textures vec size: ");
-	ImGui::SameLine();
-	ImGui::TextColored(ImColor(255, 153, 51), "%d", mat->getTexxturesSize());
-
 	ImGui::ColorEdit4("Color:", (float*)&mat->color, false);
-
-	for (std::map<std::string, int>::iterator it = mat->paths.begin(); it != mat->paths.end(); ++it)
-	{
-		ImGui::Text("%s", (*it).first.c_str());
-
-	}
-
-	std::map<std::string, int>::iterator it = mat->paths.begin();
-	for (uint i = 0; i < mat->textures.size() && it != mat->paths.end(); ++i, ++it)
-	{
-		if (ImGui::TreeNode("%s", (*it).first.c_str()))
-		{
-			uint j = mat->textures[i];
-			glBindTexture(GL_TEXTURE_2D, j);
-			ImTextureID texture = (void*)j;
-			ImGui::Image(texture, ImVec2(250, 250));
-
-			ImGui::TreePop();
-		}
-	}
+	//TODO: Show all textures
 
 	ImGui::Separator();
 }

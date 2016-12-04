@@ -146,3 +146,54 @@ void ImporterTexture::importTexture(const char* fileName, ResourceTexture* resTe
 
 	RELEASE_ARRAY(buffer);
 }
+
+bool ImporterTexture::loadTexture(ResourceTexture* resTex)
+{
+	bool ret = false;
+
+	if (!resTex)
+	{
+		_LOG(LOG_ERROR, "Error loading a texture, invalid texture resource.");
+		return ret;
+	}
+
+	if (resTex->exportedFile.empty())
+	{
+		_LOG(LOG_ERROR, "Error loading a texture .dds: Invalid file name or texture resource.");
+		return ret;
+	}
+
+	//Assume fileName is clear
+	std::string realPath; //TODO: Dont use std
+
+	realPath.assign(DEFAULT_TEXTURE_SAVE_PATH);
+
+	realPath.append(resTex->exportedFile.c_str());
+
+	_LOG(LOG_INFO, "Loading texture: %s.", realPath.c_str());
+
+	//TODO: Actually load the texture
+
+	char* buffer = NULL; //TODO: Would be a good practise to set to NULL all buffer char pointers
+	uint size = app->fs->load(realPath.c_str(), &buffer);
+
+	if (buffer && size > 0)
+	{
+		ILuint image;
+		ilGenImages(1, &image);
+		ilBindImage(image);
+
+		if (ilLoadL(IL_DDS, (const void*)buffer, size))
+		{
+			resTex->textureGlID = ilutGLBindTexImage();
+			ilDeleteImages(1, &image);
+			ret = true;
+		}
+	}
+	else
+		_LOG(LOG_ERROR, "Error loading dds: %s.", resTex->exportedFile.c_str());
+
+	RELEASE_ARRAY(buffer);
+
+	return ret;
+}
