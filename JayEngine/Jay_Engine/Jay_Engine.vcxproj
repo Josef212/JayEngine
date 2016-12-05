@@ -318,6 +318,7 @@
     <ClInclude Include="ResourceMesh.h" />
     <ClInclude Include="SceneTry.h" />
     <ClInclude Include="Material.h" />
+    <ClInclude Include="StringTools.h" />
     <ClInclude Include="Time.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Transform.h" />

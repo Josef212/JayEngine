@@ -18,6 +18,8 @@
 #include "ImporterMesh.h"
 #include "ImporterTexture.h"
 
+#include "StringTools.h"
+
 
 ModuleResourceManager::ModuleResourceManager(bool startEnabled) : Module(startEnabled)
 {
@@ -137,35 +139,17 @@ bool ModuleResourceManager::importFBX(const char* name, const char* path)
 		strcat_s(fullPath, 64, "/");
 		strcat_s(fullPath, 64, name);
 
-
-		char exported[64];
-		strcpy_s(exported, 64, name);
-		//Clean the extension--------------
-		uint s = strlen(name);
-		if (s > 0)
-		{
-			char* it = exported;
-			it += s;
-
-			while (*it != '.')
-			{
-				--it;
-				--s;
-			}
-
-			if(s < strlen(exported))
-				exported[s] = '\0';
-
-			strcat_s(exported, 64, ".json");
-		}
+		std::string out;
+		removeExtension(name, out);
+		out.append(".json");
 
 		//--------------------------
 
-		ret = fbxImporter->importFBX(fullPath, exported);
+		ret = fbxImporter->importFBX(fullPath, out.c_str());
 
 		if (ret)
 		{
-			addPrefab(name, exported);
+			addPrefab(name, out.c_str());
 		}
 	}
 	else
@@ -250,34 +234,17 @@ bool ModuleResourceManager::autoImportFBX()
 		{
 			for (uint i = 0; i < fbxCount; ++i) //Here will need to generate the file name should have after the importation in order to search it in prefabs vector.
 			{
-				char exported[64];
-				strcpy_s(exported, 64, fbxs[i].c_str());
-				//Clean the extension--------------
-				uint s = strlen(exported);
-				if (s > 0)
-				{
-					char* it = exported;
-					it += s;
-
-					while (*it != '.')
-					{
-						--it;
-						--s;
-					}
-
-					if (s < strlen(exported))
-						exported[s] = '\0';
-
-					strcat_s(exported, 64, ".json");
-				}
+				std::string out;
+				removeExtension(fbxs[i].c_str(), out);
+				out.append(".json");
 				//--------------------------
 
 				//Now we have the name of the file after importation so search it on prefabs vector, if found add it to prefabs map if not import it.
 				
-				std::vector<std::string>::iterator it = std::find(prefabs.begin(), prefabs.end(), exported);
+				std::vector<std::string>::iterator it = std::find(prefabs.begin(), prefabs.end(), out);
 				if (it != prefabs.end())
 				{
-					addPrefab(fbxs[i].c_str(), exported);
+					addPrefab(fbxs[i].c_str(), out.c_str());
 				}
 				else
 				{

@@ -675,6 +675,9 @@
     <ClInclude Include="ImporterFBX.h">
       <Filter>Core\ResourceManagement\Importers</Filter>
     </ClInclude>
+    <ClInclude Include="StringTools.h">
+      <Filter>Core\Tools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\include\Geometry\KDTree.inl">
