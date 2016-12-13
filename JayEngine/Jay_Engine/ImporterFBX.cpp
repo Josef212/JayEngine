@@ -71,6 +71,8 @@ bool ImporterFBX::importFBX(const char* fullPath, const char* fileName) //TODO: 
 
 		importFBXRec(scene->mRootNode, scene, root, fullPath);
 
+		meshesImported.clear();
+
 		//Saving the file
 
 		root->saveGO(file);
@@ -126,12 +128,23 @@ GameObject* ImporterFBX::importFBXRec(aiNode* node, const aiScene* scene, GameOb
 	for (uint i = 0; i < node->mNumMeshes; ++i)
 	{
 		//For each mesh will import it and create a mesh component
-		aiMesh* aMesh = scene->mMeshes[node->mMeshes[i]];
 		Mesh* cpMesh = (Mesh*)ret->addComponent(MESH);
-		ResourceMesh* resMesh = cpMesh->createAnEmptyMeshRes();
 
-		app->resourceManager->meshImporter->importMesh(aMesh, resMesh); //TODO: set origin file to resource
-		resMesh->originalFile.assign(originalFBX);
+		int index = node->mMeshes[i];
+		std::map<int, ResourceMesh*>::iterator tmp = meshesImported.find(index);
+		if (tmp != meshesImported.end())			//If mesh has already been imported, take that resource, else import it
+		{
+			cpMesh->meshResource = tmp->second;
+		}
+		else
+		{
+			aiMesh* aMesh = scene->mMeshes[index];
+			ResourceMesh* resMesh = cpMesh->createAnEmptyMeshRes();
+
+			app->resourceManager->meshImporter->importMesh(aMesh, resMesh);
+			resMesh->originalFile.assign(originalFBX);
+			meshesImported.insert(std::pair<int, ResourceMesh*>(index, resMesh));
+		}
 
 		//All this should first check if the meshes or the textures are already imported
 		if (scene->HasMaterials())
