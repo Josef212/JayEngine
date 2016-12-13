@@ -151,7 +151,6 @@ GameObject* ImporterFBX::importFBXRec(aiNode* node, const aiScene* scene, GameOb
 		{
 			//Create whe component as well import the texture
 			Material* cpMat = (Material*)ret->addComponent(MATERIAL);
-			ResourceTexture* resTex = cpMat->createAnEmptyMaterialRes(); //All this should first check if the meshes or the textures are already imported
 
 			aiColor4D col;
 			scene->mMaterials[scene->mMeshes[node->mMeshes[i]]->mMaterialIndex]->Get(AI_MATKEY_COLOR_DIFFUSE, col);
@@ -161,9 +160,19 @@ GameObject* ImporterFBX::importFBXRec(aiNode* node, const aiScene* scene, GameOb
 			scene->mMaterials[scene->mMeshes[node->mMeshes[i]]->mMaterialIndex]->GetTexture(aiTextureType_DIFFUSE, 0, &str);
 			if (str.length > 0)
 			{
-				char texPath[128];
-				strcpy_s(texPath, 128, str.C_Str());
-				app->resourceManager->textureImporter->importTexture(clearTexPath(texPath), resTex); //TODO: check if already in memory
+				std::map<std::string, ResourceTexture*>::iterator tmp2 = texturesImported.find(str.C_Str());
+				if (tmp2 != texturesImported.end())
+				{
+					cpMat->textureResource = tmp2->second;
+				}
+				else
+				{
+					ResourceTexture* resTex = cpMat->createAnEmptyMaterialRes();
+					char texPath[128];
+					strcpy_s(texPath, 128, str.C_Str());
+					app->resourceManager->textureImporter->importTexture(clearTexPath(texPath), resTex); //TODO: check if already in memory
+					texturesImported.insert(std::pair<std::string, ResourceTexture*>(str.C_Str(), resTex)); //Dont clear the map after importing the fbx because if another fbx use the same texture will not importe it twcie
+				}
 			}
 			//TODO: Mesh should have an index of the texture??
 

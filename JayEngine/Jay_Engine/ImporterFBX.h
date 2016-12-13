@@ -8,6 +8,7 @@ struct aiNode;
 struct aiScene;
 class FileParser;
 class ResourceMesh;
+class ResourceTexture;
 class GameObject;
 
 class ImporterFBX :	public Importer
@@ -25,6 +26,7 @@ public:
 
 private:
 	std::map<int, ResourceMesh*> meshesImported;//Key is the index from scene->meshes //TODO: Do the same for textures? 
+	std::map<std::string, ResourceTexture*> texturesImported;
 };
 
 #endif // !__IMPORTERFBX_H__
