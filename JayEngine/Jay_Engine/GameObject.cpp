@@ -43,29 +43,14 @@ void GameObject::init()
 
 void GameObject::update(float dt)
 {
-	for (uint i = 0; i < childrens.size(); ++i)
-	{
-		childrens[i]->update(dt);
-	}
 	for (uint j = 0; j < components.size(); ++j)
 	{
 		components[j]->update(dt);
 	}
-
-	if (transform && transform->transformUpdated)
+	for (uint i = 0; i < childrens.size(); ++i)
 	{
-		updateAABB();
-
-		//TODO: make this less hard. May be check in camera update if objects->transform->transformUpdate is true
-		std::vector<Component*> vec = findComponent(CAMERA);
-		for (uint i = 0; i < vec.size(); ++i)
-		{
-			Camera* cam = (Camera*)vec[i];
-			if (cam)
-				cam->updateTransform(transform);
-		}
+		childrens[i]->update(dt);
 	}
-
 }
 
 void GameObject::cleanUp()
@@ -262,44 +247,82 @@ void GameObject::drawDebug()
 		drawBoxDebug(orientedBox, ClearBlue);
 }
 
-void GameObject::updateAABB() //TODO: make enclose for all meshes
+void GameObject::recCalcTransform(const float4x4& parentTrans, bool force)
+{
+	if (transform && transform->localTransformChanged || force)
+	{
+		force = true;
+		goWasDirty = true;
+		transform->updateTransform(parentTrans);
+
+		for (uint i = 0; i < components.size(); ++i)
+			if (components[i])
+				components[i]->onTransformUpdate(transform);
+
+		app->goManager->eraseGameObjectFromTree(this);
+		app->goManager->insertGameObjectToTree(this);
+	}
+	else
+		goWasDirty = false;
+
+	for (uint i = 0; i < childrens.size(); ++i)
+		if (childrens[i] && transform)
+			childrens[i]->recCalcTransform(transform->getGlobalTransform(), force);
+}
+
+void GameObject::recCalcBoxes()
+{
+	if (goWasDirty)
+	{
+		recalcBox();
+
+		orientedBox = enclosingBox;
+		if (orientedBox.IsFinite() && transform)
+			orientedBox.Transform(transform->getGlobalTransform());
+	}
+
+	for (uint i = 0; i < childrens.size(); ++i)
+		if (childrens[i] && transform)
+			childrens[i]->recCalcBoxes();
+}
+
+void GameObject::recalcBox()
 {
 	enclosingBox.SetNegativeInfinity();
 
-	Mesh* m = (Mesh*)findComponent(MESH)[0];
-	if (m)
-		enclosingBox.Enclose((float3*)m->meshResource->vertices, m->meshResource->numVertices);
-
-	orientedBox = enclosingBox;
-	orientedBox.Transform(transform->getTransformMatrix().Transposed());
-	enclosingBox.SetFrom(orientedBox);
-
-	//TMP / TODO: optimize this
-	app->goManager->eraseGameObjectFromTree(this);
-	app->goManager->insertGameObjectToTree(this);
-
-	for (std::vector<GameObject*>::iterator it = childrens.begin(); it != childrens.end(); ++it)
-		(*it)->updateAABB();
-
-	transform->transformUpdated = false;
+	//Iterate all components and in each mesh add into AABB enclosing box all meshes aabb
+	for (uint i = 0; i < components.size(); ++i)
+	{
+		Component* cmp = components[i];
+		if (cmp && cmp->isEnable())
+			cmp->getBox(enclosingBox);
+	}
 }
 
 void GameObject::setNewParent(GameObject* newParent)
 {
-	if (newParent == parent || !newParent)
+	if (newParent == parent)
 		return;
 
 	if (parent)
 	{
 		std::vector<GameObject*>::iterator it = std::find(parent->childrens.begin(), parent->childrens.end(), this);
-		if(it != parent->childrens.end())
+		if (it != parent->childrens.end())
 			parent->childrens.erase(it);
+	}
 
-		parent = newParent;
-		parent->childrens.push_back(this);
+	parent = newParent;
 
-		//TODO: recalc transform
-		transform->setLocalTransform(transform->getTransformMatrix().Transposed() * newParent->transform->getTransformMatrix().Inverted());
+	if (newParent)
+		newParent->childrens.push_back(this);
+
+	goWasDirty = true;
+
+	//TODO: Only recalc transform if boolean parameter is true???
+	if (transform && newParent && newParent->getTransform())
+	{
+		float4x4 tmp = transform->getGlobalTransform();
+		transform->setLocalTransform(tmp * newParent->getTransform()->getLocalTransform().Inverted());
 	}
 }
 

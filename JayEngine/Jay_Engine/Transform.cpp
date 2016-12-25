@@ -12,7 +12,7 @@
 Transform::Transform(GameObject* gObj, int id) : Component(gObj, id)
 {
 	type = TRANSFORMATION;
-	position.Set(0.f, 0.f, 0.f);
+	translation.Set(0.f, 0.f, 0.f);
 	scale.Set(1.f, 1.f, 1.f);
 	rotation.Set(0.f, 0.f, 0.f, 0.f);
 	name.assign("Transform");
@@ -49,6 +49,95 @@ void Transform::cleanUp()
 
 }
 
+//---------------------------------------
+
+//Translation
+float3 Transform::getLocalPosition()const
+{
+	return translation;
+}
+
+float3 Transform::getGlobalPosition()const
+{
+	return globalTransform.TranslatePart();
+}
+
+void Transform::setLocalPosition(const float3& pos)
+{
+	translation = pos;
+	localTransformChanged = true;
+}
+
+//Scale
+float3 Transform::getLocalScale()const
+{
+	return scale;
+}
+
+void Transform::setLocalScale(const float3& scl)
+{
+	scale = scl;
+	localTransformChanged = true;
+}
+
+//Rotation
+float3 Transform::getLocalRotation()const
+{
+	return editorRotation;
+}
+
+Quat Transform::getLocalQuatRotation()const
+{
+	return rotation;
+}
+
+void Transform::setLocalRotation(float3& eulerRot)
+{
+	eulerRot.x *= DEGTORAD;
+	eulerRot.y *= DEGTORAD;
+	eulerRot.z *= DEGTORAD;
+
+	float3 eRot = eulerRot - editorRotation;
+	Quat qRot = Quat::FromEulerXYZ(eRot.x, eRot.y, eRot.z);
+	rotation = rotation * qRot;
+	editorRotation = eulerRot;
+	localTransformChanged = true;
+}
+
+void Transform::setLocalRotation(const Quat& rot)
+{
+	rotation = rot;
+	editorRotation = rotation.ToEulerXYZ().Abs();
+	localTransformChanged = true;
+}
+
+//Transform matrix
+const float4x4 Transform::getGlobalTransform()const
+{
+	return globalTransform;
+}
+
+const float4x4 Transform::getLocalTransform()const
+{
+	return localTransform;
+}
+
+void Transform::setLocalTransform(const float4x4& transform)
+{
+	transform.Decompose(translation, rotation, scale);
+	editorRotation = rotation.ToEulerXYZ().Abs();
+	localTransformChanged = true;
+}
+
+//OpenGL
+const float* Transform::getGlobalTransformGL()const
+{
+	return globalTransform.Transposed().ptr();
+}
+
+
+//---------------------------------------
+
 void Transform::setTransform(aiNode* node)
 {
 	aiVector3D pos;
@@ -56,218 +145,25 @@ void Transform::setTransform(aiNode* node)
 	aiQuaternion rot;
 	node->mTransformation.Decompose(scl, rot, pos);
 
-	setPosition(pos.x, pos.y, pos.z);
-	setScale(scl.x, scl.y, scl.z);
-	setRotation(rot.x, rot.y, rot.z, rot.w);
+	setLocalPosition(float3(pos.x, pos.y, pos.z));
+	setLocalScale(float3(scl.x, scl.y, scl.z));
+	setLocalRotation(Quat(rot.x, rot.y, rot.z, rot.w));
 
-	localTransform = float4x4::FromTRS(position, rotation, scale);
-	parentTransform = object->getParent()->getTransform()->getTransformMatrix().Transposed();
-	worldTransform = parentTransform * localTransform;
-
-	transformUpdated = true;
-}
-
-void Transform::setPosition(float x, float y, float z)
-{
-	position.Set(x, y, z);
-	updateTransform(parentTransform);
-}
-
-void Transform::setPosition(float* pos)
-{
-	position.Set(pos);
-	updateTransform(parentTransform);
-}
-
-const void Transform::getPosition(float& x, float& y, float& z)const
-{
-	x = position.x;
-	y = position.y;
-	z = position.z;
-}
-
-float* Transform::getPosition()const
-{
-	return (float*)&position;
-}
-
-void Transform::setScale(float x, float y, float z)
-{
-	scale.Set(x, y, z);
-	updateTransform(parentTransform);
-}
-
-void Transform::setScale(float* scl)
-{
-	scale.Set(scl);
-	updateTransform(parentTransform);
-}
-
-const void Transform::getScale(float& x, float& y, float& z)const
-{
-	x = scale.x;
-	y = scale.y;
-	z = scale.z;
-}
-
-float* Transform::getScale()const
-{
-	return (float*)&scale;
-}
-
-void Transform::setRotation(float x, float y, float z, float w)
-{
-	rotation.Set(x, y, z, w);
-	updateTransform(parentTransform);
-}
-
-void Transform::setRotation(float* rot)
-{
-	float3 r;
-	r.Set(rot);
-
-	while (r.x < 0)
-		r.x += 360;
-	while (r.y < 0)
-		r.y += 360;
-	while (r.z < 0)
-		r.z += 360;
-
-	while (r.x >= 360)
-		r.x -= 360;
-	while (r.y >= 360)
-		r.y -= 360;
-	while (r.z >= 360)
-		r.z -= 360;
-
-	r.x *= DEGTORAD;
-	r.y *= DEGTORAD;
-	r.z *= DEGTORAD;
-
-	rotation = Quat::FromEulerXYZ(r.x, r.y, r.z);
-	updateTransform(parentTransform);
-}
-
-void Transform::setRotation(float x, float y, float z)
-{
-	while (x < 0)
-		x += 360;
-	while (y < 0)
-		y += 360;
-	while (z < 0)
-		z += 360;
-
-	while (x >= 360)
-		x -= 360;
-	while (y >= 360)
-		y -= 360;
-	while (z >= 360)
-		z -= 360;
-
-	x *= DEGTORAD;
-	y *= DEGTORAD;
-	z *= DEGTORAD;
-
-	rotation = Quat::FromEulerXYZ(x, y, z);
-	updateTransform(parentTransform);
-}
-
-const void Transform::getRotation(float& x, float& y, float& z, float& w)const
-{
-	x = rotation.x;
-	y = rotation.y;
-	z = rotation.z;
-	w = rotation.w;
-}
-
-float* Transform::getRotation()
-{
-	float3 ret = rotation.ToEulerXYZ();
-
-	ret.x *= RADTODEG;
-	ret.y *= RADTODEG;
-	ret.z *= RADTODEG;
-
-	while (ret.x < 0)
-		ret.x += 360;
-	while (ret.y < 0)
-		ret.y += 360;
-	while (ret.z < 0)
-		ret.z += 360;
-
-	while (ret.x >= 360)
-		ret.x -= 360;
-	while (ret.y >= 360)
-		ret.y -= 360;
-	while (ret.z >= 360)
-		ret.z -= 360;
-
-	return (float*)&ret;
-}
-
-float* Transform::getEulerRot()
-{
-	rotationEuler = rotation.ToEulerXYZ();
-
-	rotationEuler.x *= RADTODEG;
-	rotationEuler.y *= RADTODEG;
-	rotationEuler.z *= RADTODEG;
-
-	while (rotationEuler.x < 0)
-		rotationEuler.x += 360;
-	while (rotationEuler.y < 0)
-		rotationEuler.y += 360;
-	while (rotationEuler.z < 0)
-		rotationEuler.z += 360;
-
-	while (rotationEuler.x >= 360)
-		rotationEuler.x -= 360;
-	while (rotationEuler.y >= 360)
-		rotationEuler.y -= 360;
-	while (rotationEuler.z >= 360)
-		rotationEuler.z -= 360;
-
-	return (float*)&rotationEuler;
-}
-
-void Transform::setLocalTransform(const float4x4 trans)
-{
-	trans.Decompose(position, rotation, scale);
-	rotationEuler = rotation.ToEulerXYZ().Abs();
-	transformUpdated = true;
-}
-
-float4x4 Transform::getTransformMatrix()
-{
-	if (isEnable())
-		return worldTransform.Transposed();
-	else
-		return float4x4::identity;
-}
-
-float4x4 Transform::getLocalMatrix()
-{
-	if(isEnable())
-		return localTransform;
-	else
-		return float4x4::identity;
-}
-
-void Transform::updateTransform(float4x4& parentMat)
-{
-	parentTransform = parentMat;
-	localTransform = float4x4::FromTRS(position, rotation, scale);
-	worldTransform = parentTransform * localTransform;
-
-	for (uint i = 0; i < object->childrens.size(); ++i)
+	localTransform = float4x4::FromTRS(translation, rotation, scale);
+	if (object && object->getParent() && object->getParent()->getTransform())
 	{
-		Transform* trans = object->childrens[i]->getTransform();
-		if (trans)
-		{
-			trans->updateTransform(worldTransform);
-		}
+		updateTransform(object->getParent()->getTransform()->getGlobalTransform());
 	}
-	transformUpdated = true;
+	localTransformChanged = true;
+}
+
+
+
+void Transform::updateTransform(const float4x4& parentMat)
+{
+	localTransformChanged = false;
+	localTransform = float4x4::FromTRS(translation, rotation, scale);
+	globalTransform = parentMat * localTransform;
 }
 
 bool Transform::saveCMP(FileParser& sect)
@@ -280,7 +176,7 @@ bool Transform::saveCMP(FileParser& sect)
 	sect.addInt("go_UUID", object->getGOId());
 
 	//TODO: add float3 and quaternion
-	sect.addFloat3("position", position);
+	sect.addFloat3("position", translation);
 	sect.addFloat3("scale", scale);
 	sect.addFloatArray("rotation", rotation.ptr(), 4);
 
@@ -294,22 +190,21 @@ bool Transform::loadCMP(FileParser& sect)
 	active = sect.getBool("active", true);
 	id = sect.getInt("UUID", 0);
 
-	position = sect.getFloat3("position", float3::zero);
+	translation = sect.getFloat3("position", float3::zero);
 	scale = sect.getFloat3("scale", float3(1, 1, 1));
 	rotation.x = sect.getFloat("rotation", 0.f, 0);
 	rotation.y = sect.getFloat("rotation", 0.f, 1);
 	rotation.z = sect.getFloat("rotation", 0.f, 2);
 	rotation.w = sect.getFloat("rotation", 0.f, 3);
 
-	localTransform = float4x4::FromTRS(position, rotation, scale);
+	localTransform = float4x4::FromTRS(translation, rotation, scale);
 
-	if (object->getParent())
+	if (object && object->getParent() && object->getParent()->getTransform())
 	{
-		parentTransform = object->getParent()->getTransform()->getTransformMatrix().Inverted();
-		worldTransform = parentTransform * localTransform;
+		updateTransform(object->getParent()->getTransform()->getGlobalTransform());
 	}
 
-	transformUpdated = true;
+	localTransformChanged = true;
 
 	return ret;
 }

@@ -43,6 +43,8 @@ public:
 	void lookAt(const float3 spot);
 	void look(const float3 spot, const float3 pos);
 
+	void onTransformUpdate(Transform* trans);
+
 	void debugDraw();
 
 	bool saveCMP(FileParser& sect);

@@ -73,13 +73,20 @@ bool ModuleGOManager::start()
 
 update_status ModuleGOManager::preUpdate(float dt)
 {
+	//TODO: destroy flagged obj
+
+	if (sceneRootObject && sceneRootObject->getTransform())
+	{
+		sceneRootObject->recCalcTransform(sceneRootObject->getTransform()->getLocalTransform());
+		sceneRootObject->recCalcBoxes();
+	}
 
 	return UPDATE_CONTINUE;
 }
 
 update_status ModuleGOManager::update(float dt)
 {
-	if (sceneRootObject)
+	if (app->isPlaySate() && sceneRootObject)
 		sceneRootObject->update(dt);
 
 	return UPDATE_CONTINUE;
@@ -523,7 +530,13 @@ void ModuleGOManager::loadSceneOrPrefabs(FileParser& file)
 		else
 			tmpGO[i]->setNewParent(sceneRootObject);
 	}
-	sceneRootObject->getTransform()->updateTransform(sceneRootObject->getTransform()->getTransformMatrix());
+
+	if (sceneRootObject && sceneRootObject->getTransform())
+	{
+		sceneRootObject->recCalcTransform(sceneRootObject->getTransform()->getLocalTransform(), true);
+		sceneRootObject->recCalcBoxes();
+	}
+
 	RELEASE(rootTMP);
 }
 

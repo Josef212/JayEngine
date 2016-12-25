@@ -51,6 +51,12 @@ void Mesh::clearMesh()
 {
 }
 
+void Mesh::getBox(AABB& box)const
+{
+	if (meshResource)
+		box.Enclose(meshResource->aabb);
+}
+
 ResourceMesh* Mesh::createAnEmptyMeshRes()
 {
 	if (!meshResource)

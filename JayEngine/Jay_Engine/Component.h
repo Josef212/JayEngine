@@ -2,10 +2,12 @@
 #define __COMPONENT_H__
 
 #include "Globals.h"
+#include "Math.h"
 #include <string>
 
 class GameObject;
 class FileParser;
+class Transform;
 
 enum ComponentType
 {
@@ -34,6 +36,9 @@ public:
 	const char* getName();
 	void setName(const char* str);
 	int getId();
+
+	virtual void getBox(AABB& box)const {}
+	virtual void onTransformUpdate(Transform* trans) {}
 
 	virtual void debugDraw();
 

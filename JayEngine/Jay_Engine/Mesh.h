@@ -2,6 +2,7 @@
 #define __MESH_H__
 
 #include "Component.h"
+#include "Math.h"
 
 class ResourceMesh;
 class FileParser;
@@ -18,6 +19,8 @@ public:
 	void init();
 	void update(float dt);
 	void cleanUp();
+
+	void getBox(AABB& box)const;
 
 	ResourceMesh* createAnEmptyMeshRes();
 

@@ -22,29 +22,39 @@ public:
 
 	void setTransform(aiNode* node);
 
-	//All these transform are about local transform
-	void setPosition(float x, float y, float z);
-	void setPosition(float* pos);
-	const void getPosition(float& x, float& y, float& z)const;
-	float* getPosition()const;
+	//----------------------------------------
 
-	void setScale(float x, float y, float z);
-	void setScale(float* scl);
-	const void getScale(float& x, float& y, float& z)const;
-	float* getScale()const;
+	//Translation
+	float3 getLocalPosition()const;
+	float3 getGlobalPosition()const;
 
-	void setRotation(float x, float y, float z, float w);
-	void setRotation(float x, float y, float z);
-	void setRotation(float* rot);
-	const void getRotation(float& x, float& y, float& z, float& w)const;
-	float* getRotation();//Don't use it
-	float* getEulerRot();
+	void setLocalPosition(const float3& pos);
 
-	void setLocalTransform(const float4x4 trans);
+	//Scale
+	float3 getLocalScale()const;
 
-	float4x4 getTransformMatrix();
-	float4x4 getLocalMatrix();
-	void updateTransform(float4x4& parentMat);
+	void setLocalScale(const float3& scl);
+
+	//Rotation
+	float3 getLocalRotation()const;
+	Quat getLocalQuatRotation()const;
+
+	void setLocalRotation(float3& eulerRot);
+	void setLocalRotation(const Quat& rot);
+
+	//Transform matrix
+	const float4x4 getGlobalTransform()const;
+	const float4x4 getLocalTransform()const;
+
+	void setLocalTransform(const float4x4& transform);
+
+	//OpenGL
+	const float* getGlobalTransformGL()const;
+
+	//----------------------------------------
+
+
+	void updateTransform(const float4x4& parentMat);
 
 	bool saveCMP(FileParser& sect);
 	bool loadCMP(FileParser& sect);
@@ -52,17 +62,18 @@ public:
 private:
 
 public:
-	float3 position = float3::zero;
-	float3 scale = float3::zero;
-	Quat rotation = Quat::identity;
-	float3 rotationEuler = float3::zero;
 
-	bool transformUpdated = false;
+	bool localTransformChanged = true;
 
 private:
-	float4x4 worldTransform = float4x4::identity;
+	float3 translation = float3::zero;
+	float3 scale = float3::one;
+	Quat rotation = Quat::identity;
+	float3 editorRotation = float3::zero;
+
+	float4x4 globalTransform = float4x4::identity;
 	float4x4 localTransform = float4x4::identity;
-	float4x4 parentTransform = float4x4::identity;
+
 };
 
 #endif // !__TRANSFORMATION_H__

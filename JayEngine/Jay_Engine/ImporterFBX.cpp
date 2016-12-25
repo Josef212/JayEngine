@@ -179,8 +179,6 @@ GameObject* ImporterFBX::importFBXRec(aiNode* node, const aiScene* scene, GameOb
 		}
 	}
 
-	ret->updateAABB(); //So that we can save it later
-
 	for (uint i = 0; i < node->mNumChildren; ++i)
 	{
 		importFBXRec(node->mChildren[i], scene, ret, originalFBX);

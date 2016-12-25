@@ -21,7 +21,7 @@ public:
 	virtual ~GameObject();
 
 	void init();
-	void update(float dt);
+	void update(float dt); //Only called on play mode
 	void cleanUp();
 
 	void draw(bool drawChilds);
@@ -49,7 +49,9 @@ public:
 
 	void drawDebug();
 
-	void updateAABB();
+	void recCalcTransform(const float4x4& parentTrans, bool force = false);
+	void recCalcBoxes();
+	void recalcBox();
 
 	//TMP
 	bool saveGO(FileParser& file);
@@ -75,6 +77,9 @@ private:
 	uint32 id = 0;
 	GameObject* parent = NULL;
 	bool goActive = true;
+
+	bool goWasDirty = true;
+	bool removeFlag = false;
 
 	/**Just a pointer to transformation component 
 	in order to agile transform search. May be transform info should be in game object class */

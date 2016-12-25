@@ -2,6 +2,7 @@
 #define __RESOURCEMESH_H__
 
 #include "Resource.h"
+#include "Math.h"
 
 class ResourceMesh : public Resource
 {
@@ -34,6 +35,8 @@ public:
 	float* texCoords = NULL; //!NOTE: remember, the size of the buffer must be the number of vertices * 2
 
 	//TODO: add vertex colors
+
+	AABB aabb;
 
 private:
 

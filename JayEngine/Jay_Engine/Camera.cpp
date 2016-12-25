@@ -121,18 +121,16 @@ void Camera::setBackground(float r, float g, float b, float a)
 	background.Set(r, g, b, a);
 }
 
-void Camera::updateTransform(Transform* trans)
+void Camera::onTransformUpdate(Transform* trans)
 {
 	if (!trans)
 		return;
 
-	float4x4 mat = trans->getTransformMatrix().Transposed();
+	float4x4 mat = trans->getGlobalTransform();
 
 	frustum.pos = mat.TranslatePart();
 	frustum.front = mat.WorldZ();
 	frustum.up = mat.WorldY();
-
-	projectMatrixChanged = true;
 }
 
 float* Camera::getGLViewMatrix()

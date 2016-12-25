@@ -326,7 +326,7 @@ void ModuleRenderer3D::drawGameObject(GameObject* obj)
 	//----------------------
 
 	glPushMatrix();
-	glMultMatrixf(*trans->getTransformMatrix().v);
+	glMultMatrixf(trans->getGlobalTransformGL());
 
 	//----------------------
 
