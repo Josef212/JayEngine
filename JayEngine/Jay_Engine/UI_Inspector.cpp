@@ -86,9 +86,12 @@ void UI_Inspector::draw()
 void UI_Inspector::drawTransformation(GameObject* selected)
 {
 	Transform* trans = selected->getTransform();
-	if(trans )
+	if(!trans)
 		trans = (Transform*)selected->findComponent(TRANSFORMATION)[0];
 	
+	if (!trans)
+		return;
+
 	char transName[60];
 	strcpy_s(transName, 60, trans->getName());
 	
@@ -100,15 +103,26 @@ void UI_Inspector::drawTransformation(GameObject* selected)
 
 	if (ImGui::Button("Remove trans")) selected->removeComponent(trans);
 
-	float* pos = trans->getPosition();
-	float* scale = trans->getScale();
-	float* rot = trans->getEulerRot();
+	if (ImGui::Button("Reset transform"))
+	{
+		trans->setLocalPosition(float3::zero);
+		trans->setLocalScale(float3::one);
+		trans->setLocalRotation(Quat::identity);
+	}
+
+	float3 pos = trans->getLocalPosition();
+	float3 scale = trans->getLocalScale();
+	float3 rot = trans->getLocalRotation();
+	rot.x *= RADTODEG;
+	rot.y *= RADTODEG;
+	rot.z *= RADTODEG;
+
 	//Position
-	if (ImGui::DragFloat3("Position:", pos)) trans->setPosition(pos);
+	if (ImGui::DragFloat3("Position:", (float*)&pos, 0.25f)) trans->setLocalPosition(pos);
 	//Scale
-	if (ImGui::DragFloat3("Scale:", scale)) trans->setScale(scale);
+	if (ImGui::DragFloat3("Scale:", (float*)&scale)) trans->setLocalScale(scale);
 	//Rotation
-	if (ImGui::DragFloat3("Rotation:", rot, 0.5f)) trans->setRotation(rot);
+	if (ImGui::DragFloat3("Rotation:", (float*)&rot, 0.5f)) trans->setLocalRotation(rot);
 
 	ImGui::Separator();
 }
