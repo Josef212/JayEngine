@@ -28,6 +28,8 @@ public:
 
 	void draw();
 
+	void removeFlaggedGO();
+
 	GameObject* getSceneroot()const;
 	GameObject* getGameObjectFromId(UID id);
 
@@ -43,10 +45,10 @@ public:
 	GameObject* getSelected()const;
 	void select(GameObject* toSelect);
 
+	GameObject* validateGO(const GameObject* point)const;
+
 	GameObject* loadPrefab(const char* file, const char* path = NULL); //Must be a json wich contains all .jof and .dds, etc
 
-
-	bool deleteGameObject(GameObject* toDel);
 	void cleanRoot();
 
 	GameObject* loadCube();
@@ -69,6 +71,8 @@ public:
 
 private:
 	GameObject* recFindGO(UID id, GameObject* go);
+	void recRecieveEvent(GameObject* obj, const Event& e);
+
 	void loadSceneOrPrefabs(FileParser& file);
 
 	void onPlay();

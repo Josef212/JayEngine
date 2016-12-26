@@ -28,7 +28,7 @@ public:
 
 	Component* addComponent(ComponentType type);
 	GameObject* addChild();
-	bool removeComponent(Component* comp);
+
 	std::vector<Component*> findComponent(ComponentType type);
 	int hasComponent(ComponentType type);
 
@@ -39,10 +39,7 @@ public:
 	const char* getName()const;
 	void setName(const char* str);
 
-	Transform* getTransform()const
-	{
-		return transform;
-	}
+	void remove();
 
 	bool isGOActive();
 	void setGOEnable(bool set);
@@ -52,6 +49,9 @@ public:
 	void recCalcTransform(const float4x4& parentTrans, bool force = false);
 	void recCalcBoxes();
 	void recalcBox();
+	bool recRemoveFlagged();
+
+	void onGameObjectDestroyed();
 
 	//TMP
 	bool saveGO(FileParser& file);
@@ -69,7 +69,11 @@ public:
 	bool drawEnclosingAABB = false;
 	bool drawOrientedBox = false;
 
-	bool toDel = false;
+	bool removeFlag = false;
+
+	/**Just a pointer to transformation component
+	in order to agile transform search. May be transform info should be in game object class */
+	Transform* transform = NULL;
 
 private:
 	std::string name;
@@ -79,11 +83,7 @@ private:
 	bool goActive = true;
 
 	bool goWasDirty = true;
-	bool removeFlag = false;
 
-	/**Just a pointer to transformation component 
-	in order to agile transform search. May be transform info should be in game object class */
-	Transform* transform = NULL;
 };
 
 #endif // !__GAMEOBJECT_H__

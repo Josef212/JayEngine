@@ -34,6 +34,11 @@ int Component::getId()
 	return id;
 }
 
+void Component::remove()
+{
+	removeFlag = true;
+}
+
 void Component::enable()
 {
 	if (!active)

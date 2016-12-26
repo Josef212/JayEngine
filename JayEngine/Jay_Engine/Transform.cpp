@@ -21,6 +21,8 @@ Transform::Transform(GameObject* gObj, int id) : Component(gObj, id)
 
 Transform::~Transform()
 {
+	if (object)
+		object->transform = NULL;
 }
 
 void Transform::enable()
@@ -150,9 +152,9 @@ void Transform::setTransform(aiNode* node)
 	setLocalRotation(Quat(rot.x, rot.y, rot.z, rot.w));
 
 	localTransform = float4x4::FromTRS(translation, rotation, scale);
-	if (object && object->getParent() && object->getParent()->getTransform())
+	if (object && object->getParent() && object->getParent()->transform)
 	{
-		updateTransform(object->getParent()->getTransform()->getGlobalTransform());
+		updateTransform(object->getParent()->transform->getGlobalTransform());
 	}
 	localTransformChanged = true;
 }
@@ -199,9 +201,9 @@ bool Transform::loadCMP(FileParser& sect)
 
 	localTransform = float4x4::FromTRS(translation, rotation, scale);
 
-	if (object && object->getParent() && object->getParent()->getTransform())
+	if (object && object->getParent() && object->getParent()->transform)
 	{
-		updateTransform(object->getParent()->getTransform()->getGlobalTransform());
+		updateTransform(object->getParent()->transform->getGlobalTransform());
 	}
 
 	localTransformChanged = true;

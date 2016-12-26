@@ -55,13 +55,14 @@ void GameObject::update(float dt)
 
 void GameObject::cleanUp()
 {
-	for (uint i = 0; i < childrens.size(); ++i)
-	{
-		childrens[i]->cleanUp();
-	}
 	for (uint i = 0; i < components.size(); ++i)
 	{
 		components[i]->cleanUp();
+	}
+
+	for (uint i = 0; i < childrens.size(); ++i)
+	{
+		childrens[i]->cleanUp();
 	}
 }
 
@@ -104,7 +105,10 @@ Component* GameObject::addComponent(ComponentType type)
 		case TRANSFORMATION:
 		{
 			if (hasComponent(TRANSFORMATION) == 0)
+			{
 				ret = new Transform(this, nextCompId);
+				transform = (Transform*)ret;
+			}
 			else
 				_LOG(LOG_WARN, "Can't add transform component, already has one.");
 		}
@@ -148,36 +152,50 @@ GameObject* GameObject::addChild()
 	return ret;
 }
 
-bool GameObject::removeComponent(Component* comp)
+void GameObject::remove()
+{
+	removeFlag = true;
+}
+
+bool GameObject::recRemoveFlagged()
 {
 	bool ret = false;
 
-	if (comp)
+	for (uint i = 0; i < components.size(); ++i)
 	{
-		uint pos = 0;
-		for (; pos < components.size(); ++pos)
+		if (components[i] && components[i]->removeFlag)
 		{
-			if (components[pos] == comp)
-			{
-				ret = true;
-				break;
-			}
-		}
-		if (ret)
-		{
-			if (comp == transform && comp->type == TRANSFORMATION)
-			{
-				transform = NULL;
-			}
-
-			components[pos]->cleanUp();
-			components.erase(components.begin() + pos);
+			components[i]->cleanUp();
+			RELEASE(components[i]);
+			components.erase(components.begin() + i);
 		}
 	}
-	else
-		ret = false;
+
+	for (uint i = 0; i < childrens.size(); ++i)
+	{
+		GameObject* tmp = childrens[i];
+		if (tmp && tmp->removeFlag)
+		{
+			tmp->cleanUp();
+			app->goManager->eraseGameObjectFromTree(tmp);
+			RELEASE(tmp);
+			childrens.erase(childrens.begin() + i);
+			ret = true;
+		}
+		else
+		{
+			ret |= tmp->recRemoveFlagged();
+		}
+	}
 
 	return ret;
+}
+
+void GameObject::onGameObjectDestroyed()
+{
+	for (uint i = 0; i < components.size(); ++i)
+		if (components[i])
+			components[i]->onGameObjectDestroyed();
 }
 
 std::vector<Component*> GameObject::findComponent(ComponentType type)
@@ -186,7 +204,7 @@ std::vector<Component*> GameObject::findComponent(ComponentType type)
 
 	for (uint i = 0; i < components.size(); ++i)
 	{
-		if (components[i]->type == type)
+		if (components[i] && components[i]->type == type)
 			ret.push_back(components[i]);
 	}
 
@@ -231,14 +249,16 @@ void GameObject::draw(bool drawChilds) //Only use this if culling is not active
 
 void GameObject::drawDebug()
 {
-	for (uint i = 0; i < childrens.size(); ++i)
-	{
-		childrens[i]->drawDebug();
-	}
-
 	for (uint j = 0; j < components.size(); ++j)
 	{
-		components[j]->debugDraw();
+		if (components[j])
+			components[j]->debugDraw();
+	}
+
+	for (uint i = 0; i < childrens.size(); ++i)
+	{
+		if(childrens[i])
+			childrens[i]->drawDebug();
 	}
 
 	if (drawEnclosingAABB)
@@ -319,10 +339,10 @@ void GameObject::setNewParent(GameObject* newParent)
 	goWasDirty = true;
 
 	//TODO: Only recalc transform if boolean parameter is true???
-	if (transform && newParent && newParent->getTransform())
+	if (transform && newParent && newParent->transform)
 	{
 		float4x4 tmp = transform->getGlobalTransform();
-		transform->setLocalTransform(tmp * newParent->getTransform()->getLocalTransform().Inverted());
+		transform->setLocalTransform(tmp * newParent->transform->getLocalTransform().Inverted());
 	}
 }
 

@@ -37,6 +37,10 @@ public:
 	void setName(const char* str);
 	int getId();
 
+	void remove();
+
+	virtual void onGameObjectDestroyed() {}
+
 	virtual void getBox(AABB& box)const {}
 	virtual void onTransformUpdate(Transform* trans) {}
 
@@ -47,6 +51,7 @@ public:
 
 public:
 	ComponentType type = UNKNOWN;
+	bool removeFlag = false;
 
 protected:
 	std::string name;

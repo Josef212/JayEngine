@@ -28,7 +28,7 @@ public:
 	bool isInMemory()const;
 	bool loadToMemory();
 
-	bool removeFromMemory();
+	virtual bool removeFromMemory();
 	uint countReferences()const;
 
 	void addInstance();

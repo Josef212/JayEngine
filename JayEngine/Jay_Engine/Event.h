@@ -10,6 +10,7 @@ struct Event
 		STOP,
 		WIN_RESIZE,
 		FILE_DROPPED,
+		GAME_OBJECT_DESTROYED,
 		INVALID
 	}type;
 

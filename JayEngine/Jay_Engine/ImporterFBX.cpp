@@ -115,7 +115,7 @@ GameObject* ImporterFBX::importFBXRec(aiNode* node, const aiScene* scene, GameOb
 	ret->setName(node->mName.C_Str());
 
 	//Setting transform
-	Transform* trans = ret->getTransform();
+	Transform* trans = ret->transform;
 	if (!trans)
 		trans = (Transform*)ret->findComponent(TRANSFORMATION)[0];
 	if (!trans)

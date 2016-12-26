@@ -5,6 +5,8 @@
 #include "Application.h"
 #include "FileParser.h"
 
+#include "ModuleRenderer3D.h"
+
 #include "DrawDebug.h"
 
 //MathGeolib frustum: http://clb.demon.fi/MathGeoLib/nightly/docs/Frustum_summary.php
@@ -29,6 +31,8 @@ Camera::Camera(GameObject* gObj, int id) : Component(gObj, id)
 
 Camera::~Camera()
 {
+	if (app->renderer3D->getActiveCamera() == this)
+		app->renderer3D->setActiveCamera(NULL);
 }
 
 

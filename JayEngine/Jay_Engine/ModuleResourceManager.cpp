@@ -183,10 +183,13 @@ bool ModuleResourceManager::removeResource(UID uuid)
 
 	if (res)
 	{
+		res->removeInstance();
+
 		if (res->countReferences() <= 0)
 		{
 			//Must remove it from the map and clean the info
 			resources.erase(uuid);
+			res->removeFromMemory();
 			RELEASE(res);
 		}
 	}

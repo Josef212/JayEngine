@@ -16,7 +16,8 @@ Mesh::Mesh(GameObject* gObj, int id) : Component(gObj, id)
 
 Mesh::~Mesh()
 {
-	app->resourceManager->removeResource(meshResource->getUID());
+	if(meshResource)
+		app->resourceManager->removeResource(meshResource->getUID());
 }
 
 void Mesh::enable()
@@ -104,7 +105,10 @@ bool Mesh::loadCMP(FileParser& sect)
 		uint id = sect.getInt("resource_id", 0);
 		ResourceMesh* tmp = (ResourceMesh*)app->resourceManager->getResourceFromUID(id);
 		if (tmp)
+		{
 			meshResource = tmp;
+			tmp->addInstance();
+		}
 		else
 		{
 			createAnEmptyMeshRes();

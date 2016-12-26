@@ -72,14 +72,14 @@ bool ModuleGOManager::start()
 }
 
 update_status ModuleGOManager::preUpdate(float dt)
-{
-	//TODO: destroy flagged obj
-
-	if (sceneRootObject && sceneRootObject->getTransform())
+{	
+	if (sceneRootObject && sceneRootObject->transform)
 	{
-		sceneRootObject->recCalcTransform(sceneRootObject->getTransform()->getLocalTransform());
+		sceneRootObject->recCalcTransform(sceneRootObject->transform->getLocalTransform());
 		sceneRootObject->recCalcBoxes();
 	}
+
+	removeFlaggedGO();
 
 	return UPDATE_CONTINUE;
 }
@@ -119,6 +119,25 @@ void ModuleGOManager::draw()
 		}
 		else
 			sceneRootObject->draw(true);
+	}
+}
+
+void ModuleGOManager::removeFlaggedGO()
+{
+	if (sceneRootObject->removeFlag)
+	{
+		for (uint i = 0; i < sceneRootObject->childrens.size(); ++i)
+		{
+			if (sceneRootObject->childrens[i])
+				sceneRootObject->childrens[i]->remove();
+		}
+		sceneRootObject->removeFlag = false;
+	}
+
+	if (sceneRootObject->recRemoveFlagged())
+	{
+		Event ev(Event::GAME_OBJECT_DESTROYED);
+		app->sendGlobalEvent(ev);
 	}
 }
 
@@ -189,12 +208,12 @@ Component* ModuleGOManager::addTransform()
 
 	if (selected)
 	{
-		Transform* trans = selected->getTransform();
+		Transform* trans = selected->transform;
 		if(!trans)
 			trans = (Transform*)selected->findComponent(TRANSFORMATION)[0];
 
-		if(trans)
-			selected->addComponent(TRANSFORMATION);
+		if(!trans)
+			ret = (Transform*)selected->addComponent(TRANSFORMATION);
 	}
 
 	return ret;
@@ -270,39 +289,6 @@ void ModuleGOManager::drawDebug()
 	}//DEL_COM
 }
 
-bool ModuleGOManager::deleteGameObject(GameObject* toDel)
-{
-	bool ret = false;
-
-	if (!toDel)
-		return ret;
-
-	if (selected == toDel)
-		select(NULL);
-
-	GameObject* parent = toDel->getParent();
-
-	if (parent)
-	{
-		for (uint i = 0; i < parent->childrens.size(); ++i)
-		{
-			if (parent->childrens[i] == toDel)
-			{
-				parent->childrens.erase(parent->childrens.begin() + i);
-				break;
-			}
-		}		
-	}
-
-	eraseGameObjectFromTree(toDel);
-	RELEASE(toDel);
-	
-	if (!toDel)
-		ret = true;
-
-	return ret;
-}
-
 void ModuleGOManager::makeGOShowAABoxRec(GameObject* obj, bool show)
 {
 	if (obj)
@@ -359,6 +345,20 @@ GameObject* ModuleGOManager::recFindGO(UID id, GameObject* go)
 	
 
 	return ret;
+}
+
+GameObject* ModuleGOManager::validateGO(const GameObject* point)const
+{
+	if (point == sceneRootObject)
+		return sceneRootObject;
+
+	for (uint i = 0; i < sceneRootObject->childrens.size(); ++i)
+	{
+		if (point == sceneRootObject->childrens[i])
+			return (GameObject*)point;
+	}
+
+	return NULL;
 }
 
 
@@ -531,9 +531,9 @@ void ModuleGOManager::loadSceneOrPrefabs(FileParser& file)
 			tmpGO[i]->setNewParent(sceneRootObject);
 	}
 
-	if (sceneRootObject && sceneRootObject->getTransform())
+	if (sceneRootObject && sceneRootObject->transform)
 	{
-		sceneRootObject->recCalcTransform(sceneRootObject->getTransform()->getLocalTransform(), true);
+		sceneRootObject->recCalcTransform(sceneRootObject->transform->getLocalTransform(), true);
 		sceneRootObject->recCalcBoxes();
 	}
 
@@ -563,6 +563,8 @@ void ModuleGOManager::cleanRoot() //TODO: Should destroy all scene directly or w
 
 void ModuleGOManager::onGlobalEvent(const Event& e)
 {
+	recRecieveEvent(sceneRootObject, e);
+
 	switch (e.type)
 	{
 	case Event::eventType::PLAY:
@@ -576,10 +578,27 @@ void ModuleGOManager::onGlobalEvent(const Event& e)
 	case Event::eventType::PAUSE:
 		onPause();
 		break;
+	}
+
+	selected = validateGO(selected);
+}
+
+void ModuleGOManager::recRecieveEvent(GameObject* obj, const Event& e)
+{
+	switch (e.type)
+	{
+	case Event::eventType::GAME_OBJECT_DESTROYED: 
+		obj->onGameObjectDestroyed();
+		break;
 
 	default:
-		_LOG(LOG_WARN, "Module GO manager: Could not recognize the event type.");
 		break;
+	}
+
+	for (uint i = 0; i < obj->childrens.size(); ++i)
+	{
+		if (obj->childrens[i])
+			recRecieveEvent(obj->childrens[i], e);
 	}
 }
 

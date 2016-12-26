@@ -56,26 +56,30 @@ void UI_Inspector::draw()
 			bool showOBB = selected->drawOrientedBox;
 			if (ImGui::Checkbox("Show oriented box", &showOBB)) app->goManager->makeGOShowOBoxRec(selected, showOBB);
 
-			if (ImGui::Button("Delete.")) app->goManager->deleteGameObject(selected);
+			if (ImGui::Button("Delete.")) selected->remove();
 
 			ImGui::Separator();
 
 			for (uint i = 0; i < selected->components.size(); ++i)
 			{
-				switch (selected->components[i]->type)
+				Component* cmp = selected->components[i];
+				if (cmp)
 				{
-				case TRANSFORMATION:
-					drawTransformation(selected);
-					break;
-				case MESH:
-					drawMesh(selected, (Mesh*)selected->components[i]);
-					break;
-				case MATERIAL:
-					drawMaterial(selected, (Material*)selected->components[i]);
-					break;
-				case CAMERA:
-					drawCamera(selected, (Camera*)selected->components[i]);
-					break;
+					switch (cmp->type)
+					{
+					case TRANSFORMATION:
+						drawTransformation(selected);
+						break;
+					case MESH:
+						drawMesh(selected, (Mesh*)cmp);
+						break;
+					case MATERIAL:
+						drawMaterial(selected, (Material*)cmp);
+						break;
+					case CAMERA:
+						drawCamera(selected, (Camera*)cmp);
+						break;
+					}
 				}
 			}
 		}
@@ -85,7 +89,7 @@ void UI_Inspector::draw()
 
 void UI_Inspector::drawTransformation(GameObject* selected)
 {
-	Transform* trans = selected->getTransform();
+	Transform* trans = selected->transform;
 	if(!trans)
 		trans = (Transform*)selected->findComponent(TRANSFORMATION)[0];
 	
@@ -101,7 +105,7 @@ void UI_Inspector::drawTransformation(GameObject* selected)
 
 	ImGui::SameLine();
 
-	if (ImGui::Button("Remove trans")) selected->removeComponent(trans);
+	if (ImGui::Button("Remove trans")) trans->remove();
 
 	if (ImGui::Button("Reset transform"))
 	{
@@ -139,7 +143,7 @@ void UI_Inspector::drawMesh(GameObject* selected, Mesh* mesh)
 
 	ImGui::SameLine();
 
-	if (ImGui::Button("Remove mesh")) selected->removeComponent(mesh);
+	if (ImGui::Button("Remove mesh")) mesh->remove();
 
 	ImGui::Text("Number of vertices: ");
 	ImGui::SameLine();
@@ -177,7 +181,7 @@ void UI_Inspector::drawMaterial(GameObject* selected, Material* mat)
 
 	ImGui::SameLine();
 
-	if (ImGui::Button("Remove material")) selected->removeComponent(mat);
+	if (ImGui::Button("Remove material")) mat->remove();
 
 	ImGui::ColorEdit4("Color:", (float*)&mat->color, false);
 	//TODO: Show all textures

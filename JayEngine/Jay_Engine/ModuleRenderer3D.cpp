@@ -313,7 +313,7 @@ void ModuleRenderer3D::drawGameObject(GameObject* obj)
 	if (!obj)
 		return;
 
-	Transform* trans = obj->getTransform();
+	Transform* trans = obj->transform;
 	std::vector<Component*> meshes = obj->findComponent(MESH);
 	std::vector<Component*> mats = obj->findComponent(MATERIAL);
 

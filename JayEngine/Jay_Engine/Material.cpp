@@ -20,7 +20,8 @@ Material::Material(GameObject* gObj, int id) : Component(gObj, id)
 
 Material::~Material()
 {
-	app->resourceManager->removeResource(textureResource->getUID());
+	if(textureResource)
+		app->resourceManager->removeResource(textureResource->getUID());
 }
 
 void Material::enable()
@@ -104,7 +105,10 @@ bool Material::loadCMP(FileParser& sect)
 		uint id = sect.getInt("resource_id", 0);
 		ResourceTexture* tmp = (ResourceTexture*)app->resourceManager->getResourceFromUID(id);
 		if (tmp)
+		{
 			textureResource = tmp;
+			tmp->addInstance();
+		}
 		else
 		{
 
