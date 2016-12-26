@@ -81,6 +81,19 @@ update_status ModuleGOManager::preUpdate(float dt)
 
 	removeFlaggedGO();
 
+	if (mustSaveScene)
+	{
+		saveSceneNow(currentScene.c_str());
+		mustSaveScene = false;
+	}
+
+	if (mustLoadScene)
+	{
+		loadSceneNow(currentScene.c_str());
+		mustLoadScene = false;
+	}
+
+
 	return UPDATE_CONTINUE;
 }
 
@@ -313,13 +326,13 @@ void ModuleGOManager::makeGOShowOBoxRec(GameObject* obj, bool show)
 	}
 }
 
-void ModuleGOManager::insertGameObjectToTree(GameObject* obj)//DEL_COM
+void ModuleGOManager::insertGameObjectToTree(GameObject* obj)
 {
 	if (sceneTree && obj)
 		sceneTree->insert(obj);
 }
 
-void ModuleGOManager::eraseGameObjectFromTree(GameObject* obj)//DEL_COM
+void ModuleGOManager::eraseGameObjectFromTree(GameObject* obj)
 {
 	if (sceneTree && obj)
 		sceneTree->erase(obj);
@@ -365,7 +378,7 @@ GameObject* ModuleGOManager::validateGO(const GameObject* point)const
 /**
 	saveScene and loadScene must be used to load and save full scenes.
 */
-bool ModuleGOManager::saveScene(const char* name, const char* path)
+bool ModuleGOManager::saveSceneNow(const char* name, const char* path)
 {
 	bool ret = false;
 
@@ -413,7 +426,17 @@ bool ModuleGOManager::saveScene(const char* name, const char* path)
 	return ret;
 }
 
-bool ModuleGOManager::loadScene(const char* name, const char* path)
+void ModuleGOManager::saveScene()
+{
+	mustSaveScene = true;
+}
+
+void ModuleGOManager::loadScene()
+{
+	mustLoadScene = true;
+}
+
+bool ModuleGOManager::loadSceneNow(const char* name, const char* path)
 {
 	bool ret = false;
 
@@ -540,25 +563,10 @@ void ModuleGOManager::loadSceneOrPrefabs(FileParser& file)
 	RELEASE(rootTMP);
 }
 
-void ModuleGOManager::cleanRoot() //TODO: Should destroy all scene directly or wait until next update.
+void ModuleGOManager::cleanRoot()
 {
-	//NOTE-REALLY IMPORTANT: Check all pointer references of game objects in all the code
-	//Probably should be in game objects and components deletes
-
-	select(NULL);
-	app->renderer3D->setActiveCamera(NULL);
-
-	for (uint i = 0; i < sceneRootObject->childrens.size(); ++i)
-	{
-		if (sceneRootObject->childrens[i])
-		{
-			if (sceneRootObject->childrens[i] == selected)
-				select(NULL);
-
-			RELEASE(sceneRootObject->childrens[i]);
-		}
-	}
-	sceneRootObject->childrens.clear();
+	if (sceneRootObject)
+		sceneRootObject->remove();
 }
 
 void ModuleGOManager::onGlobalEvent(const Event& e)
@@ -607,7 +615,7 @@ void ModuleGOManager::recRecieveEvent(GameObject* obj, const Event& e)
 */
 void ModuleGOManager::onPlay()
 {
-	saveScene(currentScene.c_str());
+	saveScene();
 }
 
 /**
@@ -627,7 +635,7 @@ void ModuleGOManager::onStop()
 	cleanRoot();
 
 	//Second load the scene
-	loadScene(currentScene.c_str());
+	loadScene();
 }
 
 /**

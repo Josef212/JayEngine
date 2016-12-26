@@ -85,11 +85,11 @@ update_status ModuleEditor::update(float dt)
 	{
 		if (ImGui::BeginMenu("File"))
 		{
-			if (ImGui::MenuItem("TMP:Save scene")) app->goManager->saveScene("scene.json");
+			if (ImGui::MenuItem("TMP:Save scene"))app->goManager->saveScene(); //TODO: Should open a window in order to set de file to save or load file name.
 			if (ImGui::MenuItem("TMP:Load scene"))
 			{
 				app->goManager->cleanRoot();
-				app->goManager->loadScene("scene.json");
+				app->goManager->loadScene();
 			}
 			if (ImGui::MenuItem("LoadConf")) app->loadGame();
 			if (ImGui::MenuItem("SaveConf")) app->saveGame();

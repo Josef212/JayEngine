@@ -64,6 +64,9 @@ bool ModuleFileSystem::init(FileParser* conf)
 	if (!exist("Library/Prefabs"))
 		makeDirectory("Library/Prefabs", "Data");
 
+	if (!exist("Library/tmp"))
+		makeDirectory("Library/tmp", "Data");
+
 	_LOG(LOG_INFO, "PHYS_FS base path: %s", getBasePath());
 
 	return ret;

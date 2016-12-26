@@ -193,6 +193,9 @@ bool Camera::saveCMP(FileParser& sect)
 	sect.addFloat3("cam_pos", frustum.pos);
 	sect.addColor("bg_color", background);
 
+	if (app->renderer3D->getActiveCamera() == this)
+		sect.addBool("is_active_cam", true);
+
 	return ret;
 }
 
@@ -210,6 +213,9 @@ bool Camera::loadCMP(FileParser& sect)
 
 	frustum.pos = sect.getFloat3("cam_pos", float3::zero);
 	background = sect.getColor("bg_color", Black);
+
+	if (sect.getBool("is_active_cam", false))
+		app->renderer3D->setActiveCamera(this);
 
 	return ret;
 }

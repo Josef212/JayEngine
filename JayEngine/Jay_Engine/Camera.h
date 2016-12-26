@@ -33,8 +33,6 @@ public:
 	void getBackground(float& r, float& g, float& b, float& a);
 	void setBackground(float r, float g, float b, float a);
 
-	void updateTransform(Transform* trans);
-
 	//View matrix must update every frame
 	float* getGLViewMatrix();
 	//Projection matrix every time camera is changed like fov or window is resized

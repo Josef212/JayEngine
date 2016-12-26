@@ -61,8 +61,8 @@ public:
 	void insertGameObjectToTree(GameObject* obj);
 	void eraseGameObjectFromTree(GameObject* obj); //DEL_COM
 
-	bool saveScene(const char* name, const char* path = NULL);
-	bool loadScene(const char* name, const char* path = NULL);
+	void saveScene();
+	void loadScene();
 
 	bool setCurrentScene(const char* scene);
 	const char* getCurrentScene();
@@ -73,6 +73,8 @@ private:
 	GameObject* recFindGO(UID id, GameObject* go);
 	void recRecieveEvent(GameObject* obj, const Event& e);
 
+	bool saveSceneNow(const char* name, const char* path = NULL);
+	bool loadSceneNow(const char* name, const char* path = NULL);
 	void loadSceneOrPrefabs(FileParser& file);
 
 	void onPlay();
@@ -91,6 +93,8 @@ private:
 	GameObject* sceneRootObject = NULL;
 	GameObject* selected = NULL;
 
+	bool mustSaveScene = false;
+	bool mustLoadScene = false;
 	std::string currentScene;
 	//TODO: List/Map of all scenes?? Should a scene be a resource and the list/map be managed as a resource?
 	/**
