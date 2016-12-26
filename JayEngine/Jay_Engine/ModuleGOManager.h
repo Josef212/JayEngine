@@ -50,6 +50,7 @@ public:
 	GameObject* loadPrefab(const char* file, const char* path = NULL); //Must be a json wich contains all .jof and .dds, etc
 
 	void cleanRoot();
+	void cleanRootNow();
 
 	GameObject* loadCube();
 
@@ -75,7 +76,7 @@ private:
 
 	bool saveSceneNow(const char* name, const char* path = NULL);
 	bool loadSceneNow(const char* name, const char* path = NULL);
-	void loadSceneOrPrefabs(FileParser& file);
+	void loadSceneOrPrefabs(const FileParser& file);
 
 	void onPlay();
 	void onPause();

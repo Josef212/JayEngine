@@ -374,6 +374,15 @@ GameObject* ModuleGOManager::validateGO(const GameObject* point)const
 	return NULL;
 }
 
+void ModuleGOManager::saveScene()
+{
+	mustSaveScene = true;
+}
+
+void ModuleGOManager::loadScene()
+{
+	mustLoadScene = true;
+}
 
 /**
 	saveScene and loadScene must be used to load and save full scenes.
@@ -399,11 +408,21 @@ bool ModuleGOManager::saveSceneNow(const char* name, const char* path)
 		_LOG(LOG_INFO, "Saving scene: %s.", fullPath);
 
 		FileParser scene;
+
+		//TODO: scene name?
+
 		scene.addArray("GameObjects");
 		//TODO: add some meta before go??
-		if (sceneRootObject->saveGO(scene))
+
+		for (uint i = 0; i < sceneRootObject->childrens.size(); ++i)
 		{
-			char* buf;
+			if (sceneRootObject->childrens[i])
+				ret = sceneRootObject->childrens[i]->saveGO(scene);
+		}
+
+		if (ret)
+		{
+			char* buf = NULL;
 			uint size = scene.writeJson(&buf, false);
 			if (app->fs->save(fullPath, buf, size) != size)
 			{
@@ -414,6 +433,8 @@ bool ModuleGOManager::saveSceneNow(const char* name, const char* path)
 				_LOG(LOG_INFO, "Successfully save the scene: %s.", fullPath);
 				ret = true;
 			}
+
+			RELEASE_ARRAY(buf);
 		}
 		else
 		{
@@ -424,16 +445,6 @@ bool ModuleGOManager::saveSceneNow(const char* name, const char* path)
 		_LOG(LOG_WARN, "No scene to save.");
 
 	return ret;
-}
-
-void ModuleGOManager::saveScene()
-{
-	mustSaveScene = true;
-}
-
-void ModuleGOManager::loadScene()
-{
-	mustLoadScene = true;
 }
 
 bool ModuleGOManager::loadSceneNow(const char* name, const char* path)
@@ -522,51 +533,60 @@ GameObject* ModuleGOManager::loadPrefab(const char* file, const char* path)
 	return ret;
 }
 
-void ModuleGOManager::loadSceneOrPrefabs(FileParser& file)
+void ModuleGOManager::loadSceneOrPrefabs(const FileParser& file)
 {
-	std::vector<GameObject*> tmpGO;
+	//TMP: must adapt create GO 
+	select(NULL);
 
 	int goCount = file.getArraySize("GameObjects");
-	GameObject* rootTMP = new GameObject(NULL, 0);
+	std::map<GameObject*, uint> relations;
 	for (uint i = 0; i < goCount; ++i)
 	{
-		GameObject* gO = rootTMP->addChild();
-		gO->loadGO(file.getArray("GameObjects", i));
-		tmpGO.push_back(gO);
+		GameObject* go = createEmptyGO();
+		go->loadGO(&file.getArray("GameObjects", i), relations);
 	}
 
-	for (uint i = 0; i < goCount; ++i)
+	for (std::map<GameObject*, uint>::iterator it = relations.begin(); it != relations.end(); ++it)
 	{
-		FileParser p = file.getArray("GameObjects", i);
-		UID pID = p.getInt("parent_UUID", 0);
-		if (pID != 0)
+		uint parentID = it->second;
+		GameObject* go = it->first;
+
+		if (parentID > 0)
 		{
-			GameObject* tmp = recFindGO(pID, rootTMP);
-			if (!tmp)
-				tmp = getGameObjectFromId(pID);
-
-			if (tmp)
-			{
-				tmpGO[i]->setNewParent(tmp);
-			}
+			GameObject* parentGO = getGameObjectFromId(parentID);
+			if (parentGO)
+				go->setNewParent(parentGO);
 		}
-		else
-			tmpGO[i]->setNewParent(sceneRootObject);
 	}
 
-	if (sceneRootObject && sceneRootObject->transform)
-	{
-		sceneRootObject->recCalcTransform(sceneRootObject->transform->getLocalTransform(), true);
-		sceneRootObject->recCalcBoxes();
-	}
+	sceneRootObject->recCalcTransform(sceneRootObject->transform->getLocalTransform(), true);
+	sceneRootObject->recCalcBoxes();
 
-	RELEASE(rootTMP);
+	//TODO: iterate all relations go->Init(); ???
 }
 
 void ModuleGOManager::cleanRoot()
 {
 	if (sceneRootObject)
 		sceneRootObject->remove();
+}
+
+void ModuleGOManager::cleanRootNow()
+{
+	if (sceneRootObject)
+	{
+		for (uint i = 0; i < sceneRootObject->childrens.size(); ++i)
+		{
+			if (sceneRootObject->childrens[i])
+				sceneRootObject->childrens[i]->remove();
+		}
+
+		if (sceneRootObject->recRemoveFlagged())
+		{
+			Event ev(Event::GAME_OBJECT_DESTROYED);
+			app->sendGlobalEvent(ev);
+		}
+	}
 }
 
 void ModuleGOManager::onGlobalEvent(const Event& e)
@@ -632,7 +652,7 @@ void ModuleGOManager::onPause()
 void ModuleGOManager::onStop()
 {
 	//First clean the scene
-	cleanRoot();
+	cleanRootNow();
 
 	//Second load the scene
 	loadScene();

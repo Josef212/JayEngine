@@ -6,6 +6,7 @@
 #include "Math.h"
 #include <vector>
 #include <string>
+#include <map>
 
 class Transform;
 class Mesh;
@@ -33,7 +34,7 @@ public:
 	int hasComponent(ComponentType type);
 
 	GameObject* getParent() const;
-	void setNewParent(GameObject* newParent);
+	void setNewParent(GameObject* newParent, bool force = false);
 
 	int getGOId()const;
 	const char* getName()const;
@@ -54,8 +55,8 @@ public:
 	void onGameObjectDestroyed();
 
 	//TMP
-	bool saveGO(FileParser& file);
-	bool loadGO(FileParser& file);
+	bool saveGO(FileParser& file, std::map<uint, uint>* duplicate = NULL)const;
+	bool loadGO(FileParser* file, std::map<GameObject*, uint>& relations);
 
 private:
 

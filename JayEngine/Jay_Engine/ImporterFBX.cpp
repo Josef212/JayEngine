@@ -74,7 +74,6 @@ bool ImporterFBX::importFBX(const char* fullPath, const char* fileName) //TODO: 
 		meshesImported.clear();
 
 		//Saving the file
-
 		root->saveGO(file);
 
 		char* buf;
@@ -122,7 +121,16 @@ GameObject* ImporterFBX::importFBXRec(aiNode* node, const aiScene* scene, GameOb
 		trans = (Transform*)ret->addComponent(TRANSFORMATION);
 
 	if (trans)
-		trans->setTransform(node);
+	{
+		aiVector3D pos;
+		aiVector3D scl;
+		aiQuaternion rot;
+		node->mTransformation.Decompose(scl, rot, pos);
+
+		trans->setLocalPosition(float3(pos.x, pos.y, pos.z));
+		trans->setLocalScale(float3(scl.x, scl.y, scl.z));
+		trans->setLocalRotation(Quat(rot.x, rot.y, rot.z, rot.w));
+	}
 
 	//Lets set meshes and materials. This time will convert them. Resource info will be in each component when save
 	for (uint i = 0; i < node->mNumMeshes; ++i)

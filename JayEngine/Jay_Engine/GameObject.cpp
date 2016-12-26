@@ -319,7 +319,7 @@ void GameObject::recalcBox()
 	}
 }
 
-void GameObject::setNewParent(GameObject* newParent)
+void GameObject::setNewParent(GameObject* newParent, bool force)
 {
 	if (newParent == parent)
 		return;
@@ -338,74 +338,74 @@ void GameObject::setNewParent(GameObject* newParent)
 
 	goWasDirty = true;
 
-	//TODO: Only recalc transform if boolean parameter is true???
-	if (transform && newParent && newParent->transform)
+	if (force && transform && newParent && newParent->transform)
 	{
 		float4x4 tmp = transform->getGlobalTransform();
 		transform->setLocalTransform(tmp * newParent->transform->getLocalTransform().Inverted());
 	}
 }
 
-bool GameObject::saveGO(FileParser& file)
+bool GameObject::saveGO(FileParser& file, std::map<uint, uint>* duplicate)const
 {
 	bool ret = true;
 
-	if (this != app->goManager->getSceneroot())
+	FileParser f;
+
+	uint uidToSave = id;
+	uint parentID = (parent) ? parent->getGOId() : 0;
+
+	if (duplicate)
 	{
-		FileParser ob;// = file->addSection(std::to_string(id).c_str());
-		ob.addString("name", getName());
-		//In order to have  a proper save and load i will refact all go id
-		id = app->resourceManager->getNewUID();
-		ob.addInt("UUID", id);
-		if (parent)
-			ob.addInt("parent_UUID", parent->getGOId());
-		else
-			ob.addInt("parent_UUID", 0); //ROOT
-		//TODO: array of childs UUID?
+		uidToSave = app->random->getRandInt();
+		(*duplicate)[id] = uidToSave;
 
-		ob.addBool("active", goActive);
-		//TODO: AABB
-
-		ob.addArray("Components");
-		for (uint i = 0; i < components.size(); ++i)
-		{
-			if (components[i])
-			{
-				//components[i]->saveCMP(&ob.addSection(std::to_string(components[i]->getId()).c_str()));
-				FileParser cmp;
-				components[i]->saveCMP(cmp);
-				ob.addArrayEntry(cmp);
-			}
-		}
-
-		file.addArrayEntry(ob);
+		std::map<uint, uint>::iterator it = duplicate->find(parentID);
+		if (it != duplicate->end())
+			parentID = it->second;
 	}
+
+	f.addInt("UUID", id);
+	f.addInt("parent_id", parentID);
+
+	f.addString("name", name.c_str());
+
+	f.addArray("components");
+
+	for (uint i = 0; i < components.size(); ++i)
+	{
+		if (components[i])
+		{
+			FileParser cmp;
+			components[i]->saveCMP(cmp);
+			f.addArrayEntry(cmp);
+		}
+	}
+
+	file.addArrayEntry(f);
 
 	for (uint i = 0; i < childrens.size(); ++i)
 	{
 		if (childrens[i])
-			childrens[i]->saveGO(file);
+			childrens[i]->saveGO(file, duplicate);
 	}
 
 	return ret;
 }
 
-bool GameObject::loadGO(FileParser& file)
+bool GameObject::loadGO(FileParser* file, std::map<GameObject*, uint>& relations)
 {
 	bool ret = true;
 
-	name.assign(file.getString("name", "no-name"));
-	goActive = file.getBool("active", true);
-	id = file.getInt("UUID", 0);
+	id = file->getInt("UUID", id);
+	uint parent = file->getInt("parent_id", 0);
+	relations[this] = parent;
 
-	//TODO: AABB
+	name = file->getString("name", "unnamed");
 
-
-	//Components
-	int cmpCount = file.getArraySize("Components");
+	int cmpCount = file->getArraySize("components");
 	for (uint i = 0; i < cmpCount; ++i)
 	{
-		FileParser cmp(file.getArray("Components", i));
+		FileParser cmp(file->getArray("components", i));
 		ComponentType type = (ComponentType)cmp.getInt("comp_type", -1);
 		if (type != UNKNOWN)
 		{
@@ -418,7 +418,7 @@ bool GameObject::loadGO(FileParser& file)
 			}
 		}
 		else
-			_LOG(LOG_ERROR, ("Unknown component type!!"));
+			_LOG(LOG_ERROR, ("Unknown component type for game object %s.!!", name.c_str()));
 	}
 
 	return ret;
