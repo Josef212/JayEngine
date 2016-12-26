@@ -14,7 +14,6 @@ public:
 	ImporterMesh();
 	virtual ~ImporterMesh();
 
-	void importFBX(const char* fbxName, std::string& outputName);
 	void importMesh(aiMesh* mesh, ResourceMesh* resMesh);
 
 };

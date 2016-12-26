@@ -298,7 +298,10 @@ void GameObject::recCalcBoxes()
 
 		orientedBox = enclosingBox;
 		if (orientedBox.IsFinite() && transform)
+		{
 			orientedBox.Transform(transform->getGlobalTransform());
+			enclosingBox.SetFrom(orientedBox);
+		}
 	}
 
 	for (uint i = 0; i < childrens.size(); ++i)

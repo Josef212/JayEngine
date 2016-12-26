@@ -1,7 +1,7 @@
 {
     "GameObjects": [
         {
-            "UUID": 1069668469,
+            "UUID": 109392816,
             "parent_id": 0,
             "name": "Game Object",
             "components": [
@@ -9,7 +9,7 @@
                     "comp_type": 0,
                     "active": true,
                     "UUID": 0,
-                    "go_UUID": 1069668469,
+                    "go_UUID": 109392816,
                     "position": [
                         0,
                         0,
@@ -30,15 +30,15 @@
             ]
         },
         {
-            "UUID": 950569583,
-            "parent_id": 1069668469,
+            "UUID": 1060230474,
+            "parent_id": 109392816,
             "name": "RootNode",
             "components": [
                 {
                     "comp_type": 0,
                     "active": true,
                     "UUID": 0,
-                    "go_UUID": 950569583,
+                    "go_UUID": 1060230474,
                     "position": [
                         0,
                         0,
@@ -59,15 +59,15 @@
             ]
         },
         {
-            "UUID": 601388444,
-            "parent_id": 950569583,
+            "UUID": 997915670,
+            "parent_id": 1060230474,
             "name": "Sky001_$AssimpFbx$_Translation",
             "components": [
                 {
                     "comp_type": 0,
                     "active": true,
                     "UUID": 0,
-                    "go_UUID": 601388444,
+                    "go_UUID": 997915670,
                     "position": [
                         18.153732,
                         0,
@@ -88,15 +88,15 @@
             ]
         },
         {
-            "UUID": 1923677812,
-            "parent_id": 601388444,
+            "UUID": 495913326,
+            "parent_id": 997915670,
             "name": "Sky001_$AssimpFbx$_PreRotation",
             "components": [
                 {
                     "comp_type": 0,
                     "active": true,
                     "UUID": 0,
-                    "go_UUID": 1923677812,
+                    "go_UUID": 495913326,
                     "position": [
                         0,
                         0,
@@ -117,15 +117,15 @@
             ]
         },
         {
-            "UUID": 555304097,
-            "parent_id": 1923677812,
+            "UUID": 887076627,
+            "parent_id": 495913326,
             "name": "Sky001_$AssimpFbx$_PostRotation",
             "components": [
                 {
                     "comp_type": 0,
                     "active": true,
                     "UUID": 0,
-                    "go_UUID": 555304097,
+                    "go_UUID": 887076627,
                     "position": [
                         0,
                         0,
@@ -146,15 +146,15 @@
             ]
         },
         {
-            "UUID": 1825923943,
-            "parent_id": 555304097,
+            "UUID": 1827127941,
+            "parent_id": 887076627,
             "name": "Sky001",
             "components": [
                 {
                     "comp_type": 0,
                     "active": true,
                     "UUID": 0,
-                    "go_UUID": 1825923943,
+                    "go_UUID": 1827127941,
                     "position": [
                         0,
                         0,
@@ -175,15 +175,15 @@
             ]
         },
         {
-            "UUID": 208867791,
-            "parent_id": 950569583,
+            "UUID": 280550316,
+            "parent_id": 1060230474,
             "name": "Dummy001_$AssimpFbx$_PreRotation",
             "components": [
                 {
                     "comp_type": 0,
                     "active": true,
                     "UUID": 0,
-                    "go_UUID": 208867791,
+                    "go_UUID": 280550316,
                     "position": [
                         0,
                         0,
@@ -204,15 +204,15 @@
             ]
         },
         {
-            "UUID": 972703374,
-            "parent_id": 208867791,
+            "UUID": 829780771,
+            "parent_id": 280550316,
             "name": "Dummy001_$AssimpFbx$_Rotation",
             "components": [
                 {
                     "comp_type": 0,
                     "active": true,
                     "UUID": 0,
-                    "go_UUID": 972703374,
+                    "go_UUID": 829780771,
                     "position": [
                         0,
                         0,
@@ -233,15 +233,15 @@
             ]
         },
         {
-            "UUID": 1832276756,
-            "parent_id": 972703374,
+            "UUID": 709469844,
+            "parent_id": 829780771,
             "name": "Dummy001",
             "components": [
                 {
                     "comp_type": 0,
                     "active": true,
                     "UUID": 0,
-                    "go_UUID": 1832276756,
+                    "go_UUID": 709469844,
                     "position": [
                         0,
                         0,
@@ -262,15 +262,15 @@
             ]
         },
         {
-            "UUID": 116430382,
-            "parent_id": 1832276756,
+            "UUID": 1876128124,
+            "parent_id": 709469844,
             "name": "City_building_004",
             "components": [
                 {
                     "comp_type": 0,
                     "active": true,
                     "UUID": 0,
-                    "go_UUID": 116430382,
+                    "go_UUID": 1876128124,
                     "position": [
                         -41.475891,
                         21.014099,
@@ -292,10 +292,10 @@
                     "comp_type": 1,
                     "active": true,
                     "UUID": 1,
-                    "go_UUID": 116430382,
+                    "go_UUID": 1876128124,
                     "have_res": true,
-                    "resource_id": 1396341444,
-                    "resource_exported_file": "1396341444.jof",
+                    "resource_id": 1518259523,
+                    "resource_exported_file": "1518259523.jof",
                     "resource_original_file": "Data\/Assets\/fbx\/Street environment_V01.FBX",
                     "wireframe": false,
                     "normals": false
@@ -304,7 +304,7 @@
                     "comp_type": 2,
                     "active": true,
                     "UUID": 2,
-                    "go_UUID": 116430382,
+                    "go_UUID": 1876128124,
                     "mat_col": [
                         0.588000,
                         0.588000,
@@ -312,22 +312,22 @@
                         1
                     ],
                     "have_res": true,
-                    "resource_id": 250456681,
-                    "resource_exported_file": "1624857908.dds",
+                    "resource_id": 1453661796,
+                    "resource_exported_file": "926067147.dds",
                     "resource_original_file": "Data\/Assets\/textures\/building03_c.tga"
                 }
             ]
         },
         {
-            "UUID": 1236339849,
-            "parent_id": 1832276756,
+            "UUID": 1966791053,
+            "parent_id": 709469844,
             "name": "City_building_001",
             "components": [
                 {
                     "comp_type": 0,
                     "active": true,
                     "UUID": 0,
-                    "go_UUID": 1236339849,
+                    "go_UUID": 1966791053,
                     "position": [
                         17.707165,
                         20.053276,
@@ -349,10 +349,10 @@
                     "comp_type": 1,
                     "active": true,
                     "UUID": 1,
-                    "go_UUID": 1236339849,
+                    "go_UUID": 1966791053,
                     "have_res": true,
-                    "resource_id": 1924571822,
-                    "resource_exported_file": "1924571822.jof",
+                    "resource_id": 2107600899,
+                    "resource_exported_file": "2107600899.jof",
                     "resource_original_file": "Data\/Assets\/fbx\/Street environment_V01.FBX",
                     "wireframe": false,
                     "normals": false
@@ -361,7 +361,7 @@
                     "comp_type": 2,
                     "active": true,
                     "UUID": 2,
-                    "go_UUID": 1236339849,
+                    "go_UUID": 1966791053,
                     "mat_col": [
                         0.588000,
                         0.588000,
@@ -369,22 +369,22 @@
                         1
                     ],
                     "have_res": true,
-                    "resource_id": 520148544,
-                    "resource_exported_file": "245042463.dds",
+                    "resource_id": 19557063,
+                    "resource_exported_file": "77650925.dds",
                     "resource_original_file": "Data\/Assets\/textures\/Building_V02_C.png"
                 }
             ]
         },
         {
-            "UUID": 491224755,
-            "parent_id": 1832276756,
+            "UUID": 918709926,
+            "parent_id": 709469844,
             "name": "City_building_007",
             "components": [
                 {
                     "comp_type": 0,
                     "active": true,
                     "UUID": 0,
-                    "go_UUID": 491224755,
+                    "go_UUID": 918709926,
                     "position": [
                         16.010492,
                         37.493286,
@@ -406,10 +406,10 @@
                     "comp_type": 1,
                     "active": true,
                     "UUID": 1,
-                    "go_UUID": 491224755,
+                    "go_UUID": 918709926,
                     "have_res": true,
-                    "resource_id": 881589380,
-                    "resource_exported_file": "881589380.jof",
+                    "resource_id": 850815798,
+                    "resource_exported_file": "850815798.jof",
                     "resource_original_file": "Data\/Assets\/fbx\/Street environment_V01.FBX",
                     "wireframe": false,
                     "normals": false
@@ -418,7 +418,7 @@
                     "comp_type": 2,
                     "active": true,
                     "UUID": 2,
-                    "go_UUID": 491224755,
+                    "go_UUID": 918709926,
                     "mat_col": [
                         0.588000,
                         0.588000,
@@ -426,22 +426,22 @@
                         1
                     ],
                     "have_res": true,
-                    "resource_id": 2051593720,
-                    "resource_exported_file": "574050856.dds",
+                    "resource_id": 605237357,
+                    "resource_exported_file": "1453393910.dds",
                     "resource_original_file": "Data\/Assets\/textures\/building_016_c.tga"
                 }
             ]
         },
         {
-            "UUID": 1323974906,
-            "parent_id": 1832276756,
+            "UUID": 1602928764,
+            "parent_id": 709469844,
             "name": "City_building_008",
             "components": [
                 {
                     "comp_type": 0,
                     "active": true,
                     "UUID": 0,
-                    "go_UUID": 1323974906,
+                    "go_UUID": 1602928764,
                     "position": [
                         40.979996,
                         18.270824,
@@ -463,10 +463,10 @@
                     "comp_type": 1,
                     "active": true,
                     "UUID": 1,
-                    "go_UUID": 1323974906,
+                    "go_UUID": 1602928764,
                     "have_res": true,
-                    "resource_id": 16350445,
-                    "resource_exported_file": "16350445.jof",
+                    "resource_id": 1368278442,
+                    "resource_exported_file": "1368278442.jof",
                     "resource_original_file": "Data\/Assets\/fbx\/Street environment_V01.FBX",
                     "wireframe": false,
                     "normals": false
@@ -475,7 +475,7 @@
                     "comp_type": 2,
                     "active": true,
                     "UUID": 2,
-                    "go_UUID": 1323974906,
+                    "go_UUID": 1602928764,
                     "mat_col": [
                         0.588235,
                         0.588235,
@@ -483,22 +483,22 @@
                         1
                     ],
                     "have_res": true,
-                    "resource_id": 167998435,
-                    "resource_exported_file": "1023101573.dds",
+                    "resource_id": 686313209,
+                    "resource_exported_file": "300778039.dds",
                     "resource_original_file": "Data\/Assets\/textures\/building_025_c.tga"
                 }
             ]
         },
         {
-            "UUID": 1617010137,
-            "parent_id": 1832276756,
+            "UUID": 354811322,
+            "parent_id": 709469844,
             "name": "Line002",
             "components": [
                 {
                     "comp_type": 0,
                     "active": true,
                     "UUID": 0,
-                    "go_UUID": 1617010137,
+                    "go_UUID": 354811322,
                     "position": [
                         -2.159772,
                         1.853838,
@@ -520,10 +520,10 @@
                     "comp_type": 1,
                     "active": true,
                     "UUID": 1,
-                    "go_UUID": 1617010137,
+                    "go_UUID": 354811322,
                     "have_res": true,
-                    "resource_id": 327521396,
-                    "resource_exported_file": "327521396.jof",
+                    "resource_id": 1962141168,
+                    "resource_exported_file": "1962141168.jof",
                     "resource_original_file": "Data\/Assets\/fbx\/Street environment_V01.FBX",
                     "wireframe": false,
                     "normals": false
@@ -532,7 +532,7 @@
                     "comp_type": 2,
                     "active": true,
                     "UUID": 2,
-                    "go_UUID": 1617010137,
+                    "go_UUID": 354811322,
                     "mat_col": [
                         0.270588,
                         0.270588,
@@ -544,15 +544,15 @@
             ]
         },
         {
-            "UUID": 385747070,
-            "parent_id": 1832276756,
+            "UUID": 500504364,
+            "parent_id": 709469844,
             "name": "Plane001",
             "components": [
                 {
                     "comp_type": 0,
                     "active": true,
                     "UUID": 0,
-                    "go_UUID": 385747070,
+                    "go_UUID": 500504364,
                     "position": [
                         -0.028603,
                         0.026032,
@@ -574,10 +574,10 @@
                     "comp_type": 1,
                     "active": true,
                     "UUID": 1,
-                    "go_UUID": 385747070,
+                    "go_UUID": 500504364,
                     "have_res": true,
-                    "resource_id": 1813754735,
-                    "resource_exported_file": "1813754735.jof",
+                    "resource_id": 544669822,
+                    "resource_exported_file": "544669822.jof",
                     "resource_original_file": "Data\/Assets\/fbx\/Street environment_V01.FBX",
                     "wireframe": false,
                     "normals": false
@@ -586,7 +586,7 @@
                     "comp_type": 2,
                     "active": true,
                     "UUID": 2,
-                    "go_UUID": 385747070,
+                    "go_UUID": 500504364,
                     "mat_col": [
                         0.309804,
                         0.454902,
@@ -598,15 +598,15 @@
             ]
         },
         {
-            "UUID": 1232478188,
-            "parent_id": 1832276756,
+            "UUID": 191438736,
+            "parent_id": 709469844,
             "name": "City_building_010",
             "components": [
                 {
                     "comp_type": 0,
                     "active": true,
                     "UUID": 0,
-                    "go_UUID": 1232478188,
+                    "go_UUID": 191438736,
                     "position": [
                         25.154011,
                         -39.153721,
@@ -628,10 +628,10 @@
                     "comp_type": 1,
                     "active": true,
                     "UUID": 1,
-                    "go_UUID": 1232478188,
+                    "go_UUID": 191438736,
                     "have_res": true,
-                    "resource_id": 1507327216,
-                    "resource_exported_file": "1507327216.jof",
+                    "resource_id": 872725774,
+                    "resource_exported_file": "872725774.jof",
                     "resource_original_file": "Data\/Assets\/fbx\/Street environment_V01.FBX",
                     "wireframe": false,
                     "normals": false
@@ -640,7 +640,7 @@
                     "comp_type": 2,
                     "active": true,
                     "UUID": 2,
-                    "go_UUID": 1232478188,
+                    "go_UUID": 191438736,
                     "mat_col": [
                         0.588000,
                         0.588000,
@@ -648,18 +648,18 @@
                         1
                     ],
                     "have_res": true,
-                    "resource_id": 544727187,
-                    "resource_exported_file": "2037763754.dds",
+                    "resource_id": 1286287083,
+                    "resource_exported_file": "377441996.dds",
                     "resource_original_file": "Data\/Assets\/textures\/building 01_c.tga"
                 },
                 {
                     "comp_type": 1,
                     "active": true,
                     "UUID": 3,
-                    "go_UUID": 1232478188,
+                    "go_UUID": 191438736,
                     "have_res": true,
-                    "resource_id": 1938145473,
-                    "resource_exported_file": "1938145473.jof",
+                    "resource_id": 1279298824,
+                    "resource_exported_file": "1279298824.jof",
                     "resource_original_file": "Data\/Assets\/fbx\/Street environment_V01.FBX",
                     "wireframe": false,
                     "normals": false
@@ -668,7 +668,7 @@
                     "comp_type": 2,
                     "active": true,
                     "UUID": 4,
-                    "go_UUID": 1232478188,
+                    "go_UUID": 191438736,
                     "mat_col": [
                         0.588000,
                         0.588000,
@@ -676,22 +676,22 @@
                         1
                     ],
                     "have_res": true,
-                    "resource_id": 544727187,
-                    "resource_exported_file": "2037763754.dds",
+                    "resource_id": 1286287083,
+                    "resource_exported_file": "377441996.dds",
                     "resource_original_file": "Data\/Assets\/textures\/building 01_c.tga"
                 }
             ]
         },
         {
-            "UUID": 638500135,
-            "parent_id": 1832276756,
+            "UUID": 1326650026,
+            "parent_id": 709469844,
             "name": "City_building_011",
             "components": [
                 {
                     "comp_type": 0,
                     "active": true,
                     "UUID": 0,
-                    "go_UUID": 638500135,
+                    "go_UUID": 1326650026,
                     "position": [
                         30.134541,
                         37.493286,
@@ -713,10 +713,10 @@
                     "comp_type": 1,
                     "active": true,
                     "UUID": 1,
-                    "go_UUID": 638500135,
+                    "go_UUID": 1326650026,
                     "have_res": true,
-                    "resource_id": 881589380,
-                    "resource_exported_file": "881589380.jof",
+                    "resource_id": 850815798,
+                    "resource_exported_file": "850815798.jof",
                     "resource_original_file": "Data\/Assets\/fbx\/Street environment_V01.FBX",
                     "wireframe": false,
                     "normals": false
@@ -725,7 +725,7 @@
                     "comp_type": 2,
                     "active": true,
                     "UUID": 2,
-                    "go_UUID": 638500135,
+                    "go_UUID": 1326650026,
                     "mat_col": [
                         0.588000,
                         0.588000,
@@ -733,22 +733,22 @@
                         1
                     ],
                     "have_res": true,
-                    "resource_id": 2051593720,
-                    "resource_exported_file": "574050856.dds",
+                    "resource_id": 605237357,
+                    "resource_exported_file": "1453393910.dds",
                     "resource_original_file": "Data\/Assets\/textures\/building_016_c.tga"
                 }
             ]
         },
         {
-            "UUID": 106405935,
-            "parent_id": 1832276756,
+            "UUID": 1577286323,
+            "parent_id": 709469844,
             "name": "City_building_013",
             "components": [
                 {
                     "comp_type": 0,
                     "active": true,
                     "UUID": 0,
-                    "go_UUID": 106405935,
+                    "go_UUID": 1577286323,
                     "position": [
                         -42.288055,
                         33.201576,
@@ -770,10 +770,10 @@
                     "comp_type": 1,
                     "active": true,
                     "UUID": 1,
-                    "go_UUID": 106405935,
+                    "go_UUID": 1577286323,
                     "have_res": true,
-                    "resource_id": 1416502132,
-                    "resource_exported_file": "1416502132.jof",
+                    "resource_id": 674804238,
+                    "resource_exported_file": "674804238.jof",
                     "resource_original_file": "Data\/Assets\/fbx\/Street environment_V01.FBX",
                     "wireframe": false,
                     "normals": false
@@ -782,7 +782,7 @@
                     "comp_type": 2,
                     "active": true,
                     "UUID": 2,
-                    "go_UUID": 106405935,
+                    "go_UUID": 1577286323,
                     "mat_col": [
                         0.588000,
                         0.588000,
@@ -790,22 +790,22 @@
                         1
                     ],
                     "have_res": true,
-                    "resource_id": 1550894438,
-                    "resource_exported_file": "1491380485.dds",
+                    "resource_id": 46108379,
+                    "resource_exported_file": "1770885741.dds",
                     "resource_original_file": "Data\/Assets\/textures\/building 06_ c.tga"
                 }
             ]
         },
         {
-            "UUID": 566413735,
-            "parent_id": 1832276756,
+            "UUID": 1652516244,
+            "parent_id": 709469844,
             "name": "City_building_014",
             "components": [
                 {
                     "comp_type": 0,
                     "active": true,
                     "UUID": 0,
-                    "go_UUID": 566413735,
+                    "go_UUID": 1652516244,
                     "position": [
                         -19.439707,
                         32.061729,
@@ -827,10 +827,10 @@
                     "comp_type": 1,
                     "active": true,
                     "UUID": 1,
-                    "go_UUID": 566413735,
+                    "go_UUID": 1652516244,
                     "have_res": true,
-                    "resource_id": 48434574,
-                    "resource_exported_file": "48434574.jof",
+                    "resource_id": 544519146,
+                    "resource_exported_file": "544519146.jof",
                     "resource_original_file": "Data\/Assets\/fbx\/Street environment_V01.FBX",
                     "wireframe": false,
                     "normals": false
@@ -839,7 +839,7 @@
                     "comp_type": 2,
                     "active": true,
                     "UUID": 2,
-                    "go_UUID": 566413735,
+                    "go_UUID": 1652516244,
                     "mat_col": [
                         0.588000,
                         0.588000,
@@ -847,22 +847,22 @@
                         1
                     ],
                     "have_res": true,
-                    "resource_id": 250456681,
-                    "resource_exported_file": "1624857908.dds",
+                    "resource_id": 1453661796,
+                    "resource_exported_file": "926067147.dds",
                     "resource_original_file": "Data\/Assets\/textures\/building03_c.tga"
                 }
             ]
         },
         {
-            "UUID": 514150664,
-            "parent_id": 1832276756,
+            "UUID": 438643175,
+            "parent_id": 709469844,
             "name": "City_building_016",
             "components": [
                 {
                     "comp_type": 0,
                     "active": true,
                     "UUID": 0,
-                    "go_UUID": 514150664,
+                    "go_UUID": 438643175,
                     "position": [
                         34.270424,
                         -41.972748,
@@ -884,10 +884,10 @@
                     "comp_type": 1,
                     "active": true,
                     "UUID": 1,
-                    "go_UUID": 514150664,
+                    "go_UUID": 438643175,
                     "have_res": true,
-                    "resource_id": 1507327216,
-                    "resource_exported_file": "1507327216.jof",
+                    "resource_id": 872725774,
+                    "resource_exported_file": "872725774.jof",
                     "resource_original_file": "Data\/Assets\/fbx\/Street environment_V01.FBX",
                     "wireframe": false,
                     "normals": false
@@ -896,7 +896,7 @@
                     "comp_type": 2,
                     "active": true,
                     "UUID": 2,
-                    "go_UUID": 514150664,
+                    "go_UUID": 438643175,
                     "mat_col": [
                         0.588000,
                         0.588000,
@@ -904,18 +904,18 @@
                         1
                     ],
                     "have_res": true,
-                    "resource_id": 544727187,
-                    "resource_exported_file": "2037763754.dds",
+                    "resource_id": 1286287083,
+                    "resource_exported_file": "377441996.dds",
                     "resource_original_file": "Data\/Assets\/textures\/building 01_c.tga"
                 },
                 {
                     "comp_type": 1,
                     "active": true,
                     "UUID": 3,
-                    "go_UUID": 514150664,
+                    "go_UUID": 438643175,
                     "have_res": true,
-                    "resource_id": 1938145473,
-                    "resource_exported_file": "1938145473.jof",
+                    "resource_id": 1279298824,
+                    "resource_exported_file": "1279298824.jof",
                     "resource_original_file": "Data\/Assets\/fbx\/Street environment_V01.FBX",
                     "wireframe": false,
                     "normals": false
@@ -924,7 +924,7 @@
                     "comp_type": 2,
                     "active": true,
                     "UUID": 4,
-                    "go_UUID": 514150664,
+                    "go_UUID": 438643175,
                     "mat_col": [
                         0.588000,
                         0.588000,
@@ -932,22 +932,22 @@
                         1
                     ],
                     "have_res": true,
-                    "resource_id": 544727187,
-                    "resource_exported_file": "2037763754.dds",
+                    "resource_id": 1286287083,
+                    "resource_exported_file": "377441996.dds",
                     "resource_original_file": "Data\/Assets\/textures\/building 01_c.tga"
                 }
             ]
         },
         {
-            "UUID": 1425950148,
-            "parent_id": 1832276756,
+            "UUID": 1559026335,
+            "parent_id": 709469844,
             "name": "City_building_017",
             "components": [
                 {
                     "comp_type": 0,
                     "active": true,
                     "UUID": 0,
-                    "go_UUID": 1425950148,
+                    "go_UUID": 1559026335,
                     "position": [
                         44.260082,
                         -39.153721,
@@ -969,10 +969,10 @@
                     "comp_type": 1,
                     "active": true,
                     "UUID": 1,
-                    "go_UUID": 1425950148,
+                    "go_UUID": 1559026335,
                     "have_res": true,
-                    "resource_id": 1507327216,
-                    "resource_exported_file": "1507327216.jof",
+                    "resource_id": 872725774,
+                    "resource_exported_file": "872725774.jof",
                     "resource_original_file": "Data\/Assets\/fbx\/Street environment_V01.FBX",
                     "wireframe": false,
                     "normals": false
@@ -981,7 +981,7 @@
                     "comp_type": 2,
                     "active": true,
                     "UUID": 2,
-                    "go_UUID": 1425950148,
+                    "go_UUID": 1559026335,
                     "mat_col": [
                         0.588000,
                         0.588000,
@@ -989,18 +989,18 @@
                         1
                     ],
                     "have_res": true,
-                    "resource_id": 544727187,
-                    "resource_exported_file": "2037763754.dds",
+                    "resource_id": 1286287083,
+                    "resource_exported_file": "377441996.dds",
                     "resource_original_file": "Data\/Assets\/textures\/building 01_c.tga"
                 },
                 {
                     "comp_type": 1,
                     "active": true,
                     "UUID": 3,
-                    "go_UUID": 1425950148,
+                    "go_UUID": 1559026335,
                     "have_res": true,
-                    "resource_id": 1938145473,
-                    "resource_exported_file": "1938145473.jof",
+                    "resource_id": 1279298824,
+                    "resource_exported_file": "1279298824.jof",
                     "resource_original_file": "Data\/Assets\/fbx\/Street environment_V01.FBX",
                     "wireframe": false,
                     "normals": false
@@ -1009,7 +1009,7 @@
                     "comp_type": 2,
                     "active": true,
                     "UUID": 4,
-                    "go_UUID": 1425950148,
+                    "go_UUID": 1559026335,
                     "mat_col": [
                         0.588000,
                         0.588000,
@@ -1017,22 +1017,22 @@
                         1
                     ],
                     "have_res": true,
-                    "resource_id": 544727187,
-                    "resource_exported_file": "2037763754.dds",
+                    "resource_id": 1286287083,
+                    "resource_exported_file": "377441996.dds",
                     "resource_original_file": "Data\/Assets\/textures\/building 01_c.tga"
                 }
             ]
         },
         {
-            "UUID": 53736745,
-            "parent_id": 1832276756,
+            "UUID": 706498714,
+            "parent_id": 709469844,
             "name": "City_building_022",
             "components": [
                 {
                     "comp_type": 0,
                     "active": true,
                     "UUID": 0,
-                    "go_UUID": 53736745,
+                    "go_UUID": 706498714,
                     "position": [
                         -20.831324,
                         -27.426489,
@@ -1054,10 +1054,10 @@
                     "comp_type": 1,
                     "active": true,
                     "UUID": 1,
-                    "go_UUID": 53736745,
+                    "go_UUID": 706498714,
                     "have_res": true,
-                    "resource_id": 289410571,
-                    "resource_exported_file": "289410571.jof",
+                    "resource_id": 1181516506,
+                    "resource_exported_file": "1181516506.jof",
                     "resource_original_file": "Data\/Assets\/fbx\/Street environment_V01.FBX",
                     "wireframe": false,
                     "normals": false
@@ -1066,7 +1066,7 @@
                     "comp_type": 2,
                     "active": true,
                     "UUID": 2,
-                    "go_UUID": 53736745,
+                    "go_UUID": 706498714,
                     "mat_col": [
                         0.588235,
                         0.588235,
@@ -1074,22 +1074,22 @@
                         1
                     ],
                     "have_res": true,
-                    "resource_id": 1361787437,
-                    "resource_exported_file": "1895103621.dds",
+                    "resource_id": 1147049538,
+                    "resource_exported_file": "261504109.dds",
                     "resource_original_file": "Data\/Assets\/textures\/building05 _c.tga"
                 }
             ]
         },
         {
-            "UUID": 1908893255,
-            "parent_id": 1832276756,
+            "UUID": 1958697070,
+            "parent_id": 709469844,
             "name": "City_building_023",
             "components": [
                 {
                     "comp_type": 0,
                     "active": true,
                     "UUID": 0,
-                    "go_UUID": 1908893255,
+                    "go_UUID": 1958697070,
                     "position": [
                         42.130642,
                         37.493286,
@@ -1111,10 +1111,10 @@
                     "comp_type": 1,
                     "active": true,
                     "UUID": 1,
-                    "go_UUID": 1908893255,
+                    "go_UUID": 1958697070,
                     "have_res": true,
-                    "resource_id": 881589380,
-                    "resource_exported_file": "881589380.jof",
+                    "resource_id": 850815798,
+                    "resource_exported_file": "850815798.jof",
                     "resource_original_file": "Data\/Assets\/fbx\/Street environment_V01.FBX",
                     "wireframe": false,
                     "normals": false
@@ -1123,7 +1123,7 @@
                     "comp_type": 2,
                     "active": true,
                     "UUID": 2,
-                    "go_UUID": 1908893255,
+                    "go_UUID": 1958697070,
                     "mat_col": [
                         0.588000,
                         0.588000,
@@ -1131,22 +1131,22 @@
                         1
                     ],
                     "have_res": true,
-                    "resource_id": 2051593720,
-                    "resource_exported_file": "574050856.dds",
+                    "resource_id": 605237357,
+                    "resource_exported_file": "1453393910.dds",
                     "resource_original_file": "Data\/Assets\/textures\/building_016_c.tga"
                 }
             ]
         },
         {
-            "UUID": 2031811760,
-            "parent_id": 1832276756,
+            "UUID": 1237125970,
+            "parent_id": 709469844,
             "name": "City_building_024",
             "components": [
                 {
                     "comp_type": 0,
                     "active": true,
                     "UUID": 0,
-                    "go_UUID": 2031811760,
+                    "go_UUID": 1237125970,
                     "position": [
                         -20.572771,
                         43.060829,
@@ -1168,10 +1168,10 @@
                     "comp_type": 1,
                     "active": true,
                     "UUID": 1,
-                    "go_UUID": 2031811760,
+                    "go_UUID": 1237125970,
                     "have_res": true,
-                    "resource_id": 16350445,
-                    "resource_exported_file": "16350445.jof",
+                    "resource_id": 1368278442,
+                    "resource_exported_file": "1368278442.jof",
                     "resource_original_file": "Data\/Assets\/fbx\/Street environment_V01.FBX",
                     "wireframe": false,
                     "normals": false
@@ -1180,7 +1180,7 @@
                     "comp_type": 2,
                     "active": true,
                     "UUID": 2,
-                    "go_UUID": 2031811760,
+                    "go_UUID": 1237125970,
                     "mat_col": [
                         0.588235,
                         0.588235,
@@ -1188,22 +1188,22 @@
                         1
                     ],
                     "have_res": true,
-                    "resource_id": 167998435,
-                    "resource_exported_file": "1023101573.dds",
+                    "resource_id": 686313209,
+                    "resource_exported_file": "300778039.dds",
                     "resource_original_file": "Data\/Assets\/textures\/building_025_c.tga"
                 }
             ]
         },
         {
-            "UUID": 2018715070,
-            "parent_id": 1832276756,
+            "UUID": 820527141,
+            "parent_id": 709469844,
             "name": "City_building_026",
             "components": [
                 {
                     "comp_type": 0,
                     "active": true,
                     "UUID": 0,
-                    "go_UUID": 2018715070,
+                    "go_UUID": 820527141,
                     "position": [
                         31.511889,
                         -16.446016,
@@ -1225,10 +1225,10 @@
                     "comp_type": 1,
                     "active": true,
                     "UUID": 1,
-                    "go_UUID": 2018715070,
+                    "go_UUID": 820527141,
                     "have_res": true,
-                    "resource_id": 747126908,
-                    "resource_exported_file": "747126908.jof",
+                    "resource_id": 707589714,
+                    "resource_exported_file": "707589714.jof",
                     "resource_original_file": "Data\/Assets\/fbx\/Street environment_V01.FBX",
                     "wireframe": false,
                     "normals": false
@@ -1237,7 +1237,7 @@
                     "comp_type": 2,
                     "active": true,
                     "UUID": 2,
-                    "go_UUID": 2018715070,
+                    "go_UUID": 820527141,
                     "mat_col": [
                         0.588235,
                         0.588235,
@@ -1245,22 +1245,22 @@
                         1
                     ],
                     "have_res": true,
-                    "resource_id": 1361787437,
-                    "resource_exported_file": "1895103621.dds",
+                    "resource_id": 1147049538,
+                    "resource_exported_file": "261504109.dds",
                     "resource_original_file": "Data\/Assets\/textures\/building05 _c.tga"
                 }
             ]
         },
         {
-            "UUID": 1521047881,
-            "parent_id": 1832276756,
+            "UUID": 1976099861,
+            "parent_id": 709469844,
             "name": "City_building_028",
             "components": [
                 {
                     "comp_type": 0,
                     "active": true,
                     "UUID": 0,
-                    "go_UUID": 1521047881,
+                    "go_UUID": 1976099861,
                     "position": [
                         13.387990,
                         -33.755039,
@@ -1282,10 +1282,10 @@
                     "comp_type": 1,
                     "active": true,
                     "UUID": 1,
-                    "go_UUID": 1521047881,
+                    "go_UUID": 1976099861,
                     "have_res": true,
-                    "resource_id": 160922237,
-                    "resource_exported_file": "160922237.jof",
+                    "resource_id": 1656061273,
+                    "resource_exported_file": "1656061273.jof",
                     "resource_original_file": "Data\/Assets\/fbx\/Street environment_V01.FBX",
                     "wireframe": false,
                     "normals": false
@@ -1294,7 +1294,7 @@
                     "comp_type": 2,
                     "active": true,
                     "UUID": 2,
-                    "go_UUID": 1521047881,
+                    "go_UUID": 1976099861,
                     "mat_col": [
                         0.588000,
                         0.588000,
@@ -1302,22 +1302,22 @@
                         1
                     ],
                     "have_res": true,
-                    "resource_id": 144875778,
-                    "resource_exported_file": "1813333826.dds",
+                    "resource_id": 392363750,
+                    "resource_exported_file": "764648910.dds",
                     "resource_original_file": "Data\/Assets\/textures\/Building_V01_C.png"
                 }
             ]
         },
         {
-            "UUID": 1993143757,
-            "parent_id": 1832276756,
+            "UUID": 1649637627,
+            "parent_id": 709469844,
             "name": "Object010",
             "components": [
                 {
                     "comp_type": 0,
                     "active": true,
                     "UUID": 0,
-                    "go_UUID": 1993143757,
+                    "go_UUID": 1649637627,
                     "position": [
                         -2.503353,
                         15.800846,
@@ -1339,10 +1339,10 @@
                     "comp_type": 1,
                     "active": true,
                     "UUID": 1,
-                    "go_UUID": 1993143757,
+                    "go_UUID": 1649637627,
                     "have_res": true,
-                    "resource_id": 710687898,
-                    "resource_exported_file": "710687898.jof",
+                    "resource_id": 1995787807,
+                    "resource_exported_file": "1995787807.jof",
                     "resource_original_file": "Data\/Assets\/fbx\/Street environment_V01.FBX",
                     "wireframe": false,
                     "normals": false
@@ -1351,7 +1351,7 @@
                     "comp_type": 2,
                     "active": true,
                     "UUID": 2,
-                    "go_UUID": 1993143757,
+                    "go_UUID": 1649637627,
                     "mat_col": [
                         0.588235,
                         0.588235,
@@ -1363,15 +1363,15 @@
             ]
         },
         {
-            "UUID": 778919778,
-            "parent_id": 1832276756,
+            "UUID": 108499306,
+            "parent_id": 709469844,
             "name": "City_building_030",
             "components": [
                 {
                     "comp_type": 0,
                     "active": true,
                     "UUID": 0,
-                    "go_UUID": 778919778,
+                    "go_UUID": 108499306,
                     "position": [
                         -42.807240,
                         -41.835564,
@@ -1393,10 +1393,10 @@
                     "comp_type": 1,
                     "active": true,
                     "UUID": 1,
-                    "go_UUID": 778919778,
+                    "go_UUID": 108499306,
                     "have_res": true,
-                    "resource_id": 160922237,
-                    "resource_exported_file": "160922237.jof",
+                    "resource_id": 1656061273,
+                    "resource_exported_file": "1656061273.jof",
                     "resource_original_file": "Data\/Assets\/fbx\/Street environment_V01.FBX",
                     "wireframe": false,
                     "normals": false
@@ -1405,7 +1405,7 @@
                     "comp_type": 2,
                     "active": true,
                     "UUID": 2,
-                    "go_UUID": 778919778,
+                    "go_UUID": 108499306,
                     "mat_col": [
                         0.588000,
                         0.588000,
@@ -1413,22 +1413,22 @@
                         1
                     ],
                     "have_res": true,
-                    "resource_id": 144875778,
-                    "resource_exported_file": "1813333826.dds",
+                    "resource_id": 392363750,
+                    "resource_exported_file": "764648910.dds",
                     "resource_original_file": "Data\/Assets\/textures\/Building_V01_C.png"
                 }
             ]
         },
         {
-            "UUID": 916810094,
-            "parent_id": 1832276756,
+            "UUID": 1130196527,
+            "parent_id": 709469844,
             "name": "City_building_031",
             "components": [
                 {
                     "comp_type": 0,
                     "active": true,
                     "UUID": 0,
-                    "go_UUID": 916810094,
+                    "go_UUID": 1130196527,
                     "position": [
                         -34.679482,
                         -41.835564,
@@ -1450,10 +1450,10 @@
                     "comp_type": 1,
                     "active": true,
                     "UUID": 1,
-                    "go_UUID": 916810094,
+                    "go_UUID": 1130196527,
                     "have_res": true,
-                    "resource_id": 160922237,
-                    "resource_exported_file": "160922237.jof",
+                    "resource_id": 1656061273,
+                    "resource_exported_file": "1656061273.jof",
                     "resource_original_file": "Data\/Assets\/fbx\/Street environment_V01.FBX",
                     "wireframe": false,
                     "normals": false
@@ -1462,7 +1462,7 @@
                     "comp_type": 2,
                     "active": true,
                     "UUID": 2,
-                    "go_UUID": 916810094,
+                    "go_UUID": 1130196527,
                     "mat_col": [
                         0.588000,
                         0.588000,
@@ -1470,22 +1470,22 @@
                         1
                     ],
                     "have_res": true,
-                    "resource_id": 144875778,
-                    "resource_exported_file": "1813333826.dds",
+                    "resource_id": 392363750,
+                    "resource_exported_file": "764648910.dds",
                     "resource_original_file": "Data\/Assets\/textures\/Building_V01_C.png"
                 }
             ]
         },
         {
-            "UUID": 1726598240,
-            "parent_id": 1832276756,
+            "UUID": 1611580187,
+            "parent_id": 709469844,
             "name": "City_building_032",
             "components": [
                 {
                     "comp_type": 0,
                     "active": true,
                     "UUID": 0,
-                    "go_UUID": 1726598240,
+                    "go_UUID": 1611580187,
                     "position": [
                         -29.478403,
                         21.014099,
@@ -1507,10 +1507,10 @@
                     "comp_type": 1,
                     "active": true,
                     "UUID": 1,
-                    "go_UUID": 1726598240,
+                    "go_UUID": 1611580187,
                     "have_res": true,
-                    "resource_id": 1396341444,
-                    "resource_exported_file": "1396341444.jof",
+                    "resource_id": 1518259523,
+                    "resource_exported_file": "1518259523.jof",
                     "resource_original_file": "Data\/Assets\/fbx\/Street environment_V01.FBX",
                     "wireframe": false,
                     "normals": false
@@ -1519,7 +1519,7 @@
                     "comp_type": 2,
                     "active": true,
                     "UUID": 2,
-                    "go_UUID": 1726598240,
+                    "go_UUID": 1611580187,
                     "mat_col": [
                         0.588000,
                         0.588000,
@@ -1527,22 +1527,22 @@
                         1
                     ],
                     "have_res": true,
-                    "resource_id": 250456681,
-                    "resource_exported_file": "1624857908.dds",
+                    "resource_id": 1453661796,
+                    "resource_exported_file": "926067147.dds",
                     "resource_original_file": "Data\/Assets\/textures\/building03_c.tga"
                 }
             ]
         },
         {
-            "UUID": 2098926215,
-            "parent_id": 1832276756,
+            "UUID": 246094318,
+            "parent_id": 709469844,
             "name": "City_building_033",
             "components": [
                 {
                     "comp_type": 0,
                     "active": true,
                     "UUID": 0,
-                    "go_UUID": 2098926215,
+                    "go_UUID": 246094318,
                     "position": [
                         -32.361496,
                         42.370422,
@@ -1564,10 +1564,10 @@
                     "comp_type": 1,
                     "active": true,
                     "UUID": 1,
-                    "go_UUID": 2098926215,
+                    "go_UUID": 246094318,
                     "have_res": true,
-                    "resource_id": 1669770753,
-                    "resource_exported_file": "1669770753.jof",
+                    "resource_id": 707977712,
+                    "resource_exported_file": "707977712.jof",
                     "resource_original_file": "Data\/Assets\/fbx\/Street environment_V01.FBX",
                     "wireframe": false,
                     "normals": false
@@ -1576,7 +1576,7 @@
                     "comp_type": 2,
                     "active": true,
                     "UUID": 2,
-                    "go_UUID": 2098926215,
+                    "go_UUID": 246094318,
                     "mat_col": [
                         0.588000,
                         0.588000,
@@ -1584,22 +1584,22 @@
                         1
                     ],
                     "have_res": true,
-                    "resource_id": 1550894438,
-                    "resource_exported_file": "1491380485.dds",
+                    "resource_id": 46108379,
+                    "resource_exported_file": "1770885741.dds",
                     "resource_original_file": "Data\/Assets\/textures\/building 06_ c.tga"
                 }
             ]
         },
         {
-            "UUID": 1377331562,
-            "parent_id": 1832276756,
+            "UUID": 1071621208,
+            "parent_id": 709469844,
             "name": "City_building_034",
             "components": [
                 {
                     "comp_type": 0,
                     "active": true,
                     "UUID": 0,
-                    "go_UUID": 1377331562,
+                    "go_UUID": 1071621208,
                     "position": [
                         16.049517,
                         -16.696884,
@@ -1621,10 +1621,10 @@
                     "comp_type": 1,
                     "active": true,
                     "UUID": 1,
-                    "go_UUID": 1377331562,
+                    "go_UUID": 1071621208,
                     "have_res": true,
-                    "resource_id": 1760872158,
-                    "resource_exported_file": "1760872158.jof",
+                    "resource_id": 1610741741,
+                    "resource_exported_file": "1610741741.jof",
                     "resource_original_file": "Data\/Assets\/fbx\/Street environment_V01.FBX",
                     "wireframe": false,
                     "normals": false
@@ -1633,7 +1633,7 @@
                     "comp_type": 2,
                     "active": true,
                     "UUID": 2,
-                    "go_UUID": 1377331562,
+                    "go_UUID": 1071621208,
                     "mat_col": [
                         0.588235,
                         0.588235,
@@ -1641,22 +1641,22 @@
                         1
                     ],
                     "have_res": true,
-                    "resource_id": 1361787437,
-                    "resource_exported_file": "1895103621.dds",
+                    "resource_id": 1147049538,
+                    "resource_exported_file": "261504109.dds",
                     "resource_original_file": "Data\/Assets\/textures\/building05 _c.tga"
                 }
             ]
         },
         {
-            "UUID": 281555829,
-            "parent_id": 1832276756,
+            "UUID": 2002187468,
+            "parent_id": 709469844,
             "name": "City_building_035",
             "components": [
                 {
                     "comp_type": 0,
                     "active": true,
                     "UUID": 0,
-                    "go_UUID": 281555829,
+                    "go_UUID": 2002187468,
                     "position": [
                         13.387990,
                         -40.802517,
@@ -1678,10 +1678,10 @@
                     "comp_type": 1,
                     "active": true,
                     "UUID": 1,
-                    "go_UUID": 281555829,
+                    "go_UUID": 2002187468,
                     "have_res": true,
-                    "resource_id": 160922237,
-                    "resource_exported_file": "160922237.jof",
+                    "resource_id": 1656061273,
+                    "resource_exported_file": "1656061273.jof",
                     "resource_original_file": "Data\/Assets\/fbx\/Street environment_V01.FBX",
                     "wireframe": false,
                     "normals": false
@@ -1690,7 +1690,7 @@
                     "comp_type": 2,
                     "active": true,
                     "UUID": 2,
-                    "go_UUID": 281555829,
+                    "go_UUID": 2002187468,
                     "mat_col": [
                         0.588000,
                         0.588000,
@@ -1698,22 +1698,22 @@
                         1
                     ],
                     "have_res": true,
-                    "resource_id": 144875778,
-                    "resource_exported_file": "1813333826.dds",
+                    "resource_id": 392363750,
+                    "resource_exported_file": "764648910.dds",
                     "resource_original_file": "Data\/Assets\/textures\/Building_V01_C.png"
                 }
             ]
         },
         {
-            "UUID": 2115124640,
-            "parent_id": 1832276756,
+            "UUID": 1130182858,
+            "parent_id": 709469844,
             "name": "City_building_036",
             "components": [
                 {
                     "comp_type": 0,
                     "active": true,
                     "UUID": 0,
-                    "go_UUID": 2115124640,
+                    "go_UUID": 1130182858,
                     "position": [
                         -31.216331,
                         33.201576,
@@ -1735,10 +1735,10 @@
                     "comp_type": 1,
                     "active": true,
                     "UUID": 1,
-                    "go_UUID": 2115124640,
+                    "go_UUID": 1130182858,
                     "have_res": true,
-                    "resource_id": 1416502132,
-                    "resource_exported_file": "1416502132.jof",
+                    "resource_id": 674804238,
+                    "resource_exported_file": "674804238.jof",
                     "resource_original_file": "Data\/Assets\/fbx\/Street environment_V01.FBX",
                     "wireframe": false,
                     "normals": false
@@ -1747,7 +1747,7 @@
                     "comp_type": 2,
                     "active": true,
                     "UUID": 2,
-                    "go_UUID": 2115124640,
+                    "go_UUID": 1130182858,
                     "mat_col": [
                         0.588000,
                         0.588000,
@@ -1755,22 +1755,22 @@
                         1
                     ],
                     "have_res": true,
-                    "resource_id": 1550894438,
-                    "resource_exported_file": "1491380485.dds",
+                    "resource_id": 46108379,
+                    "resource_exported_file": "1770885741.dds",
                     "resource_original_file": "Data\/Assets\/textures\/building 06_ c.tga"
                 }
             ]
         },
         {
-            "UUID": 1991403003,
-            "parent_id": 1832276756,
+            "UUID": 659930738,
+            "parent_id": 709469844,
             "name": "City_building_037",
             "components": [
                 {
                     "comp_type": 0,
                     "active": true,
                     "UUID": 0,
-                    "go_UUID": 1991403003,
+                    "go_UUID": 659930738,
                     "position": [
                         -20.317694,
                         -16.163609,
@@ -1792,10 +1792,10 @@
                     "comp_type": 1,
                     "active": true,
                     "UUID": 1,
-                    "go_UUID": 1991403003,
+                    "go_UUID": 659930738,
                     "have_res": true,
-                    "resource_id": 1924221543,
-                    "resource_exported_file": "1924221543.jof",
+                    "resource_id": 1772766380,
+                    "resource_exported_file": "1772766380.jof",
                     "resource_original_file": "Data\/Assets\/fbx\/Street environment_V01.FBX",
                     "wireframe": false,
                     "normals": false
@@ -1804,7 +1804,7 @@
                     "comp_type": 2,
                     "active": true,
                     "UUID": 2,
-                    "go_UUID": 1991403003,
+                    "go_UUID": 659930738,
                     "mat_col": [
                         0.588235,
                         0.588235,
@@ -1812,22 +1812,22 @@
                         1
                     ],
                     "have_res": true,
-                    "resource_id": 1361787437,
-                    "resource_exported_file": "1895103621.dds",
+                    "resource_id": 1147049538,
+                    "resource_exported_file": "261504109.dds",
                     "resource_original_file": "Data\/Assets\/textures\/building05 _c.tga"
                 }
             ]
         },
         {
-            "UUID": 1903178049,
-            "parent_id": 1832276756,
+            "UUID": 1587981596,
+            "parent_id": 709469844,
             "name": "City_building_038",
             "components": [
                 {
                     "comp_type": 0,
                     "active": true,
                     "UUID": 0,
-                    "go_UUID": 1903178049,
+                    "go_UUID": 1587981596,
                     "position": [
                         -41.649002,
                         -16.495394,
@@ -1849,10 +1849,10 @@
                     "comp_type": 1,
                     "active": true,
                     "UUID": 1,
-                    "go_UUID": 1903178049,
+                    "go_UUID": 1587981596,
                     "have_res": true,
-                    "resource_id": 1417929529,
-                    "resource_exported_file": "1417929529.jof",
+                    "resource_id": 113580262,
+                    "resource_exported_file": "113580262.jof",
                     "resource_original_file": "Data\/Assets\/fbx\/Street environment_V01.FBX",
                     "wireframe": false,
                     "normals": false
@@ -1861,7 +1861,7 @@
                     "comp_type": 2,
                     "active": true,
                     "UUID": 2,
-                    "go_UUID": 1903178049,
+                    "go_UUID": 1587981596,
                     "mat_col": [
                         0.588235,
                         0.588235,
@@ -1869,22 +1869,22 @@
                         1
                     ],
                     "have_res": true,
-                    "resource_id": 1361787437,
-                    "resource_exported_file": "1895103621.dds",
+                    "resource_id": 1147049538,
+                    "resource_exported_file": "261504109.dds",
                     "resource_original_file": "Data\/Assets\/textures\/building05 _c.tga"
                 }
             ]
         },
         {
-            "UUID": 2143453213,
-            "parent_id": 1832276756,
+            "UUID": 536632448,
+            "parent_id": 709469844,
             "name": "City_building_039",
             "components": [
                 {
                     "comp_type": 0,
                     "active": true,
                     "UUID": 0,
-                    "go_UUID": 2143453213,
+                    "go_UUID": 536632448,
                     "position": [
                         -42.807240,
                         -30.643888,
@@ -1906,10 +1906,10 @@
                     "comp_type": 1,
                     "active": true,
                     "UUID": 1,
-                    "go_UUID": 2143453213,
+                    "go_UUID": 536632448,
                     "have_res": true,
-                    "resource_id": 160922237,
-                    "resource_exported_file": "160922237.jof",
+                    "resource_id": 1656061273,
+                    "resource_exported_file": "1656061273.jof",
                     "resource_original_file": "Data\/Assets\/fbx\/Street environment_V01.FBX",
                     "wireframe": false,
                     "normals": false
@@ -1918,7 +1918,7 @@
                     "comp_type": 2,
                     "active": true,
                     "UUID": 2,
-                    "go_UUID": 2143453213,
+                    "go_UUID": 536632448,
                     "mat_col": [
                         0.588000,
                         0.588000,
@@ -1926,22 +1926,22 @@
                         1
                     ],
                     "have_res": true,
-                    "resource_id": 144875778,
-                    "resource_exported_file": "1813333826.dds",
+                    "resource_id": 392363750,
+                    "resource_exported_file": "764648910.dds",
                     "resource_original_file": "Data\/Assets\/textures\/Building_V01_C.png"
                 }
             ]
         },
         {
-            "UUID": 717512243,
-            "parent_id": 1832276756,
+            "UUID": 1114655349,
+            "parent_id": 709469844,
             "name": "City_building_040",
             "components": [
                 {
                     "comp_type": 0,
                     "active": true,
                     "UUID": 0,
-                    "go_UUID": 717512243,
+                    "go_UUID": 1114655349,
                     "position": [
                         -34.679482,
                         -30.643888,
@@ -1963,10 +1963,10 @@
                     "comp_type": 1,
                     "active": true,
                     "UUID": 1,
-                    "go_UUID": 717512243,
+                    "go_UUID": 1114655349,
                     "have_res": true,
-                    "resource_id": 160922237,
-                    "resource_exported_file": "160922237.jof",
+                    "resource_id": 1656061273,
+                    "resource_exported_file": "1656061273.jof",
                     "resource_original_file": "Data\/Assets\/fbx\/Street environment_V01.FBX",
                     "wireframe": false,
                     "normals": false
@@ -1975,7 +1975,7 @@
                     "comp_type": 2,
                     "active": true,
                     "UUID": 2,
-                    "go_UUID": 717512243,
+                    "go_UUID": 1114655349,
                     "mat_col": [
                         0.588000,
                         0.588000,
@@ -1983,22 +1983,22 @@
                         1
                     ],
                     "have_res": true,
-                    "resource_id": 144875778,
-                    "resource_exported_file": "1813333826.dds",
+                    "resource_id": 392363750,
+                    "resource_exported_file": "764648910.dds",
                     "resource_original_file": "Data\/Assets\/textures\/Building_V01_C.png"
                 }
             ]
         },
         {
-            "UUID": 1302757036,
-            "parent_id": 1832276756,
+            "UUID": 1950984737,
+            "parent_id": 709469844,
             "name": "City_building_041",
             "components": [
                 {
                     "comp_type": 0,
                     "active": true,
                     "UUID": 0,
-                    "go_UUID": 1302757036,
+                    "go_UUID": 1950984737,
                     "position": [
                         30.695278,
                         21.612646,
@@ -2020,10 +2020,10 @@
                     "comp_type": 1,
                     "active": true,
                     "UUID": 1,
-                    "go_UUID": 1302757036,
+                    "go_UUID": 1950984737,
                     "have_res": true,
-                    "resource_id": 1924571822,
-                    "resource_exported_file": "1924571822.jof",
+                    "resource_id": 2107600899,
+                    "resource_exported_file": "2107600899.jof",
                     "resource_original_file": "Data\/Assets\/fbx\/Street environment_V01.FBX",
                     "wireframe": false,
                     "normals": false
@@ -2032,7 +2032,7 @@
                     "comp_type": 2,
                     "active": true,
                     "UUID": 2,
-                    "go_UUID": 1302757036,
+                    "go_UUID": 1950984737,
                     "mat_col": [
                         0.588000,
                         0.588000,
@@ -2040,22 +2040,22 @@
                         1
                     ],
                     "have_res": true,
-                    "resource_id": 520148544,
-                    "resource_exported_file": "245042463.dds",
+                    "resource_id": 19557063,
+                    "resource_exported_file": "77650925.dds",
                     "resource_original_file": "Data\/Assets\/textures\/Building_V02_C.png"
                 }
             ]
         },
         {
-            "UUID": 275772311,
-            "parent_id": 950569583,
+            "UUID": 1167701927,
+            "parent_id": 1060230474,
             "name": "Camera001_$AssimpFbx$_Translation",
             "components": [
                 {
                     "comp_type": 0,
                     "active": true,
                     "UUID": 0,
-                    "go_UUID": 275772311,
+                    "go_UUID": 1167701927,
                     "position": [
                         -78.312431,
                         45.251217,
@@ -2076,15 +2076,15 @@
             ]
         },
         {
-            "UUID": 1040259951,
-            "parent_id": 275772311,
+            "UUID": 1434918835,
+            "parent_id": 1167701927,
             "name": "Camera001_$AssimpFbx$_PreRotation",
             "components": [
                 {
                     "comp_type": 0,
                     "active": true,
                     "UUID": 0,
-                    "go_UUID": 1040259951,
+                    "go_UUID": 1434918835,
                     "position": [
                         0,
                         0,
@@ -2105,15 +2105,15 @@
             ]
         },
         {
-            "UUID": 52053496,
-            "parent_id": 1040259951,
+            "UUID": 1692436742,
+            "parent_id": 1434918835,
             "name": "Camera001_$AssimpFbx$_Rotation",
             "components": [
                 {
                     "comp_type": 0,
                     "active": true,
                     "UUID": 0,
-                    "go_UUID": 52053496,
+                    "go_UUID": 1692436742,
                     "position": [
                         0,
                         0,
@@ -2134,15 +2134,15 @@
             ]
         },
         {
-            "UUID": 1211532527,
-            "parent_id": 52053496,
+            "UUID": 1005671186,
+            "parent_id": 1692436742,
             "name": "Camera001",
             "components": [
                 {
                     "comp_type": 0,
                     "active": true,
                     "UUID": 0,
-                    "go_UUID": 1211532527,
+                    "go_UUID": 1005671186,
                     "position": [
                         0,
                         0,
@@ -2163,15 +2163,15 @@
             ]
         },
         {
-            "UUID": 1390859048,
-            "parent_id": 950569583,
+            "UUID": 1424297365,
+            "parent_id": 1060230474,
             "name": "Camera001.Target_$AssimpFbx$_Translation",
             "components": [
                 {
                     "comp_type": 0,
                     "active": true,
                     "UUID": 0,
-                    "go_UUID": 1390859048,
+                    "go_UUID": 1424297365,
                     "position": [
                         -28.132622,
                         20.873329,
@@ -2192,15 +2192,15 @@
             ]
         },
         {
-            "UUID": 812653931,
-            "parent_id": 1390859048,
+            "UUID": 949448440,
+            "parent_id": 1424297365,
             "name": "Camera001.Target_$AssimpFbx$_PreRotation",
             "components": [
                 {
                     "comp_type": 0,
                     "active": true,
                     "UUID": 0,
-                    "go_UUID": 812653931,
+                    "go_UUID": 949448440,
                     "position": [
                         0,
                         0,
@@ -2221,15 +2221,15 @@
             ]
         },
         {
-            "UUID": 175166289,
-            "parent_id": 812653931,
+            "UUID": 2003186580,
+            "parent_id": 949448440,
             "name": "Camera001.Target_$AssimpFbx$_Rotation",
             "components": [
                 {
                     "comp_type": 0,
                     "active": true,
                     "UUID": 0,
-                    "go_UUID": 175166289,
+                    "go_UUID": 2003186580,
                     "position": [
                         0,
                         0,
@@ -2250,15 +2250,15 @@
             ]
         },
         {
-            "UUID": 1840058803,
-            "parent_id": 175166289,
+            "UUID": 1969882706,
+            "parent_id": 2003186580,
             "name": "Camera001.Target",
             "components": [
                 {
                     "comp_type": 0,
                     "active": true,
                     "UUID": 0,
-                    "go_UUID": 1840058803,
+                    "go_UUID": 1969882706,
                     "position": [
                         0,
                         0,
@@ -2279,15 +2279,15 @@
             ]
         },
         {
-            "UUID": 744445525,
-            "parent_id": 950569583,
+            "UUID": 455726065,
+            "parent_id": 1060230474,
             "name": "Spot001_$AssimpFbx$_Translation",
             "components": [
                 {
                     "comp_type": 0,
                     "active": true,
                     "UUID": 0,
-                    "go_UUID": 744445525,
+                    "go_UUID": 455726065,
                     "position": [
                         -66.721268,
                         141.934128,
@@ -2308,15 +2308,15 @@
             ]
         },
         {
-            "UUID": 1671559327,
-            "parent_id": 744445525,
+            "UUID": 1180970587,
+            "parent_id": 455726065,
             "name": "Spot001_$AssimpFbx$_PreRotation",
             "components": [
                 {
                     "comp_type": 0,
                     "active": true,
                     "UUID": 0,
-                    "go_UUID": 1671559327,
+                    "go_UUID": 1180970587,
                     "position": [
                         0,
                         0,
@@ -2337,15 +2337,15 @@
             ]
         },
         {
-            "UUID": 1345590490,
-            "parent_id": 1671559327,
+            "UUID": 1794328485,
+            "parent_id": 1180970587,
             "name": "Spot001_$AssimpFbx$_Rotation",
             "components": [
                 {
                     "comp_type": 0,
                     "active": true,
                     "UUID": 0,
-                    "go_UUID": 1345590490,
+                    "go_UUID": 1794328485,
                     "position": [
                         0,
                         0,
@@ -2366,15 +2366,15 @@
             ]
         },
         {
-            "UUID": 1676371209,
-            "parent_id": 1345590490,
+            "UUID": 1672224548,
+            "parent_id": 1794328485,
             "name": "Spot001_$AssimpFbx$_PostRotation",
             "components": [
                 {
                     "comp_type": 0,
                     "active": true,
                     "UUID": 0,
-                    "go_UUID": 1676371209,
+                    "go_UUID": 1672224548,
                     "position": [
                         0,
                         0,
@@ -2395,15 +2395,15 @@
             ]
         },
         {
-            "UUID": 1346178280,
-            "parent_id": 1676371209,
+            "UUID": 414301497,
+            "parent_id": 1672224548,
             "name": "Spot001",
             "components": [
                 {
                     "comp_type": 0,
                     "active": true,
                     "UUID": 0,
-                    "go_UUID": 1346178280,
+                    "go_UUID": 414301497,
                     "position": [
                         0,
                         0,
@@ -2424,15 +2424,15 @@
             ]
         },
         {
-            "UUID": 1796709506,
-            "parent_id": 950569583,
+            "UUID": 1231659780,
+            "parent_id": 1060230474,
             "name": "Spot001.Target_$AssimpFbx$_Translation",
             "components": [
                 {
                     "comp_type": 0,
                     "active": true,
                     "UUID": 0,
-                    "go_UUID": 1796709506,
+                    "go_UUID": 1231659780,
                     "position": [
                         28.890945,
                         -60.963882,
@@ -2453,15 +2453,15 @@
             ]
         },
         {
-            "UUID": 2085046770,
-            "parent_id": 1796709506,
+            "UUID": 363518670,
+            "parent_id": 1231659780,
             "name": "Spot001.Target_$AssimpFbx$_PreRotation",
             "components": [
                 {
                     "comp_type": 0,
                     "active": true,
                     "UUID": 0,
-                    "go_UUID": 2085046770,
+                    "go_UUID": 363518670,
                     "position": [
                         0,
                         0,
@@ -2482,15 +2482,15 @@
             ]
         },
         {
-            "UUID": 1736571558,
-            "parent_id": 2085046770,
+            "UUID": 438544175,
+            "parent_id": 363518670,
             "name": "Spot001.Target_$AssimpFbx$_Rotation",
             "components": [
                 {
                     "comp_type": 0,
                     "active": true,
                     "UUID": 0,
-                    "go_UUID": 1736571558,
+                    "go_UUID": 438544175,
                     "position": [
                         0,
                         0,
@@ -2511,15 +2511,15 @@
             ]
         },
         {
-            "UUID": 666597065,
-            "parent_id": 1736571558,
+            "UUID": 1108998276,
+            "parent_id": 438544175,
             "name": "Spot001.Target",
             "components": [
                 {
                     "comp_type": 0,
                     "active": true,
                     "UUID": 0,
-                    "go_UUID": 666597065,
+                    "go_UUID": 1108998276,
                     "position": [
                         0,
                         0,

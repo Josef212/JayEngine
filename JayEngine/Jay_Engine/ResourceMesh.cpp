@@ -90,6 +90,11 @@ void ResourceMesh::loadMeshResource(const char* fileName, const char* path)
 			memcpy(texCoords, cursor, bytes);
 		}
 
+		//AABB
+		cursor += bytes;
+		bytes = sizeof(AABB);
+		memcpy(&aabb.minPoint.x, cursor, bytes);
+
 		addInstance();
 		app->resourceManager->addResource(this, uuid);
 

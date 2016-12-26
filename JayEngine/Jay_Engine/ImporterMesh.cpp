@@ -31,59 +31,6 @@ ImporterMesh::~ImporterMesh()
 	aiDetachAllLogStreams();
 }
 
-void ImporterMesh::importFBX(const char* fbxName, std::string& outputName) //Prob this should be in resource management
-{
-	if (!fbxName)
-	{
-		_LOG(LOG_ERROR, "Could not load the fbx: Invalid fbx name or output name.");
-		return;
-	}
-
-	outputName.assign(DEFAULT_FB_PATH);
-	outputName.append("/");
-	outputName.append(fbxName);
-	//TODO: clear fbx name file here or the parameter is already cleaned
-	//For now will add the Assets/fbx path here
-
-	_LOG(LOG_INFO, "Loading fbx: %s.", outputName.c_str());
-
-	char* buffer;
-	uint fileSize = app->fs->load(outputName.c_str(), &buffer);
-	const aiScene* scene = NULL;
-	if (buffer && fileSize > 0)
-	{
-		scene = aiImportFileFromMemory(buffer, fileSize, aiProcessPreset_TargetRealtime_MaxQuality, "fbx");
-	}
-	else
-	{
-		_LOG(LOG_ERROR, "Error while loading fbx: %s.", outputName.c_str());
-		return;
-	}
-
-	//TODO: I want to build the game object hierarchy here and generate the json file without adding to the scene
-	//For now will serialitzate only meshes directly.
-	//Maybe will put this method code to Resource manager file and let only mesh import here
-
-	if (scene && scene->HasMeshes())
-	{
-		for (uint i = 0; i < scene->mNumMeshes; ++i)
-		{
-			ResourceMesh* resMesh = (ResourceMesh*)app->resourceManager->createNewResource(RESOURCE_MESH);
-			if (resMesh)
-			{
-				resMesh->originalFile.assign(outputName);
-				importMesh(scene->mMeshes[i], resMesh);
-			}
-			else
-				_LOG(LOG_ERROR, "Error: Could not generate a new mesh resource.");
-		}
-
-		aiReleaseImport(scene);
-	}
-
-	RELEASE_ARRAY(buffer);
-}
-
 void ImporterMesh::importMesh(aiMesh* mesh, ResourceMesh* resMesh)
 {
 	if (!mesh || !resMesh)
@@ -156,6 +103,9 @@ void ImporterMesh::importMesh(aiMesh* mesh, ResourceMesh* resMesh)
 		//_LOG(LOG_STD, "Mesh has %d UV's.", resMesh->numTexCoords);
 	}
 
+	resMesh->aabb.SetNegativeInfinity();
+	resMesh->aabb.Enclose((float3*)resMesh->vertices, resMesh->numVertices);
+
 	//----------------------------------------------
 #pragma endregion
 
@@ -173,6 +123,7 @@ void ImporterMesh::importMesh(aiMesh* mesh, ResourceMesh* resMesh)
 	if (resMesh->normals) size += sizeof(float) * resMesh->numNormals * 3;
 	if (resMesh->texCoords) size += sizeof(float) * resMesh->numTexCoords * 2;
 	//TODO: Colors
+	size += sizeof(AABB);
 
 	//Allocate memory
 	char* data = new char[size];
@@ -208,8 +159,12 @@ void ImporterMesh::importMesh(aiMesh* mesh, ResourceMesh* resMesh)
 		memcpy(cursor, resMesh->texCoords, bytes);
 	}
 
+	//Sixth store colors //TODO
 
-	//Sixth stroe colors //TODO
+	//Seventh store AABB
+	cursor += bytes;
+	bytes = sizeof(AABB);
+	memcpy(cursor, &resMesh->aabb.minPoint.x, bytes);
 
 	if (app->fs->save(outName.c_str(), data, size) != size)
 		_LOG(LOG_ERROR, "ERROR saving the mesh.");
