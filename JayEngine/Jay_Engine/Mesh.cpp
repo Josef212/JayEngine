@@ -16,8 +16,8 @@ Mesh::Mesh(GameObject* gObj, int id) : Component(gObj, id)
 
 Mesh::~Mesh()
 {
-	//if(meshResource)
-		//app->resourceManager->removeResource(meshResource->getUID());
+	if(meshResource)
+		app->resourceManager->removeResource(meshResource->getUID());
 }
 
 void Mesh::enable()

@@ -15,8 +15,6 @@ ResourceMesh::ResourceMesh(UID uuid) : Resource(uuid)
 
 ResourceMesh::~ResourceMesh()
 {
-	removeFromMemory();
-	clearResMesh();
 }
 
 void ResourceMesh::loadMeshResource(const char* fileName, const char* path)
@@ -95,7 +93,6 @@ void ResourceMesh::loadMeshResource(const char* fileName, const char* path)
 		bytes = sizeof(AABB);
 		memcpy(&aabb.minPoint.x, cursor, bytes);
 
-		addInstance();
 		app->resourceManager->addResource(this, uuid);
 
 		RELEASE_ARRAY(data);
@@ -168,6 +165,8 @@ bool ResourceMesh::removeFromMemory()
 	if (idVertices > 0) glDeleteBuffers(1, &idVertices);
 	if (idNormals > 0) glDeleteBuffers(1, &idNormals);
 	if (idTexCoords > 0) glDeleteBuffers(1, &idTexCoords);
+
+	clearResMesh();
 
 	return true;
 }

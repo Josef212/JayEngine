@@ -20,8 +20,8 @@ Material::Material(GameObject* gObj, int id) : Component(gObj, id)
 
 Material::~Material()
 {
-	//if(textureResource)
-		//app->resourceManager->removeResource(textureResource->getUID());
+	if(textureResource)
+		app->resourceManager->removeResource(textureResource->getUID());
 }
 
 void Material::enable()

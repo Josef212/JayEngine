@@ -13,7 +13,6 @@ ResourceTexture::ResourceTexture(UID uuid) : Resource(uuid)
 
 ResourceTexture::~ResourceTexture()
 {
-	removeFromMemory();
 }
 
 bool ResourceTexture::loadToMemory()
