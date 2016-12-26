@@ -3,18 +3,12 @@
 #include "FileParser.h"
 #include "GameObject.h"
 
-#include "Assimp/include/cimport.h"
-#include "Assimp/include/scene.h"
-#include "Assimp/include/postprocess.h"
-#include "Assimp/include/cfileio.h"
-
-
 Transform::Transform(GameObject* gObj, int id) : Component(gObj, id)
 {
 	type = TRANSFORMATION;
 	translation.Set(0.f, 0.f, 0.f);
 	scale.Set(1.f, 1.f, 1.f);
-	rotation.Set(0.f, 0.f, 0.f, 0.f);
+	rotation.Set(0.f, 0.f, 0.f, 1.f);
 	name.assign("Transform");
 }
 
@@ -140,27 +134,6 @@ const float* Transform::getGlobalTransformGL()const
 
 //---------------------------------------
 
-void Transform::setTransform(aiNode* node)
-{
-	aiVector3D pos;
-	aiVector3D scl;
-	aiQuaternion rot;
-	node->mTransformation.Decompose(scl, rot, pos);
-
-	setLocalPosition(float3(pos.x, pos.y, pos.z));
-	setLocalScale(float3(scl.x, scl.y, scl.z));
-	setLocalRotation(Quat(rot.x, rot.y, rot.z, rot.w));
-
-	localTransform = float4x4::FromTRS(translation, rotation, scale);
-	if (object && object->getParent() && object->getParent()->transform)
-	{
-		updateTransform(object->getParent()->transform->getGlobalTransform());
-	}
-	localTransformChanged = true;
-}
-
-
-
 void Transform::updateTransform(const float4x4& parentMat)
 {
 	localTransformChanged = false;
@@ -177,7 +150,6 @@ bool Transform::saveCMP(FileParser& sect)
 	sect.addInt("UUID", id);
 	sect.addInt("go_UUID", object->getGOId());
 
-	//TODO: add float3 and quaternion
 	sect.addFloat3("position", translation);
 	sect.addFloat3("scale", scale);
 	sect.addFloatArray("rotation", rotation.ptr(), 4);
@@ -192,21 +164,15 @@ bool Transform::loadCMP(FileParser& sect)
 	active = sect.getBool("active", true);
 	id = sect.getInt("UUID", 0);
 
-	translation = sect.getFloat3("position", float3::zero);
-	scale = sect.getFloat3("scale", float3(1, 1, 1));
-	rotation.x = sect.getFloat("rotation", 0.f, 0);
-	rotation.y = sect.getFloat("rotation", 0.f, 1);
-	rotation.z = sect.getFloat("rotation", 0.f, 2);
-	rotation.w = sect.getFloat("rotation", 0.f, 3);
+	setLocalPosition(sect.getFloat3("position", float3::zero));
+	setLocalScale(sect.getFloat3("scale", float3(1, 1, 1)));
+	Quat r;
+	r.x = sect.getFloat("rotation", 0.f, 0);
+	r.y = sect.getFloat("rotation", 0.f, 1);
+	r.z = sect.getFloat("rotation", 0.f, 2);
+	r.w = sect.getFloat("rotation", 1.f, 3);
 
-	localTransform = float4x4::FromTRS(translation, rotation, scale);
-
-	if (object && object->getParent() && object->getParent()->transform)
-	{
-		updateTransform(object->getParent()->transform->getGlobalTransform());
-	}
-
-	localTransformChanged = true;
+	setLocalRotation(r);
 
 	return ret;
 }

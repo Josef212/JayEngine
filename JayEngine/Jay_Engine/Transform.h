@@ -4,7 +4,6 @@
 #include "Component.h"
 #include "Math.h"
 
-struct aiNode;
 class FileParser;
 
 class Transform : public Component
@@ -19,8 +18,6 @@ public:
 	void init();
 	void update(float dt);
 	void cleanUp();
-
-	void setTransform(aiNode* node);
 
 	//----------------------------------------
 
