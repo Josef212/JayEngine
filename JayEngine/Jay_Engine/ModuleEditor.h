@@ -30,6 +30,9 @@ public:
 	void logFPS(float fps, float ms);
 	void log(const char* str, logType type);
 
+	bool usingMouse()const;
+	bool usingKeyboard()const;
+
 private:
 	void openDirWin(const char* path);
 	void openSaveBrowser(const char* path);
@@ -59,6 +62,9 @@ private: //TODO: So many booleans are needed????
 	bool showLoadFBX = false;
 
 	std::string engineVersion ;
+
+	bool isUsingMouse = false;
+	bool isUsingKeyboard = false;
 
 };
 

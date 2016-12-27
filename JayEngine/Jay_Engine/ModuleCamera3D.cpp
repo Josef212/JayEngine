@@ -4,6 +4,7 @@
 #include "ModuleCamera3D.h"
 #include "ModuleInput.h"
 #include "ModuleGOManager.h"
+#include "ModuleEditor.h"
 
 #include "GameObject.h"
 #include "Camera.h"
@@ -63,12 +64,15 @@ bool ModuleCamera3D::cleanUp()
 // -----------------------------------------------------------------
 update_status ModuleCamera3D::update(float dt)
 {
-	//TODO: check if imgui is using the keyboard
-	move(dt);
-	//TODO: check if imgui is using the mouse
-	rotate(dt);
-	//TODO: mouse wheel
-	zoom(dt);
+	if(!app->editor->usingKeyboard())
+		move(dt);
+	
+	if (!app->editor->usingMouse())
+	{
+		rotate(dt);
+		zoom(dt);
+	}
+
 	//TODO: picking
 
 	return UPDATE_CONTINUE;

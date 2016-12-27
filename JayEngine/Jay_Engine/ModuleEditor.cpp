@@ -74,6 +74,10 @@ update_status ModuleEditor::preUpdate(float dt)
 
 	ImGui_ImplSdlGL3_NewFrame(app->window->getWindow());
 
+	ImGuiIO& io = ImGui::GetIO();
+	isUsingMouse = io.WantCaptureMouse;
+	isUsingKeyboard = io.WantCaptureKeyboard;
+
 	return ret;
 }
 
@@ -248,6 +252,16 @@ void ModuleEditor::drawEditor()
 void ModuleEditor::passInput(SDL_Event* inputEvent)
 {
 	ImGui_ImplSdlGL3_ProcessEvent(inputEvent);
+}
+
+bool ModuleEditor::usingMouse()const
+{
+	return isUsingMouse;
+}
+
+bool ModuleEditor::usingKeyboard()const
+{
+	return isUsingKeyboard;
 }
 
 void ModuleEditor::logFPS(float fps, float ms)

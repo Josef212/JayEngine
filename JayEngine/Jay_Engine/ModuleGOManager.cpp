@@ -47,9 +47,8 @@ bool ModuleGOManager::init(FileParser* conf)
 {
 	_LOG(LOG_STD, "Manager: Init.");
 
-	//sceneTree = new JQuadTree();
 	sceneTree = new JOctree();
-	sceneTree->setRoot(AABB::FromCenterAndSize(float3(0, 40, 0), float3(100, 100, 100)));
+	sceneTree->setRoot(AABB::FromCenterAndSize(float3(0, 0, 0), float3(1000, 1000, 1000)));
 
 	if (sceneRootObject)
 		return true;
