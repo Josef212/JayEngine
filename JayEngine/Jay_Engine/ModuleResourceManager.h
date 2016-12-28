@@ -12,7 +12,7 @@ class ResourceTexture;
 enum ResourceType;
 
 class Importer;
-class ImporterFBX;
+class ImporterScene;
 class ImporterMesh;
 class ImporterTexture;
 
@@ -28,9 +28,24 @@ public:
 
 	bool importFBX(const char* name, const char* path = NULL);
 
+	/**
+		Import a file depending on the format and return its UID.
+	*/
+	UID importFile(const char* fileInAssets, bool checkFirst = false);
+	
+	/** 
+		Search in resources if there is a resource with file name passed, if found return its UID, if not 0;
+	*/
+	UID findResource(const char* fileInAssets)const;
+
+	/**
+		Return resource type from file extension.
+	*/
+	ResourceType getTypeFromExtension(const char* extension);
+
 	UID getNewUID();
 
-	Resource* createNewResource(ResourceType type);
+	Resource* createNewResource(ResourceType type, UID forceUID = 0);
 	Resource* getResourceFromUID(UID uuid);
 
 	bool addResource(Resource* res, UID uuid);
@@ -43,7 +58,7 @@ private:
 	bool checkAllPrefabs();
 
 public:
-	ImporterFBX* fbxImporter = NULL;
+	ImporterScene* sceneImporter = NULL;
 	ImporterMesh* meshImporter = NULL;
 	ImporterTexture* textureImporter = NULL;
 

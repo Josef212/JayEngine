@@ -37,6 +37,81 @@ ImporterTexture::~ImporterTexture()
 	ilShutDown();
 }
 
+bool ImporterTexture::import(const char* originalFile, std::string& exportedFile, UID& resUID)
+{
+	bool ret = false;
+
+	std::string file, ext, origin;
+	app->fs->splitPath(originalFile, NULL, &file, &ext);
+	origin.assign(DEFAULT_TEXTURES_PATH + file);
+
+	char* buffer = NULL;
+	uint size = app->fs->load(origin.c_str(), &buffer);
+
+	if (buffer && size > 0)
+		ret = import(buffer, exportedFile, resUID);
+
+	RELEASE_ARRAY(buffer);
+
+	if (!ret)
+		_LOG(LOG_ERROR, "Could not load texture %s.", originalFile);
+
+	return ret;
+}
+
+bool ImporterTexture::importBuf(const void* buffer, uint size, std::string& exportedFile, UID& resUID)
+{
+	bool ret = false;
+
+	/**First load the image */
+	//1-Gen the image and bind it
+	ILuint image;
+	ilGenImages(1, &image);
+	ilBindImage(image);
+
+	//2-Load the image from buffer
+	if (ilLoadL(IL_TYPE_UNKNOWN, buffer, size))
+	{
+		ilEnable(IL_FILE_OVERWRITE);
+
+		ILuint _size;
+		ILubyte* data = NULL;
+
+		//3-Set format (DDS, DDS compression)
+		ilSetInteger(IL_DXTC_FORMAT, IL_DXT5);
+		//4-Get size
+		_size = ilSaveL(IL_DDS, NULL, 0);
+		if (_size > 0)
+		{
+			//5-If size is more than 0 create the image buffer
+			data = new ILubyte[_size];
+
+			//6-Save the image with the correct format and save it with file system
+			if (ilSaveL(IL_DDS, data, _size) > 0)
+			{
+				//Save it FS
+				resUID = app->resourceManager->getNewUID();
+				exportedFile.assign(std::to_string(resUID) + TEXTURE_EXTENSION);
+				char savePath[256];
+				sprintf_s(savePath, 256, "%s%s", DEFAULT_TEXTURE_SAVE_PATH, exportedFile.c_str());
+
+				if (app->fs->save(savePath, (const char*)data, _size) == _size)
+					ret = true;
+				else
+					_LOG(LOG_ERROR, "Error importing texture.");
+			}
+
+			//7-Release the image buffer to avoid memory leaks
+			RELEASE_ARRAY(data);
+		}
+
+		//8-Finally if the image was loaded destroy the image to avoid more memory leaks
+		ilDeleteImages(1, &image);
+	}
+
+	return ret;
+}
+
 void ImporterTexture::importTexture(const char* fileName, ResourceTexture* resTex) //Note in texture case the output name will be a new UID + extension
 {//TODO: outputName should be the original file with all the path? The new file? Which extension should have the outputName
 	if (!fileName || !resTex)
@@ -47,7 +122,6 @@ void ImporterTexture::importTexture(const char* fileName, ResourceTexture* resTe
 
 	//TODO: Assign the path directly here? Assume file name is clear?... For now the fileName is clear and the path is added here
 	std::string outputName(DEFAULT_TEXTURES_PATH);
-	outputName.append("/");
 	outputName.append(fileName);
 
 	resTex->originalFile.assign(outputName);
@@ -59,7 +133,7 @@ void ImporterTexture::importTexture(const char* fileName, ResourceTexture* resTe
 
 	if (buffer && size > 0)
 	{
-		//First load the image with unknown format //TODO: maybe identify forst the file format and load the file with the correct format
+		//First load the image with unknown format //TODO: maybe identify first the file format and load the file with the correct format
 		//For now will use UNKNOWN parameter
 		//1-Gen the image and bind it
 		ILuint image;
@@ -200,3 +274,5 @@ bool ImporterTexture::loadTexture(ResourceTexture* resTex)
 
 	return ret;
 }
+
+

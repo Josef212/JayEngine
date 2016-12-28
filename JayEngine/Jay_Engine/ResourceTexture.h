@@ -15,8 +15,8 @@ public:
 	ResourceTexture(UID uuid);
 	virtual ~ResourceTexture();
 
-	bool loadToMemory();
-	bool removeFromMemory();
+	bool loadToMemory()override;
+	bool removeFromMemory()override;
 
 	uint textureGlID = 0;
 };

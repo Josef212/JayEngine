@@ -11,11 +11,11 @@ public:
 	virtual ~ResourceMesh();
 
 	void loadMeshResource(const char* fileName, const char* path = NULL);
-	bool loadToMemory();
-	bool removeFromMemory();
+
+	bool loadToMemory()override;
+	bool removeFromMemory()override;
 
 private:
-	void clearResMesh();
 
 public:
 	uint idVertices = 0;

@@ -14,7 +14,7 @@
 #include "Timer.h"
 
 #include "Importer.h"
-#include "ImporterFBX.h"
+#include "ImporterScene.h"
 #include "ImporterMesh.h"
 #include "ImporterTexture.h"
 
@@ -27,7 +27,7 @@ ModuleResourceManager::ModuleResourceManager(bool startEnabled) : Module(startEn
 	name.assign("module_importer");
 
 	//TODO: only if mode editor
-	fbxImporter = new ImporterFBX();
+	sceneImporter = new ImporterScene();
 	meshImporter = new ImporterMesh();
 	textureImporter = new ImporterTexture();
 	//----------------------------- endif
@@ -51,8 +51,7 @@ bool ModuleResourceManager::start()
 {
 	_LOG(LOG_STD, "Importer: Start.");
 
-	//checkAllPrefabs();
-	autoImportFBX();
+	//autoImportFBX();
 
 	return true;
 }
@@ -70,32 +69,70 @@ UID ModuleResourceManager::getNewUID()
 	return app->random->getRandInt();
 }
 
-Resource* ModuleResourceManager::createNewResource(ResourceType type)
+Resource* ModuleResourceManager::createNewResource(ResourceType type, UID forceUID)
 {
 	Resource* ret = NULL;
-	UID uuid = getNewUID();
+
+	if(forceUID == 0 || !getResourceFromUID(forceUID))
+		forceUID = getNewUID();
 
 	switch (type)
 	{
 		case RESOURCE_MESH:
-		{
-			ret = new ResourceMesh(uuid);
-		}
-		break;
+			ret = new ResourceMesh(forceUID);
+			break;
 
 		case RESOURCE_TEXTURE:
-		{
-			ret = new ResourceTexture(uuid);
-		}
-		break;
+			ret = new ResourceTexture(forceUID);
+			break;
+
+		case RESOURCE_SHADER:
+			break;
+
+		case RESOURCE_SCENE:
+			break;
+
+		case RESOURCE_MATERIAL:
+			break;
 
 		default:
 			_LOG(LOG_ERROR, "Invalid resource type.");
-		break;
+			break;
 	}
 
 	if (ret)
-		resources[uuid] = ret;
+		resources[forceUID] = ret;
+
+	return ret;
+}
+
+ResourceType ModuleResourceManager::getTypeFromExtension(const char* extension)
+{
+	ResourceType ret = RESOURCE_UNKNOWN;
+
+	if (extension)
+	{
+		if (strcmp(extension, "wav") == 0)
+			ret = RESOURCE_AUDIO;
+		else if (strcmp(extension, "ogg") == 0)
+			ret = RESOURCE_AUDIO;
+		else if (strcmp(extension, "dds") == 0)
+			ret = RESOURCE_TEXTURE;
+		else if (strcmp(extension, "png") == 0)
+			ret = RESOURCE_TEXTURE;
+		else if (strcmp(extension, "jpg") == 0)
+			ret = RESOURCE_TEXTURE;
+		else if (strcmp(extension, "tga") == 0)
+			ret = RESOURCE_TEXTURE;
+		else if (strcmp(extension, "fbx") == 0)
+			ret = RESOURCE_SCENE;
+		else if (strcmp(extension, "jayscene") == 0)
+			ret = RESOURCE_SCENE;
+		else if (strcmp(extension, "jaymesh") == 0)
+			ret = RESOURCE_MESH;
+		else if (strcmp(extension, "jaymat") == 0)
+			ret = RESOURCE_MATERIAL;
+	}
 
 	return ret;
 }
@@ -106,6 +143,79 @@ Resource* ModuleResourceManager::getResourceFromUID(UID uuid)
 
 	return (it != resources.end()) ? ((*it).second) : (NULL);
 }
+
+UID ModuleResourceManager::findResource(const char* fileInAssets)const
+{
+	std::string file(fileInAssets);
+	app->fs->normalizePath(file);
+
+	for (std::map<UID, Resource*>::const_iterator it = resources.begin(); it != resources.end(); ++it)
+	{
+		if (it->second->originalFile.compare(file) == 0)
+			return it->first;
+	}
+
+	return 0;
+}
+
+UID ModuleResourceManager::importFile(const char* fileInAssets, bool checkFirst)
+{
+	UID ret = 0;
+
+	if (checkFirst)
+	{
+		ret = findResource(fileInAssets);
+		if (ret != 0)
+			return ret;
+	}
+
+	std::string ext;
+	app->fs->splitPath(fileInAssets, NULL, NULL, &ext);
+
+	ResourceType type = getTypeFromExtension(ext.c_str());
+
+	bool succes = false;
+	std::string exportedFile;
+	UID resUID = 0;
+
+	switch (type)
+	{
+		//TODO: Add more cases for new resources type.
+
+	case RESOURCE_TEXTURE:
+		succes = textureImporter->import(fileInAssets, exportedFile, resUID);
+		break;
+
+	case RESOURCE_SCENE:
+		succes = sceneImporter->import(fileInAssets, exportedFile, ext.c_str(), resUID);
+		break;
+
+	default:
+		_LOG(LOG_ERROR, "Could not recognize file extension.");
+		break;
+	}
+
+	//If import has success then create the resource. And assign name and ID info, not all info only needed info to reload resource
+	if (succes)
+	{
+		Resource* res = createNewResource(type, resUID);
+		res->originalFile = fileInAssets;
+		app->fs->normalizePath(res->originalFile);
+		std::string file;
+		app->fs->splitPath(exportedFile.c_str(), NULL, &file);
+		res->exportedFile = file.c_str();
+		ret = res->getUID();
+
+		_LOG(LOG_INFO, "Just imported from '%s' to '%s'.", res->getOriginalFile(), res->getExportedFile());
+	}
+	else
+	{
+		_LOG(LOG_ERROR, "FAILED importing '%s'.", fileInAssets);
+	}
+
+	return ret;
+}
+
 
 
 /** 
@@ -145,7 +255,7 @@ bool ModuleResourceManager::importFBX(const char* name, const char* path)
 
 		//--------------------------
 
-		ret = fbxImporter->importFBX(fullPath, out.c_str());
+		ret = sceneImporter->importFBX(fullPath, out.c_str());
 
 		if (ret)
 		{

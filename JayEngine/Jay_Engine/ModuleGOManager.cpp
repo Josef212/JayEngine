@@ -158,6 +158,14 @@ GameObject* ModuleGOManager::getSceneroot()const
 	return sceneRootObject;
 }
 
+GameObject* ModuleGOManager::createGameObject(GameObject* parent)
+{
+	if (!parent)
+		parent = sceneRootObject;
+
+	return sceneRootObject->addChild();
+}
+
 GameObject* ModuleGOManager::createEmptyGO()
 {
 	GameObject* ret = NULL;

@@ -33,6 +33,8 @@ public:
 	GameObject* getSceneroot()const;
 	GameObject* getGameObjectFromId(UID id);
 
+
+	GameObject* createGameObject(GameObject* parent = NULL);
 	GameObject* createEmptyGO();
 	GameObject* createEmptyGoWithAABB(float xP, float yP, float zP); //TMP
 	GameObject* createCamera();

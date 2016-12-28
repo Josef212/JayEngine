@@ -8,13 +8,17 @@ enum ResourceType
 {
 	RESOURCE_UNKNOWN = -1,
 	RESOURCE_MESH = 0,
-	RESOURCE_TEXTURE
+	RESOURCE_TEXTURE,
+	RESOURCE_SHADER,
+	RESOURCE_SCENE,
+	RESOURCE_MATERIAL,
+	RESOURCE_AUDIO
 };
 
 class Resource
 {
 public:
-	Resource(UID uuid);
+	Resource(UID uuid, ResourceType resType = RESOURCE_UNKNOWN);
 	virtual ~Resource();
 
 	ResourceType getResourceType()const;
@@ -22,13 +26,14 @@ public:
 	UID getUID()const;
 	void setUID(UID uid); //NOTE: Care when use it. //TODO: Check for other ways
 
-	const char* getOriginalFile();
-	const char* getExportedFile();
+	const char* getOriginalFile()const;
+	const char* getExportedFile()const;
 
 	bool isInMemory()const;
-	bool loadToMemory();
 
+	virtual bool loadToMemory();
 	virtual bool removeFromMemory();
+
 	uint countReferences()const;
 
 	void addInstance();

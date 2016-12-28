@@ -91,8 +91,8 @@ char* clearTexPath(char* path);
 #define SDL_DOC_URL "https://wiki.libsdl.org/"
 #define SDL_MIXER_DOC_URL "https://www.libsdl.org/projects/SDL_mixer/docs/SDL_mixer_frame.html"
 
-#define DEFAULT_FB_PATH "Data/Assets/fbx"
-#define DEFAULT_TEXTURES_PATH "Data/Assets/textures"
+#define DEFAULT_FB_PATH "Data/Assets/fbx/"
+#define DEFAULT_TEXTURES_PATH "Data/Assets/textures/"
 
 #define DEFAULT_SCENE_SAVE_PATH "Data/Scenes/"
 #define DEFAULT_PREF_SAVE_PATHS "Data/Library/Prefabs/"
@@ -101,7 +101,9 @@ char* clearTexPath(char* path);
 
 #define DEFAULT_TMP_DIR "Data/Library/tmp/"
 
-#define MESH_EXTENSION ".jof"
+#define MESH_EXTENSION ".jaymesh"
 #define TEXTURE_EXTENSION ".dds"
+#define MATERIAL_EXTENSION ".jaymat"
+#define SCENE_EXTENSION ".jayscene"
 
 #endif

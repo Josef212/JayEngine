@@ -31,7 +31,7 @@ ImporterMesh::~ImporterMesh()
 	aiDetachAllLogStreams();
 }
 
-void ImporterMesh::importMesh(aiMesh* mesh, ResourceMesh* resMesh)
+void ImporterMesh::importMesh(const aiMesh* mesh, ResourceMesh* resMesh)
 {
 	if (!mesh || !resMesh)
 	{

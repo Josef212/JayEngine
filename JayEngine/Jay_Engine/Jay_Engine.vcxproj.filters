@@ -319,7 +319,7 @@
     <ClCompile Include="Time.cpp">
       <Filter>Core\Tools</Filter>
     </ClCompile>
-    <ClCompile Include="ImporterFBX.cpp">
+    <ClCompile Include="ImporterScene.cpp">
       <Filter>Core\ResourceManagement\Importers</Filter>
     </ClCompile>
   </ItemGroup>
@@ -672,11 +672,11 @@
     <ClInclude Include="Time.h">
       <Filter>Core\Tools</Filter>
     </ClInclude>
-    <ClInclude Include="ImporterFBX.h">
-      <Filter>Core\ResourceManagement\Importers</Filter>
-    </ClInclude>
     <ClInclude Include="StringTools.h">
       <Filter>Core\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="ImporterScene.h">
+      <Filter>Core\ResourceManagement\Importers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

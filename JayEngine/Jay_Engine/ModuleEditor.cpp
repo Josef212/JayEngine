@@ -21,7 +21,7 @@
 
 //TMP
 #include "ModuleResourceManager.h"
-#include "ImporterFBX.h"
+#include "ImporterScene.h"
 
 ModuleEditor::ModuleEditor(bool startEnabled) : Module(startEnabled)
 {

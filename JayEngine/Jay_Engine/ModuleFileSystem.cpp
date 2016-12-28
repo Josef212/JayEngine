@@ -247,3 +247,64 @@ const char* ModuleFileSystem::getBasePath()
 {
 	return PHYSFS_getBaseDir();
 }
+
+void ModuleFileSystem::normalizePath(char* path)
+{
+	if (!path)
+		return;
+
+	int len = strlen(path);
+	for (uint i = 0; i < len; ++i)
+	{
+		if (path[i] == '\\')
+			path[i] = '/';
+		else
+			path[i] = tolower(path[i]);
+	}
+}
+
+void ModuleFileSystem::normalizePath(std::string& path)
+{
+	for (std::string::iterator it = path.begin(); it < path.end(); ++it)
+	{
+		if (*it == '\\')
+			*it = '/';
+		else
+			*it = tolower(*it);
+	}
+}
+
+void ModuleFileSystem::splitPath(const char* originalPath, std::string* path, std::string* file, std::string* extension)
+{
+	if (!originalPath)
+		return;
+
+	std::string fullPath(originalPath);
+	normalizePath(fullPath);
+	int lastSeparator = fullPath.find_last_of("\\/");
+	int dot = fullPath.find_last_of(".");
+
+	if (path)
+	{
+		if (lastSeparator < fullPath.length())
+			*path = fullPath.substr(0, lastSeparator + 1);
+		else
+			path->clear();
+	}
+
+	if (file)
+	{
+		if (lastSeparator < fullPath.length())
+			*file = fullPath.substr(lastSeparator + 1);
+		else
+			*file = fullPath;
+	}
+
+	if (extension)
+	{
+		if (dot < fullPath.length())
+			*extension = fullPath.substr(dot + 1);
+		else
+			extension->clear();
+	}
+}

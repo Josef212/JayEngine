@@ -9,7 +9,6 @@
 
 ResourceMesh::ResourceMesh(UID uuid) : Resource(uuid)
 {
-	resType = RESOURCE_MESH;
 }
 
 
@@ -146,8 +145,13 @@ bool ResourceMesh::loadToMemory()
 	return ret;
 }
 
-void ResourceMesh::clearResMesh()
+bool ResourceMesh::removeFromMemory()
 {
+	if (idIndices > 0) glDeleteBuffers(1, &idIndices);
+	if (idVertices > 0) glDeleteBuffers(1, &idVertices);
+	if (idNormals > 0) glDeleteBuffers(1, &idNormals);
+	if (idTexCoords > 0) glDeleteBuffers(1, &idTexCoords);
+
 	numIndices = 0;
 	numVertices = 0;
 	numNormals = 0;
@@ -157,16 +161,6 @@ void ResourceMesh::clearResMesh()
 	RELEASE_ARRAY(vertices);
 	RELEASE_ARRAY(normals);
 	RELEASE_ARRAY(texCoords);
-}
-
-bool ResourceMesh::removeFromMemory()
-{
-	if (idIndices > 0) glDeleteBuffers(1, &idIndices);
-	if (idVertices > 0) glDeleteBuffers(1, &idVertices);
-	if (idNormals > 0) glDeleteBuffers(1, &idNormals);
-	if (idTexCoords > 0) glDeleteBuffers(1, &idTexCoords);
-
-	clearResMesh();
 
 	return true;
 }

@@ -2,7 +2,7 @@
 
 
 
-Resource::Resource(UID uuid) : uuid(uuid)
+Resource::Resource(UID uuid, ResourceType resType) : uuid(uuid), resType(resType)
 {
 }
 
@@ -27,12 +27,12 @@ void Resource::setUID(UID uid)
 		uuid = uid;
 }
 
-const char* Resource::getOriginalFile()
+const char* Resource::getOriginalFile()const
 {
 	return originalFile.c_str();
 }
 
-const char* Resource::getExportedFile()
+const char* Resource::getExportedFile()const
 {
 	return exportedFile.c_str();
 }

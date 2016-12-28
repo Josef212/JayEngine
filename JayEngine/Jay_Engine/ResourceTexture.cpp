@@ -7,7 +7,6 @@
 
 ResourceTexture::ResourceTexture(UID uuid) : Resource(uuid)
 {
-	resType = RESOURCE_TEXTURE;
 }
 
 

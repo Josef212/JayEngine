@@ -33,6 +33,10 @@ public:
 	uint load(const char* file, char** buffer)const;
 	SDL_RWops* load(const char* file)const;
 	unsigned int save(const char* file, const char* buffer, unsigned int size)const;
+
+	void splitPath(const char* originalPath, std::string* path, std::string* file = NULL, std::string* extension = NULL);
+	void normalizePath(char* path);
+	void normalizePath(std::string& path);
 };
 
 #endif // !__MODULEFILESYSTEM_H__
