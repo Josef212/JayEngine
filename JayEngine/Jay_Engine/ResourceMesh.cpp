@@ -7,7 +7,7 @@
 
 #include "OpenGL.h"
 
-ResourceMesh::ResourceMesh(UID uuid) : Resource(uuid)
+ResourceMesh::ResourceMesh(UID uuid) : Resource(uuid, RESOURCE_MESH)
 {
 }
 

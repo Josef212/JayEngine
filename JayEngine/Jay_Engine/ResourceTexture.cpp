@@ -5,7 +5,7 @@
 
 #include "OpenGL.h"
 
-ResourceTexture::ResourceTexture(UID uuid) : Resource(uuid)
+ResourceTexture::ResourceTexture(UID uuid) : Resource(uuid, RESOURCE_TEXTURE)
 {
 }
 
