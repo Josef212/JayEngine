@@ -4,6 +4,7 @@
 #include "Module.h"
 
 #include <string>
+#include <vector>
 #include <map>
 
 class Resource;
@@ -51,9 +52,14 @@ public:
 
 	bool addPrefab(const char* originalFile, const char* exportedFile); //Both will be raw file names, path must be added
 
+	void getResourcesOfType(std::vector<Resource*>& res, ResourceType type)const;
+
 private:
 	bool autoImportFBX();
 	bool checkAllPrefabs();
+
+	bool loadResources();
+	bool saveResources();
 
 public:
 	ImporterScene* sceneImporter = NULL;

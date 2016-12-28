@@ -44,6 +44,8 @@ bool ModuleResourceManager::init(FileParser* conf)
 {
 	_LOG(LOG_STD, "Resource manager: Init.");
 	bool ret = true;
+
+	loadResources();
 	
 	return ret;
 }
@@ -62,6 +64,8 @@ bool ModuleResourceManager::cleanUp()
 {
 	_LOG(LOG_STD, "Resource manager: CleanUp.");
 	bool ret = true;
+
+	saveResources();
 	
 	return ret;
 }
@@ -307,6 +311,101 @@ bool ModuleResourceManager::autoImportFBX()
 
 	return ret;
 }
+
+bool ModuleResourceManager::loadResources()
+{
+	//Might change this if primitives added
+	bool ret = false;
+
+	std::string path(SETTINGS_PATH);
+	path.append("resources.json");
+	char* buffer = NULL;
+	uint size = app->fs->load(path.c_str(), &buffer);
+
+	if (buffer && size > 0) 
+	{
+		FileParser file(buffer);
+
+		int count = file.getArraySize("Resources");
+		for (uint i = 0; i < count; ++i)
+		{
+			FileParser res(file.getArray("Resources", i));
+			ResourceType type = (ResourceType)res.getInt("type", RESOURCE_UNKNOWN);
+			UID uid = res.getInt("UID", 0);
+
+			if (getResourceFromUID(uid)) //If a resource with given UID is found jus continue.
+				continue;
+
+			Resource* r = createNewResource(type, uid);
+			r->originalFile = res.getString("original_file", "???");
+			r->exportedFile = res.getString("exported_file", "???");
+		}
+	}
+
+	RELEASE_ARRAY(buffer);
+
+	return ret;
+}
+
+bool ModuleResourceManager::saveResources()
+{
+	bool ret = false;
+
+	FileParser save;
+
+	save.addArray("Resources");
+
+	for (std::map<UID, Resource*>::const_iterator it = resources.begin(); it != resources.end(); ++it)
+	{
+		FileParser res;
+		//---
+		res.addInt("UID", it->second->getUID());
+		res.addInt("type", it->second->getResourceType());
+		res.addString("original_file", it->second->getOriginalFile());
+		res.addString("exported_file", it->second->getExportedFile());
+		//---
+		save.addArrayEntry(res);
+	}
+
+	char* buffer = NULL;
+	uint size = save.writeJson(&buffer, false); //TODO: Fast write
+
+	std::string path(SETTINGS_PATH);
+	path.append("resources.json");
+
+	if (app->fs->save(path.c_str(), buffer, size) == size)
+		ret = true;
+
+	RELEASE_ARRAY(buffer);
+
+	return ret;
+}
+
+void ModuleResourceManager::getResourcesOfType(std::vector<Resource*>& res, ResourceType type)const
+{
+	for (std::map<UID, Resource*>::const_iterator it = resources.begin(); it != resources.end(); ++it)
+	{
+		if (it->second->getResourceType() == type)
+			res.push_back(it->second);
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 bool ModuleResourceManager::checkAllPrefabs() //Is this really important??? //TODO: Instead of doing this why not serialitzate the prefabs map and check files from there??
 {
