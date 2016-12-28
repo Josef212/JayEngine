@@ -44,13 +44,13 @@ Application::Application()
 	sceneTry = new SceneTry();
 
 	// Main Modules
+	addModule(editor);
 	addModule(fs);
 	addModule(window);
 	addModule(camera);
 	addModule(input);
 	addModule(audio);
 	//addModule(physics);
-	addModule(editor);
 	addModule(goManager);
 	addModule(resourceManager);
 	
@@ -64,7 +64,7 @@ Application::Application()
 Application::~Application()
 {
 	_LOG(LOG_STD, "Application Destructor --------------");
-	for(std::list<Module*>::reverse_iterator it = modules.rbegin(); it!=modules.rbegin(); ++it)
+	for(std::list<Module*>::reverse_iterator it = modules.rbegin(); it!=modules.rend(); ++it)
 	{
 		RELEASE(*it);
 	}
@@ -196,7 +196,7 @@ bool Application::cleanUp()
 	bool ret = true;
 
 	_LOG(LOG_STD, "Application CleaUp --------------");
-	for (std::list<Module*>::reverse_iterator it = modules.rbegin(); it != modules.rbegin(); ++it)
+	for (std::list<Module*>::reverse_iterator it = modules.rbegin(); it != modules.rend(); ++it)
 	{
 		ret = (*it)->cleanUp();
 	}

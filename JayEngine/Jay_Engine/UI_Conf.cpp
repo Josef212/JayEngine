@@ -14,10 +14,7 @@ UI_Conf::UI_Conf() : UI_Comp()
 
 
 UI_Conf::~UI_Conf()
-{
-	delete[] fps;
-	delete[] ms;
-}
+{}
 
 void UI_Conf::draw()
 {

@@ -47,6 +47,12 @@ ModuleEditor::ModuleEditor(bool startEnabled) : Module(startEnabled)
 ModuleEditor::~ModuleEditor()
 {
 	_LOG(LOG_STD, "Editor: Destroying.");
+
+	std::list<UI_Comp*>::reverse_iterator it = uiList.rbegin();
+	for (; it != uiList.rend(); ++it)
+		RELEASE((*it));
+
+	ImGui_ImplSdlGL3_Shutdown();
 }
 
 
@@ -236,11 +242,6 @@ bool ModuleEditor::cleanUp()
 {
 	_LOG(LOG_INFO, "Editor: CleanUp.");
 
-	std::list<UI_Comp*>::iterator it = uiList.begin();
-	for (; it != uiList.end(); ++it)
-		RELEASE((*it));
-
-	ImGui_ImplSdlGL3_Shutdown();
 	return true;
 }
 

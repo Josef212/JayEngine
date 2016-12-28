@@ -75,6 +75,7 @@ void UI_Console::logUi(const char* str, logType type)
 		lastLogColor = ImColor(255, 255, 255);
 		break;
 	}
+
 	log.push_back(str);
 	colors.push_back(lastLogColor);
 }
