@@ -322,6 +322,9 @@
     <ClCompile Include="ImporterScene.cpp">
       <Filter>Core\ResourceManagement\Importers</Filter>
     </ClCompile>
+    <ClCompile Include="ResourceScene.cpp">
+      <Filter>Core\ResourceManagement\Resources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.h">
@@ -677,6 +680,9 @@
     </ClInclude>
     <ClInclude Include="ImporterScene.h">
       <Filter>Core\ResourceManagement\Importers</Filter>
+    </ClInclude>
+    <ClInclude Include="ResourceScene.h">
+      <Filter>Core\ResourceManagement\Resources</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -95,7 +95,7 @@ bool ImporterScene::import(const char* originalFile, std::string& exportedFile, 
 		resUID = app->resourceManager->getNewUID();
 
 		char name[128];
-		sprintf_s(name, 128, "%d.%s", resUID, SCENE_EXTENSION);
+		sprintf_s(name, 128, "%d%s", resUID, SCENE_EXTENSION);
 		exportedFile.assign(name);
 		char fullPath[256];
 		sprintf_s(fullPath, 256, "%s%s", DEFAULT_PREF_SAVE_PATHS, name);
@@ -103,7 +103,7 @@ bool ImporterScene::import(const char* originalFile, std::string& exportedFile, 
 		char* buf = NULL;
 		uint _size = save.writeJson(&buf, false); //TODO: When finish testing change to fast mode.
 
-		if (app->fs->save(fullPath, buf, size) == size)
+		if (app->fs->save(fullPath, buf, _size) == _size)
 			ret = true;
 
 		RELEASE_ARRAY(buf);
@@ -129,6 +129,7 @@ void ImporterScene::recImport(const aiScene* scene, const aiNode* node, GameObje
 	Quat rot(rotation.x, rotation.y, rotation.z, rotation.w);
 
 	GameObject* go = parent->addChild();
+	go->setName(name.c_str());
 
 	Transform* trans = go->transform;
 
@@ -180,18 +181,12 @@ void ImporterScene::recImport(const aiScene* scene, const aiNode* node, GameObje
 				//Need to import that texture
 				std::string texPath(str.C_Str());
 				app->fs->normalizePath(texPath);
-				if (app->fs->exist(texPath.c_str()))
-				{
-					//If exist import it. Might check if i should change the path before.
-					std::string texFile;
-					app->fs->splitPath(texPath.c_str(), NULL, &texFile);
-					
-					cMat->textureResource = (ResourceTexture*)app->resourceManager->getResourceFromUID(app->resourceManager->importFile(texFile.c_str(), true));
-				}
-				else
-				{
-					_LOG(LOG_ERROR, "Texture '%s' does not exist.", texPath.c_str());
-				}
+
+				//If exist import it. Might check if i should change the path before.
+				std::string texFile;
+				app->fs->splitPath(texPath.c_str(), NULL, &texFile);
+				
+				cMat->textureResource = (ResourceTexture*)app->resourceManager->getResourceFromUID(app->resourceManager->importFile(texFile.c_str(), true));
 			}
 
 			//TODO:Check assimp for embedded textures... For now will normally import textures.
@@ -225,159 +220,3 @@ void ImporterScene::recImport(const aiScene* scene, const aiNode* node, GameObje
 	for (uint j = 0; j < node->mNumChildren; ++j)
 		recImport(scene, node->mChildren[j], go, basePath, file);
 }
-
-bool ImporterScene::importFBX(const char* fullPath, const char* fileName) //TODO: path full ??
-{
-	bool ret = true;
-
-	char* buffer;
-	uint size = app->fs->load(fullPath, &buffer);
-
-	const aiScene* scene = NULL;
-
-	if (buffer && size > 0)
-	{
-		scene = aiImportFileFromMemory(buffer, size, aiProcessPreset_TargetRealtime_MaxQuality, "fbx");
-	}
-	else
-	{
-		_LOG(LOG_ERROR, "Error loading fbx: %s.", fullPath);
-		ret = false;
-	}
-
-	if (scene && scene->HasMeshes())
-	{
-		FileParser file;
-		file.addArray("GameObjects");
-		_LOG(LOG_STD, "Loading fbx: %s.", fullPath);
-
-		GameObject* root = new GameObject(NULL, app->resourceManager->getNewUID()); //TODO: Should clean this because it adds a new GO
-
-		importFBXRec(scene->mRootNode, scene, root, fullPath);
-
-		meshesImported.clear();
-
-		//Saving the file
-		root->saveGO(file);
-
-		char* buf;
-		uint jSize = file.writeJson(&buf, false);
-
-		char jFileName[128];
-		strcpy_s(jFileName, 128, DEFAULT_PREF_SAVE_PATHS);
-		strcat_s(jFileName, 128, fileName);
-
-		if (app->fs->save(jFileName, buf, jSize) != jSize)
-		{
-			_LOG(LOG_ERROR, "Error saving json file: %s.", );
-		}
-
-		aiReleaseImport(scene);
-		RELEASE_ARRAY(buffer);
-		RELEASE_ARRAY(buf);
-	}
-	else
-	{
-		_LOG(LOG_ERROR, "Error loading fbx: %s.", fullPath);
-		ret = false;
-	}
-
-	return ret;
-}
-
-
-GameObject* ImporterScene::importFBXRec(aiNode* node, const aiScene* scene, GameObject* parent, const char* originalFBX)
-{
-	GameObject* ret = NULL;
-
-	if (!parent)
-		return ret;
-
-	ret = parent->addChild();
-
-	ret->setName(node->mName.C_Str());
-
-	//Setting transform
-	Transform* trans = ret->transform;
-	if (!trans)
-		trans = (Transform*)ret->findComponent(TRANSFORMATION)[0];
-	if (!trans)
-		trans = (Transform*)ret->addComponent(TRANSFORMATION);
-
-	if (trans)
-	{
-		aiVector3D pos;
-		aiVector3D scl;
-		aiQuaternion rot;
-		node->mTransformation.Decompose(scl, rot, pos);
-
-		trans->setLocalPosition(float3(pos.x, pos.y, pos.z));
-		trans->setLocalScale(float3(scl.x, scl.y, scl.z));
-		trans->setLocalRotation(Quat(rot.x, rot.y, rot.z, rot.w));
-	}
-
-	//Lets set meshes and materials. This time will convert them. Resource info will be in each component when save
-	for (uint i = 0; i < node->mNumMeshes; ++i)
-	{
-		//For each mesh will import it and create a mesh component
-		Mesh* cpMesh = (Mesh*)ret->addComponent(MESH);
-
-		int index = node->mMeshes[i];
-		std::map<int, ResourceMesh*>::iterator tmp = meshesImported.find(index);
-		if (tmp != meshesImported.end())			//If mesh has already been imported, take that resource, else import it
-		{
-			cpMesh->meshResource = tmp->second;
-		}
-		else
-		{
-			aiMesh* aMesh = scene->mMeshes[index];
-			ResourceMesh* resMesh = cpMesh->createAnEmptyMeshRes();
-
-			app->resourceManager->meshImporter->importMesh(aMesh, resMesh);
-			resMesh->originalFile.assign(originalFBX);
-			meshesImported.insert(std::pair<int, ResourceMesh*>(index, resMesh));
-		}
-
-		//All this should first check if the meshes or the textures are already imported
-		if (scene->HasMaterials())
-		{
-			//Create whe component as well import the texture
-			Material* cpMat = (Material*)ret->addComponent(MATERIAL);
-
-			aiColor4D col;
-			scene->mMaterials[scene->mMeshes[node->mMeshes[i]]->mMaterialIndex]->Get(AI_MATKEY_COLOR_DIFFUSE, col);
-			cpMat->color.Set(col.r, col.g, col.b, col.a);
-
-			aiString str;
-			scene->mMaterials[scene->mMeshes[node->mMeshes[i]]->mMaterialIndex]->GetTexture(aiTextureType_DIFFUSE, 0, &str);
-			if (str.length > 0)
-			{
-				std::map<std::string, ResourceTexture*>::iterator tmp2 = texturesImported.find(str.C_Str());
-				if (tmp2 != texturesImported.end())
-				{
-					cpMat->textureResource = tmp2->second;
-				}
-				else
-				{
-					ResourceTexture* resTex = cpMat->createAnEmptyMaterialRes();
-					char texPath[128];
-					strcpy_s(texPath, 128, str.C_Str());
-					app->resourceManager->textureImporter->importTexture(clearTexPath(texPath), resTex); //TODO: check if already in memory
-					texturesImported.insert(std::pair<std::string, ResourceTexture*>(str.C_Str(), resTex)); //Dont clear the map after importing the fbx because if another fbx use the same texture will not importe it twcie
-				}
-			}
-			//TODO: Mesh should have an index of the texture??
-
-		}
-	}
-
-	for (uint i = 0; i < node->mNumChildren; ++i)
-	{
-		importFBXRec(node->mChildren[i], scene, ret, originalFBX);
-	}
-
-	return ret;
-}
-
-
-

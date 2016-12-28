@@ -170,21 +170,22 @@ bool GameObject::recRemoveFlagged()
 			components.erase(components.begin() + i);
 		}
 	}
-
-	for (uint i = 0; i < childrens.size(); ++i)
+	
+	for (std::vector<GameObject*>::iterator it = childrens.begin(); it != childrens.end();)
 	{
-		GameObject* tmp = childrens[i];
+		GameObject* tmp = *it;
 		if (tmp && tmp->removeFlag)
 		{
 			tmp->cleanUp();
 			app->goManager->eraseGameObjectFromTree(tmp);
 			RELEASE(tmp);
-			childrens.erase(childrens.begin() + i);
+			it = childrens.erase(it);
 			ret = true;
 		}
 		else
 		{
 			ret |= tmp->recRemoveFlagged();
+			++it;
 		}
 	}
 

@@ -71,14 +71,14 @@ bool ModuleGOManager::start()
 }
 
 update_status ModuleGOManager::preUpdate(float dt)
-{	
+{
+	removeFlaggedGO();
+
 	if (sceneRootObject && sceneRootObject->transform)
 	{
 		sceneRootObject->recCalcTransform(sceneRootObject->transform->getLocalTransform());
 		sceneRootObject->recCalcBoxes();
 	}
-
-	removeFlaggedGO();
 
 	if (mustSaveScene)
 	{

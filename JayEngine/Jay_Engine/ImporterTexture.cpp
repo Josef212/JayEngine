@@ -49,7 +49,7 @@ bool ImporterTexture::import(const char* originalFile, std::string& exportedFile
 	uint size = app->fs->load(origin.c_str(), &buffer);
 
 	if (buffer && size > 0)
-		ret = import(buffer, exportedFile, resUID);
+		ret = importBuf(buffer, size, exportedFile, resUID);
 
 	RELEASE_ARRAY(buffer);
 
@@ -112,7 +112,7 @@ bool ImporterTexture::importBuf(const void* buffer, uint size, std::string& expo
 	return ret;
 }
 
-void ImporterTexture::importTexture(const char* fileName, ResourceTexture* resTex) //Note in texture case the output name will be a new UID + extension
+/*void ImporterTexture::importTexture(const char* fileName, ResourceTexture* resTex) //Note in texture case the output name will be a new UID + extension
 {//TODO: outputName should be the original file with all the path? The new file? Which extension should have the outputName
 	if (!fileName || !resTex)
 	{
@@ -149,7 +149,7 @@ void ImporterTexture::importTexture(const char* fileName, ResourceTexture* resTe
 		}*/
 
 		//2-Load the image from buffer
-		if (ilLoadL(IL_TYPE_UNKNOWN, buffer, size))
+		/*if (ilLoadL(IL_TYPE_UNKNOWN, buffer, size))
 		{
 			//Check overwitting parameter (ilEnable). if textuer already exist maybe shoudl overwrite it??
 			
@@ -219,7 +219,7 @@ void ImporterTexture::importTexture(const char* fileName, ResourceTexture* resTe
 		_LOG(LOG_ERROR, "Could not load the image: %s.", outputName.c_str());
 
 	RELEASE_ARRAY(buffer);
-}
+}*/
 
 bool ImporterTexture::loadTexture(ResourceTexture* resTex)
 {

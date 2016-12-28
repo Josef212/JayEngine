@@ -9,6 +9,7 @@
 #include "Resource.h"
 #include "ResourceMesh.h"
 #include "ResourceTexture.h"
+#include "ResourceScene.h"
 
 //TMP
 #include "Timer.h"
@@ -51,7 +52,8 @@ bool ModuleResourceManager::start()
 {
 	_LOG(LOG_STD, "Importer: Start.");
 
-	//autoImportFBX();
+	//TODO: Load and save the resource map.
+	autoImportFBX();
 
 	return true;
 }
@@ -73,7 +75,7 @@ Resource* ModuleResourceManager::createNewResource(ResourceType type, UID forceU
 {
 	Resource* ret = NULL;
 
-	if(forceUID == 0 || !getResourceFromUID(forceUID))
+	if(forceUID == 0 || getResourceFromUID(forceUID))
 		forceUID = getNewUID();
 
 	switch (type)
@@ -90,6 +92,7 @@ Resource* ModuleResourceManager::createNewResource(ResourceType type, UID forceU
 			break;
 
 		case RESOURCE_SCENE:
+			ret = new ResourceScene(forceUID);
 			break;
 
 		case RESOURCE_MATERIAL:
@@ -162,15 +165,17 @@ UID ModuleResourceManager::importFile(const char* fileInAssets, bool checkFirst)
 {
 	UID ret = 0;
 
+	std::string original(fileInAssets);
+	std::string path, file, ext;
+	app->fs->normalizePath(original);
+	app->fs->splitPath(original.c_str(), &path, &file, &ext);
+	
 	if (checkFirst)
 	{
-		ret = findResource(fileInAssets);
+		ret = findResource(file.c_str());
 		if (ret != 0)
 			return ret;
 	}
-
-	std::string ext;
-	app->fs->splitPath(fileInAssets, NULL, NULL, &ext);
 
 	ResourceType type = getTypeFromExtension(ext.c_str());
 
@@ -183,11 +188,20 @@ UID ModuleResourceManager::importFile(const char* fileInAssets, bool checkFirst)
 		//TODO: Add more cases for new resources type.
 
 	case RESOURCE_TEXTURE:
-		succes = textureImporter->import(fileInAssets, exportedFile, resUID);
+		succes = textureImporter->import(file.c_str(), exportedFile, resUID);
 		break;
 
 	case RESOURCE_SCENE:
-		succes = sceneImporter->import(fileInAssets, exportedFile, ext.c_str(), resUID);
+	{
+		std::string full;
+		if (path.empty())
+			full.assign(DEFAULT_FB_PATH);
+		else
+			full.assign(path);
+		full.append(file);
+
+		succes = sceneImporter->import(full.c_str(), exportedFile, ext.c_str(), resUID); 
+	}
 		break;
 
 	default:
@@ -199,11 +213,11 @@ UID ModuleResourceManager::importFile(const char* fileInAssets, bool checkFirst)
 	if (succes)
 	{
 		Resource* res = createNewResource(type, resUID);
-		res->originalFile = fileInAssets;
-		app->fs->normalizePath(res->originalFile);
-		std::string file;
-		app->fs->splitPath(exportedFile.c_str(), NULL, &file);
-		res->exportedFile = file.c_str();
+		res->originalFile = file;
+		std::string eFile;
+		app->fs->normalizePath(exportedFile);
+		app->fs->splitPath(exportedFile.c_str(), NULL, &eFile);
+		res->exportedFile = eFile;
 		ret = res->getUID();
 
 		_LOG(LOG_INFO, "Just imported from '%s' to '%s'.", res->getOriginalFile(), res->getExportedFile());
@@ -211,61 +225,6 @@ UID ModuleResourceManager::importFile(const char* fileInAssets, bool checkFirst)
 	else
 	{
 		_LOG(LOG_ERROR, "FAILED importing '%s'.", fileInAssets);
-	}
-
-	return ret;
-}
-
-
-
-/** 
-	-Name: Must be the fbx name with extension.			Ex: example.fbx
-	-Path: Must be the realtive path of the file.		Ex: Data/Assets/fbx
-
-
-	-Exported name: Will be the final exported file.		Ex: example.json
-	-Fullpath: Will be the full path of original file.		Ex: Data/Assets/fbx/example.fbx
-*/
-bool ModuleResourceManager::importFBX(const char* name, const char* path)
-{
-	bool ret = true;
-
-	if (!name)
-	{
-		_LOG(LOG_ERROR, "Invalid fbx name!");
-		ret = false;
-	}
-
-	std::map<const char*, std::string>::iterator it = prefabs.find(name);
-
-	if (ret && it == prefabs.end()) //TODO: Instead of not loading the fbx load it and update all resources. Also check if the resources of all meshes and textures are in the library
-	{
-		char fullPath[64];
-		if (path)
-			strcpy_s(fullPath, 64, path);
-		else
-			strcpy_s(fullPath, 64, DEFAULT_FB_PATH);
-
-		strcat_s(fullPath, 64, "/");
-		strcat_s(fullPath, 64, name);
-
-		std::string out;
-		removeExtension(name, out);
-		out.append(".json");
-
-		//--------------------------
-
-		ret = sceneImporter->importFBX(fullPath, out.c_str());
-
-		if (ret)
-		{
-			addPrefab(name, out.c_str());
-		}
-	}
-	else
-	{
-		_LOG(LOG_WARN, "FBX already imported into prefab. Original: %s. Exported: %s.", name, (*it).second.c_str());
-		ret = false;
 	}
 
 	return ret;
@@ -340,37 +299,9 @@ bool ModuleResourceManager::autoImportFBX()
 
 	if (fbxCount > 0)
 	{
-		std::vector<std::string> prefabs;
-		uint prefabsCount = app->fs->getFilesOnDir(DEFAULT_PREF_SAVE_PATHS, prefabs);
-
-		if (prefabsCount > 0) /** Must check individually all fbx and prefabs. */
+		for (uint i = 0; i < fbxCount; ++i)
 		{
-			for (uint i = 0; i < fbxCount; ++i) //Here will need to generate the file name should have after the importation in order to search it in prefabs vector.
-			{
-				std::string out;
-				removeExtension(fbxs[i].c_str(), out);
-				out.append(".json");
-				//--------------------------
-
-				//Now we have the name of the file after importation so search it on prefabs vector, if found add it to prefabs map if not import it.
-				
-				std::vector<std::string>::iterator it = std::find(prefabs.begin(), prefabs.end(), out);
-				if (it != prefabs.end())
-				{
-					addPrefab(fbxs[i].c_str(), out.c_str());
-				}
-				else
-				{
-					importFBX(fbxs[i].c_str());
-				}
-			}
-		}
-		else /** Directly import all fbx because none have been imported. */
-		{
-			for (uint i = 0; i < fbxCount; ++i)
-			{
-				importFBX(fbxs[i].c_str()); //As this method automatically creates the exported file name and adds it to the map just do this.
-			}
+			importFile(fbxs[i].c_str(), true);
 		}
 	}
 

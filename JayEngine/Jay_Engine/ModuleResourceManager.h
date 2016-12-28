@@ -26,8 +26,6 @@ public:
 	bool start();
 	bool cleanUp();
 
-	bool importFBX(const char* name, const char* path = NULL);
-
 	/**
 		Import a file depending on the format and return its UID.
 	*/
