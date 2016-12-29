@@ -174,9 +174,30 @@ void UI_Resources::meshes(std::vector<Resource*> meshes)
 						ImGui::SameLine();
 						ImGui::TextColored(ImVec4(1, 1, 0, 1), "%d.", res->countReferences());
 
-						//TODO: If resource is loaded show vertex and indices info.
+						//-------------
 
-						if (ImGui::Button("Attach to..."))
+						if (res->isInMemory())
+						{
+							ImGui::Text("Num vertices:");
+							ImGui::SameLine();
+							ImGui::TextColored(ImVec4(1, 1, 0, 1), "%d.", res->numVertices);
+
+							ImGui::Text("Num indices:");
+							ImGui::SameLine();
+							ImGui::TextColored(ImVec4(1, 1, 0, 1), "%d.", res->numIndices);
+
+							ImGui::Text("Num normals:");
+							ImGui::SameLine();
+							ImGui::TextColored(ImVec4(1, 1, 0, 1), "%d.", res->numNormals);
+
+							ImGui::Text("Num tex coords:");
+							ImGui::SameLine();
+							ImGui::TextColored(ImVec4(1, 1, 0, 1), "%d.", res->numTexCoords);
+						}
+
+						//-------------
+
+						if (ImGui::Button("Attach mesh to..."))
 							ImGui::OpenPopup("meshes popup");
 
 						//TODO: Delete button that remove resource of the map???
@@ -197,16 +218,16 @@ void UI_Resources::meshes(std::vector<Resource*> meshes)
 								{
 									if (cmp[j])
 									{
-										static char cmpName[32];
-										sprintf_s(cmpName, 32, "%s", cmp[j]->getName());
-										if (ImGui::MenuItem(cmpName))
+										static char mName[32];
+										sprintf_s(mName, 32, "%s", cmp[j]->getName());
+										if (ImGui::MenuItem(mName))
 										{
 											cmp[j]->setResource(res->getUID());
 										}
 									}
 								}
 
-								if (ImGui::MenuItem("Add component"))
+								if (ImGui::MenuItem("Add component mesh"))
 								{
 									Mesh* m = (Mesh*)selected->addComponent(ComponentType::MESH);
 									if (m)
@@ -262,9 +283,63 @@ void UI_Resources::textures(std::vector<Resource*> texs)
 					ImGui::PushStyleVar(ImGuiStyleVar_ChildWindowRounding, 5.0f);
 					ImGui::BeginChild("T", ImVec2(infoW, infoH));
 					{
+						ImGui::Text("Exported file:");
+						ImGui::SameLine();
+						ImGui::TextColored(ImVec4(1, 1, 0, 1), "%s.", res->getExportedFile());
+
 						ImGui::Text("Instances in memory: ");
 						ImGui::SameLine();
 						ImGui::TextColored(ImVec4(1, 1, 0, 1), "%d.", res->countReferences());
+
+						//-------------
+						//TODO: Texture info if is in memory
+
+						//-------------
+
+						if (ImGui::Button("Attach tex to..."))
+							ImGui::OpenPopup("tex popup");
+
+						//TODO: Delete button that remove resource of the map???
+
+						if (ImGui::BeginPopup("tex popup"))
+						{
+							ImGui::MenuItem("GO selected", NULL, false, false);
+							ImGui::Separator();
+
+							GameObject* selected = app->goManager->getSelected();
+
+							if (!selected)
+								ImGui::MenuItem("Not game object", NULL, false, false);
+							else
+							{
+								//TODO: Adapt this to material component and multitextures.
+								std::vector<Component*> cmp = selected->findComponent(ComponentType::MATERIAL);
+								for (uint j = 0; j < cmp.size(); ++j)
+								{
+									if (cmp[j])
+									{
+										static char tName[32];
+										sprintf_s(tName, 32, "%s", cmp[j]->getName());
+										if (ImGui::MenuItem(tName))
+										{
+											cmp[j]->setResource(res->getUID());
+										}
+									}
+								}
+								
+								if (ImGui::MenuItem("Add component material"))
+								{
+									Material* mat = (Material*)selected->addComponent(ComponentType::MATERIAL);
+									if (mat)
+									{
+										mat->setResource(res->getUID());
+									}
+								}
+							}
+
+
+							ImGui::EndPopup();
+						}
 
 						ImGui::EndChild();
 						ImGui::PopStyleVar();

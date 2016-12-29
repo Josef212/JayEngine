@@ -187,7 +187,7 @@ bool ImporterMesh::loadResource(ResourceMesh* resource)
 	std::string path(DEFAULT_MESH_SAVE_PATH);
 	path.append(resource->getExportedFile());
 
-	_LOG(LOG_STD, "Loading mesh resource from: '%s'.", path.c_str());
+	_LOG(LOG_INFO, "Loading mesh resource from: '%s'.", path.c_str());
 
 	char* data = NULL;
 	uint size = app->fs->load(path.c_str(), &data); 

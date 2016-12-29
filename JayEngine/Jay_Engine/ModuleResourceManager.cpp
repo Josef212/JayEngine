@@ -248,7 +248,7 @@ bool ModuleResourceManager::loadResource(Resource* resource)
 		break;
 
 	case ResourceType::RESOURCE_TEXTURE:
-		ret = textureImporter->loadResource(resource);
+		ret = textureImporter->loadResource((ResourceTexture*)resource);
 		break;
 
 	case ResourceType::RESOURCE_SCENE:

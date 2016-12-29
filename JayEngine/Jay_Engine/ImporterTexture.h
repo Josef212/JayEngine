@@ -15,7 +15,7 @@ public:
 	bool import(const char* originalFile, std::string& exportedFile, UID& resUID);
 	bool importBuf(const void* buffer, uint size, std::string& exportedFile, UID& resUID);
 
-	bool loadTexture(ResourceTexture* resTex);
+	bool loadResource(ResourceTexture* resource);
 };
 
 #endif // !__IMPORTERTEXTURE_H__

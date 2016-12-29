@@ -20,8 +20,7 @@ Material::Material(GameObject* gObj, int id) : Component(gObj, id)
 
 Material::~Material()
 {
-	if(textureResource)
-		app->resourceManager->removeResource(textureResource->getUID());
+	clearMaterial();
 }
 
 void Material::enable()
@@ -119,10 +118,47 @@ bool Material::loadCMP(FileParser& sect)
 
 			textureResource->exportedFile.assign(sect.getString("resource_exported_file", NULL));
 			textureResource->originalFile.assign(sect.getString("resource_original_file", NULL));
-			app->resourceManager->textureImporter->loadTexture(textureResource);
+			//app->resourceManager->textureImporter->loadTexture(textureResource);
 
 		}
 	}
 
 	return ret;
+}
+
+
+//-------------------------------------
+
+void Material::setResource(UID resUID)
+{
+	ResourceTexture* res = (ResourceTexture*)app->resourceManager->getResourceFromUID(resUID);
+
+	if (res)
+	{
+		if (!res->isInMemory())
+		{
+			//If is not in memory load it.
+			if (!app->resourceManager->loadResource(res))
+			{
+				_LOG(LOG_ERROR, "Error loading resource '%s'.", res->getExportedFile());
+			}
+			else
+			{
+				_LOG(LOG_STD, "Just loaded resource '%s'.", res->getExportedFile());
+			}
+		}
+		else
+			res->addInstance();
+
+		textureResource = res;
+	}
+}
+
+void Material::clearMaterial()
+{
+	if (textureResource)
+	{
+		app->resourceManager->onResourceRemove(textureResource);
+		textureResource = NULL;
+	}
 }

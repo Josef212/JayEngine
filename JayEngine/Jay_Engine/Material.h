@@ -30,10 +30,13 @@ public:
 	bool saveCMP(FileParser& sect);
 	bool loadCMP(FileParser& sect);
 
+	void setResource(UID resUID);
+	void clearMaterial();
+
 private:
 
 public:
-	Color color;
+	Color color = White;
 
 	ResourceTexture* textureResource = NULL; //Vector if normal map, light map, etc.
 
