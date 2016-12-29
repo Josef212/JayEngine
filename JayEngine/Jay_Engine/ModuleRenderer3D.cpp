@@ -336,101 +336,109 @@ void ModuleRenderer3D::drawGameObject(GameObject* obj)
 		Mesh* mesh = (Mesh*)meshes[i];
 		Material* mat = (Material*)mats[i];
 
-		glEnable(GL_LIGHTING);
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-
-		//Now pass vertices
-		glEnableClientState(GL_VERTEX_ARRAY);
-		glBindBuffer(GL_ARRAY_BUFFER, mesh->meshResource->idVertices);
-		glVertexPointer(3, GL_FLOAT, 0, NULL);
-
-		if (mesh->renderWireframe)
+		if (mesh)
 		{
-			drawWireframe(selected);
-		}
-		else
-		{
-			//Render normals
-			if (mesh->renderNormals && mesh->meshResource->numNormals > 0)
+			ResourceMesh* resMesh = mesh->meshResource;
+
+			if (resMesh)
 			{
-				glDisable(GL_LIGHTING);
-				glLineWidth(0.7f);
-				glBegin(GL_LINES);
-				glColor4f(0.4f, 0.1f, 0.f, 1.f);
-
-				for (uint i = 0; i < mesh->meshResource->numVertices; ++i)
-				{
-					glVertex3f(mesh->meshResource->vertices[i * 3], mesh->meshResource->vertices[i * 3 + 1], mesh->meshResource->vertices[i * 3 + 2]);
-					glVertex3f(mesh->meshResource->vertices[i * 3] + mesh->meshResource->normals[i * 3], mesh->meshResource->vertices[i * 3 + 1] + mesh->meshResource->normals[i * 3 + 1], mesh->meshResource->vertices[i * 3 + 2] + mesh->meshResource->normals[i * 3 + 2]);
-				}
-
-				glEnd();
-				glLineWidth(1.f);
 				glEnable(GL_LIGHTING);
-			}
+				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-			//Set normals
-			if (mesh->meshResource->idNormals > 0)
-			{
-				glEnableClientState(GL_NORMAL_ARRAY);
-				glBindBuffer(GL_ARRAY_BUFFER, mesh->meshResource->idNormals);
-				glNormalPointer(GL_FLOAT, 0, NULL);
-			}
+				//Now pass vertices
+				glEnableClientState(GL_VERTEX_ARRAY);
+				glBindBuffer(GL_ARRAY_BUFFER, resMesh->idVertices);
+				glVertexPointer(3, GL_FLOAT, 0, NULL);
 
-			//If there is a material use its texture and colour if not use a default colour
-			if (mat)
-			{
-				glEnable(GL_TEXTURE_2D);
-				glColor4f(mat->color.r, mat->color.g, mat->color.b, mat->color.a);
-				ResourceTexture* tex = mat->textureResource;
-				if (tex)
+				if (mesh->renderWireframe)
 				{
-					uint texID = tex->textureGlID;
-					if (texID > 0)
+					drawWireframe(selected);
+				}
+				else
+				{
+					//Render normals
+					if (mesh->renderNormals && resMesh->numNormals > 0)
 					{
-						glBindTexture(GL_TEXTURE_2D, texID);
+						glDisable(GL_LIGHTING);
+						glLineWidth(0.7f);
+						glBegin(GL_LINES);
+						glColor4f(0.4f, 0.1f, 0.f, 1.f);
+
+						for (uint i = 0; i < mesh->meshResource->numVertices; ++i)
+						{
+							glVertex3f(resMesh->vertices[i * 3], resMesh->vertices[i * 3 + 1], resMesh->vertices[i * 3 + 2]);
+							glVertex3f(resMesh->vertices[i * 3] + resMesh->normals[i * 3], resMesh->vertices[i * 3 + 1] + resMesh->normals[i * 3 + 1], resMesh->vertices[i * 3 + 2] + resMesh->normals[i * 3 + 2]);
+						}
+
+						glEnd();
+						glLineWidth(1.f);
+						glEnable(GL_LIGHTING);
 					}
 
-					//Set UV's
-					if (mesh->meshResource->idTexCoords > 0)
+					//Set normals
+					if (resMesh->idNormals > 0)
 					{
-						glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-						glBindBuffer(GL_ARRAY_BUFFER, mesh->meshResource->idTexCoords);
-						glTexCoordPointer(2, GL_FLOAT, 0, NULL);
+						glEnableClientState(GL_NORMAL_ARRAY);
+						glBindBuffer(GL_ARRAY_BUFFER, resMesh->idNormals);
+						glNormalPointer(GL_FLOAT, 0, NULL);
+					}
+
+					//If there is a material use its texture and colour if not use a default colour
+					if (mat)
+					{
+						glEnable(GL_TEXTURE_2D);
+						glColor4f(mat->color.r, mat->color.g, mat->color.b, mat->color.a);
+						ResourceTexture* tex = mat->textureResource;
+						if (tex)
+						{
+							uint texID = tex->textureGlID;
+							if (texID > 0)
+							{
+								glBindTexture(GL_TEXTURE_2D, texID);
+							}
+
+							//Set UV's
+							if (resMesh->idTexCoords > 0)
+							{
+								glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+								glBindBuffer(GL_ARRAY_BUFFER, resMesh->idTexCoords);
+								glTexCoordPointer(2, GL_FLOAT, 0, NULL);
+							}
+						}
+					}
+					else
+					{
+						glColor4f(0.5f, 0.5f, 0.5f, 1.f);
 					}
 				}
-			}
-			else
-			{
-				glColor4f(0.5f, 0.5f, 0.5f, 1.f);
+
+				//Finally set indices and draw elements
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, resMesh->idIndices);
+				glDrawElements(GL_TRIANGLES, resMesh->numIndices, GL_UNSIGNED_INT, NULL);
+
+				if (selected && !mesh->renderWireframe)
+				{
+					drawWireframe(selected);
+					glDrawElements(GL_TRIANGLES, resMesh->numIndices, GL_UNSIGNED_INT, NULL);
+				}
+
+				//Cleaning
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+				glBindBuffer(GL_ARRAY_BUFFER, 0);
+				glBindTexture(GL_TEXTURE_2D, 0);
+				//------
+				glDisableClientState(GL_NORMAL_ARRAY);
+				glDisableClientState(GL_COLOR_ARRAY);
+				glDisableClientState(GL_VERTEX_ARRAY);
+				glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
+				//==============
+				glEnable(GL_LIGHTING);
+				glEnable(GL_CULL_FACE);
+				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+				glColor4f(1.f, 1.f, 1.f, 1.f);
 			}
 		}
-
-		//Finally set indices and draw elements
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh->meshResource->idIndices);
-		glDrawElements(GL_TRIANGLES, mesh->meshResource->numIndices, GL_UNSIGNED_INT, NULL);
-
-		if (selected && !mesh->renderWireframe)
-		{
-			drawWireframe(selected);
-			glDrawElements(GL_TRIANGLES, mesh->meshResource->numIndices, GL_UNSIGNED_INT, NULL);
-		}
-
-		//Cleaning
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		glBindTexture(GL_TEXTURE_2D, 0);
-		//------
-		glDisableClientState(GL_NORMAL_ARRAY);
-		glDisableClientState(GL_COLOR_ARRAY);
-		glDisableClientState(GL_VERTEX_ARRAY);
-		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-
-		//==============
-		glEnable(GL_LIGHTING);
-		glEnable(GL_CULL_FACE);
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		glColor4f(1.f, 1.f, 1.f, 1.f);
 	}
 
 	//----------------------
