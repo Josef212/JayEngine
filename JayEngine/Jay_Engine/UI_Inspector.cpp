@@ -145,21 +145,34 @@ void UI_Inspector::drawMesh(GameObject* selected, Mesh* mesh)
 
 	if (ImGui::Button("Remove mesh")) mesh->remove();
 
+	static uint nVertices = 0;
+	static uint nIndices = 0;
+	static uint nNormals = 0;
+	static uint nTexCoords = 0;
+
+	if (mesh->meshResource)
+	{
+		nVertices = mesh->meshResource->numVertices;
+		nIndices = mesh->meshResource->numIndices;
+		nNormals = mesh->meshResource->numNormals;
+		nTexCoords = mesh->meshResource->numTexCoords;
+	}
+
 	ImGui::Text("Number of vertices: ");
 	ImGui::SameLine();
-	ImGui::TextColored(ImColor(255, 153, 51), "%d", mesh->meshResource->numVertices);
+	ImGui::TextColored(ImColor(255, 153, 51), "%d", nVertices);
 
 	ImGui::Text("Number of indices: ");
 	ImGui::SameLine();
-	ImGui::TextColored(ImColor(255, 153, 51), "%d", mesh->meshResource->numIndices);
+	ImGui::TextColored(ImColor(255, 153, 51), "%d",nIndices);
 
 	ImGui::Text("Number of normals: ");
 	ImGui::SameLine();
-	ImGui::TextColored(ImColor(255, 153, 51), "%d", mesh->meshResource->numNormals);
+	ImGui::TextColored(ImColor(255, 153, 51), "%d", nNormals);
 
 	ImGui::Text("Number of texture coords: ");
 	ImGui::SameLine();
-	ImGui::TextColored(ImColor(255, 153, 51), "%d", mesh->meshResource->numTexCoords);
+	ImGui::TextColored(ImColor(255, 153, 51), "%d", nTexCoords);
 
 	bool wire = mesh->renderWireframe;
 	if (ImGui::Checkbox("Wireframe", &wire)) mesh->renderWireframe = wire;
