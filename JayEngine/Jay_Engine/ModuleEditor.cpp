@@ -13,6 +13,7 @@
 #include "UI_Hierarchy.h"
 #include "UI_Inspector.h"
 #include "UI_Tree.h"
+#include "UI_Resources.h"
 
 #include "ImGui/imgui.h"
 #include "ImGui/imgui_impl_sdl_gl3.h"
@@ -34,6 +35,7 @@ ModuleEditor::ModuleEditor(bool startEnabled) : Module(startEnabled)
 	hieracy = new UI_Hierarchy();
 	inspector = new UI_Inspector();
 	tree = new UI_Tree();
+	resources = new UI_Resources();
 
 
 	uiList.push_back(conf);
@@ -41,6 +43,7 @@ ModuleEditor::ModuleEditor(bool startEnabled) : Module(startEnabled)
 	uiList.push_back(hieracy);
 	uiList.push_back(inspector);
 	uiList.push_back(tree);
+	uiList.push_back(resources);
 }
 
 

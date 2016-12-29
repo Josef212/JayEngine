@@ -11,6 +11,7 @@ class UI_Console;
 class UI_Hierarchy;
 class UI_Inspector;
 class UI_Tree;
+class UI_Resources;
 
 class ModuleEditor : public Module
 {
@@ -50,6 +51,7 @@ public:
 	UI_Hierarchy* hieracy = NULL;
 	UI_Inspector* inspector = NULL;
 	UI_Tree* tree = NULL;
+	UI_Resources* resources = NULL;
 
 private: //TODO: So many booleans are needed????
 	bool showImGuiDemo = false;

@@ -325,6 +325,9 @@
     <ClCompile Include="ResourceScene.cpp">
       <Filter>Core\ResourceManagement\Resources</Filter>
     </ClCompile>
+    <ClCompile Include="UI_Resources.cpp">
+      <Filter>Core\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.h">
@@ -683,6 +686,9 @@
     </ClInclude>
     <ClInclude Include="ResourceScene.h">
       <Filter>Core\ResourceManagement\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Resources.h">
+      <Filter>Core\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -16,15 +16,24 @@ void UI_Console::draw()
 	int w = ImGui::GetIO().DisplaySize.x;
 	int h = ImGui::GetIO().DisplaySize.y;
 
-	ImGui::SetNextWindowPos(ImVec2(0, h - (h / 3)));
-	ImGui::SetNextWindowSize(ImVec2(w / 3, h / 3));
+	//ImGui::SetNextWindowPos(ImVec2(0, h - (h / 3)));
+	ImGui::SetNextWindowPos(ImVec2(360, 830));
+	ImGui::SetNextWindowSize(ImVec2(1560, 190));
+
 	ImGui::Begin("Console", &active);
 	{
-		//ImGui::TextUnformatted(logs.begin());
+		if (ImGui::Button("Clear"))
+		{
+			colors.clear();
+			log.clear();
+		}
+
+		ImGui::BeginChild("", ImVec2(1540, 115), true);
 		for (uint i =0; i < colors.size(); ++i)
 		{
 			ImGui::TextColored(colors[i], log[i].c_str());
 		}
+		ImGui::EndChild();
 
 		static char input[100];
 		static bool focus = true;

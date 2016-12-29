@@ -37,8 +37,8 @@ void UI_Inspector::draw()
 
 	GameObject* selected = app->goManager->getSelected();
 
-	ImGui::SetNextWindowPos(ImVec2(windowW - 350, 20));
-	ImGui::SetNextWindowSize(ImVec2(350, windowH - 20));
+	ImGui::SetNextWindowPos(ImVec2(1570, 20));
+	ImGui::SetNextWindowSize(ImVec2(350, 810));
 
 	ImGui::Begin("Inspector", &active);
 	{
