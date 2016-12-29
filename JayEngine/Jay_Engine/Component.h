@@ -49,6 +49,8 @@ public:
 	virtual bool saveCMP(FileParser& sect);
 	virtual bool loadCMP(FileParser& sect);
 
+	virtual void setResource(UID resUID) {}
+
 public:
 	ComponentType type = UNKNOWN;
 	bool removeFlag = false;

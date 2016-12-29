@@ -16,8 +16,7 @@ Mesh::Mesh(GameObject* gObj, int id) : Component(gObj, id)
 
 Mesh::~Mesh()
 {
-	if(meshResource)
-		app->resourceManager->removeResource(meshResource->getUID());
+	clearMesh();
 }
 
 void Mesh::enable()
@@ -44,12 +43,16 @@ void Mesh::update(float dt)
 
 void Mesh::cleanUp()
 {
-	if(meshResource)
-		clearMesh();
+	
 }
 
 void Mesh::clearMesh()
 {
+	if (meshResource)
+	{
+		app->resourceManager->onResourceRemove(meshResource);
+		meshResource = NULL;
+	}
 }
 
 void Mesh::getBox(AABB& box)const
@@ -127,4 +130,35 @@ bool Mesh::loadCMP(FileParser& sect)
 	renderNormals = sect.getBool("normals", false);
 
 	return ret;
+}
+
+
+//--------------------------
+
+void Mesh::setResource(UID resUID)
+{
+	//TODO: if there is already a resource, notify to manager and check if there are no more instances to remove from memory
+
+	ResourceMesh* res = (ResourceMesh*)app->resourceManager->getResourceFromUID(resUID);
+
+	if (res)
+	{
+		if (!res->isInMemory())
+		{
+			//If is not in memory load it.
+			if (!app->resourceManager->loadResource(res))
+			{
+				_LOG(LOG_ERROR, "Error loading resource '%s'.", res->getExportedFile());
+			}
+			else
+			{
+				_LOG(LOG_STD, "Just loaded resource '%s'.", res->getExportedFile());
+			}
+		}
+		else
+			res->addInstance();
+
+		meshResource = res;
+	}
+
 }

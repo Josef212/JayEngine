@@ -31,6 +31,11 @@ public:
 		Import a file depending on the format and return its UID.
 	*/
 	UID importFile(const char* fileInAssets, bool checkFirst = false);
+
+	/**
+		Load a resource.
+	*/
+	bool loadResource(Resource* resource);
 	
 	/** 
 		Search in resources if there is a resource with file name passed, if found return its UID, if not 0;
@@ -41,6 +46,11 @@ public:
 		Return resource type from file extension.
 	*/
 	ResourceType getTypeFromExtension(const char* extension);
+
+	/**
+		Called when a resource is removed, if it was tha last instance will remove from memory if not just rest an instance
+	*/
+	void onResourceRemove(Resource* resource);
 
 	UID getNewUID();
 

@@ -234,6 +234,63 @@ UID ModuleResourceManager::importFile(const char* fileInAssets, bool checkFirst)
 	return ret;
 }
 
+bool ModuleResourceManager::loadResource(Resource* resource)
+{
+	bool ret = false;
+
+	if (!resource)
+		return ret;
+
+	switch (resource->getResourceType())
+	{
+	case ResourceType::RESOURCE_MESH:
+		ret = meshImporter->loadResource((ResourceMesh*)resource);
+		break;
+
+	case ResourceType::RESOURCE_TEXTURE:
+		ret = textureImporter->loadResource(resource);
+		break;
+
+	case ResourceType::RESOURCE_SCENE:
+		ret = sceneImporter->loadResource(resource);
+		break;
+
+	case ResourceType::RESOURCE_SHADER:
+
+		break;
+
+	case ResourceType::RESOURCE_AUDIO:
+
+		break;
+
+	case ResourceType::RESOURCE_MATERIAL:
+
+		break;
+
+	default:
+		break;
+	}
+
+	if(ret)
+		resource->addInstance();
+
+	return ret;
+}
+
+void ModuleResourceManager::onResourceRemove(Resource* resource)
+{
+	if (!resource)
+		return;
+
+	if (resource->countReferences() <= 1)
+	{
+		//Current instances are 1 or less remove from memory.
+		resource->removeFromMemory();
+	}
+
+	resource->removeInstance();
+}
+
 bool ModuleResourceManager::addResource(Resource* res, UID uuid)
 {
 	bool ret = true;

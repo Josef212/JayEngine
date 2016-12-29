@@ -15,7 +15,7 @@ public:
 	virtual ~ImporterMesh();
 
 	void importMesh(const aiMesh* mesh, ResourceMesh* resMesh);
-
+	bool loadResource(ResourceMesh* resource);
 };
 
 #endif // !__IMPORTERMESH_H__

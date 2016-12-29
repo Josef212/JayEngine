@@ -29,6 +29,8 @@ public:
 	bool saveCMP(FileParser& sect);
 	bool loadCMP(FileParser& sect);
 
+	void setResource(UID resUID);
+
 private:
 
 public:
