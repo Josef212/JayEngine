@@ -20,12 +20,14 @@
 #include "Mesh.h"
 #include "Material.h"
 
+#include "OpenGL.h"
+
 
 UI_Resources::UI_Resources()
 {
 	active = true;
 	infoW = 300;
-	infoH = 100;
+	infoH = 150;
 }
 
 
@@ -193,6 +195,8 @@ void UI_Resources::meshes(std::vector<Resource*> meshes)
 							ImGui::Text("Num tex coords:");
 							ImGui::SameLine();
 							ImGui::TextColored(ImVec4(1, 1, 0, 1), "%d.", res->numTexCoords);
+
+							ImGui::Separator();
 						}
 
 						//-------------
@@ -290,9 +294,69 @@ void UI_Resources::textures(std::vector<Resource*> texs)
 						ImGui::Text("Instances in memory: ");
 						ImGui::SameLine();
 						ImGui::TextColored(ImVec4(1, 1, 0, 1), "%d.", res->countReferences());
+						
+						if (res->isInMemory())
+						{
+							ImGui::Text("Width:");
+							ImGui::SameLine();
+							ImGui::TextColored(ImVec4(1, 1, 0, 1), "%d.", res->width);
 
-						//-------------
-						//TODO: Texture info if is in memory
+							ImGui::Text("Height:");
+							ImGui::SameLine();
+							ImGui::TextColored(ImVec4(1, 1, 0, 1), "%d.", res->height);
+
+							ImGui::Text("Depth:");
+							ImGui::SameLine();
+							ImGui::TextColored(ImVec4(1, 1, 0, 1), "%d.", res->depth);
+
+							ImGui::Text("Bpp:");
+							ImGui::SameLine();
+							ImGui::TextColored(ImVec4(1, 1, 0, 1), "%d.", res->bpp);
+
+							ImGui::Text("Mips:");
+							ImGui::SameLine();
+							ImGui::TextColored(ImVec4(1, 1, 0, 1), "%d.", res->mips);
+
+							ImGui::Text("Bytes:");
+							ImGui::SameLine();
+							ImGui::TextColored(ImVec4(1, 1, 0, 1), "%d.", res->bytes);
+
+							ImGui::Text("Format:");
+							ImGui::SameLine();
+							ImGui::TextColored(ImVec4(1, 1, 0, 1), "%s.", res->getFormatStr());
+
+							uint texIndex = res->textureGlID;
+							glBindTexture(GL_TEXTURE_2D, texIndex);
+							ImTextureID texID = (void*)texIndex;
+							ImVec2 texSize(64, 64);
+							ImGui::Image(texID, ImVec2(texSize.x, texSize.y), ImVec2(0, 0), ImVec2(1, 1), ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 255));
+							
+							//if (ImGui::IsItemHovered())
+							//{
+							//	ImGui::BeginTooltip();
+							//
+							//	ImVec2 texScreenPos = ImGui::GetCursorScreenPos();
+							//	float focusSZ = 32.0f;
+							//	float focusX = ImGui::GetMousePos().x - texScreenPos.x - focusSZ * 0.5f;
+							//	if (focusX < 0.0f) focusX = 0.0f;
+							//	else if (focusX > texSize.x - focusSZ) focusX = texSize.x - focusSZ;
+							//	float focusY = ImGui::GetMousePos().y - texScreenPos.y - focusSZ * 0.5f;
+							//	if (focusY < 0.0f) focusY = 0.0f; 
+							//	else if (focusY > texSize.y - focusSZ) focusY = texSize.y - focusSZ;
+							//
+							//	ImVec2 uv0 = ImVec2((focusX) / texSize.x, (focusY) / texSize.y);
+							//	ImVec2 uv1 = ImVec2((focusX + focusSZ) / texSize.x, (focusY + focusSZ) / texScreenPos.y);
+							//
+							//	ImGui::Image(texID, ImVec2(256, 256), uv0, uv1, ImColor(255, 255, 255, 255), ImColor(255, 255, 255, 255));
+							//
+							//	ImGui::EndTooltip();
+							//}
+							//TODO: Fix this 
+
+							glBindTexture(GL_TEXTURE_2D, 0);
+
+							ImGui::Separator();
+						}
 
 						//-------------
 
