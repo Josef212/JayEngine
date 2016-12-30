@@ -187,6 +187,7 @@ void ImporterScene::recImport(const aiScene* scene, const aiNode* node, GameObje
 				app->fs->splitPath(texPath.c_str(), NULL, &texFile);
 				
 				cMat->textureResource = (ResourceTexture*)app->resourceManager->getResourceFromUID(app->resourceManager->importFile(texFile.c_str(), true));
+				cMat->textureResource->addInstance();
 			}
 
 			//TODO:Check assimp for embedded textures... For now will normally import textures.
@@ -211,6 +212,7 @@ void ImporterScene::recImport(const aiScene* scene, const aiNode* node, GameObje
 			resMesh->originalFile.assign(file);
 			meshesImported.insert(std::pair<int, ResourceMesh*>(meshIndex, resMesh));
 			cmesh->meshResource = resMesh;
+			resMesh->addInstance();
 		}
 
 
@@ -226,6 +228,8 @@ void ImporterScene::recImport(const aiScene* scene, const aiNode* node, GameObje
 bool ImporterScene::loadResource(ResourceScene* resource)
 {
 	bool ret = false;
+
+
 
 	return ret;
 }
