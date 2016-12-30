@@ -30,3 +30,14 @@ bool ResourceTexture::removeFromMemory()
 	}
 	return false;
 }
+
+const char* ResourceTexture::getFormatStr()const
+{
+	static const char* formats[] = {
+		"color index", "rgb", "rgba", "bgr", "bgra", "luminance", "unknown" };
+
+	if (format >= 0 && format <= UNKNOWN)
+		return formats[format];
+	else
+		return NULL;
+}
