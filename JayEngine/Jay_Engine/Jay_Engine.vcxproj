@@ -139,6 +139,7 @@
     <ClCompile Include="imGUI\imgui_draw.cpp" />
     <ClCompile Include="imGUI\imgui_impl_sdl_gl3.cpp" />
     <ClCompile Include="ImporterScene.cpp" />
+    <ClCompile Include="ImporterShader.cpp" />
     <ClCompile Include="ImporterTexture.cpp" />
     <ClCompile Include="Importer.cpp" />
     <ClCompile Include="ImporterMesh.cpp" />
@@ -196,6 +197,7 @@
     <ClCompile Include="RandGen.cpp" />
     <ClCompile Include="Resource.cpp" />
     <ClCompile Include="ResourceScene.cpp" />
+    <ClCompile Include="ResourceShader.cpp" />
     <ClCompile Include="ResourceTexture.cpp" />
     <ClCompile Include="ResourceMesh.cpp" />
     <ClCompile Include="SceneTry.cpp" />
@@ -231,6 +233,7 @@
     <ClInclude Include="imGUI\stb_textedit.h" />
     <ClInclude Include="imGUI\stb_truetype.h" />
     <ClInclude Include="ImporterScene.h" />
+    <ClInclude Include="ImporterShader.h" />
     <ClInclude Include="ImporterTexture.h" />
     <ClInclude Include="Importer.h" />
     <ClInclude Include="ImporterMesh.h" />
@@ -317,6 +320,7 @@
     <ClInclude Include="RandGen.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="ResourceScene.h" />
+    <ClInclude Include="ResourceShader.h" />
     <ClInclude Include="ResourceTexture.h" />
     <ClInclude Include="ResourceMesh.h" />
     <ClInclude Include="SceneTry.h" />

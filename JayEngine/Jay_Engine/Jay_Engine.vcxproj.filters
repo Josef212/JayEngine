@@ -328,6 +328,12 @@
     <ClCompile Include="UI_Resources.cpp">
       <Filter>Core\UI</Filter>
     </ClCompile>
+    <ClCompile Include="ResourceShader.cpp">
+      <Filter>Core\ResourceManagement\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="ImporterShader.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.h">
@@ -690,6 +696,10 @@
     <ClInclude Include="UI_Resources.h">
       <Filter>Core\UI</Filter>
     </ClInclude>
+    <ClInclude Include="ResourceShader.h">
+      <Filter>Core\ResourceManagement\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="ImporterShader.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\include\Geometry\KDTree.inl">

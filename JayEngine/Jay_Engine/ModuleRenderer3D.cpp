@@ -19,6 +19,9 @@
 
 #include "Primitive.h"
 
+//TMP
+#include "ModuleResourceManager.h"
+
 #include "OpenGL.h"
 
 #pragma comment (lib, "opengl32.lib") /* link Microsoft OpenGL lib   */
@@ -324,9 +327,9 @@ void ModuleRenderer3D::drawGameObject(GameObject* obj)
 
 	//First push transform matrix, remember to pop it at end of draw
 	//----------------------
-
-	glPushMatrix();
-	glMultMatrixf(trans->getGlobalTransformGL());
+	//SH
+	/*glPushMatrix();
+	glMultMatrixf(trans->getGlobalTransformGL());*/
 
 	//----------------------
 
@@ -350,14 +353,18 @@ void ModuleRenderer3D::drawGameObject(GameObject* obj)
 				glBindBuffer(GL_ARRAY_BUFFER, resMesh->idVertices);
 				glVertexPointer(3, GL_FLOAT, 0, NULL);
 
+				//Now indices
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, resMesh->idIndices);
+
 				if (mesh->renderWireframe)
 				{
 					drawWireframe(selected);
 				}
 				else
 				{
+					//SH
 					//Render normals
-					if (mesh->renderNormals && resMesh->numNormals > 0)
+					/*if (mesh->renderNormals && resMesh->numNormals > 0)
 					{
 						glDisable(GL_LIGHTING);
 						glLineWidth(0.7f);
@@ -373,18 +380,19 @@ void ModuleRenderer3D::drawGameObject(GameObject* obj)
 						glEnd();
 						glLineWidth(1.f);
 						glEnable(GL_LIGHTING);
-					}
+					}*/
 
+					//SH
 					//Set normals
-					if (resMesh->idNormals > 0)
+					/*if (resMesh->idNormals > 0)
 					{
 						glEnableClientState(GL_NORMAL_ARRAY);
 						glBindBuffer(GL_ARRAY_BUFFER, resMesh->idNormals);
 						glNormalPointer(GL_FLOAT, 0, NULL);
-					}
+					}*/
 
 					//If there is a material use its texture and colour if not use a default colour
-					if (mat)
+					/*if (mat)
 					{
 						glEnable(GL_TEXTURE_2D);
 						glColor4f(mat->color.r, mat->color.g, mat->color.b, mat->color.a);
@@ -392,6 +400,7 @@ void ModuleRenderer3D::drawGameObject(GameObject* obj)
 						if (tex)
 						{
 							uint texID = tex->textureGlID;
+							//SH
 							if (texID > 0)
 							{
 								glBindTexture(GL_TEXTURE_2D, texID);
@@ -409,18 +418,50 @@ void ModuleRenderer3D::drawGameObject(GameObject* obj)
 					else
 					{
 						glColor4f(0.5f, 0.5f, 0.5f, 1.f);
-					}
+					}*/
 				}
 
-				//Finally set indices and draw elements
-				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, resMesh->idIndices);
+				uint shID = app->resourceManager->getDefaultShader();
+				glUseProgram(shID);
+
+				Camera* currentCam = NULL;
+				currentCam = (app->getGameState() == gameState::EDITOR) ? app->camera->getCamera() : getActiveCamera();
+
+				//----------------------------------
+
+				GLuint model = glGetUniformLocation(shID, "model");
+				glUniformMatrix4fv(model, 1, GL_FALSE, trans->getGlobalTransformGL()); //NOTE: Might not be the transposed one
+
+				GLuint view = glGetUniformLocation(shID, "view");
+				glUniformMatrix4fv(view, 1, GL_FALSE, currentCam->getGLViewMatrix());
+
+				GLuint projection = glGetUniformLocation(shID, "projection");
+				glUniformMatrix4fv(projection, 1, GL_FALSE, currentCam->getGLProjectMatrix());
+
+				//----------------------------------
+
+				glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+				glEnableVertexAttribArray(0);
+				
+				if (resMesh->numNormals > 0)
+				{
+					glEnableVertexAttribArray(2);
+					glBindBuffer(GL_ARRAY_BUFFER, resMesh->idNormals);
+					glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)0);
+				}
+
+				//----------------------------------
+				
 				glDrawElements(GL_TRIANGLES, resMesh->numIndices, GL_UNSIGNED_INT, NULL);
 
-				if (selected && !mesh->renderWireframe)
+				glDisableVertexAttribArray(0);
+				glDisableVertexAttribArray(1);
+
+				/*if (selected && !mesh->renderWireframe)
 				{
 					drawWireframe(selected);
 					glDrawElements(GL_TRIANGLES, resMesh->numIndices, GL_UNSIGNED_INT, NULL);
-				}
+				}*/
 
 				//Cleaning
 				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -436,7 +477,9 @@ void ModuleRenderer3D::drawGameObject(GameObject* obj)
 				glEnable(GL_LIGHTING);
 				glEnable(GL_CULL_FACE);
 				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-				glColor4f(1.f, 1.f, 1.f, 1.f);
+				//glColor4f(1.f, 1.f, 1.f, 1.f);
+
+				glUseProgram(0);
 			}
 		}
 	}

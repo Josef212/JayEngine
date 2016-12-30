@@ -10,12 +10,14 @@
 class Resource;
 class ResourceMesh;
 class ResourceTexture;
+class ResourceShader;
 enum ResourceType;
 
 class Importer;
 class ImporterScene;
 class ImporterMesh;
 class ImporterTexture;
+class ImporterShader;
 
 class ModuleResourceManager : public Module
 {
@@ -64,6 +66,8 @@ public:
 
 	void getResourcesOfType(std::vector<Resource*>& res, ResourceType type)const;
 
+	const uint getDefaultShader()const;
+
 private:
 	bool autoImportFBX();
 	bool checkAllPrefabs();
@@ -71,13 +75,25 @@ private:
 	bool loadResources();
 	bool saveResources();
 
+	void loadBasicResources();
+
 public:
 	ImporterScene* sceneImporter = NULL;
 	ImporterMesh* meshImporter = NULL;
 	ImporterTexture* textureImporter = NULL;
+	ImporterShader* shaderImporter = NULL;
 
 private:
 	std::map<UID, Resource*> resources;
+
+	std::vector<ResourceMesh*> primitives;
+	ResourceTexture* checkers = NULL;
+
+	uint defaultShader = 0;
+
+
+
+
 	std::map<const char*, std::string> prefabs;
 
 };

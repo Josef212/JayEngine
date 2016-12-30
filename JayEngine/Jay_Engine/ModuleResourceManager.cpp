@@ -10,6 +10,7 @@
 #include "ResourceMesh.h"
 #include "ResourceTexture.h"
 #include "ResourceScene.h"
+#include "ResourceShader.h"
 
 //TMP
 #include "Timer.h"
@@ -18,6 +19,7 @@
 #include "ImporterScene.h"
 #include "ImporterMesh.h"
 #include "ImporterTexture.h"
+#include "ImporterShader.h"
 
 #include "StringTools.h"
 
@@ -27,17 +29,22 @@ ModuleResourceManager::ModuleResourceManager(bool startEnabled) : Module(startEn
 	_LOG(LOG_STD, "Resource manager: Creation.");
 	name.assign("module_importer");
 
-	//TODO: only if mode editor
+
 	sceneImporter = new ImporterScene();
 	meshImporter = new ImporterMesh();
 	textureImporter = new ImporterTexture();
-	//----------------------------- endif
+	shaderImporter = new ImporterShader();
 }
 
 
 ModuleResourceManager::~ModuleResourceManager()
 {
 	_LOG(LOG_STD, "Resource manager: Destroying.");
+
+	if (sceneImporter) RELEASE(sceneImporter);
+	if (meshImporter) RELEASE(meshImporter);
+	if (textureImporter) RELEASE(textureImporter);
+	if (shaderImporter) RELEASE(shaderImporter);
 }
 
 bool ModuleResourceManager::init(FileParser* conf)
@@ -47,8 +54,6 @@ bool ModuleResourceManager::init(FileParser* conf)
 
 	loadResources();
 
-	//TODO: Load primitives and checkers.
-	
 	return ret;
 }
 
@@ -56,7 +61,7 @@ bool ModuleResourceManager::start()
 {
 	_LOG(LOG_STD, "Importer: Start.");
 
-	//TODO: Load and save the resource map.
+	loadBasicResources();
 	autoImportFBX();
 
 	return true;
@@ -68,6 +73,11 @@ bool ModuleResourceManager::cleanUp()
 	bool ret = true;
 
 	saveResources();
+
+	//TODO: Make sure all resources are free
+
+	if (defaultShader > 0)
+		shaderImporter->freeShader(defaultShader);
 	
 	return ret;
 }
@@ -449,8 +459,17 @@ void ModuleResourceManager::getResourcesOfType(std::vector<Resource*>& res, Reso
 	}
 }
 
+void ModuleResourceManager::loadBasicResources()
+{
+	defaultShader = shaderImporter->loadDefaultShader();
 
+	//TODO: Load primitives and checkers.
+}
 
+const uint ModuleResourceManager::getDefaultShader()const
+{
+	return defaultShader;
+}
 
 
 
