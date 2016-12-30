@@ -38,14 +38,9 @@ void oTreeNode::insert(GameObject* obj)
 
 void oTreeNode::erase(GameObject* obj)
 {
-	std::list<GameObject*>::iterator it = objects.begin();
-	while (it != objects.end())  //TODO: check for std find funcs
-	{
-		if ((*it) == obj)
-			it = objects.erase(it);
-		else
-			++it;
-	}
+	std::list<GameObject*>::iterator tmp = std::find(objects.begin(), objects.end(), obj);
+	if (tmp != objects.end())
+		objects.erase(tmp);
 
 	if (childs[0] != nullptr)
 		for (unsigned int i = 0; i < 8; ++i)
