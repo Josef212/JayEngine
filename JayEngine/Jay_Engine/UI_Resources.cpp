@@ -120,11 +120,21 @@ void UI_Resources::prefabs(std::vector<Resource*> prefs)
 					ImGui::PushStyleVar(ImGuiStyleVar_ChildWindowRounding, 5.0f);
 					ImGui::BeginChild("P", ImVec2(infoW, infoH));
 					{
-						ImGui::Text("Instances in memory: ");
+						ImGui::Text("Exported file:");
+						ImGui::SameLine();
+						ImGui::TextColored(ImVec4(1, 1, 0, 1), "%s.", res->getExportedFile());
+
+						ImGui::Text("Instances in memory:");
 						ImGui::SameLine();
 						ImGui::TextColored(ImVec4(1, 1, 0, 1), "%d.", res->countReferences());
+						ImGui::TextColored(ImVec4(1, 0, 0, 1), "This might not be correct, will fix in future updates.");
 
-						//Load prefab
+						//---------------
+						//Scene info???
+						//---------------
+
+						if(ImGui::Button("Load prefab to scene"))
+							app->resourceManager->loadResource(res);
 
 						ImGui::EndChild();
 						ImGui::PopStyleVar();

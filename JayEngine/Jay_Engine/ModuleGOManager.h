@@ -67,6 +67,8 @@ public:
 	void saveScene();
 	void loadScene();
 
+	void loadSceneOrPrefabs(const FileParser& file);
+
 	bool setCurrentScene(const char* scene);
 	const char* getCurrentScene();
 
@@ -78,7 +80,6 @@ private:
 
 	bool saveSceneNow(const char* name, const char* path = NULL);
 	bool loadSceneNow(const char* name, const char* path = NULL);
-	void loadSceneOrPrefabs(const FileParser& file);
 
 	void onPlay();
 	void onPause();

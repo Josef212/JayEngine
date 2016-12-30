@@ -13,8 +13,12 @@
 #include "Transform.h"
 #include "Mesh.h"
 #include "Material.h"
+#include "Resource.h"
 #include "ResourceMesh.h"
 #include "ResourceTexture.h"
+#include "ResourceScene.h"
+
+#include <string>
 
 #include "Assimp\include\cimport.h"
 #include "Assimp\include\scene.h"
@@ -229,7 +233,27 @@ bool ImporterScene::loadResource(ResourceScene* resource)
 {
 	bool ret = false;
 
+	if (!resource)
+		return ret;
 
+	std::string path(DEFAULT_PREF_SAVE_PATHS);
+	path.append(resource->getExportedFile());
+
+	_LOG(LOG_INFO, "Loading prefab/scene resource from: '%s'.", path.c_str());
+
+	char* buffer = NULL;
+	uint size = app->fs->load(path.c_str(), &buffer);
+
+	if (buffer && size > 0)
+	{
+		FileParser file(buffer);
+
+		app->goManager->loadSceneOrPrefabs(file);
+
+		ret = true;
+	}
+
+	RELEASE_ARRAY(buffer);
 
 	return ret;
 }
