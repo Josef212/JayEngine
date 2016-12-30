@@ -41,7 +41,6 @@ private:
 	void playMenu();
 	void setStyle();
 	void timeDisplay();
-	void prefabsLoad();
 
 public:
 	std::list<UI_Comp*> uiList;
@@ -61,7 +60,6 @@ private: //TODO: So many booleans are needed????
 	bool showSaveWin = false;
 	bool showLoadWin = false;
 	bool showTimeDisplay = true;
-	bool showLoadFBX = false;
 
 	std::string engineVersion ;
 

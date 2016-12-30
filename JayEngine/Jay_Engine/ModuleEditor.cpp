@@ -181,13 +181,6 @@ update_status ModuleEditor::update(float dt)
 			ImGui::EndMenu();
 		}
 
-		if (ImGui::BeginMenu("FBX"))
-		{
-			if (ImGui::MenuItem("Load prefab")) showLoadFBX = !showLoadFBX;
-			
-			ImGui::EndMenu();
-		}
-
 		ImGui::EndMainMenuBar();
 	}
 
@@ -232,9 +225,6 @@ update_status ModuleEditor::update(float dt)
 
 	if (showTimeDisplay)
 		timeDisplay();
-
-	if (showLoadFBX)
-		prefabsLoad();
 
 	playMenu();
 
@@ -581,36 +571,4 @@ void ModuleEditor::timeDisplay()
 
 		ImGui::End();
 	}
-}
-
-void ModuleEditor::prefabsLoad()
-{
-	std::vector<std::string> files;
-	app->fs->getFilesOnDir(DEFAULT_PREF_SAVE_PATHS, files);
-
-	ImGui::SetNextWindowSize(ImVec2(500, 300));
-	if (ImGui::Begin(DEFAULT_PREF_SAVE_PATHS, &showLoadFBX))
-	{
-		static int selected = -1;
-		ImGui::BeginChild("Files", ImVec2(480, 230), true);
-		{
-			for (int i = 0; i < files.size(); ++i)
-			{
-				if (ImGui::Selectable(files[i].c_str(), selected == i))
-					selected = i;
-			}
-		}
-		ImGui::EndChild();
-		if (selected > -1 && selected < files.size())
-		{
-			if (ImGui::Button("Load"))
-			{
-				char file[64];
-				strcpy_s(file, 64, files[selected].c_str());
-				app->goManager->loadPrefab(file);
-				showLoadFBX = !showLoadFBX;
-			}
-		}
-	}
-	ImGui::End();
 }
