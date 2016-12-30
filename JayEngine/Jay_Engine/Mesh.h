@@ -22,8 +22,6 @@ public:
 
 	void getBox(AABB& box)const;
 
-	ResourceMesh* createAnEmptyMeshRes();
-
 	void clearMesh();
 
 	bool saveCMP(FileParser& sect);

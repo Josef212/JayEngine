@@ -61,16 +61,6 @@ void Mesh::getBox(AABB& box)const
 		box.Enclose(meshResource->aabb);
 }
 
-ResourceMesh* Mesh::createAnEmptyMeshRes()
-{
-	if (!meshResource)
-	{
-		meshResource = (ResourceMesh*)app->resourceManager->createNewResource(RESOURCE_MESH);
-	}
-	
-	return meshResource;
-}
-
 bool Mesh::saveCMP(FileParser& sect)
 {
 	bool ret = true;
@@ -105,25 +95,7 @@ bool Mesh::loadCMP(FileParser& sect)
 
 	if (sect.getBool("have_res", false))
 	{
-		uint id = sect.getInt("resource_id", 0);
-		ResourceMesh* tmp = (ResourceMesh*)app->resourceManager->getResourceFromUID(id);
-		if (tmp)
-		{
-			meshResource = tmp;
-			tmp->addInstance();
-		}
-		else
-		{
-			createAnEmptyMeshRes();
-
-			if (id > 0)
-				meshResource->setUID(id);
-
-			meshResource->loadMeshResource(sect.getString("resource_exported_file", NULL));
-			meshResource->originalFile.assign(sect.getString("resource_original_file", NULL));
-			meshResource->loadToMemory();
-		}
-
+		setResource(sect.getInt("resource_id", 0));
 	}
 
 	renderWireframe = sect.getBool("wireframe", false);

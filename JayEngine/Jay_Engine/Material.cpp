@@ -50,23 +50,6 @@ void Material::cleanUp()
 
 }
 
-
-
-int Material::getTexture(int index)
-{
-	int ret = -1;
-
-	return ret;
-}
-
-ResourceTexture* Material::createAnEmptyMaterialRes()
-{
-	if(!textureResource)
-		textureResource = (ResourceTexture*)app->resourceManager->createNewResource(RESOURCE_TEXTURE);
-
-	return textureResource;
-}
-
 bool Material::saveCMP(FileParser& sect)
 {
 	bool ret = true;
@@ -101,26 +84,7 @@ bool Material::loadCMP(FileParser& sect)
 
 	if (sect.getBool("have_res", false))
 	{
-		uint id = sect.getInt("resource_id", 0);
-		ResourceTexture* tmp = (ResourceTexture*)app->resourceManager->getResourceFromUID(id);
-		if (tmp)
-		{
-			textureResource = tmp;
-			tmp->addInstance();
-		}
-		else
-		{
-
-			createAnEmptyMaterialRes();
-
-			if (id > 0)
-				textureResource->setUID(id);
-
-			textureResource->exportedFile.assign(sect.getString("resource_exported_file", NULL));
-			textureResource->originalFile.assign(sect.getString("resource_original_file", NULL));
-			//app->resourceManager->textureImporter->loadTexture(textureResource);
-
-		}
+		setResource(sect.getInt("resource_id", 0));
 	}
 
 	return ret;

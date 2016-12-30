@@ -23,10 +23,6 @@ public:
 	void update(float dt);
 	void cleanUp();
 
-	int getTexture(int index);
-
-	ResourceTexture* createAnEmptyMaterialRes();
-
 	bool saveCMP(FileParser& sect);
 	bool loadCMP(FileParser& sect);
 
