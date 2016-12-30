@@ -546,10 +546,11 @@ void ModuleGOManager::loadSceneOrPrefabs(const FileParser& file)
 	select(NULL);
 
 	int goCount = file.getArraySize("GameObjects");
+	GameObject* tmpRoot = new GameObject(NULL, 0);
 	std::map<GameObject*, uint> relations;
 	for (uint i = 0; i < goCount; ++i)
 	{
-		GameObject* go = createEmptyGO();
+		GameObject* go = tmpRoot->addChild();
 		go->loadGO(&file.getArray("GameObjects", i), relations);
 	}
 
@@ -560,10 +561,16 @@ void ModuleGOManager::loadSceneOrPrefabs(const FileParser& file)
 
 		if (parentID > 0)
 		{
-			GameObject* parentGO = getGameObjectFromId(parentID);
+			GameObject* parentGO = recFindGO(parentID, tmpRoot);
 			if (parentGO)
 				go->setNewParent(parentGO);
 		}
+	}
+
+	for (uint i = 0; i < tmpRoot->childrens.size(); ++i)
+	{
+		if (tmpRoot->childrens[i])
+			tmpRoot->childrens[i]->setNewParent(sceneRootObject);
 	}
 
 	sceneRootObject->recCalcTransform(sceneRootObject->transform->getLocalTransform(), true);
