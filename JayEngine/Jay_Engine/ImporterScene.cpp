@@ -220,3 +220,12 @@ void ImporterScene::recImport(const aiScene* scene, const aiNode* node, GameObje
 	for (uint j = 0; j < node->mNumChildren; ++j)
 		recImport(scene, node->mChildren[j], go, basePath, file);
 }
+
+//------------------------------------
+
+bool ImporterScene::loadResource(ResourceScene* resource)
+{
+	bool ret = false;
+
+	return ret;
+}

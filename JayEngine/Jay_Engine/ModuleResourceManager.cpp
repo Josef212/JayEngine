@@ -46,6 +46,8 @@ bool ModuleResourceManager::init(FileParser* conf)
 	bool ret = true;
 
 	loadResources();
+
+	//TODO: Load primitives and checkers.
 	
 	return ret;
 }
@@ -252,7 +254,7 @@ bool ModuleResourceManager::loadResource(Resource* resource)
 		break;
 
 	case ResourceType::RESOURCE_SCENE:
-		ret = sceneImporter->loadResource(resource);
+		ret = sceneImporter->loadResource((ResourceScene*)resource);
 		break;
 
 	case ResourceType::RESOURCE_SHADER:

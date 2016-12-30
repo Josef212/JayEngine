@@ -138,6 +138,47 @@ bool ImporterTexture::loadResource(ResourceTexture* resource)
 
 		if (ilLoadL(IL_DDS, (const void*)data, size))
 		{
+			ILinfo info;
+			iluGetImageInfo(&info);
+
+			resource->width = info.Width;
+			resource->height = info.Height;
+			resource->bpp = (uint)info.Bpp;
+			resource->depth = info.Depth;
+			resource->mips = info.NumMips;
+			resource->bytes = info.SizeOfData;
+
+			switch (info.Format)
+			{
+			case IL_COLOUR_INDEX:
+				resource->format = ResourceTexture::COLOR_INDEX;
+				break;
+
+			case IL_RGB:
+				resource->format = ResourceTexture::RGB;
+				break;
+
+			case IL_RGBA:
+				resource->format = ResourceTexture::RGBA;
+				break;
+
+			case IL_BGR:
+				resource->format = ResourceTexture::BGR;
+				break;
+
+			case IL_BGRA:
+				resource->format = ResourceTexture::BGRA;
+				break;
+
+			case IL_LUMINANCE:
+				resource->format = ResourceTexture::LUMINANCE;
+					break;
+
+			default:
+				resource->format = ResourceTexture::UNKNOWN;
+				break;
+			}
+
 			resource->textureGlID = ilutGLBindTexImage();
 			ilDeleteImages(1, &image);
 

@@ -8,6 +8,7 @@
 struct aiNode;
 struct aiScene;
 class ResourceMesh;
+class ResourceScene;
 class GameObject;
 
 class ImporterScene :	public Importer
@@ -17,6 +18,8 @@ public:
 	virtual ~ImporterScene();
 
 	bool import(const char* originalFile, std::string& exportedFile, const char* originalFileExtension, UID& resUID);
+
+	bool loadResource(ResourceScene* resource);
 
 private:
 	void recImport(const aiScene* scene, const aiNode* node, GameObject* parent, const std::string& basePath, const std::string& file);
