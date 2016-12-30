@@ -35,7 +35,7 @@ private:
 
 public:
 	float moveSpeed = 10.f;
-	float rotSpeed = 3.f; //TODO: read this from config
+	float rotSpeed = 3.f;
 	float zoomSpeed = 500.f;
 	float distToReference = 10.f;
 

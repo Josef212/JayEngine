@@ -1,9 +1,15 @@
 {
-    "app" :
-    {
-        "app_name" : "JayEgine",
-        "organitzation" : "Josef21296",
-        "fps_limit" : 0
+    "app": {
+        "app_name": "JayEgine",
+        "organitzation": "Josef21296",
+        "fps_limit": 0
+    },
+
+    "module_camera3d": {
+        "mov_speed" : 10.0,
+        "rot_speed": 3.0,
+        "zoom_speed": 500.0,
+        "dist_ref" :  10.0
     },
 
     "module_window" : 

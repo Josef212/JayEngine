@@ -6,6 +6,8 @@
 #include "ModuleGOManager.h"
 #include "ModuleEditor.h"
 
+#include "FileParser.h"
+
 #include "GameObject.h"
 #include "Camera.h"
 
@@ -36,6 +38,11 @@ ModuleCamera3D::~ModuleCamera3D()
 
 bool ModuleCamera3D::init(FileParser* conf)
 {
+	moveSpeed = conf->getFloat("mov_speed", 10.f);
+	rotSpeed = conf->getFloat("rot_speed", 3.f);
+	zoomSpeed = conf->getFloat("zoom_speed", 500.f);
+	distToReference = conf->getFloat("dist_ref", 10.f);
+
 	if (!defaultCamera || !defaultCameraComp)
 		return false;
 	else

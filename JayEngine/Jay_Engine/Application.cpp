@@ -289,7 +289,7 @@ void Application::loadGame()
 	loadNextFrame = true;
 }
 
-bool Application::saveGameNow() //TODO: pass the file name in order to select it from the app
+bool Application::saveGameNow() //TODO: pass the file name or set it from a string in .h in order to select it from the app
 {
 	bool ret = false;
 

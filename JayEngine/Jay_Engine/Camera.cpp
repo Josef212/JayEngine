@@ -188,7 +188,6 @@ bool Camera::saveCMP(FileParser& sect)
 	sect.addFloat("far_plane", farPlaneDist);
 	sect.addFloat("fov", FOV);
 	sect.addFloat("aspect_ratio", aspectRatio);
-	//TODO: Front?? Right???
 
 	sect.addFloat3("cam_pos", frustum.pos);
 	sect.addColor("bg_color", background);
