@@ -164,13 +164,15 @@ bool ModuleRenderer3D::start()
 	_LOG(LOG_STD, "Render3D: Start.");
 	bool ret = true;
 
+	glEnable(GL_LIGHTING);
+
 	return ret;
 }
 
 // PreUpdate: clear buffer
 update_status ModuleRenderer3D::preUpdate(float dt)
 {
-	Camera* cam = (app->isPlaySate()) ? (activeCamera) : (app->camera->getCamera());  //TODO: When active camera is NULL and play state, strange things happen
+	Camera* cam = (app->getGameState() != gameState::EDITOR) ? (activeCamera) : (app->camera->getCamera());  //TODO: When active camera is NULL and play state, strange things happen
 
 	if (cam && cam->projectMatrixChanged)
 	{
@@ -344,124 +346,95 @@ void ModuleRenderer3D::drawGameObject(GameObject* obj)
 			ResourceMesh* resMesh = mesh->meshResource;
 
 			if (resMesh)
-			{
-				glEnable(GL_LIGHTING);
-				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-
-				//Now pass vertices
-				glEnableClientState(GL_VERTEX_ARRAY);
-				glBindBuffer(GL_ARRAY_BUFFER, resMesh->idVertices);
-				glVertexPointer(3, GL_FLOAT, 0, NULL);
-
-				//Now indices
-				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, resMesh->idIndices);
-
-				if (mesh->renderWireframe)
+			{				
+				if (!mesh->renderWireframe)
 				{
-					drawWireframe(selected);
-				}
-				else
-				{
-					//SH
-					//Render normals
-					/*if (mesh->renderNormals && resMesh->numNormals > 0)
-					{
-						glDisable(GL_LIGHTING);
-						glLineWidth(0.7f);
-						glBegin(GL_LINES);
-						glColor4f(0.4f, 0.1f, 0.f, 1.f);
+					Color col = (mat) ? mat->color : Color(0.5f, 0.5f, 0.5f, 1.f);
+					glColor4f(col.r, col.g, col.b, col.a);
 
-						for (uint i = 0; i < mesh->meshResource->numVertices; ++i)
+					Camera* currentCam = (app->getGameState() == gameState::EDITOR) ? app->camera->getCamera() : getActiveCamera();
+
+					/*uint shID = 0;
+					if (mat && mat->shader > 0)
+						shID = mat->shader;
+					else
+						shID = app->resourceManager->getDefaultShader();*/
+					
+					uint shID = app->resourceManager->getDefaultShader();
+
+					glUseProgram(shID);
+
+					//----------------------------------
+					//Matrices.
+					GLuint model = glGetUniformLocation(shID, "model");
+					glUniformMatrix4fv(model, 1, GL_FALSE, trans->getGlobalTransformGL()); //NOTE: Might not be the transposed one
+
+					GLuint view = glGetUniformLocation(shID, "view");
+					glUniformMatrix4fv(view, 1, GL_FALSE, currentCam->getGLViewMatrix());
+
+					GLuint projection = glGetUniformLocation(shID, "projection");
+					glUniformMatrix4fv(projection, 1, GL_FALSE, currentCam->getGLProjectMatrix());
+
+					//----------------------------------
+					//Texture.
+					ResourceTexture* resTex = (mat) ? mat->textureResource : NULL;
+					if (resTex)
+					{
+						GLuint texture = glGetUniformLocation(shID, "ourTexture");
+						if (texture != -1)
 						{
-							glVertex3f(resMesh->vertices[i * 3], resMesh->vertices[i * 3 + 1], resMesh->vertices[i * 3 + 2]);
-							glVertex3f(resMesh->vertices[i * 3] + resMesh->normals[i * 3], resMesh->vertices[i * 3 + 1] + resMesh->normals[i * 3 + 1], resMesh->vertices[i * 3 + 2] + resMesh->normals[i * 3 + 2]);
-						}
-
-						glEnd();
-						glLineWidth(1.f);
-						glEnable(GL_LIGHTING);
-					}*/
-
-					//SH
-					//Set normals
-					/*if (resMesh->idNormals > 0)
-					{
-						glEnableClientState(GL_NORMAL_ARRAY);
-						glBindBuffer(GL_ARRAY_BUFFER, resMesh->idNormals);
-						glNormalPointer(GL_FLOAT, 0, NULL);
-					}*/
-
-					//If there is a material use its texture and colour if not use a default colour
-					/*if (mat)
-					{
-						glEnable(GL_TEXTURE_2D);
-						glColor4f(mat->color.r, mat->color.g, mat->color.b, mat->color.a);
-						ResourceTexture* tex = mat->textureResource;
-						if (tex)
-						{
-							uint texID = tex->textureGlID;
-							//SH
-							if (texID > 0)
-							{
-								glBindTexture(GL_TEXTURE_2D, texID);
-							}
-
-							//Set UV's
-							if (resMesh->idTexCoords > 0)
-							{
-								glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-								glBindBuffer(GL_ARRAY_BUFFER, resMesh->idTexCoords);
-								glTexCoordPointer(2, GL_FLOAT, 0, NULL);
-							}
+							glUniform1i(texture, 0);
+							glActiveTexture(GL_TEXTURE0);
+							glBindTexture(GL_TEXTURE_2D, resTex->textureGlID);
 						}
 					}
-					else
+
+					//----------------------------------
+					//Buffers
+					glEnableClientState(GL_VERTEX_ARRAY);
+
+						//Vertices.
+					glEnableVertexAttribArray(0);
+					glBindBuffer(GL_ARRAY_BUFFER, resMesh->idVertices);
+					glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+
+						//UV's
+					if (resMesh->numTexCoords > 0)
 					{
-						glColor4f(0.5f, 0.5f, 0.5f, 1.f);
-					}*/
-				}
+						glEnableVertexAttribArray(1);
+						glBindBuffer(GL_ARRAY_BUFFER, resMesh->idTexCoords);
+						glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), (GLvoid*)0);
+					}
 
-				uint shID = app->resourceManager->getDefaultShader();
-				glUseProgram(shID);
+						//Normals
+					if (resMesh->numNormals > 0)
+					{
+						glEnableVertexAttribArray(2);
+						glBindBuffer(GL_ARRAY_BUFFER, resMesh->idNormals);
+						glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+					}
 
-				Camera* currentCam = NULL;
-				currentCam = (app->getGameState() == gameState::EDITOR) ? app->camera->getCamera() : getActiveCamera();
+						//Indices
+					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, resMesh->idIndices);
 
-				//----------------------------------
+					//----------------------------------
 
-				GLuint model = glGetUniformLocation(shID, "model");
-				glUniformMatrix4fv(model, 1, GL_FALSE, trans->getGlobalTransformGL()); //NOTE: Might not be the transposed one
+					if (mesh->renderNormals)
+						drawNormals(resMesh);
 
-				GLuint view = glGetUniformLocation(shID, "view");
-				glUniformMatrix4fv(view, 1, GL_FALSE, currentCam->getGLViewMatrix());
+					/*if (mesh->renderWireframe || selected) //TODO: Not working really well...
+						drawWireframe(resMesh, selected);*/
 
-				GLuint projection = glGetUniformLocation(shID, "projection");
-				glUniformMatrix4fv(projection, 1, GL_FALSE, currentCam->getGLProjectMatrix());
+					//----------------------------------
 
-				//----------------------------------
-
-				glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
-				glEnableVertexAttribArray(0);
-				
-				if (resMesh->numNormals > 0)
-				{
-					glEnableVertexAttribArray(2);
-					glBindBuffer(GL_ARRAY_BUFFER, resMesh->idNormals);
-					glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 0, (GLvoid*)0);
-				}
-
-				//----------------------------------
-				
-				glDrawElements(GL_TRIANGLES, resMesh->numIndices, GL_UNSIGNED_INT, NULL);
-
-				glDisableVertexAttribArray(0);
-				glDisableVertexAttribArray(1);
-
-				/*if (selected && !mesh->renderWireframe)
-				{
-					drawWireframe(selected);
 					glDrawElements(GL_TRIANGLES, resMesh->numIndices, GL_UNSIGNED_INT, NULL);
-				}*/
+
+					//----------------------------------
+
+					glDisableVertexAttribArray(0);
+					glDisableVertexAttribArray(1);
+					glDisableVertexAttribArray(2);
+				}
 
 				//Cleaning
 				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -474,10 +447,7 @@ void ModuleRenderer3D::drawGameObject(GameObject* obj)
 				glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
 				//==============
-				glEnable(GL_LIGHTING);
-				glEnable(GL_CULL_FACE);
-				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-				//glColor4f(1.f, 1.f, 1.f, 1.f);
+				glColor4f(1.f, 1.f, 1.f, 1.f);
 
 				glUseProgram(0);
 			}
@@ -491,13 +461,15 @@ void ModuleRenderer3D::drawGameObject(GameObject* obj)
 	//----------------------
 }
 
-void ModuleRenderer3D::drawWireframe(bool selected)
+void ModuleRenderer3D::drawWireframe(ResourceMesh* resMesh, bool selected)
 {
+	if (!resMesh)
+		return;
+
 	//Wireframe
 	//----------------
 	glDisable(GL_LIGHTING);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	glColor4f(0.f, 0.8f, 0.8f, 1.f);
 
 	if (selected)
 	{
@@ -507,8 +479,40 @@ void ModuleRenderer3D::drawWireframe(bool selected)
 	else
 	{
 		glLineWidth(1.f);
+		glColor4f(0.f, 0.8f, 0.8f, 1.f);
 		glDisable(GL_CULL_FACE);
 	}
 
+	glDrawElements(GL_TRIANGLES, resMesh->numIndices, GL_UNSIGNED_INT, NULL);
+
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	glEnable(GL_LIGHTING);
+
+	if (selected)
+		glLineWidth(1.f);
+	else
+		glEnable(GL_CULL_FACE);
+
 	//----------------
+}
+
+void ModuleRenderer3D::drawNormals(ResourceMesh* resMesh)
+{
+	if (!resMesh)
+		return;
+
+	glDisable(GL_LIGHTING);
+	glLineWidth(0.7f);
+	glBegin(GL_LINES);
+	glColor4f(0.4f, 0.1f, 0.f, 1.f);
+
+	for (uint i = 0; i < resMesh->numVertices; ++i)
+	{
+		glVertex3f(resMesh->vertices[i * 3], resMesh->vertices[i * 3 + 1], resMesh->vertices[i * 3 + 2]);
+		glVertex3f(resMesh->vertices[i * 3] + resMesh->normals[i * 3], resMesh->vertices[i * 3 + 1] + resMesh->normals[i * 3 + 1], resMesh->vertices[i * 3 + 2] + resMesh->normals[i * 3 + 2]);
+	}
+
+	glEnd();
+	glLineWidth(1.f);
+	glEnable(GL_LIGHTING);
 }

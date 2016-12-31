@@ -8,6 +8,7 @@
 
 class GameObject;
 class Camera;
+class ResourceMesh;
 
 #define MAX_LIGHTS 8
 
@@ -29,7 +30,6 @@ public:
 	void setVSync(bool vsync);
 
 	void drawGameObject(GameObject* obj);
-	void drawWireframe(bool selected);
 
 	void setActiveCamera(Camera* activeCamera);
 	Camera* getActiveCamera()const;
@@ -38,6 +38,8 @@ public:
 
 private:
 	void updateProjectionMat(Camera* cam);
+	void drawWireframe(ResourceMesh* resMesh, bool selected);
+	void drawNormals(ResourceMesh* resMesh);
 
 public:
 	Light lights[MAX_LIGHTS];
