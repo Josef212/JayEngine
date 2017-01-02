@@ -51,9 +51,7 @@ bool ModuleResourceManager::init(FileParser* conf)
 {
 	_LOG(LOG_STD, "Resource manager: Init.");
 	bool ret = true;
-
-	loadResources();
-
+	
 	return ret;
 }
 
@@ -61,6 +59,7 @@ bool ModuleResourceManager::start()
 {
 	_LOG(LOG_STD, "Importer: Start.");
 
+	loadResources();
 	loadBasicResources();
 	autoImportFBX();
 
@@ -105,6 +104,7 @@ Resource* ModuleResourceManager::createNewResource(ResourceType type, UID forceU
 			break;
 
 		case RESOURCE_SHADER:
+			ret = new ResourceShader(forceUID);
 			break;
 
 		case RESOURCE_SCENE:
@@ -408,6 +408,17 @@ bool ModuleResourceManager::loadResources()
 			Resource* r = createNewResource(type, uid);
 			r->originalFile = res.getString("original_file", "???");
 			r->exportedFile = res.getString("exported_file", "???");
+
+			if (type == ResourceType::RESOURCE_SHADER)
+			{
+				ResourceShader* s = (ResourceShader*)r;
+				s->vertexFile = res.getString("vertex_shader", "???");
+				s->fragtalFile = res.getString("fragtal_shader", "???");
+				s->shaderName = res.getString("sh_name", "???");
+				//Must compile the shader every time engine start
+				shaderImporter->loadShaderToMemory(s);
+				shaderImporter->compileShader(s);
+			}
 		}
 	}
 
@@ -432,6 +443,14 @@ bool ModuleResourceManager::saveResources()
 		res.addInt("type", it->second->getResourceType());
 		res.addString("original_file", it->second->getOriginalFile());
 		res.addString("exported_file", it->second->getExportedFile());
+		//---
+		if (it->second->getResourceType() == ResourceType::RESOURCE_SHADER)
+		{
+			ResourceShader* s = (ResourceShader*)it->second;
+			res.addString("vertex_shader", s->vertexFile.c_str());
+			res.addString("fragtal_shader", s->fragtalFile.c_str());
+			res.addString("sh_name", s->shaderName.c_str());
+		}
 		//---
 		save.addArrayEntry(res);
 	}

@@ -5,6 +5,7 @@
 #include <vector>
 
 class Resource;
+class ResourceShader;
 
 class UI_Resources : public UI_Comp
 {
@@ -20,6 +21,13 @@ private:
 	void meshes(std::vector<Resource*> texs);
 	void textures(std::vector<Resource*> texs);
 	void shaders(std::vector<Resource*> shds);
+
+	void shaderEditor(ResourceShader* resShader);
+
+
+private:
+	bool shaderEditorOpen = false;
+	ResourceShader* currentShaderEditing = NULL;
 
 	int infoW, infoH;
 };

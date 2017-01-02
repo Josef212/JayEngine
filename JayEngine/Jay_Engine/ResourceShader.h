@@ -20,6 +20,8 @@ public:
 	void removeFragtalShaderStr();
 	void removeVertexAndFragtalShaderStr();
 
+	void applydefaultShader();
+
 private:
 
 
@@ -27,9 +29,11 @@ public:
 	std::string vertexShaderStr;
 	std::string fragtalShaderStr;
 
-	std::string shaderName;
-
 	uint shaderID = 0;
+
+	std::string vertexFile;
+	std::string fragtalFile;
+	std::string shaderName;
 
 };
 

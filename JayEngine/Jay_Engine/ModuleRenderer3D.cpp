@@ -375,12 +375,17 @@ void ModuleRenderer3D::drawGameObject(GameObject* obj)
 					GLuint projection = glGetUniformLocation(shID, "projection");
 					glUniformMatrix4fv(projection, 1, GL_FALSE, currentCam->getGLProjectMatrix());
 
+					//Color
+					GLint color = glGetUniformLocation(shID, "color");
+					if (color != -1)
+						glUniform3f(color, col.r, col.g, col.b);
+
 					//----------------------------------
 					//Texture.
 					ResourceTexture* resTex = (mat) ? mat->textureResource : NULL;
 					if (resTex)
 					{
-						GLuint texture = glGetUniformLocation(shID, "ourTexture");
+						GLint texture = glGetUniformLocation(shID, "ourTexture");
 						if (texture != -1)
 						{
 							glUniform1i(texture, 0);

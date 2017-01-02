@@ -10,11 +10,13 @@
 #include "ImporterMesh.h"
 #include "ImporterTexture.h"
 #include "ImporterScene.h"
+#include "ImporterShader.h"
 
 //Resources
 #include "ResourceMesh.h"
 #include "ResourceTexture.h"
 #include "ResourceScene.h"
+#include "ResourceShader.h"
 
 //Components
 #include "Mesh.h"
@@ -79,6 +81,21 @@ void UI_Resources::draw()
 		//------------------------------------
 		//Shaders
 
+		if (ImGui::CollapsingHeader("Shaders"))
+		{
+			if (ImGui::Button("Create new shader"))
+			{
+				ResourceShader* sh = (ResourceShader*)app->resourceManager->createNewResource(ResourceType::RESOURCE_SHADER);
+				sh->applydefaultShader();
+				app->resourceManager->shaderImporter->saveShader(sh);
+			}
+
+			resources.clear();
+			app->resourceManager->getResourcesOfType(resources, ResourceType::RESOURCE_SHADER);
+
+			shaders(resources);
+		}
+
 		//------------------------------------
 		//Materials
 
@@ -89,6 +106,9 @@ void UI_Resources::draw()
 
 		ImGui::End();
 	}
+
+	if (shaderEditorOpen && currentShaderEditing)
+		shaderEditor(currentShaderEditing);
 }
 
 
@@ -433,7 +453,93 @@ void UI_Resources::textures(std::vector<Resource*> texs)
 
 void UI_Resources::shaders(std::vector<Resource*> shds)
 {
+	static int sSelected = -1;
 
+	for (uint i = 0; i < shds.size(); ++i)
+	{
+		ResourceShader* res = (ResourceShader*)shds[i];
+		if (res)
+		{
+			ImGuiTreeNodeFlags nodeFlags = 0;
+			if (sSelected == i)
+			{
+				nodeFlags |= ImGuiTreeNodeFlags_Selected;
+				nodeFlags |= ImGuiTreeNodeFlags_OpenOnArrow;
+				nodeFlags |= ImGuiTreeNodeFlags_OpenOnDoubleClick;
+			}
+			else
+				nodeFlags |= ImGuiTreeNodeFlags_Leaf;
+
+			if (ImGui::TreeNodeEx(res->shaderName.c_str(), nodeFlags))
+			{
+				if (sSelected == i)
+				{
+					if (ImGui::Button("Edit shader"))
+					{
+						//Load it to memory.
+						shaderEditorOpen = true;
+						currentShaderEditing = res;
+						if (!res->vertexAndFragtalInMemory())
+							app->resourceManager->shaderImporter->loadShaderToMemory(res);
+					}
+				}
+
+				if (ImGui::IsItemClicked())
+					sSelected = i;
+
+				ImGui::TreePop();
+			}
+		}
+	}
 }
 
 //-----------------------------
+
+void UI_Resources::shaderEditor(ResourceShader* resShader)
+{
+	if (!resShader)
+		return;
+
+	ImGui::SetNextWindowSize(ImVec2(850, 760));
+
+	ImGui::Begin("Shader editor.", &shaderEditorOpen);
+	{
+		char name[128];
+		sprintf_s(name, 128, resShader->shaderName.c_str());
+		if (ImGui::InputText("Name", name, 128)) resShader->shaderName = name;
+
+		ImGui::Text("Shader buffer id:", resShader->shaderID);
+
+		ImGui::SameLine();
+		int s = strlen(resShader->vertexShaderStr.c_str());
+		ImGui::Text("Text size:%d.  Text size pls:%d.", s, s + 50);
+
+		ImGui::BeginChild("E", ImVec2(830, 650));
+		{
+			const char* text = resShader->vertexShaderStr.c_str();
+			ImGui::InputTextMultiline("##shader", (char*)text, strlen(text) + 50, ImVec2(-1.0f, -1.0f), ImGuiInputTextFlags_AllowTabInput);
+			resShader->vertexShaderStr = text;
+
+			ImGui::EndChild();
+		}
+
+		if (ImGui::Button("Compile shader"))
+		{
+			app->resourceManager->shaderImporter->saveShader(resShader);
+			app->resourceManager->shaderImporter->compileShader(resShader);
+		}
+
+		ImGui::SameLine();
+
+		if (ImGui::Button("Save shader"))
+			app->resourceManager->shaderImporter->saveShader(resShader);
+
+		if (ImGui::Button("Close"))
+		{
+			currentShaderEditing = NULL;
+			shaderEditorOpen = false;
+		}
+
+		ImGui::End();
+	}
+}

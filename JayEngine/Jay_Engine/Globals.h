@@ -50,6 +50,8 @@ void _log(logType type, const char file[], int line, const char* format, ...);
 #define IS_INSIDE(n, maxVal, minVal) (n >= minVal && n <= maxVal) ? (true) : (false)
 #define IS_BETWEEN(n, maxVal, minVal) (n > minVal && n < maxVal) ? (true) : (false)
 
+#define IM_ARRAYSIZE(_ARR)  ((int)(sizeof(_ARR)/sizeof(*_ARR)))
+
 #define DEGTORAD 0.0174532925199432957f
 #define RADTODEG 57.295779513082320876f
 #define HAVE_M_PI
@@ -99,11 +101,15 @@ char* clearTexPath(char* path);
 #define DEFAULT_MESH_SAVE_PATH "Data/Library/Meshes/"
 #define DEFAULT_TEXTURE_SAVE_PATH "Data/Library/Textures/"
 
+#define DEFAULT_SHADER_SAVE_PATH "Data/Shaders/"
+
 #define DEFAULT_TMP_DIR "Data/Library/tmp/"
 
 #define MESH_EXTENSION ".jaymesh"
 #define TEXTURE_EXTENSION ".dds"
 #define MATERIAL_EXTENSION ".jaymat"
 #define SCENE_EXTENSION ".jayscene"
+#define VERTEX_SHADER_EXTENSION ".jayvertex"
+#define FRAGTAL_SHADER_EXTENSION ".jayfragtal"
 
 #endif

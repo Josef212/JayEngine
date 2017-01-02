@@ -10,6 +10,8 @@
 
 #include <string>
 
+class ResourceShader;
+
 class ImporterShader : public Importer
 {
 public:
@@ -23,6 +25,12 @@ public:
 	const char* getDefaultFragtalShaderStr()const;
 
 	void freeShader(uint shaderId);
+
+	void loadShaderToMemory(ResourceShader* resShader);
+	void saveShader(ResourceShader* resShader);
+	void compileShader(ResourceShader* resShader);
+
+	void firstCompile(ResourceShader* resShader);
 
 private:
 	std::string defaultVertexShader;

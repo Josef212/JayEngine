@@ -332,7 +332,7 @@
       <Filter>Core\ResourceManagement\Resources</Filter>
     </ClCompile>
     <ClCompile Include="ImporterShader.cpp">
-      <Filter>Core</Filter>
+      <Filter>Core\ResourceManagement\Importers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -699,7 +699,9 @@
     <ClInclude Include="ResourceShader.h">
       <Filter>Core\ResourceManagement\Resources</Filter>
     </ClInclude>
-    <ClInclude Include="ImporterShader.h" />
+    <ClInclude Include="ImporterShader.h">
+      <Filter>Core\ResourceManagement\Importers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="MathGeoLib\include\Geometry\KDTree.inl">
