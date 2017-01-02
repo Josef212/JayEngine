@@ -36,8 +36,6 @@ ImporterShader::ImporterShader()
 		"uniform sampler2D ourTexture;\n\n"
 		"void main()\n"
 		"{\n"
-		//"	color = texture(ourTexture, TexCoord) * vec4(ourColor, 1.0f);\n"
-		//"	gl_FragColor = ourColor;\n"
 		"	color = texture(ourTexture, TexCoord);\n"
 		"}\n"
 	);
@@ -52,6 +50,9 @@ void ImporterShader::compileShader(ResourceShader* resShader)
 {
 	if (!resShader)
 		return;
+
+	if (!resShader->vertexAndFragtalInMemory())
+		loadShaderToMemory(resShader);
 
 	const char* str = resShader->vertexShaderStr.c_str();
 	GLuint vS = glCreateShader(GL_VERTEX_SHADER);
@@ -94,18 +95,23 @@ void ImporterShader::compileShader(ResourceShader* resShader)
 		_LOG(LOG_ERROR, "Shader link error: %s.", infoLog);
 	}
 
-	if (shaderProgram != 0)
+	if (shaderProgram != 0 && success != 0)
 		resShader->shaderID = shaderProgram;
 
 	glDetachShader(shaderProgram, vS);
 	glDetachShader(shaderProgram, fS);
 	glDeleteShader(vS);
 	glDeleteShader(fS);
+
+	resShader->removeVertexAndFragtalShaderStr();
 }
 
-uint ImporterShader::loadDefaultShader()
+uint ImporterShader::loadDefaultShader(ResourceShader* resShader)
 {
 	uint shaderRet = 0;
+
+	if (!resShader)
+		return shaderRet;
 
 	const char* str = defaultVertexShader.c_str();
 	GLuint vertexShader;
@@ -158,6 +164,11 @@ uint ImporterShader::loadDefaultShader()
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
 
+	if (shaderRet != 0)
+		resShader->shaderID = shaderRet;
+	else
+		_LOG(LOG_WARN, "Could not load default shader.");
+
 	return shaderRet;
 }
 
@@ -188,7 +199,7 @@ void ImporterShader::firstCompile(ResourceShader* resShader)
 
 	compileShader(resShader);
 
-	//TODO: Unload shaders from memory.
+	resShader->removeVertexAndFragtalShaderStr();
 }
 
 void ImporterShader::loadShaderToMemory(ResourceShader* resShader)
@@ -207,6 +218,8 @@ void ImporterShader::loadShaderToMemory(ResourceShader* resShader)
 	if (buffer && size > 0)
 	{
 		resShader->vertexShaderStr = buffer;
+		char* text = (char*)resShader->vertexShaderStr.c_str();
+		text[size] = '\0';											//NOTE: This is a big **** but works to remove garbage. Cool for now
 	}
 
 	RELEASE_ARRAY(buffer);
@@ -222,6 +235,8 @@ void ImporterShader::loadShaderToMemory(ResourceShader* resShader)
 	if (buffer && size > 0)
 	{
 		resShader->fragtalShaderStr = buffer;
+		char* text = (char*)resShader->fragtalShaderStr.c_str();
+		text[size] = '\0';
 	}
 
 	RELEASE_ARRAY(buffer);

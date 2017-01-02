@@ -19,7 +19,7 @@ public:
 	virtual ~ImporterShader();
 
 	//This must only be called once, TODO: maybe do this on constructor and save the default shader id here
-	uint loadDefaultShader();
+	uint loadDefaultShader(ResourceShader* resShader);
 
 	const char* getDefaultVertexShaderStr()const;
 	const char* getDefaultFragtalShaderStr()const;

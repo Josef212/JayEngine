@@ -7,6 +7,7 @@
 #include "ModuleFileSystem.h"
 
 #include "ResourceTexture.h"
+#include "ResourceShader.h"
 #include "ModuleResourceManager.h"
 #include "ImporterTexture.h"
 

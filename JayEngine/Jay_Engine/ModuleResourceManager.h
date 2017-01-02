@@ -11,6 +11,7 @@ class Resource;
 class ResourceMesh;
 class ResourceTexture;
 class ResourceShader;
+
 enum ResourceType;
 
 class Importer;
@@ -66,7 +67,7 @@ public:
 
 	void getResourcesOfType(std::vector<Resource*>& res, ResourceType type)const;
 
-	const uint getDefaultShader()const;
+	ResourceShader* getDefaultShader()const;
 
 private:
 	bool autoImportFBX();
@@ -89,7 +90,7 @@ private:
 	std::vector<ResourceMesh*> primitives;
 	ResourceTexture* checkers = NULL;
 
-	uint defaultShader = 0;
+	ResourceShader* defaultShader = NULL;
 
 
 

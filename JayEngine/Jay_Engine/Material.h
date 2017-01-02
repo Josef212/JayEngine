@@ -9,6 +9,7 @@
 
 class ResourceTexture;
 class FileParser;
+class ResourceShader;
 
 class Material : public Component
 {
@@ -35,6 +36,7 @@ public:
 	Color color = White;
 
 	ResourceTexture* textureResource = NULL; //Vector if normal map, light map, etc.
+	ResourceShader* shaderResource = NULL;
 
 private:
 };

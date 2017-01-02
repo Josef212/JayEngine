@@ -16,6 +16,7 @@
 
 #include "ResourceMesh.h"
 #include "ResourceTexture.h"
+#include "ResourceShader.h"
 
 #include "Primitive.h"
 
@@ -354,13 +355,11 @@ void ModuleRenderer3D::drawGameObject(GameObject* obj)
 
 					Camera* currentCam = (app->getGameState() == gameState::EDITOR) ? app->camera->getCamera() : getActiveCamera();
 
-					/*uint shID = 0;
-					if (mat && mat->shader > 0)
-						shID = mat->shader;
+					uint shID = 0;
+					if (mat && mat->shaderResource && mat->shaderResource->shaderID > 0)
+						shID = mat->shaderResource->shaderID;
 					else
-						shID = app->resourceManager->getDefaultShader();*/
-					
-					uint shID = app->resourceManager->getDefaultShader();
+						shID = app->resourceManager->getDefaultShader()->shaderID;
 
 					glUseProgram(shID);
 

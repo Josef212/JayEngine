@@ -9,7 +9,11 @@
 #include "Material.h"
 #include "Camera.h"
 
+#include "ModuleResourceManager.h"
+
 #include "ResourceMesh.h"
+#include "ResourceTexture.h"
+#include "ResourceShader.h"
 
 #include "ModuleGOManager.h"
 #include "ModuleWindow.h"
@@ -198,6 +202,20 @@ void UI_Inspector::drawMaterial(GameObject* selected, Material* mat)
 
 	ImGui::ColorEdit4("Color:", (float*)&mat->color, false);
 	//TODO: Show all textures
+
+	ImGui::Text("Shader id(0 or %d if using default):", app->resourceManager->getDefaultShader()->shaderID);
+	ImGui::SameLine();
+	int sh = 0;
+	if (mat->shaderResource)
+		sh = mat->shaderResource->shaderID;
+
+	ImGui::TextColored(ImVec4(1, 1, 0, 1), "%d.", sh);
+
+	if (sh != 0)
+	{
+		if (ImGui::Button("Set default shader"))
+			mat->shaderResource = app->resourceManager->getDefaultShader();
+	}
 
 	ImGui::Separator();
 }

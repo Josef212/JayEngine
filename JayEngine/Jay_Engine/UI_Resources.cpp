@@ -474,6 +474,57 @@ void UI_Resources::shaders(std::vector<Resource*> shds)
 			{
 				if (sSelected == i)
 				{
+					if (ImGui::Button("Force compile"))
+						app->resourceManager->shaderImporter->compileShader(res);
+
+					ImGui::SameLine();
+
+					if (ImGui::Button("Attach shader to"))
+						ImGui::OpenPopup("shaders popup");
+
+					if (ImGui::BeginPopup("shaders popup"))
+					{
+						ImGui::MenuItem("GO selected", NULL, false, false);
+						ImGui::Separator();
+
+						GameObject* selected = app->goManager->getSelected();
+
+						if (!selected)
+							ImGui::MenuItem("Not game object", NULL, false, false);
+						else
+						{
+							//TODO: Adapt this to material component and multitextures.
+							std::vector<Component*> cmp = selected->findComponent(ComponentType::MATERIAL);
+							for (uint j = 0; j < cmp.size(); ++j)
+							{
+								Material* mat = (Material*)cmp[j];
+								if (mat)
+								{
+									static char tName[32];
+									sprintf_s(tName, 32, "%s", mat->getName());
+									if (ImGui::MenuItem(tName))
+									{
+										mat->shaderResource = res;
+									}
+								}
+							}
+
+							if (ImGui::MenuItem("Add component material"))
+							{
+								Material* mat = (Material*)selected->addComponent(ComponentType::MATERIAL);
+								if (mat)
+								{
+									mat->shaderResource = res;
+								}
+							}
+						}
+
+
+						ImGui::EndPopup();
+					}
+
+
+					//-----------------------------------------------
 					if (ImGui::Button("Edit shader"))
 					{
 						//Load it to memory.

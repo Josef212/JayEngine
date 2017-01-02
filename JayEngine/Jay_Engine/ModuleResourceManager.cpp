@@ -76,7 +76,7 @@ bool ModuleResourceManager::cleanUp()
 	//TODO: Make sure all resources are free
 
 	if (defaultShader > 0)
-		shaderImporter->freeShader(defaultShader);
+		shaderImporter->freeShader(defaultShader->shaderID);
 	
 	return ret;
 }
@@ -416,7 +416,6 @@ bool ModuleResourceManager::loadResources()
 				s->fragtalFile = res.getString("fragtal_shader", "???");
 				s->shaderName = res.getString("sh_name", "???");
 				//Must compile the shader every time engine start
-				shaderImporter->loadShaderToMemory(s);
 				shaderImporter->compileShader(s);
 			}
 		}
@@ -480,12 +479,13 @@ void ModuleResourceManager::getResourcesOfType(std::vector<Resource*>& res, Reso
 
 void ModuleResourceManager::loadBasicResources()
 {
-	defaultShader = shaderImporter->loadDefaultShader();
+	defaultShader = new ResourceShader(0);
+	shaderImporter->loadDefaultShader(defaultShader);
 
 	//TODO: Load primitives and checkers.
 }
 
-const uint ModuleResourceManager::getDefaultShader()const
+ResourceShader* ModuleResourceManager::getDefaultShader()const
 {
 	return defaultShader;
 }
