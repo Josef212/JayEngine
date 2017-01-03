@@ -347,7 +347,10 @@ void ModuleRenderer3D::drawGameObject(GameObject* obj)
 			ResourceMesh* resMesh = mesh->meshResource;
 
 			if (resMesh)
-			{				
+			{		
+				if (mesh->renderWireframe || selected)
+					drawWireframe(resMesh, selected);
+
 				if (!mesh->renderWireframe)
 				{
 					Color col = (mat) ? mat->color : Color(0.5f, 0.5f, 0.5f, 1.f);
@@ -378,6 +381,14 @@ void ModuleRenderer3D::drawGameObject(GameObject* obj)
 					GLint color = glGetUniformLocation(shID, "color");
 					if (color != -1)
 						glUniform3f(color, col.r, col.g, col.b);
+
+					//Time
+					GLuint t = glGetUniformLocation(shID, "time");
+					glUniform1f(t, time->elapsedTime());
+
+					//DT
+					GLuint deltaTime = glGetUniformLocation(shID, "dt");
+					glUniform1f(deltaTime, time->editorDT());
 
 					//----------------------------------
 					//Texture.
@@ -426,9 +437,6 @@ void ModuleRenderer3D::drawGameObject(GameObject* obj)
 					if (mesh->renderNormals)
 						drawNormals(resMesh);
 
-					/*if (mesh->renderWireframe || selected) //TODO: Not working really well...
-						drawWireframe(resMesh, selected);*/
-
 					//----------------------------------
 
 					glDrawElements(GL_TRIANGLES, resMesh->numIndices, GL_UNSIGNED_INT, NULL);
@@ -472,6 +480,12 @@ void ModuleRenderer3D::drawWireframe(ResourceMesh* resMesh, bool selected)
 
 	//Wireframe
 	//----------------
+	glEnableClientState(GL_VERTEX_ARRAY);
+
+	glBindBuffer(GL_ARRAY_BUFFER, resMesh->idVertices);
+	glVertexPointer(3, GL_FLOAT, 0, NULL);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, resMesh->idIndices);
+
 	glDisable(GL_LIGHTING);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
