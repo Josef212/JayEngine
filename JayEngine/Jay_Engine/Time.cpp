@@ -35,10 +35,16 @@ uint64 Time::gameFrames()const
 	return gameFPSCounter;
 }
 
+float Time::elapsedTime()const
+{
+	return elapsed;
+}
+
 //----------------------------
 
 void Time::updateTime()
 {
+	elapsed += realDT;
 	realDT = (float)msTimer->ReadSec();
 	msTimer->Start();
 	++frameCount;

@@ -21,6 +21,7 @@ public:
 
 	float editorDT()const;
 	uint64 editorFrames()const;
+	float elapsedTime()const;
 
 	float DT()const;
 	uint64 gameFrames()const;
@@ -38,6 +39,7 @@ private:
 	uint fpsCounter = 0;
 	uint32 lastFrameMs = -1; //Dont really usefull
 	int lastFPS = -1; //Dont really usefull
+	float elapsed = 0.0f;
 
 	//Game----------------------------------------
 	Timer* msGameTimer = NULL;

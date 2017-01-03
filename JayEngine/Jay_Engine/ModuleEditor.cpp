@@ -523,6 +523,11 @@ void ModuleEditor::timeDisplay()
 {
 	ImGui::Begin("Time", &showTimeDisplay);
 	{
+		ImGui::Text("Time elapsed:");
+		ImGui::SameLine();
+		ImGui::TextColored(ImVec4(1, 1, 0, 1), "%f.", time->elapsedTime());
+		ImGui::Separator();
+
 		ImGui::TextColored(ImVec4(1, 0, 0, 1), "Real:");
 		ImGui::Separator();
 

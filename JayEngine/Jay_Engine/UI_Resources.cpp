@@ -567,9 +567,9 @@ void UI_Resources::shaderEditor(ResourceShader* resShader)
 
 		ImGui::BeginChild("E", ImVec2(830, 650));
 		{
-			const char* text = resShader->vertexShaderStr.c_str();
+			/*const char* text = resShader->vertexShaderStr.c_str();
 			ImGui::InputTextMultiline("##shader", (char*)text, strlen(text) + 50, ImVec2(-1.0f, -1.0f), ImGuiInputTextFlags_AllowTabInput);
-			resShader->vertexShaderStr = text;
+			resShader->vertexShaderStr = text;*/
 
 			ImGui::EndChild();
 		}

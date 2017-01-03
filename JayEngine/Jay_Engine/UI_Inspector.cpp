@@ -160,6 +160,10 @@ void UI_Inspector::drawMesh(GameObject* selected, Mesh* mesh)
 		nIndices = mesh->meshResource->numIndices;
 		nNormals = mesh->meshResource->numNormals;
 		nTexCoords = mesh->meshResource->numTexCoords;
+
+		ImGui::Text("File: ");
+		ImGui::SameLine();
+		ImGui::TextColored(ImColor(255, 153, 51), "%s.", mesh->meshResource->getExportedFile());
 	}
 
 	ImGui::Text("Number of vertices: ");
