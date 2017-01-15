@@ -111,6 +111,10 @@ void UI_Conf::draw()
 			ImGui::DragFloat("Zoom speed: ", &app->camera->zoomSpeed);
 			ImGui::DragFloat("Orbiting distance: ", &app->camera->distToReference);
 
+			ImGui::Text("Aspect ratio: ");
+			ImGui::SameLine();
+			ImGui::TextColored(ImVec4(1, 1, 0, 1), "%f.", cam->getAspectRatio());
+
 			bool culling = cam->isCullingActive();
 			if (ImGui::Checkbox("Culling", &culling))cam->setCulling(culling);
 		}

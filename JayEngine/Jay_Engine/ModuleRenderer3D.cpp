@@ -155,7 +155,11 @@ bool ModuleRenderer3D::init(FileParser* conf)
 	if (app->isPlaySate())
 		;//TODO: get active camera from config
 
-	onResize(app->window->getWidth(), app->window->getHeight());
+	Event e(Event::eventType::WIN_RESIZE);
+	e.point2d.x = app->window->getWidth();
+	e.point2d.y = app->window->getHeight();
+
+	app->sendGlobalEvent(e);
 
 	return ret;
 }
