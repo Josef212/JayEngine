@@ -6,15 +6,23 @@ currently studying at CITM (UPC).
 GitHub: https://github.com/Josef212/JayEngine
 Releases: https://github.com/Josef212/JayEngine/releases
 
-Assignment instructions:
+Assignment 3 instructions:
+    ·Before running the engine check "Data/Library/..." to see folders are empty and check again after running the engine to see how fbx have been imported.
+    ·Some more fbx will be in Assets folder to see that engine can import many fbx.
     ·Run the engine and all fbx will be imported to the proper format.
-    ·Go to "FBX" menu "Load prefab", select the "Street environmentV01.json" and click "Load" to load the material from the teacher.
     ·Hierarchy should be seen on left and inspector on right, if not check on "View" to see how to open those 
     windows.
     ·Move around hierarchy menu and try inspector options, try moving scaling and rotating, etc.
     ·Engine create a default camera called "main camera" and is the active camera by default so on play this will be the used camera.
     ·Click on "Play" to start and then click "Pause" or "Stop" to recover the editing status.
     ·On "View"->"Scene tree" then "Show"->"Show tree" to display the scene octree. Do the same again to stop showing it.
+    ·On left under hierarchy there's a window will all resources. Click on them and then click to attach to attach resource to game objects. Try different ways.
+   
+    ·All drawed geometry is rendered using a default shader. 
+    ·You can create new shaders and edit them from outside the engine. (Working on still so may be some errors.)
+    ·You can attach new shaders to materials and then  force default shader again.
+
+    ·Video: https://www.youtube.com/watch?v=hS8AymfBZvU&feature=youtu.be
 
 
 -Instalation:
@@ -23,9 +31,9 @@ Assignment instructions:
     ·Download latest source code version and complie it by yourself.
 
 -How to use it:
-On the latest version of the engine all fbx on "Data/Assets/fbx/" are imported to own format (json, binaty meshes and dds), 
+On the latest version of the engine all fbx on "Data/Assets/fbx/" are imported to own format (json, binary meshes and dds), 
 you can load the prefabs already imported to the scene. Scene can be serielized into json. You can play and stop the engine.
-Camera can cul optimitzated by an octree.
+Camera can cull optimitzated by an octree.
 
 Resource management makes only load once any texture or mesh.
 
@@ -76,9 +84,6 @@ Resource management makes only load once any texture or mesh.
     ·Test LOG: Just a testing tool to check different log types on console.
     ·About: Open or close a window with some basic info.
 
-###FBX
-    ·Load prefab: Open a window with all prefabs that can be loaded to the scene.
-
 ##Hierarchy
     ·Here you can see all the scene hierarchy with all game objects on the current scene.
     ·Double click or click on the arrow to open the object and see all its childs and/or select the game object to watch it 
@@ -128,6 +133,10 @@ Resource management makes only load once any texture or mesh.
 
 ##Time 
     ·Display real time clock and game clock and engine status (Editor, play or play). (Still working on to add more)
+
+##Resources 
+    ·For each resource type you can load it to scene or attach it to game objects components.
+    ·For shaders you can create new ones and force recompile them.
 
 ##License
 
