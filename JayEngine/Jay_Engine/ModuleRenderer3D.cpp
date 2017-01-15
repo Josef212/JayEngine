@@ -353,7 +353,7 @@ void ModuleRenderer3D::drawGameObject(GameObject* obj)
 			if (resMesh)
 			{		
 				if (mesh->renderWireframe || selected)
-					drawWireframe(resMesh, selected);
+					;// drawWireframe(resMesh, selected);
 
 				if (!mesh->renderWireframe)
 				{

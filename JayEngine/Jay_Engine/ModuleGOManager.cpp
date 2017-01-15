@@ -565,6 +565,8 @@ void ModuleGOManager::loadSceneOrPrefabs(const FileParser& file)
 			if (parentGO)
 				go->setNewParent(parentGO);
 		}
+		else if(parentID == 0)
+			go->setNewParent(sceneRootObject);
 	}
 
 	for (uint i = 0; i < tmpRoot->childrens.size(); ++i)
