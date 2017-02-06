@@ -68,6 +68,10 @@ Application::~Application()
 	{
 		RELEASE(*it);
 	}
+
+	RELEASE(random);
+	RELEASE(time);
+	RELEASE(info);
 }
 
 bool Application::init()
