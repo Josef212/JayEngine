@@ -9,71 +9,59 @@
 
 Mesh::Mesh(GameObject* gObj, int id) : Component(gObj, id)
 {
-	type = MESH;
+	type = CMP_MESH;
 	name.assign("Mesh");
 }
 
 
 Mesh::~Mesh()
 {
-	clearMesh();
+	ClearMesh();
 }
 
-void Mesh::enable()
-{
-	if (!active)
-		active = true;
-}
-
-void Mesh::disable()
-{
-	if (active)
-		active = false;
-}
-
-void Mesh::init()
+void Mesh::Init()
 {
 	
 }
 
-void Mesh::update(float dt)
+void Mesh::Update(float dt)
 {
 
 }
 
-void Mesh::cleanUp()
+void Mesh::CleanUp()
 {
 	
 }
 
-void Mesh::clearMesh()
+void Mesh::ClearMesh()
 {
 	if (meshResource)
 	{
-		app->resourceManager->onResourceRemove(meshResource);
-		meshResource = NULL;
+		app->resourceManager->OnResourceRemove(meshResource);
+		meshResource = nullptr;
 	}
 }
 
-void Mesh::getBox(AABB& box)const
+void Mesh::GetBox(AABB& box)const
 {
 	if (meshResource)
 		box.Enclose(meshResource->aabb);
 }
 
-bool Mesh::saveCMP(FileParser& sect)
+bool Mesh::SaveCMP(FileParser& sect)
 {
 	bool ret = true;
 
 	sect.addInt("comp_type", (int)type);
-	sect.addBool("active", active);
+	sect.addBool("active", selfActive);
 	sect.addInt("UUID", id);
-	sect.addInt("go_UUID", object->getGOId());
+	sect.addInt("go_UUID", object->GetGOId());
 
 	if (meshResource)
 	{
 		sect.addBool("have_res", true);
-		sect.addInt("resource_id", meshResource->getUID());
+		sect.addInt("resource_id", meshResource->GetUID());
 		sect.addString("resource_exported_file", meshResource->exportedFile.c_str());
 		sect.addString("resource_original_file", meshResource->originalFile.c_str());
 	}
@@ -86,16 +74,16 @@ bool Mesh::saveCMP(FileParser& sect)
 	return ret;
 }
 
-bool Mesh::loadCMP(FileParser& sect)
+bool Mesh::LoadCMP(FileParser& sect)
 {
 	bool ret = true;
 
-	active = sect.getBool("active", true);
+	selfActive = sect.getBool("active", true);
 	id = sect.getInt("UUID", 0);
 
 	if (sect.getBool("have_res", false))
 	{
-		setResource(sect.getInt("resource_id", 0));
+		SetResource(sect.getInt("resource_id", 0));
 	}
 
 	renderWireframe = sect.getBool("wireframe", false);
@@ -107,28 +95,28 @@ bool Mesh::loadCMP(FileParser& sect)
 
 //--------------------------
 
-void Mesh::setResource(UID resUID)
+void Mesh::SetResource(UID resUID)
 {
 	//TODO: if there is already a resource, notify to manager and check if there are no more instances to remove from memory
 
-	ResourceMesh* res = (ResourceMesh*)app->resourceManager->getResourceFromUID(resUID);
+	ResourceMesh* res = (ResourceMesh*)app->resourceManager->GetResourceFromUID(resUID);
 
 	if (res)
 	{
-		if (!res->isInMemory())
+		if (!res->IsInMemory())
 		{
 			//If is not in memory load it.
-			if (!app->resourceManager->loadResource(res))
+			if (!app->resourceManager->LoadResource(res))
 			{
-				_LOG(LOG_ERROR, "Error loading resource '%s'.", res->getExportedFile());
+				_LOG(LOG_ERROR, "Error loading resource '%s'.", res->exportedFile.c_str());
 			}
 			else
 			{
-				_LOG(LOG_STD, "Just loaded resource '%s'.", res->getExportedFile());
+				_LOG(LOG_STD, "Just loaded resource '%s'.", res->exportedFile.c_str());
 			}
 		}
 		else
-			res->addInstance();
+			res->AddInstance();
 
 		meshResource = res;
 	}

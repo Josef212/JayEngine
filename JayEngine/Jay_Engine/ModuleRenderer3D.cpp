@@ -44,7 +44,7 @@ ModuleRenderer3D::~ModuleRenderer3D()
 }
 
 // Called before render is available
-bool ModuleRenderer3D::init(FileParser* conf)
+bool ModuleRenderer3D::Init(FileParser* conf)
 {
 	_LOG(LOG_STD, "Renderer3D: Init.");
 	_LOG(LOG_INFO, "Creating 3D Renderer context");
@@ -53,7 +53,7 @@ bool ModuleRenderer3D::init(FileParser* conf)
 	vsync = conf->getBool("vsync", true);
 
 	//Create context
-	context = SDL_GL_CreateContext(app->window->getWindow());
+	context = SDL_GL_CreateContext(app->window->GetWindow());
 	if (context == nullptr)
 	{
 		_LOG(LOG_ERROR, "OpenGL context could not be created! SDL_Error: %s\n", SDL_GetError());
@@ -81,7 +81,7 @@ bool ModuleRenderer3D::init(FileParser* conf)
 		_LOG(LOG_INFO, "GLSL: %s\n", glGetString(GL_SHADING_LANGUAGE_VERSION));
 
 		//Use Vsync
-		setVSync(vsync);
+		SetVSync(vsync);
 
 		//Initialize Projection Matrix
 		glMatrixMode(GL_PROJECTION);
@@ -152,19 +152,19 @@ bool ModuleRenderer3D::init(FileParser* conf)
 	}
 
 	//TODO: Check this
-	if (app->isPlaySate())
+	if (app->IsPlaySate())
 		;//TODO: get active camera from config
 
 	Event e(Event::eventType::WIN_RESIZE);
-	e.point2d.x = app->window->getWidth();
-	e.point2d.y = app->window->getHeight();
+	e.point2d.x = app->window->GetWidth();
+	e.point2d.y = app->window->GetHeight();
 
-	app->sendGlobalEvent(e);
+	app->SendGlobalEvent(e);
 
 	return ret;
 }
 
-bool ModuleRenderer3D::start()
+bool ModuleRenderer3D::Start()
 {
 	_LOG(LOG_STD, "Render3D: Start.");
 	bool ret = true;
@@ -175,13 +175,13 @@ bool ModuleRenderer3D::start()
 }
 
 // PreUpdate: clear buffer
-update_status ModuleRenderer3D::preUpdate(float dt)
+update_status ModuleRenderer3D::PreUpdate(float dt)
 {
-	Camera* cam = (app->getGameState() != gameState::EDITOR) ? (activeCamera) : (app->camera->getCamera());  //TODO: When active camera is NULL and play state, strange things happen
+	Camera* cam = (app->GetGameState() != gameState::EDITOR) ? (activeCamera) : (app->camera->GetCamera());  //TODO: When active camera is NULL and play state, strange things happen
 
 	if (cam && cam->projectMatrixChanged)
 	{
-		updateProjectionMat(cam);
+		UpdateProjectionMat(cam);
 		cam->projectMatrixChanged = false;
 	}
 
@@ -193,7 +193,7 @@ update_status ModuleRenderer3D::preUpdate(float dt)
 		glLoadIdentity();
 
 		glMatrixMode(GL_MODELVIEW);
-		glLoadMatrixf(cam->getGLViewMatrix());
+		glLoadMatrixf(cam->GetGLViewMatrix());
 
 
 		// light 0 on cam pos
@@ -207,7 +207,7 @@ update_status ModuleRenderer3D::preUpdate(float dt)
 }
 
 // PostUpdate present buffer to screen
-update_status ModuleRenderer3D::postUpdate(float dt)
+update_status ModuleRenderer3D::PostUpdate(float dt)
 {
 	//TODO: draw all geometry
 
@@ -220,23 +220,24 @@ update_status ModuleRenderer3D::postUpdate(float dt)
 		floor.Render();
 	}
 
-	app->goManager->draw();
+	app->goManager->Draw();
 
 	if (/*app->debug*/true) //TODO: change debug system
 	{
-		beginDebugDraw();
-		app->drawDebug();
-		endDebugDraw();
+		BeginDebugDraw();
+		app->DrawDebug();
+		EndDebugDraw();
 	}
 
-	app->editor->drawEditor();
+	if(app->IsEditorState() || app->forceEditor)
+		app->editor->DrawEditor();
 
-	SDL_GL_SwapWindow(app->window->getWindow());
+	SDL_GL_SwapWindow(app->window->GetWindow());
 	return UPDATE_CONTINUE;
 }
 
 // Called before quitting
-bool ModuleRenderer3D::cleanUp()
+bool ModuleRenderer3D::CleanUp()
 {
 	_LOG(LOG_STD, "Renderer3D: CleanUp.");
 
@@ -245,22 +246,22 @@ bool ModuleRenderer3D::cleanUp()
 	return true;
 }
 
-void ModuleRenderer3D::onResize(int width, int height)
+void ModuleRenderer3D::OnResize(int width, int height)
 {
-	Camera* cam = (app->isPlaySate()) ? (activeCamera) : (app->camera->getCamera());
+	Camera* cam = (app->IsPlaySate()) ? (activeCamera) : (app->camera->GetCamera());
 
-	cam->setAspectRatio((float)width / (float)height);
+	cam->SetAspectRatio((float)width / (float)height);
 	glViewport(0, 0, width, height);
 
-	updateProjectionMat(cam);
+	UpdateProjectionMat(cam);
 }
 
-bool ModuleRenderer3D::getVSync() const
+bool ModuleRenderer3D::GetVSync() const
 {
 	return vsync;
 }
 
-void ModuleRenderer3D::setVSync(bool vsync)
+void ModuleRenderer3D::SetVSync(bool vsync)
 {
 	if (this->vsync != vsync)
 	{
@@ -270,32 +271,32 @@ void ModuleRenderer3D::setVSync(bool vsync)
 	}
 }
 
-void ModuleRenderer3D::setActiveCamera(Camera* activeCamera)
+void ModuleRenderer3D::SetActiveCamera(Camera* activeCamera)
 {
 	this->activeCamera = activeCamera;
 }
 
-Camera* ModuleRenderer3D::getActiveCamera()const
+Camera* ModuleRenderer3D::GetActiveCamera()const
 {
 	return activeCamera;
 }
 
-void ModuleRenderer3D::updateProjectionMat(Camera* cam)
+void ModuleRenderer3D::UpdateProjectionMat(Camera* cam)
 {
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glLoadMatrixf((GLfloat*)cam->getGLProjectMatrix());
+	glLoadMatrixf((GLfloat*)cam->GetGLProjectMatrix());
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 }
 
-void ModuleRenderer3D::onGlobalEvent(const Event& e)
+void ModuleRenderer3D::OnGlobalEvent(const Event& e)
 {
 	switch (e.type)
 	{
 	case Event::eventType::WIN_RESIZE:
-		onResize(e.point2d.x, e.point2d.y);
+		OnResize(e.point2d.x, e.point2d.y);
 		break;
 
 	case Event::eventType::PLAY:
@@ -318,19 +319,19 @@ void ModuleRenderer3D::onGlobalEvent(const Event& e)
 
 //---------------------------------
 
-void ModuleRenderer3D::drawGameObject(GameObject* obj)
+void ModuleRenderer3D::DrawGameObject(GameObject* obj)
 {
 	if (!obj)
 		return;
 
 	Transform* trans = obj->transform;
-	std::vector<Component*> meshes = obj->findComponent(MESH);
-	std::vector<Component*> mats = obj->findComponent(MATERIAL);
+	std::vector<Component*> meshes = obj->GetComponents(CMP_MESH);
+	std::vector<Component*> mats = obj->GetComponents(CMP_MATERIAL);
 
 	if (!meshes[0] || !trans)
 		return;
 
-	bool selected = (app->goManager->getSelected() == obj);
+	bool selected = (app->goManager->GetSelected() == obj);
 
 	//First push transform matrix, remember to pop it at end of draw
 	//----------------------
@@ -360,26 +361,26 @@ void ModuleRenderer3D::drawGameObject(GameObject* obj)
 					Color col = (mat) ? mat->color : Color(0.5f, 0.5f, 0.5f, 1.f);
 					glColor4f(col.r, col.g, col.b, col.a);
 
-					Camera* currentCam = (app->getGameState() == gameState::EDITOR) ? app->camera->getCamera() : getActiveCamera();
+					Camera* currentCam = (app->GetGameState() == gameState::EDITOR) ? app->camera->GetCamera() : GetActiveCamera();
 
 					uint shID = 0;
 					if (mat && mat->shaderResource && mat->shaderResource->shaderID > 0)
 						shID = mat->shaderResource->shaderID;
 					else
-						shID = app->resourceManager->getDefaultShader()->shaderID;
+						shID = app->resourceManager->GetDefaultShader()->shaderID;
 
 					glUseProgram(shID);
 
 					//----------------------------------
 					//Matrices.
 					GLuint model = glGetUniformLocation(shID, "model");
-					glUniformMatrix4fv(model, 1, GL_FALSE, trans->getGlobalTransformGL()); //NOTE: Might not be the transposed one
+					glUniformMatrix4fv(model, 1, GL_FALSE, trans->GetGlobalTransformGL()); //NOTE: Might not be the transposed one
 
 					GLuint view = glGetUniformLocation(shID, "view");
-					glUniformMatrix4fv(view, 1, GL_FALSE, currentCam->getGLViewMatrix());
+					glUniformMatrix4fv(view, 1, GL_FALSE, currentCam->GetGLViewMatrix());
 
 					GLuint projection = glGetUniformLocation(shID, "projection");
-					glUniformMatrix4fv(projection, 1, GL_FALSE, currentCam->getGLProjectMatrix());
+					glUniformMatrix4fv(projection, 1, GL_FALSE, currentCam->GetGLProjectMatrix());
 
 					//Color
 					GLint color = glGetUniformLocation(shID, "color");
@@ -388,11 +389,11 @@ void ModuleRenderer3D::drawGameObject(GameObject* obj)
 
 					//Time
 					GLuint t = glGetUniformLocation(shID, "time");
-					glUniform1f(t, time->elapsedTime());
+					glUniform1f(t, time->ElapsedTime());
 
 					//DT
 					GLuint deltaTime = glGetUniformLocation(shID, "dt");
-					glUniform1f(deltaTime, time->editorDT());
+					glUniform1f(deltaTime, time->EditorDT());
 
 					//----------------------------------
 					//Texture.
@@ -439,7 +440,7 @@ void ModuleRenderer3D::drawGameObject(GameObject* obj)
 					//----------------------------------
 
 					if (mesh->renderNormals)
-						drawNormals(resMesh);
+						DrawNormals(resMesh);
 
 					//----------------------------------
 
@@ -477,7 +478,7 @@ void ModuleRenderer3D::drawGameObject(GameObject* obj)
 	//----------------------
 }
 
-void ModuleRenderer3D::drawWireframe(ResourceMesh* resMesh, bool selected)
+void ModuleRenderer3D::DrawWireframe(ResourceMesh* resMesh, bool selected)
 {
 	if (!resMesh)
 		return;
@@ -518,7 +519,7 @@ void ModuleRenderer3D::drawWireframe(ResourceMesh* resMesh, bool selected)
 	//----------------
 }
 
-void ModuleRenderer3D::drawNormals(ResourceMesh* resMesh)
+void ModuleRenderer3D::DrawNormals(ResourceMesh* resMesh)
 {
 	if (!resMesh)
 		return;

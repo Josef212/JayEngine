@@ -1,21 +1,20 @@
-#ifndef __IMPORTERTEXTURE_H__
-#define __IMPORTERTEXTURE_H__
+#ifndef __IMPORTER_TEXTURE__
+#define __IMPORTER_TEXTURE__
 
-#include "Importer.h"
 #include <string>
 
 class ResourceTexture;
 
-class ImporterTexture : public Importer
+class ImporterTexture
 {
 public:
 	ImporterTexture();
 	virtual ~ImporterTexture();
 
-	bool import(const char* originalFile, std::string& exportedFile, UID& resUID);
-	bool importBuf(const void* buffer, uint size, std::string& exportedFile, UID& resUID);
+	bool Import(const char* originalFile, std::string& exportedFile, UID& resUID);
+	bool ImportBuf(const void* buffer, uint size, std::string& exportedFile, UID& resUID);
 
-	bool loadResource(ResourceTexture* resource);
+	bool LoadResource(ResourceTexture* resource);
 };
 
-#endif // !__IMPORTERTEXTURE_H__
+#endif // !__IMPORTER_TEXTURE__

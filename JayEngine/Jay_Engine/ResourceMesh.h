@@ -1,5 +1,5 @@
-#ifndef __RESOURCEMESH_H__
-#define __RESOURCEMESH_H__
+#ifndef __RESOURCEMESH__
+#define __RESOURCEMESH__
 
 #include "Resource.h"
 #include "Math.h"
@@ -10,29 +10,29 @@ public:
 	ResourceMesh(uint UID);
 	virtual ~ResourceMesh();
 
-	void loadMeshResource(const char* fileName, const char* path = NULL);
+	void LoadMeshResource(const char* fileName, const char* path = nullptr);
 
-	bool loadToMemory()override;
-	bool removeFromMemory()override;
+	bool LoadToMemory()override;
+	bool RemoveFromMemory()override;
 
 private:
 
 public:
 	uint idVertices = 0;
 	uint numVertices = 0;
-	uint* indices = NULL;
+	uint* indices = nullptr;
 
 	uint idIndices = 0;
 	uint numIndices = 0;
-	float* vertices = NULL; //!NOTE: remember, the size of the buffer must be the number of vertices * 3
+	float* vertices = nullptr; //!NOTE: remember, the size of the buffer must be the number of vertices * 3
 
 	uint idNormals = 0;
 	uint numNormals = 0;
-	float* normals = NULL; //!NOTE: remember, the size of the buffer must be the number of vertices * 3
+	float* normals = nullptr; //!NOTE: remember, the size of the buffer must be the number of vertices * 3
 
 	uint idTexCoords = 0;
 	uint numTexCoords = 0;
-	float* texCoords = NULL; //!NOTE: remember, the size of the buffer must be the number of vertices * 2
+	float* texCoords = nullptr; //!NOTE: remember, the size of the buffer must be the number of vertices * 2
 
 	//TODO: add vertex colors
 
@@ -42,4 +42,4 @@ private:
 
 };
 
-#endif // !__RESOURCEMESH_H__
+#endif // !__RESOURCEMESH__

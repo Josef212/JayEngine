@@ -23,9 +23,8 @@
 #include "FileParser.h"
 #include "ModuleFileSystem.h"
 
-UI_Inspector::UI_Inspector() : UI_Comp()
+UI_Inspector::UI_Inspector(bool startEnalbed) : UI_Panel(startEnalbed)
 {
-	active = true;
 }
 
 
@@ -33,13 +32,13 @@ UI_Inspector::~UI_Inspector()
 {
 }
 
-void UI_Inspector::draw()
+void UI_Inspector::Draw()
 {
 	ImGuiIO& io = ImGui::GetIO();
 	windowW = io.DisplaySize.x;
 	windowH = io.DisplaySize.y;
 
-	GameObject* selected = app->goManager->getSelected();
+	GameObject* selected = app->goManager->GetSelected();
 
 	ImGui::SetNextWindowPos(ImVec2(1570, 20));
 	ImGui::SetNextWindowSize(ImVec2(350, 810));
@@ -49,18 +48,18 @@ void UI_Inspector::draw()
 		if (selected)
 		{
 			char name[128];
-			sprintf_s(name, 128, selected->getName());
-			if (ImGui::InputText("Name", name, 128)) selected->setName(name);
+			sprintf_s(name, 128, selected->GetName());
+			if (ImGui::InputText("Name", name, 128)) selected->SetName(name);
 
 			ImGui::Separator();
 
 			bool showAABB = selected->drawEnclosingAABB;
-			if (ImGui::Checkbox("Show enclosing AABB", &showAABB)) app->goManager->makeGOShowAABoxRec(selected, showAABB);
+			if (ImGui::Checkbox("Show enclosing AABB", &showAABB)) app->goManager->MakeGOShowAABoxRec(selected, showAABB);
 			ImGui::SameLine();
 			bool showOBB = selected->drawOrientedBox;
-			if (ImGui::Checkbox("Show oriented box", &showOBB)) app->goManager->makeGOShowOBoxRec(selected, showOBB);
+			if (ImGui::Checkbox("Show oriented box", &showOBB)) app->goManager->MakeGOShowOBoxRec(selected, showOBB);
 
-			if (ImGui::Button("Delete.")) selected->remove();
+			if (ImGui::Button("Delete.")) selected->Remove();
 
 			ImGui::Separator();
 
@@ -71,17 +70,17 @@ void UI_Inspector::draw()
 				{
 					switch (cmp->type)
 					{
-					case TRANSFORMATION:
-						drawTransformation(selected);
+					case CMP_TRANSFORMATION:
+						DrawTransformation(selected);
 						break;
-					case MESH:
-						drawMesh(selected, (Mesh*)cmp);
+					case CMP_MESH:
+						DrawMesh(selected, (Mesh*)cmp);
 						break;
-					case MATERIAL:
-						drawMaterial(selected, (Material*)cmp);
+					case CMP_MATERIAL:
+						DrawMaterial(selected, (Material*)cmp);
 						break;
-					case CAMERA:
-						drawCamera(selected, (Camera*)cmp);
+					case CMP_CAMERA:
+						DrawCamera(selected, (Camera*)cmp);
 						break;
 					}
 				}
@@ -91,63 +90,63 @@ void UI_Inspector::draw()
 	}
 }
 
-void UI_Inspector::drawTransformation(GameObject* selected)
+void UI_Inspector::DrawTransformation(GameObject* selected)
 {
 	Transform* trans = selected->transform;
 	if(!trans)
-		trans = (Transform*)selected->findComponent(TRANSFORMATION)[0];
+		trans = (Transform*)selected->GetComponents(CMP_TRANSFORMATION)[0];
 	
 	if (!trans)
 		return;
 
 	char transName[60];
-	strcpy_s(transName, 60, trans->getName());
+	strcpy_s(transName, 60, trans->GetName());
 	
 	//Active
-	bool transActive = trans->isEnable();
-	if (ImGui::Checkbox("Transform:", &transActive)) trans->switchActive();
+	bool transActive = trans->IsEnable();
+	if (ImGui::Checkbox("Transform:", &transActive)) trans->SwitchActive();
 
 	ImGui::SameLine();
 
-	if (ImGui::Button("Remove trans")) trans->remove();
+	if (ImGui::Button("Remove trans")) trans->Remove();
 
 	if (ImGui::Button("Reset transform"))
 	{
-		trans->setLocalPosition(float3::zero);
-		trans->setLocalScale(float3::one);
-		trans->setLocalRotation(Quat::identity);
+		trans->SetLocalPosition(float3::zero);
+		trans->SetLocalScale(float3::one);
+		trans->SetLocalRotation(Quat::identity);
 	}
 
-	float3 pos = trans->getLocalPosition();
-	float3 scale = trans->getLocalScale();
-	float3 rot = trans->getLocalRotation();
+	float3 pos = trans->GetLocalPosition();
+	float3 scale = trans->GetLocalScale();
+	float3 rot = trans->GetLocalRotation();
 	rot.x *= RADTODEG;
 	rot.y *= RADTODEG;
 	rot.z *= RADTODEG;
 
 	//Position
-	if (ImGui::DragFloat3("Position:", (float*)&pos, 0.25f)) trans->setLocalPosition(pos);
+	if (ImGui::DragFloat3("Position:", (float*)&pos, 0.25f)) trans->SetLocalPosition(pos);
 	//Scale
-	if (ImGui::DragFloat3("Scale:", (float*)&scale)) trans->setLocalScale(scale);
+	if (ImGui::DragFloat3("Scale:", (float*)&scale)) trans->SetLocalScale(scale);
 	//Rotation
-	if (ImGui::DragFloat3("Rotation:", (float*)&rot, 0.5f)) trans->setLocalRotation(rot);
+	if (ImGui::DragFloat3("Rotation:", (float*)&rot, 0.5f)) trans->SetLocalRotation(rot);
 
 	ImGui::Separator();
 }
 
-void UI_Inspector::drawMesh(GameObject* selected, Mesh* mesh)
+void UI_Inspector::DrawMesh(GameObject* selected, Mesh* mesh)
 {
 	char meshName[60];
-	strcpy_s(meshName, 60, mesh->getName());
+	strcpy_s(meshName, 60, mesh->GetName());
 
 	//Active
-	bool meshActive = mesh->isEnable();
+	bool meshActive = mesh->IsEnable();
 	if (ImGui::Checkbox("Mesh:", &meshActive))
-		mesh->switchActive();
+		mesh->SwitchActive();
 
 	ImGui::SameLine();
 
-	if (ImGui::Button("Remove mesh")) mesh->remove();
+	if (ImGui::Button("Remove mesh")) mesh->Remove();
 
 	static uint nVertices = 0;
 	static uint nIndices = 0;
@@ -163,7 +162,7 @@ void UI_Inspector::drawMesh(GameObject* selected, Mesh* mesh)
 
 		ImGui::Text("File: ");
 		ImGui::SameLine();
-		ImGui::TextColored(ImColor(255, 153, 51), "%s.", mesh->meshResource->getExportedFile());
+		ImGui::TextColored(ImColor(255, 153, 51), "%s.", mesh->meshResource->exportedFile.c_str());
 	}
 
 	ImGui::Text("Number of vertices: ");
@@ -191,23 +190,23 @@ void UI_Inspector::drawMesh(GameObject* selected, Mesh* mesh)
 	ImGui::Separator();
 }
 
-void UI_Inspector::drawMaterial(GameObject* selected, Material* mat)
+void UI_Inspector::DrawMaterial(GameObject* selected, Material* mat)
 {
 	char matName[60];
-	strcpy_s(matName, 60, mat->getName());
+	strcpy_s(matName, 60, mat->GetName());
 
 	//Active
-	bool metActive = mat->isEnable();
-	if (ImGui::Checkbox("Material:", &metActive)) mat->switchActive();
+	bool metActive = mat->IsEnable();
+	if (ImGui::Checkbox("Material:", &metActive)) mat->SwitchActive();
 
 	ImGui::SameLine();
 
-	if (ImGui::Button("Remove material")) mat->remove();
+	if (ImGui::Button("Remove material")) mat->Remove();
 
 	ImGui::ColorEdit4("Color:", (float*)&mat->color, false);
 	//TODO: Show all textures
 
-	ImGui::Text("Shader id(0 or %d if using default):", app->resourceManager->getDefaultShader()->shaderID);
+	ImGui::Text("Shader id(0 or %d if using default):", app->resourceManager->GetDefaultShader()->shaderID);
 	ImGui::SameLine();
 	int sh = 0;
 	if (mat->shaderResource)
@@ -218,32 +217,32 @@ void UI_Inspector::drawMaterial(GameObject* selected, Material* mat)
 	if (sh != 0)
 	{
 		if (ImGui::Button("Set default shader"))
-			mat->shaderResource = app->resourceManager->getDefaultShader();
+			mat->shaderResource = app->resourceManager->GetDefaultShader();
 	}
 
 	ImGui::Separator();
 }
 
-void UI_Inspector::drawCamera(GameObject* selected, Camera* cam)
+void UI_Inspector::DrawCamera(GameObject* selected, Camera* cam)
 {
 	if (cam)
 	{
 		ImGui::Text("Camera:");
 		ImGui::ColorEdit4("Background:", (float*)&cam->background, false);
 
-		float nearP = cam->getNearPlaneDist();
-		float farP = cam->getFarPlaneDist();
-		float fov = cam->getFOV();
+		float nearP = cam->GetNearPlaneDist();
+		float farP = cam->GetFarPlaneDist();
+		float fov = cam->GetFOV();
 
-		if (ImGui::DragFloat("Near plane:", &nearP)) cam->setNearPlaneDist(nearP);
-		if (ImGui::DragFloat("Far plane:", &farP))cam->setFarPlaneDist(farP);
-		if (ImGui::DragFloat("Field of view:", &fov))cam->setFOV(fov);
+		if (ImGui::DragFloat("Near plane:", &nearP)) cam->SetNearPlaneDist(nearP);
+		if (ImGui::DragFloat("Far plane:", &farP))cam->SetFarPlaneDist(farP);
+		if (ImGui::DragFloat("Field of view:", &fov))cam->SetFOV(fov);
 
-		bool culling = cam->isCullingActive();
-		if (ImGui::Checkbox("Culling", &culling))cam->setCulling(culling);
+		bool culling = cam->IsCullingActive();
+		if (ImGui::Checkbox("Culling", &culling))cam->SetCulling(culling);
 
-		if (ImGui::Button("Make this active."))app->renderer3D->setActiveCamera(cam);
-		if (app->renderer3D->getActiveCamera() == cam)
+		if (ImGui::Button("Make this active."))app->renderer3D->SetActiveCamera(cam);
+		if (app->renderer3D->GetActiveCamera() == cam)
 			ImGui::TextColored(ImVec4(1, 0, 0, 1), "This is the active camera!");
 
 		ImGui::Separator();

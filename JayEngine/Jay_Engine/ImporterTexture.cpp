@@ -15,7 +15,7 @@
 #pragma comment(lib, "Devil/libx86/ILUT.lib")
 
 
-ImporterTexture::ImporterTexture() : Importer()
+ImporterTexture::ImporterTexture()
 {
 	_LOG(LOG_STD, "Creating a texture importer.");
 
@@ -37,19 +37,19 @@ ImporterTexture::~ImporterTexture()
 	ilShutDown();
 }
 
-bool ImporterTexture::import(const char* originalFile, std::string& exportedFile, UID& resUID)
+bool ImporterTexture::Import(const char* originalFile, std::string& exportedFile, UID& resUID)
 {
 	bool ret = false;
 
 	std::string file, ext, origin;
-	app->fs->splitPath(originalFile, NULL, &file, &ext);
+	app->fs->SplitPath(originalFile, NULL, &file, &ext);
 	origin.assign(DEFAULT_TEXTURES_PATH + file);
 
 	char* buffer = NULL;
-	uint size = app->fs->load(origin.c_str(), &buffer);
+	uint size = app->fs->Load(origin.c_str(), &buffer);
 
 	if (buffer && size > 0)
-		ret = importBuf(buffer, size, exportedFile, resUID);
+		ret = ImportBuf(buffer, size, exportedFile, resUID);
 
 	RELEASE_ARRAY(buffer);
 
@@ -59,7 +59,7 @@ bool ImporterTexture::import(const char* originalFile, std::string& exportedFile
 	return ret;
 }
 
-bool ImporterTexture::importBuf(const void* buffer, uint size, std::string& exportedFile, UID& resUID)
+bool ImporterTexture::ImportBuf(const void* buffer, uint size, std::string& exportedFile, UID& resUID)
 {
 	bool ret = false;
 
@@ -90,12 +90,12 @@ bool ImporterTexture::importBuf(const void* buffer, uint size, std::string& expo
 			if (ilSaveL(IL_DDS, data, _size) > 0)
 			{
 				//Save it FS
-				resUID = app->resourceManager->getNewUID();
+				resUID = app->resourceManager->GetNewUID();
 				exportedFile.assign(std::to_string(resUID) + TEXTURE_EXTENSION);
 				char savePath[256];
 				sprintf_s(savePath, 256, "%s%s", DEFAULT_TEXTURE_SAVE_PATH, exportedFile.c_str());
 
-				if (app->fs->save(savePath, (const char*)data, _size) == _size)
+				if (app->fs->Save(savePath, (const char*)data, _size) == _size)
 					ret = true;
 				else
 					_LOG(LOG_ERROR, "Error importing texture.");
@@ -112,7 +112,7 @@ bool ImporterTexture::importBuf(const void* buffer, uint size, std::string& expo
 	return ret;
 }
 
-bool ImporterTexture::loadResource(ResourceTexture* resource)
+bool ImporterTexture::LoadResource(ResourceTexture* resource)
 {
 	bool ret = false;
 
@@ -123,12 +123,12 @@ bool ImporterTexture::loadResource(ResourceTexture* resource)
 		return ret;
 
 	std::string path(DEFAULT_TEXTURE_SAVE_PATH);
-	path.append(resource->getExportedFile());
+	path.append(resource->exportedFile.c_str());
 
 	_LOG(LOG_INFO, "Loading textures resource from: '%s'.", path.c_str());
 
 	char* data = NULL;
-	uint size = app->fs->load(path.c_str(), &data);
+	uint size = app->fs->Load(path.c_str(), &data);
 
 	if (data && size > 0)
 	{

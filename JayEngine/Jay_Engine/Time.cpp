@@ -15,12 +15,12 @@ Time::~Time()
 {
 }
 
-float Time::editorDT()const
+float Time::EditorDT()const
 {
 	return realDT;
 }
 
-uint64 Time::editorFrames()const
+uint64 Time::EditorFrames()const
 {
 	return frameCount;
 }
@@ -30,19 +30,19 @@ float Time::DT()const
 	return gameDT;
 }
 
-uint64 Time::gameFrames()const
+uint64 Time::GameFrames()const
 {
 	return gameFPSCounter;
 }
 
-float Time::elapsedTime()const
+float Time::ElapsedTime()const
 {
 	return elapsed;
 }
 
 //----------------------------
 
-void Time::updateTime()
+void Time::UpdateTime()
 {
 	elapsed += realDT;
 	realDT = (float)msTimer->ReadSec();
@@ -50,31 +50,31 @@ void Time::updateTime()
 	++frameCount;
 }
 
-void Time::updateGameTime()
+void Time::UpdateGameTime()
 {
 	gameDT = (float)msGameTimer->ReadSec();
 	msGameTimer->Start();
 	++gameFPSCounter;
 }
 
-void Time::restartGameTimer()
+void Time::RestartGameTimer()
 {
 	msGameTimer->Start();
 	gameFPSCounter = 0;
 	gameDT = 0;
 }
 
-void Time::startGameTimer()
+void Time::StartGameTimer()
 {
 	msGameTimer->Start();
 }
 
-void Time::stopGameTimer()
+void Time::StopGameTimer()
 {
 	msGameTimer->Stop();
 }
 
-void Time::cleanGameTimer()
+void Time::CleanGameTimer()
 {
 	msGameTimer->Stop();
 	gameFPSCounter = 0;

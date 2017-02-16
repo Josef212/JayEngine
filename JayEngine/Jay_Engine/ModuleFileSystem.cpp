@@ -16,7 +16,7 @@ ModuleFileSystem::ModuleFileSystem(bool startEnabled) : Module(startEnabled)
 	PHYSFS_init(basePath);
 	SDL_free(basePath);
 
-	addPath(".");
+	AddPath(".");
 }
 
 
@@ -27,7 +27,7 @@ ModuleFileSystem::~ModuleFileSystem()
 }
 
 
-bool ModuleFileSystem::init(FileParser* conf)
+bool ModuleFileSystem::Init(FileParser* conf)
 {
 	_LOG(LOG_STD, "FileSystem: init.");
 	bool ret = true;
@@ -47,38 +47,38 @@ bool ModuleFileSystem::init(FileParser* conf)
 	else
 	{
 		_LOG(LOG_INFO, "Writing directory is %s\n", writePath);
-		addPath(writePath, getSaveDirectory());
+		AddPath(writePath, GetSaveDirectory());
 	}
 
-	addPath("Data");
+	AddPath("Data");
 
-	if (!exist("Library"))
-		makeDirectory("Library", "Data");
+	if (!Exist("Library"))
+		MakeDirectory("Library", "Data");
 
-	if (!exist("Library/Meshes"))
-		makeDirectory("Library/Meshes", "Data");
+	if (!Exist("Library/Meshes"))
+		MakeDirectory("Library/Meshes", "Data");
 
-	if (!exist("Library/Textures"))
-		makeDirectory("Library/Textures", "Data");
+	if (!Exist("Library/Textures"))
+		MakeDirectory("Library/Textures", "Data");
 
-	if (!exist("Library/Prefabs"))
-		makeDirectory("Library/Prefabs", "Data");
+	if (!Exist("Library/Prefabs"))
+		MakeDirectory("Library/Prefabs", "Data");
 
-	if (!exist("Library/tmp"))
-		makeDirectory("Library/tmp", "Data");
+	if (!Exist("Library/tmp"))
+		MakeDirectory("Library/tmp", "Data");
 
-	_LOG(LOG_INFO, "PHYS_FS base path: %s", getBasePath());
+	_LOG(LOG_INFO, "PHYS_FS base path: %s", GetBasePath());
 
 	return ret;
 }
 
-bool ModuleFileSystem::cleanUp()
+bool ModuleFileSystem::CleanUp()
 {
 	_LOG(LOG_STD, "FileSystem: CleanUp.");
 	return true;
 }
 
-bool ModuleFileSystem::addPath(const char* pathOrZip, const char* mountPoint)
+bool ModuleFileSystem::AddPath(const char* pathOrZip, const char* mountPoint)
 {
 	bool ret = false;
 
@@ -92,17 +92,17 @@ bool ModuleFileSystem::addPath(const char* pathOrZip, const char* mountPoint)
 	return ret;
 }
 
-bool ModuleFileSystem::exist(const char* file)
+bool ModuleFileSystem::Exist(const char* file)
 {
 	return PHYSFS_exists(file) != 0;
 }
 
-bool ModuleFileSystem::isDirectory(const char* file)
+bool ModuleFileSystem::IsDirectory(const char* file)
 {
 	return PHYSFS_isDirectory(file) != 0;
 }
 
-bool ModuleFileSystem::makeDirectory(const char* dir, const char* mount)
+bool ModuleFileSystem::MakeDirectory(const char* dir, const char* mount)
 {
 	bool ret = false;
 
@@ -129,7 +129,7 @@ bool ModuleFileSystem::makeDirectory(const char* dir, const char* mount)
 	return ret;
 }
 
-uint ModuleFileSystem::getFilesOnDir(const char* dir, std::vector<std::string>& files)
+uint ModuleFileSystem::GetFilesOnDir(const char* dir, std::vector<std::string>& files)
 {
 	uint ret = 0;
 
@@ -145,7 +145,7 @@ uint ModuleFileSystem::getFilesOnDir(const char* dir, std::vector<std::string>& 
 	return ret;
 }
 
-uint ModuleFileSystem::load(const char* file, const char* path, char** buffer)const
+uint ModuleFileSystem::Load(const char* file, const char* path, char** buffer)const
 {
 	if (!file)
 		return 0;
@@ -156,10 +156,10 @@ uint ModuleFileSystem::load(const char* file, const char* path, char** buffer)co
 	else
 		strcpy_s(realPath, 256, file);
 
-	return load(realPath, buffer);
+	return Load(realPath, buffer);
 }
 
-uint ModuleFileSystem::load(const char* file, char** buffer)const
+uint ModuleFileSystem::Load(const char* file, char** buffer)const
 {
 	uint ret = 0;
 
@@ -201,10 +201,10 @@ int closeSdlRwops(SDL_RWops *rw)
 	return 0;
 }
 
-SDL_RWops* ModuleFileSystem::load(const char* file)const
+SDL_RWops* ModuleFileSystem::Load(const char* file)const
 {
 	char* buffer;
-	int size = load(file, &buffer);
+	int size = Load(file, &buffer);
 
 	if (size > 0)
 	{
@@ -218,7 +218,7 @@ SDL_RWops* ModuleFileSystem::load(const char* file)const
 		return NULL;
 }
 
-unsigned int ModuleFileSystem::save(const char* file, const char* buffer, unsigned int size)const
+unsigned int ModuleFileSystem::Save(const char* file, const char* buffer, unsigned int size)const
 {
 	unsigned int ret = 0;
 
@@ -243,12 +243,12 @@ unsigned int ModuleFileSystem::save(const char* file, const char* buffer, unsign
 	return ret;
 }
 
-const char* ModuleFileSystem::getBasePath()
+const char* ModuleFileSystem::GetBasePath()
 {
 	return PHYSFS_getBaseDir();
 }
 
-void ModuleFileSystem::normalizePath(char* path)
+void ModuleFileSystem::NormalizePath(char* path)
 {
 	if (!path)
 		return;
@@ -258,29 +258,29 @@ void ModuleFileSystem::normalizePath(char* path)
 	{
 		if (path[i] == '\\')
 			path[i] = '/';
-		else
-			path[i] = tolower(path[i]);
+		/*else
+			path[i] = tolower(path[i]);*/
 	}
 }
 
-void ModuleFileSystem::normalizePath(std::string& path)
+void ModuleFileSystem::NormalizePath(std::string& path)
 {
 	for (std::string::iterator it = path.begin(); it < path.end(); ++it)
 	{
 		if (*it == '\\')
 			*it = '/';
-		else
-			*it = tolower(*it);
+		/*else
+			*it = tolower(*it);*/
 	}
 }
 
-void ModuleFileSystem::splitPath(const char* originalPath, std::string* path, std::string* file, std::string* extension)
+void ModuleFileSystem::SplitPath(const char* originalPath, std::string* path, std::string* file, std::string* extension)
 {
 	if (!originalPath)
 		return;
 
 	std::string fullPath(originalPath);
-	normalizePath(fullPath);
+	NormalizePath(fullPath);
 	int lastSeparator = fullPath.find_last_of("\\/");
 	int dot = fullPath.find_last_of(".");
 

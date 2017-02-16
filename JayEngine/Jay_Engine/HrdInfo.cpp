@@ -9,7 +9,7 @@ HrdInfo::~HrdInfo()
 {
 }
 
-void HrdInfo::setInfo()
+void HrdInfo::SetInfo()
 {
 	info.platform = SDL_GetPlatform();
 	info.cpuCacheSize = SDL_GetCPUCacheLineSize();
@@ -27,10 +27,10 @@ void HrdInfo::setInfo()
 	info.has3DNow = SDL_Has3DNow();
 	SDL_GetVersion(&info.sdlVersion);
 	info.sdlRevison = SDL_GetRevision();
-	setCaps();
+	SetCaps();
 }
 
-void HrdInfo::logHrdInfo()
+void HrdInfo::LogHrdInfo()
 {
 	_LOG(LOG_STD,"---Hardware information:  ---");
 	_LOG(LOG_STD,"CPU cores: %d.", info.cpuCores);
@@ -59,7 +59,7 @@ void HrdInfo::logHrdInfo()
 		_LOG(LOG_STD, "Has3DNow");
 }
 
-void HrdInfo::setCaps()
+void HrdInfo::SetCaps()
 {
 	if (info.hasAVX)
 		str.append("AVX ");
@@ -83,7 +83,7 @@ void HrdInfo::setCaps()
 		str.append("3DNow");
 }
 
-const char* HrdInfo::getCaps()
+const char* HrdInfo::GetCaps()
 {
 	return str.c_str();
 }

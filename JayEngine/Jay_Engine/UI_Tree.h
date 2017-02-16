@@ -1,20 +1,20 @@
-#ifndef __UITREE_H__
-#define __UITREE_H__
+#ifndef __UI_TREE__
+#define __UI_TREE__
 
-#include "UI_Comp.h"
+#include "UI_Panel.h"
 
-class oTreeNode;
+class OcTreeNode;
 
-class UI_Tree : public UI_Comp
+class UI_Tree : public UI_Panel
 {
 public:
-	UI_Tree();
+	UI_Tree(bool startEnalbed = false);
 	virtual ~UI_Tree();
 
-	void draw();
+	void Draw()override;
 
 private:
-	void recursiveDrawTree(oTreeNode* treeNode, uint index);
+	void RecursiveDrawTree(OcTreeNode* treeNode, uint index);
 };
 
-#endif // !__UITREE_H__
+#endif // !__UI_TREE__

@@ -1,5 +1,5 @@
-#ifndef __EVENT_H__
-#define __EVENT_H__
+#ifndef __EVENT__
+#define __EVENT__
 
 struct Event
 {
@@ -34,4 +34,4 @@ struct Event
 	{}
 };
 
-#endif // !__EVENT_H__
+#endif // !__EVENT__

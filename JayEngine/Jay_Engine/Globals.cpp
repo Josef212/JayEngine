@@ -20,7 +20,7 @@ void _log(logType type, const char file[], int line, const char* format, ...)
 	if(app)
 	{
 		sprintf_s(tmp_string2, 4096, "%s", tmp_string);
-		app->log(tmp_string2, type);
+		app->Log(tmp_string2, type);
 	}
 }
 

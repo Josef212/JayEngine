@@ -24,10 +24,10 @@ ModuleCamera3D::ModuleCamera3D(bool startEnabled) : Module(startEnabled)
 
 	if (defaultCamera)
 	{
-		defaultCamera->setName("Editor camera");
-		defaultCameraComp = (Camera*)defaultCamera->addComponent(CAMERA);
+		defaultCamera->SetName("Editor camera");
+		defaultCameraComp = (Camera*)defaultCamera->AddComponent(CMP_CAMERA);
 		if(defaultCameraComp)
-			defaultCameraComp->look(float3::zero, float3(0, 10, 10));
+			defaultCameraComp->Look(float3::zero, float3(0, 10, 10));
 	}
 }
 
@@ -36,7 +36,7 @@ ModuleCamera3D::~ModuleCamera3D()
 	_LOG(LOG_STD, "Camera3D: Destroying.");
 }
 
-bool ModuleCamera3D::init(FileParser* conf)
+bool ModuleCamera3D::Init(FileParser* conf)
 {
 	moveSpeed = conf->getFloat("mov_speed", 10.f);
 	rotSpeed = conf->getFloat("rot_speed", 3.f);
@@ -50,7 +50,7 @@ bool ModuleCamera3D::init(FileParser* conf)
 }
 
 // -----------------------------------------------------------------
-bool ModuleCamera3D::start()
+bool ModuleCamera3D::Start()
 {
 	_LOG(LOG_STD, "Camera3D: Start.");
 
@@ -58,26 +58,26 @@ bool ModuleCamera3D::start()
 }
 
 // -----------------------------------------------------------------
-bool ModuleCamera3D::cleanUp()
+bool ModuleCamera3D::CleanUp()
 {
 	_LOG(LOG_STD, "Camera3D: CleanUp.");
 
-	defaultCamera->cleanUp();
+	defaultCamera->CleanUp();
 	RELEASE(defaultCamera);
 
 	return true;
 }
 
 // -----------------------------------------------------------------
-update_status ModuleCamera3D::update(float dt)
+update_status ModuleCamera3D::Update(float dt)
 {
-	if(!app->editor->usingKeyboard())
-		move(dt);
+	if(!app->editor->UsingKeyboard())
+		Move(dt);
 	
-	if (!app->editor->usingMouse())
+	if (!app->editor->UsingMouse())
 	{
-		rotate(dt);
-		zoom(dt);
+		Rotate(dt);
+		Zoom(dt);
 	}
 
 	//TODO: picking
@@ -86,25 +86,25 @@ update_status ModuleCamera3D::update(float dt)
 }
 
 // -----------------------------------------------------------------
-void ModuleCamera3D::look(const float3& position, const float3& reference, bool rotateAroundReference)
+void ModuleCamera3D::Look(const float3& position, const float3& reference, bool rotateAroundReference)
 {
-	defaultCameraComp->look(position, reference);
+	defaultCameraComp->Look(position, reference);
 }
 
 // -----------------------------------------------------------------
-void ModuleCamera3D::lookAt( const float3& spot)
+void ModuleCamera3D::LookAt( const float3& spot)
 {
-	defaultCameraComp->lookAt(spot);
+	defaultCameraComp->LookAt(spot);
 }
 
 
 // -----------------------------------------------------------------
-void ModuleCamera3D::move(float dt)
+void ModuleCamera3D::Move(float dt)
 {
 	Frustum* frust = &defaultCameraComp->frustum;
 
 	float speed;
-	if (app->input->getKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
+	if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
 		speed = moveSpeed / 2;
 	else
 		speed = moveSpeed;
@@ -113,12 +113,12 @@ void ModuleCamera3D::move(float dt)
 	float3 forw(frust->front);
 	float3 right(frust->WorldRight());
 
-	if (app->input->getKey(SDL_SCANCODE_W) == KEY_REPEAT) movement += forw;
-	if (app->input->getKey(SDL_SCANCODE_S) == KEY_REPEAT) movement -= forw;
-	if (app->input->getKey(SDL_SCANCODE_D) == KEY_REPEAT) movement += right;
-	if (app->input->getKey(SDL_SCANCODE_A) == KEY_REPEAT) movement -= right;
-	if (app->input->getKey(SDL_SCANCODE_R) == KEY_REPEAT) movement += float3::unitY;
-	if (app->input->getKey(SDL_SCANCODE_F) == KEY_REPEAT) movement -= float3::unitY;
+	if (app->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) movement += forw;
+	if (app->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) movement -= forw;
+	if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) movement += right;
+	if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) movement -= right;
+	if (app->input->GetKey(SDL_SCANCODE_R) == KEY_REPEAT) movement += float3::unitY;
+	if (app->input->GetKey(SDL_SCANCODE_F) == KEY_REPEAT) movement -= float3::unitY;
 
 	if (!movement.Equals(float3::zero))
 	{
@@ -127,18 +127,18 @@ void ModuleCamera3D::move(float dt)
 	}
 }
 
-void ModuleCamera3D::rotate(float dt)
+void ModuleCamera3D::Rotate(float dt)
 {
-	if (app->input->getMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
+	if (app->input->GetMouseButton(SDL_BUTTON_RIGHT) == KEY_REPEAT)
 	{
-		int motX = app->input->getMouseXMotion();
-		int motY = app->input->getMouseYMotion();
+		int motX = app->input->GetMouseXMotion();
+		int motY = app->input->GetMouseYMotion();
 
 		if (!(motX != 0 && motY != 0))
 			return;
 
 		float speed;
-		if (app->input->getKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
+		if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
 			speed = rotSpeed / 2;
 		else
 			speed = rotSpeed;
@@ -146,19 +146,19 @@ void ModuleCamera3D::rotate(float dt)
 		float x = (float)-motX * speed * dt;
 		float y = (float)-motY * speed * dt;
 
-		if (app->input->getKey(SDL_SCANCODE_LALT) == KEY_REPEAT)
-			orbit(x, y);
+		if (app->input->GetKey(SDL_SCANCODE_LALT) == KEY_REPEAT)
+			Orbit(x, y);
 		else
-			lookAt(x, y);
+			LookAt(x, y);
 	}
 }
 
-void ModuleCamera3D::setPos(const float3& pos)
+void ModuleCamera3D::SetPos(const float3& pos)
 {
 	
 }
 
-void ModuleCamera3D::orbit(float dx, float dy)
+void ModuleCamera3D::Orbit(float dx, float dy)
 {
 	//TODO: improve this: better orbit rotation and rotate with an object reference
 	float3 reference = defaultCameraComp->frustum.pos + defaultCameraComp->frustum.front * distToReference;
@@ -170,10 +170,10 @@ void ModuleCamera3D::orbit(float dx, float dy)
 	vec = roty.Transform(vec);
 
 	defaultCameraComp->frustum.pos = vec + reference;
-	lookAt(reference);
+	LookAt(reference);
 }
 
-void ModuleCamera3D::lookAt(float dx, float dy)
+void ModuleCamera3D::LookAt(float dx, float dy)
 {
 	//dx will be rotation along x axis
 	if (dx != 0.f)
@@ -194,14 +194,14 @@ void ModuleCamera3D::lookAt(float dx, float dy)
 	}
 }
 
-void ModuleCamera3D::zoom(float dt)
+void ModuleCamera3D::Zoom(float dt)
 {
-	if (app->input->getWheelYMotion() != 0)
+	if (app->input->GetWheelYMotion() != 0)
 	{
 		Frustum* frust = &defaultCameraComp->frustum;
 
 		float speed;
-		if (app->input->getKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
+		if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT)
 			speed = zoomSpeed / 2;
 		else
 			speed = zoomSpeed;
@@ -209,7 +209,7 @@ void ModuleCamera3D::zoom(float dt)
 		float3 movement(float3::zero);
 		float3 forw(frust->front);
 
-		movement += (forw * app->input->getWheelYMotion());
+		movement += (forw * app->input->GetWheelYMotion());
 
 		if (!movement.Equals(float3::zero))
 		{
@@ -220,12 +220,12 @@ void ModuleCamera3D::zoom(float dt)
 }
 
 //=================================================================
-GameObject* ModuleCamera3D::getEditorCameraObj()const
+GameObject* ModuleCamera3D::GetEditorCameraObj()const
 {
 	return defaultCamera;
 }
 
-Camera* ModuleCamera3D::getCamera()
+Camera* ModuleCamera3D::GetCamera()
 {
 	return defaultCameraComp;
 }

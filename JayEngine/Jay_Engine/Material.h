@@ -1,5 +1,5 @@
-#ifndef __MATERIAL_H__
-#define __MATERIAL_H__
+#ifndef __MATERIAL__
+#define __MATERIAL__
 
 #include "Component.h"
 #include "Color.h"
@@ -17,28 +17,25 @@ public:
 	Material(GameObject* gObj, int id);
 	virtual ~Material();
 
-	void enable();
-	void disable();
+	void Init()override;
+	void Update(float dt)override;
+	void CleanUp()override;
 
-	void init();
-	void update(float dt);
-	void cleanUp();
+	bool SaveCMP(FileParser& sect)override;
+	bool LoadCMP(FileParser& sect)override;
 
-	bool saveCMP(FileParser& sect);
-	bool loadCMP(FileParser& sect);
-
-	void setResource(UID resUID);
-	void clearMaterial();
+	void SetResource(UID resUID)override;
+	void ClearMaterial();
 
 private:
 
 public:
 	Color color = White;
 
-	ResourceTexture* textureResource = NULL; //Vector if normal map, light map, etc.
-	ResourceShader* shaderResource = NULL;
+	ResourceTexture* textureResource = nullptr; //Vector if normal map, light map, etc.
+	ResourceShader* shaderResource = nullptr;
 
 private:
 };
 
-#endif // !__MATERIAL_H__
+#endif // !__MATERIAL__

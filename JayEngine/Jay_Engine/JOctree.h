@@ -14,31 +14,31 @@ class GameObject;
 //---------------TreeNode----------------------------
 //---------------------------------------------------
 
-class oTreeNode
+class OcTreeNode
 {
 public:
-	oTreeNode(const AABB& _box);
-	~oTreeNode();
+	OcTreeNode(const AABB& _box);
+	~OcTreeNode();
 
-	void insert(GameObject* obj);
-	void erase(GameObject* obj);
+	void Insert(GameObject* obj);
+	void Erase(GameObject* obj);
 
-	void coollectBoxes(std::vector<AABB>& vec);
-	void coollectGO(std::vector<GameObject*>& vec);
+	void CoollectBoxes(std::vector<AABB>& vec);
+	void CoollectGO(std::vector<GameObject*>& vec);
 
-	void collectTreeBoxes(std::vector<AABB>& vec);
+	void CollectTreeBoxes(std::vector<AABB>& vec);
 
-	void divideNode();
-	void ajustNode();
-	bool intersectsAllChilds(const AABB& _box);
+	void DivideNode();
+	void AjustNode();
+	bool IntersectsAllChilds(const AABB& _box);
 
-	void collectCandidates(std::vector<GameObject*>& vec, const Frustum& frustum);
+	void CollectCandidates(std::vector<GameObject*>& vec, const Frustum& frustum);
 
 public:
 	AABB box;
 	std::list<GameObject*> objects;
-	oTreeNode* parent = nullptr;
-	oTreeNode* childs[8];
+	OcTreeNode* parent = nullptr;
+	OcTreeNode* childs[8];
 };
 
 //---------------------------------------------------
@@ -51,21 +51,21 @@ public:
 	JOctree();
 	virtual ~JOctree();
 
-	void insert(GameObject* obj);
-	void erase(GameObject* obj);
+	void Insert(GameObject* obj);
+	void Erase(GameObject* obj);
 
-	void setRoot(const AABB& _box);
-	void clear();
+	void SetRoot(const AABB& _box);
+	void Clear();
 
-	void coollectBoxes(std::vector<AABB>& vec);
-	void coollectGO(std::vector<GameObject*>& vec);
+	void CoollectBoxes(std::vector<AABB>& vec);
+	void CoollectGO(std::vector<GameObject*>& vec);
 
-	void collectTreeBoxes(std::vector<AABB>& vec);
+	void CollectTreeBoxes(std::vector<AABB>& vec);
 
-	void collectCandidates(std::vector<GameObject*>& vec, const Frustum& primitive);
+	void CollectCandidates(std::vector<GameObject*>& vec, const Frustum& primitive);
 
 public:
-	oTreeNode* rootNode = nullptr;
+	OcTreeNode* rootNode = nullptr;
 };
 
 

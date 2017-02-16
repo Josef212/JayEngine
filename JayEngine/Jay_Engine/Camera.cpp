@@ -13,7 +13,7 @@
 
 Camera::Camera(GameObject* gObj, int id) : Component(gObj, id)
 {
-	type = CAMERA;
+	type = CMP_CAMERA;
 
 	name.assign("Camera");
 
@@ -25,39 +25,39 @@ Camera::Camera(GameObject* gObj, int id) : Component(gObj, id)
 
 	frustum.nearPlaneDistance = nearPlaneDist;
 	frustum.farPlaneDistance = farPlaneDist;
-	setFOV(FOV);
-	setAspectRatio(aspectRatio);
+	SetFOV(FOV);
+	SetAspectRatio(aspectRatio);
 }
 
 Camera::~Camera()
 {
-	if (app->renderer3D->getActiveCamera() == this)
-		app->renderer3D->setActiveCamera(NULL);
+	if (app->renderer3D->GetActiveCamera() == this)
+		app->renderer3D->SetActiveCamera(nullptr);
 }
 
 
-float Camera::getFOV()const //Vertical FOV
+float Camera::GetFOV()const //Vertical FOV
 {
 	return FOV;
 }
 
-void Camera::setFOV(float vFOV) //Vertical FOV
+void Camera::SetFOV(float vFOV) //Vertical FOV
 {
 	if (vFOV > 0.f)
 	{
 		//Will set manually aspect ratio (h fov) cause can use SetVerticalFovAndAspectRatio function
 		FOV = vFOV;
 		frustum.verticalFov = DEGTORAD * FOV;
-		setAspectRatio(aspectRatio);
+		SetAspectRatio(aspectRatio);
 	}
 }
 
-float Camera::getFarPlaneDist()const
+float Camera::GetFarPlaneDist()const
 {
 	return farPlaneDist;
 }
 
-void Camera::setFarPlaneDist(float farPlaneD)
+void Camera::SetFarPlaneDist(float farPlaneD)
 {
 	if (farPlaneD > 0.f && farPlaneD > nearPlaneDist)
 	{
@@ -67,12 +67,12 @@ void Camera::setFarPlaneDist(float farPlaneD)
 	}
 }
 
-float Camera::getNearPlaneDist()const
+float Camera::GetNearPlaneDist()const
 {
 	return nearPlaneDist;
 }
 
-void Camera::setNearPlaneDist(float nearPlaneD)
+void Camera::SetNearPlaneDist(float nearPlaneD)
 {
 	if (nearPlaneD > 0.f && nearPlaneD < farPlaneDist)
 	{
@@ -82,12 +82,12 @@ void Camera::setNearPlaneDist(float nearPlaneD)
 	}
 }
 
-float Camera::getAspectRatio()const
+float Camera::GetAspectRatio()const
 {
 	return aspectRatio;
 }
 
-void Camera::setAspectRatio(float ratio)
+void Camera::SetAspectRatio(float ratio)
 {
 	if (ratio > 0)
 	{
@@ -97,22 +97,22 @@ void Camera::setAspectRatio(float ratio)
 	}
 }
 
-bool Camera::isCullingActive()const
+bool Camera::IsCullingActive()const
 {
 	return culling;
 }
 
-void Camera::setCulling(bool set)
+void Camera::SetCulling(bool set)
 {
 	culling = set;
 }
 
-Color Camera::getBackground()
+Color Camera::GetBackground()
 {
 	return background;
 }
 
-void Camera::getBackground(float& r, float& g, float& b, float& a)
+void Camera::GetBackground(float& r, float& g, float& b, float& a)
 {
 	r = background.r;
 	g = background.g;
@@ -120,24 +120,24 @@ void Camera::getBackground(float& r, float& g, float& b, float& a)
 	a = background.a;
 }
 
-void Camera::setBackground(float r, float g, float b, float a)
+void Camera::SetBackground(float r, float g, float b, float a)
 {
 	background.Set(r, g, b, a);
 }
 
-void Camera::onTransformUpdate(Transform* trans)
+void Camera::OnTransformUpdate(Transform* trans)
 {
 	if (!trans)
 		return;
 
-	float4x4 mat = trans->getGlobalTransform();
+	float4x4 mat = trans->GetGlobalTransform();
 
 	frustum.pos = mat.TranslatePart();
 	frustum.front = mat.WorldZ();
 	frustum.up = mat.WorldY();
 }
 
-float* Camera::getGLViewMatrix()
+float* Camera::GetGLViewMatrix()
 {
 	static float4x4 ret;
 	ret = frustum.ViewMatrix();
@@ -145,7 +145,7 @@ float* Camera::getGLViewMatrix()
 	return (float*)ret.v;
 }
 
-float* Camera::getGLProjectMatrix()
+float* Camera::GetGLProjectMatrix()
 {
 	static float4x4 ret;
 	ret = frustum.ProjectionMatrix();
@@ -153,13 +153,13 @@ float* Camera::getGLProjectMatrix()
 	return (float*)ret.v;
 }
 
-void Camera::debugDraw()
+void Camera::DebugDraw()
 {
 	if(app->debug)
-		drawFrustumDebug(frustum);
+		DrawFrustumDebug(frustum);
 }
 
-void Camera::lookAt(const float3 spot)
+void Camera::LookAt(const float3 spot)
 {
 	float3 direction = spot - frustum.pos;
 	float3x3 mat = float3x3::LookAt(frustum.front, direction.Normalized(), frustum.up, float3::unitY);
@@ -168,21 +168,21 @@ void Camera::lookAt(const float3 spot)
 	frustum.up = mat.MulDir(frustum.up).Normalized();
 }
 
-void Camera::look(const float3 spot, const float3 pos)
+void Camera::Look(const float3 spot, const float3 pos)
 {
 	frustum.pos = pos;
-	lookAt(spot);
+	LookAt(spot);
 	projectMatrixChanged = true;
 }
 
-bool Camera::saveCMP(FileParser& sect)
+bool Camera::SaveCMP(FileParser& sect)
 {
 	bool ret = true;
 
 	sect.addInt("comp_type", (int)type);
-	sect.addBool("active", active);
+	sect.addBool("active", selfActive);
 	sect.addInt("UUID", id);
-	sect.addInt("go_UUID", object->getGOId());
+	sect.addInt("go_UUID", object->GetGOId());
 
 	sect.addFloat("near_plane", nearPlaneDist);
 	sect.addFloat("far_plane", farPlaneDist);
@@ -192,29 +192,29 @@ bool Camera::saveCMP(FileParser& sect)
 	sect.addFloat3("cam_pos", frustum.pos);
 	sect.addColor("bg_color", background);
 
-	if (app->renderer3D->getActiveCamera() == this)
+	if (app->renderer3D->GetActiveCamera() == this)
 		sect.addBool("is_active_cam", true);
 
 	return ret;
 }
 
-bool Camera::loadCMP(FileParser& sect)
+bool Camera::LoadCMP(FileParser& sect)
 {
 	bool ret = true;
 
-	active = sect.getBool("active", true);
+	selfActive = sect.getBool("active", true);
 	id = sect.getInt("UUID", 0);
 
 	nearPlaneDist = sect.getFloat("near_plane", 0.f);
 	farPlaneDist = sect.getFloat("far_plane", 0.f);
 	FOV = sect.getFloat("fov", 0.f);
-	setAspectRatio(sect.getFloat("aspect_ratio", 1.3f));
+	SetAspectRatio(sect.getFloat("aspect_ratio", 1.3f));
 
 	frustum.pos = sect.getFloat3("cam_pos", float3::zero);
 	background = sect.getColor("bg_color", Black);
 
 	if (sect.getBool("is_active_cam", false))
-		app->renderer3D->setActiveCamera(this);
+		app->renderer3D->SetActiveCamera(this);
 
 	return ret;
 }

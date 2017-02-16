@@ -16,7 +16,7 @@ ResourceMesh::~ResourceMesh()
 {
 }
 
-void ResourceMesh::loadMeshResource(const char* fileName, const char* path)
+void ResourceMesh::LoadMeshResource(const char* fileName, const char* path)
 {
 	if (!fileName)
 	{
@@ -37,7 +37,7 @@ void ResourceMesh::loadMeshResource(const char* fileName, const char* path)
 	_LOG(LOG_INFO, "Loading mesh: %s.", realName.c_str());
 
 	char* data;
-	uint size = app->fs->load(realName.c_str(), &data);
+	uint size = app->fs->Load(realName.c_str(), &data);
 
 	if (data && size > 0)
 	{
@@ -92,7 +92,7 @@ void ResourceMesh::loadMeshResource(const char* fileName, const char* path)
 		bytes = sizeof(AABB);
 		memcpy(&aabb.minPoint.x, cursor, bytes);
 
-		app->resourceManager->addResource(this, uuid);
+		app->resourceManager->AddResource(this, uuid);
 
 		RELEASE_ARRAY(data);
 	}
@@ -101,7 +101,7 @@ void ResourceMesh::loadMeshResource(const char* fileName, const char* path)
 
 }
 
-bool ResourceMesh::loadToMemory()
+bool ResourceMesh::LoadToMemory()
 {
 	bool ret = false;
 
@@ -145,7 +145,7 @@ bool ResourceMesh::loadToMemory()
 	return ret;
 }
 
-bool ResourceMesh::removeFromMemory()
+bool ResourceMesh::RemoveFromMemory()
 {
 	if (idIndices > 0) glDeleteBuffers(1, &idIndices);
 	if (idVertices > 0) glDeleteBuffers(1, &idVertices);

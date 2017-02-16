@@ -7,7 +7,7 @@
 #include "ModuleRenderer3D.h"
 #include "FileParser.h"
 
-#include "UI_Comp.h"
+#include "UI_Panel.h"
 #include "UI_Conf.h"
 #include "UI_Console.h"
 #include "UI_Hierarchy.h"
@@ -51,7 +51,7 @@ ModuleEditor::~ModuleEditor()
 {
 	_LOG(LOG_STD, "Editor: Destroying.");
 
-	std::list<UI_Comp*>::reverse_iterator it = uiList.rbegin();
+	std::list<UI_Panel*>::reverse_iterator it = uiList.rbegin();
 	for (; it != uiList.rend(); ++it)
 		RELEASE((*it));
 
@@ -59,29 +59,38 @@ ModuleEditor::~ModuleEditor()
 }
 
 
-bool ModuleEditor::init(FileParser* conf)
+bool ModuleEditor::Init(FileParser* conf)
 {
 	_LOG(LOG_STD, "Editor: Init.");
-	ImGui_ImplSdlGL3_Init(app->window->getWindow());
+	ImGui_ImplSdlGL3_Init(app->window->GetWindow());
 
 	engineVersion.assign(conf->getString("version", "0.1.0-V"));
 	
-	setStyle(); //TODO: config??
+	SetStyle(); //TODO: config??
 
 	return true;
 }
 
-bool ModuleEditor::start()
+bool ModuleEditor::Start()
 {
 	_LOG(LOG_STD, "Editor: Start.");
+
+	if (app->IsEditorState() || app->forceEditor)
+	{
+		console->SwapActive();
+		hieracy->SwapActive();
+		inspector->SwapActive();
+		resources->SwapActive();
+	}
+
 	return true;
 }
 
-update_status ModuleEditor::preUpdate(float dt)
+update_status ModuleEditor::PreUpdate(float dt)
 {
 	update_status ret = UPDATE_CONTINUE;
 
-	ImGui_ImplSdlGL3_NewFrame(app->window->getWindow());
+	ImGui_ImplSdlGL3_NewFrame(app->window->GetWindow());
 
 	ImGuiIO& io = ImGui::GetIO();
 	isUsingMouse = io.WantCaptureMouse;
@@ -90,78 +99,70 @@ update_status ModuleEditor::preUpdate(float dt)
 	return ret;
 }
 
-update_status ModuleEditor::update(float dt)
+update_status ModuleEditor::Update(float dt)
 {
 	update_status ret = UPDATE_CONTINUE;
+
+	if (!(app->IsEditorState() || app->forceEditor))
+		return ret;
 
 	ImGui::BeginMainMenuBar();
 	{
 		if (ImGui::BeginMenu("File"))
 		{
-			if (ImGui::MenuItem("TMP:Save scene"))app->goManager->saveScene(); //TODO: Should open a window in order to set de file to save or load file name.
-			if (ImGui::MenuItem("TMP:Load scene"))
-			{
-				app->goManager->cleanRootNow();
-				app->goManager->loadScene();
-			}
-			if (ImGui::MenuItem("LoadConf")) app->loadGame();
-			if (ImGui::MenuItem("SaveConf")) app->saveGame();
-			if (ImGui::MenuItem("Load")) showLoadWin = !showLoadWin; //TODO: open file browser etc
-			if (ImGui::MenuItem("Save")) showSaveWin = !showSaveWin;
-			if (ImGui::MenuItem("Serch files")) showDirWin = !showDirWin;
 			if (ImGui::MenuItem("Quit")) app->quit = true;
 			ImGui::EndMenu();
 		}
 
-		if (ImGui::BeginMenu("View"))
+		if (ImGui::BeginMenu("Windows"))
 		{
-			if (ImGui::MenuItem("Configuration")) conf->swapActive();
-			if (ImGui::MenuItem("Console")) console->swapActive();
-			if (ImGui::MenuItem("Hierarchy")) hieracy->swapActive();
-			if (ImGui::MenuItem("Inspector")) inspector->swapActive();
-			if (ImGui::MenuItem("Scene tree")) tree->swapActive();
+			if (ImGui::MenuItem("Configuration")) conf->SwapActive();
+			if (ImGui::MenuItem("Console")) console->SwapActive();
+			if (ImGui::MenuItem("Hierarchy")) hieracy->SwapActive();
+			if (ImGui::MenuItem("Inspector")) inspector->SwapActive();
+			if (ImGui::MenuItem("Scene tree")) tree->SwapActive();
 			ImGui::EndMenu();
 		}
 
 		if (ImGui::BeginMenu("GameObject"))
 		{
-			if (ImGui::MenuItem("Create Empty Game object")) app->goManager->createEmptyGO();
+			if (ImGui::MenuItem("Create Empty Game object")) app->goManager->CreateEmptyGO();
 			if (ImGui::BeginMenu("Primitives"))
 			{
 				//if (ImGui::MenuItem("Cube")) app->goManager->loadCube(); //DEL_COM: commented for delivery
 
 				ImGui::EndMenu();
 			}
-			if (ImGui::MenuItem("Camera")) app->goManager->createCamera();
+			if (ImGui::MenuItem("Camera")) app->goManager->CreateCamera();
 			ImGui::EndMenu();
 		}
 
 		if (ImGui::BeginMenu("Components"))
 		{
-			if (ImGui::MenuItem("Add transform"))app->goManager->addTransform();
+			/*if (ImGui::MenuItem("Add transform"))app->goManager->addTransform();
 			if (ImGui::MenuItem("Add mesh"))app->goManager->addMesh();
 			if (ImGui::MenuItem("Add material"))app->goManager->addMaterial();
-			if (ImGui::MenuItem("Add camera"))app->goManager->addCamera();
+			if (ImGui::MenuItem("Add camera"))app->goManager->addCamera();*/
 			ImGui::EndMenu();
 		}
 
 		if (ImGui::BeginMenu("Help"))
 		{
 			if (ImGui::MenuItem("ImGui Demo")) showImGuiDemo = !showImGuiDemo;
-			if (ImGui::MenuItem("Engine Documentation")) app->browse(WIKI_URL);
-			if (ImGui::MenuItem("Check all releases")) app->browse(RELEASES_URL);
-			if (ImGui::MenuItem("Report a bug")) app->browse(ISSUES_URL);
+			if (ImGui::MenuItem("Engine Documentation")) app->Browse(WIKI_URL);
+			if (ImGui::MenuItem("Check all releases")) app->Browse(RELEASES_URL);
+			if (ImGui::MenuItem("Report a bug")) app->Browse(ISSUES_URL);
 			if (ImGui::BeginMenu("3rd Party Documentation"))
 			{
-				if (ImGui::MenuItem("Assimp")) app->browse(ASSIMP_DOC_URL);
-				if (ImGui::MenuItem("Bullet")) app->browse(BULLET_DOC_URL);
-				if (ImGui::MenuItem("Devil")) app->browse(DEVIL_DOC_URL);
-				if (ImGui::MenuItem("ImGui")) app->browse(IMGUI_DOC_URL);
-				if (ImGui::MenuItem("MathGeolib")) app->browse(MATHGEOLIB_DOC_URL);
-				if (ImGui::MenuItem("OpenGL")) app->browse(OPENGL_DOC_URL);
-				if (ImGui::MenuItem("PhysFs")) app->browse(PHYSFS_DOC_URL);
-				if (ImGui::MenuItem("SDL2")) app->browse(SDL_DOC_URL);
-				if (ImGui::MenuItem("SDL_Mixer")) app->browse(SDL_MIXER_DOC_URL);
+				if (ImGui::MenuItem("Assimp")) app->Browse(ASSIMP_DOC_URL);
+				if (ImGui::MenuItem("Bullet")) app->Browse(BULLET_DOC_URL);
+				if (ImGui::MenuItem("Devil")) app->Browse(DEVIL_DOC_URL);
+				if (ImGui::MenuItem("ImGui")) app->Browse(IMGUI_DOC_URL);
+				if (ImGui::MenuItem("MathGeolib")) app->Browse(MATHGEOLIB_DOC_URL);
+				if (ImGui::MenuItem("OpenGL")) app->Browse(OPENGL_DOC_URL);
+				if (ImGui::MenuItem("PhysFs")) app->Browse(PHYSFS_DOC_URL);
+				if (ImGui::MenuItem("SDL2")) app->Browse(SDL_DOC_URL);
+				if (ImGui::MenuItem("SDL_Mixer")) app->Browse(SDL_MIXER_DOC_URL);
 
 				ImGui::EndMenu();
 			}
@@ -192,20 +193,20 @@ update_status ModuleEditor::update(float dt)
 		ImGui::Text("Please report any bug you find, take a look at 'Help->Report a bug'. Thanks ;)");
 		ImGui::Text("Check the repository clicking here:");
 		ImGui::SameLine();
-		if (ImGui::Button("GitHub")) app->browse(REPOSITORY_URL);
+		if (ImGui::Button("GitHub")) app->Browse(REPOSITORY_URL);
 		ImGui::SameLine();
 		ImGui::Text("or know more about me clicking here:");
 		ImGui::SameLine();
-		if (ImGui::Button("Josef21296")) app->browse(GITHUB_URL);
+		if (ImGui::Button("Josef21296")) app->Browse(GITHUB_URL);
 
 		ImGui::End();
 	}
 
-	std::list<UI_Comp*>::iterator it = uiList.begin();
+	std::list<UI_Panel*>::iterator it = uiList.begin();
 	for (; it != uiList.end(); ++it)
 	{
-		if ((*it)->isActive())
-			(*it)->draw();
+		if ((*it)->IsActive())
+			(*it)->Draw();
 	}
 
 	if (showImGuiDemo)
@@ -215,65 +216,65 @@ update_status ModuleEditor::update(float dt)
 	}
 
 	if (showDirWin)
-		openDirWin("Assets/fbx");
+		OpenDirWin("Assets/fbx");
 
 	if (showSaveWin)
-		openSaveBrowser("Data/Scenes/");
+		OpenSaveBrowser("Data/Scenes/");
 
 	if (showLoadWin)
-		openLoadBrowser("Data/Scenes/");
+		OpenLoadBrowser("Data/Scenes/");
 
 	if (showTimeDisplay)
-		timeDisplay();
+		TimeDisplay();
 
-	playMenu();
+	PlayMenu();
 
 	return ret;
 }
 
-bool ModuleEditor::cleanUp()
+bool ModuleEditor::CleanUp()
 {
 	_LOG(LOG_INFO, "Editor: CleanUp.");
 
 	return true;
 }
 
-void ModuleEditor::drawEditor()
+void ModuleEditor::DrawEditor()
 {
 	ImGui::Render();
 }
 
-void ModuleEditor::passInput(SDL_Event* inputEvent)
+void ModuleEditor::PassInput(SDL_Event* inputEvent)
 {
 	ImGui_ImplSdlGL3_ProcessEvent(inputEvent);
 }
 
-bool ModuleEditor::usingMouse()const
+bool ModuleEditor::UsingMouse()const
 {
 	return isUsingMouse;
 }
 
-bool ModuleEditor::usingKeyboard()const
+bool ModuleEditor::UsingKeyboard()const
 {
 	return isUsingKeyboard;
 }
 
-void ModuleEditor::logFPS(float fps, float ms)
+void ModuleEditor::LogFPS(float fps, float ms)
 {
 	if (conf)
-		conf->pushFpsMs(fps, ms);
+		conf->PushFpsMs(fps, ms);
 }
 
-void ModuleEditor::log(const char* str, logType type)
+void ModuleEditor::Log(const char* str, logType type)
 {
 	if (console)
-		console->logUi(str, type);
+		console->LogUi(str, type);
 }
 
-void ModuleEditor::openDirWin(const char* path)
+void ModuleEditor::OpenDirWin(const char* path)
 {
 	std::vector<std::string> files;
-	app->fs->getFilesOnDir(path, files);
+	app->fs->GetFilesOnDir(path, files);
 	if (ImGui::Begin("Dir", &showDirWin))
 	{
 		static int selected = -1;
@@ -301,7 +302,7 @@ void ModuleEditor::openDirWin(const char* path)
 	ImGui::End();
 }
 
-void ModuleEditor::setStyle()
+void ModuleEditor::SetStyle()
 {
 	ImGuiStyle& style = ImGui::GetStyle();
 
@@ -374,7 +375,7 @@ void ModuleEditor::setStyle()
 	*/
 }
 
-void ModuleEditor::playMenu()
+void ModuleEditor::PlayMenu()
 {
 	static bool b = true;
 	int w = ImGui::GetIO().DisplaySize.x;
@@ -387,20 +388,20 @@ void ModuleEditor::playMenu()
 		return;
 	}
 
-	if (!app->isPlaySate() && !app->isPauseState())
+	if (!app->IsPlaySate() && !app->IsPauseState())
 	{
-		if (ImGui::Button("Play")) app->setPlay();
+		if (ImGui::Button("Play")) app->SetPlay();
 	}
 	else
 	{
-		if(app->isPauseState())
-			if (ImGui::Button("Play")) app->setPlay();
+		if(app->IsPauseState())
+			if (ImGui::Button("Play")) app->SetPlay();
 		
-		if(app->isPlaySate())
-			if (ImGui::Button("Pause")) app->setPause();
+		if(app->IsPlaySate())
+			if (ImGui::Button("Pause")) app->SetPause();
 
 		ImGui::SameLine();
-		if (ImGui::Button("Stop"))app->setStop();
+		if (ImGui::Button("Stop"))app->SetStop();
 	}
 
 	ImGui::SameLine();
@@ -411,10 +412,10 @@ void ModuleEditor::playMenu()
 	ImGui::End();
 }
 
-void ModuleEditor::openSaveBrowser(const char* path)
+void ModuleEditor::OpenSaveBrowser(const char* path)
 {
 	std::vector<std::string> files;
-	app->fs->getFilesOnDir(path, files);
+	app->fs->GetFilesOnDir(path, files);
 	ImGui::Begin("Save", &showSaveWin);
 	{
 		static int selected = -1;
@@ -466,10 +467,10 @@ void ModuleEditor::openSaveBrowser(const char* path)
 	ImGui::End();
 }
 
-void ModuleEditor::openLoadBrowser(const char* path)
+void ModuleEditor::OpenLoadBrowser(const char* path)
 {
 	std::vector<std::string> files;
-	app->fs->getFilesOnDir(path, files);
+	app->fs->GetFilesOnDir(path, files);
 	ImGui::Begin("Save", &showLoadWin);
 	{
 		static int selected = -1;
@@ -519,13 +520,13 @@ void ModuleEditor::openLoadBrowser(const char* path)
 	ImGui::End();
 }
 
-void ModuleEditor::timeDisplay()
+void ModuleEditor::TimeDisplay()
 {
 	ImGui::Begin("Time", &showTimeDisplay);
 	{
 		ImGui::Text("Time elapsed:");
 		ImGui::SameLine();
-		ImGui::TextColored(ImVec4(1, 1, 0, 1), "%f.", time->elapsedTime());
+		ImGui::TextColored(ImVec4(1, 1, 0, 1), "%f.", time->ElapsedTime());
 		ImGui::Separator();
 
 		ImGui::TextColored(ImVec4(1, 0, 0, 1), "Real:");
@@ -533,11 +534,11 @@ void ModuleEditor::timeDisplay()
 
 		ImGui::Text("Real dt: ");
 		ImGui::SameLine();
-		ImGui::TextColored(ImVec4(1, 1, 0, 1), "%f", time->editorDT());
+		ImGui::TextColored(ImVec4(1, 1, 0, 1), "%f", time->EditorDT());
 
 		ImGui::Text("Frames: ");
 		ImGui::SameLine();
-		ImGui::TextColored(ImVec4(1, 1, 0, 1), "%d", time->editorFrames());
+		ImGui::TextColored(ImVec4(1, 1, 0, 1), "%d", time->EditorFrames());
 		
 
 		ImGui::TextColored(ImVec4(1, 0, 0, 1), "Game:");
@@ -549,13 +550,13 @@ void ModuleEditor::timeDisplay()
 
 		ImGui::Text("Game frames: ");
 		ImGui::SameLine();
-		ImGui::TextColored(ImVec4(1, 1, 0, 1), "%d", time->gameFrames());
+		ImGui::TextColored(ImVec4(1, 1, 0, 1), "%d", time->GameFrames());
 
 		ImGui::Separator();
 
 		ImGui::Text("Game state:");
 		ImGui::SameLine();
-		switch (app->getGameState())
+		switch (app->GetGameState())
 		{
 			case gameState::PLAY:
 				ImGui::TextColored(ImVec4(1, 1, 0, 1), "PLAY");

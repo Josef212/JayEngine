@@ -20,7 +20,7 @@ ModuleAudio::~ModuleAudio()
 }
 
 // Called before render is available
-bool ModuleAudio::init(FileParser* conf)
+bool ModuleAudio::Init(FileParser* conf)
 {
 	_LOG(LOG_STD, "Audio: Init.");
 	bool ret = true;
@@ -53,7 +53,7 @@ bool ModuleAudio::init(FileParser* conf)
 }
 
 // Called before quitting
-bool ModuleAudio::cleanUp()
+bool ModuleAudio::CleanUp()
 {
 	_LOG(LOG_STD, "Audio: CleanUp.");
 	/*LOG("Freeing sound FX, closing Mixer and Audio subsystem");
@@ -78,7 +78,7 @@ bool ModuleAudio::cleanUp()
 }
 
 // Play a music file
-bool ModuleAudio::playMusic(const char* path, float fade_time)
+bool ModuleAudio::PlayMusic(const char* path, float fade_time)
 {
 	bool ret = true;
 	/*
@@ -129,7 +129,7 @@ bool ModuleAudio::playMusic(const char* path, float fade_time)
 }
 
 // Load WAV
-unsigned int ModuleAudio::loadFx(const char* path)
+unsigned int ModuleAudio::LoadFx(const char* path)
 {
 	unsigned int ret = 0;
 /*
@@ -149,7 +149,7 @@ unsigned int ModuleAudio::loadFx(const char* path)
 }
 
 // Play WAV
-bool ModuleAudio::playFx(unsigned int id, int repeat)
+bool ModuleAudio::PlayFx(unsigned int id, int repeat)
 {
 	bool ret = false;
 	/*
@@ -164,7 +164,7 @@ bool ModuleAudio::playFx(unsigned int id, int repeat)
 	return ret;
 }
 
-bool ModuleAudio::save(FileParser* sect)
+bool ModuleAudio::Save(FileParser* sect)
 {
 	sect->addBool("test", true);
 	sect->addInt("teste", 10);
@@ -176,7 +176,7 @@ bool ModuleAudio::save(FileParser* sect)
 	return true;
 }
 
-bool ModuleAudio::load(FileParser* sect)
+bool ModuleAudio::Load(FileParser* sect)
 {
 	int b = (int)sect->getBool("test", false);
 

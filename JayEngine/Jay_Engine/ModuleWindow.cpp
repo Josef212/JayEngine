@@ -8,9 +8,6 @@ ModuleWindow::ModuleWindow(bool startEnabled) : Module(startEnabled)
 	_LOG(LOG_STD, "Window: Creation.");
 
 	name.assign("module_window");
-
-	window = NULL;
-	screenSurface = NULL;
 }
 
 // Destructor
@@ -20,7 +17,7 @@ ModuleWindow::~ModuleWindow()
 }
 
 // Called before render is available
-bool ModuleWindow::init(FileParser* conf)
+bool ModuleWindow::Init(FileParser* conf)
 {
 	_LOG(LOG_STD, "Window: Init.");
 	bool ret = true;
@@ -67,7 +64,7 @@ bool ModuleWindow::init(FileParser* conf)
 			flags |= SDL_WINDOW_FULLSCREEN_DESKTOP;
 		}
 
-		window = SDL_CreateWindow(app->getTitle(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, flags);
+		window = SDL_CreateWindow(app->GetTitle(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, flags);
 
 		if(window == NULL)
 		{
@@ -85,7 +82,7 @@ bool ModuleWindow::init(FileParser* conf)
 }
 
 // Called before quitting
-bool ModuleWindow::cleanUp()
+bool ModuleWindow::CleanUp()
 {
 	_LOG(LOG_STD, "Window: CleanUp.");
 
@@ -100,12 +97,12 @@ bool ModuleWindow::cleanUp()
 	return true;
 }
 
-void ModuleWindow::setTitle(const char* title)
+void ModuleWindow::SetTitle(const char* title)
 {
 	SDL_SetWindowTitle(window, title);
 }
 
-void ModuleWindow::hideWindow()
+void ModuleWindow::HideWindow()
 {
 	if (window)
 		SDL_HideWindow(window);
@@ -113,7 +110,7 @@ void ModuleWindow::hideWindow()
 		_LOG(LOG_ERROR, "Error hidding window, null pointer.");
 }
 
-void ModuleWindow::maximizeWindow()
+void ModuleWindow::MaximizeWindow()
 {
 	if (window)
 		SDL_MaximizeWindow(window);
@@ -121,7 +118,7 @@ void ModuleWindow::maximizeWindow()
 		_LOG(LOG_ERROR, "Error maximizing window, null pointer.");
 }
 
-void ModuleWindow::minimizaWindow()
+void ModuleWindow::MinimizaWindow()
 {
 	if (window)
 		SDL_MinimizeWindow(window);
@@ -129,7 +126,7 @@ void ModuleWindow::minimizaWindow()
 		_LOG(LOG_ERROR, "Error minimizing window, null pointer.");
 }
 
-void ModuleWindow::restoreWindow()
+void ModuleWindow::RestoreWindow()
 {
 	if (window)
 		SDL_RestoreWindow(window);
@@ -137,7 +134,7 @@ void ModuleWindow::restoreWindow()
 		_LOG(LOG_ERROR, "Error restoring window, null pointer.");
 }
 
-void ModuleWindow::showWindow()
+void ModuleWindow::ShowWindow()
 {
 	if (window)
 		SDL_ShowWindow(window);
@@ -145,7 +142,7 @@ void ModuleWindow::showWindow()
 		_LOG(LOG_ERROR, "Error showing window, null pointer.");
 }
 
-void ModuleWindow::raiseWindow()
+void ModuleWindow::RaiseWindow()
 {
 	if (window)
 		SDL_RaiseWindow(window);
@@ -153,25 +150,22 @@ void ModuleWindow::raiseWindow()
 		_LOG(LOG_ERROR, "Error raising window, null pointer.");
 }
 
-bool ModuleWindow::isScreecnSaver()
+bool ModuleWindow::IsScreenSaver()const
 {
-	if (SDL_IsScreenSaverEnabled() == SDL_TRUE)
-		return true;
-	else
-		return false;
+	return (bool)SDL_IsScreenSaverEnabled();
 }
 
-void ModuleWindow::setScreenSaver(bool set)
+void ModuleWindow::SetScreenSaver(bool set)
 {
 	if (set)
 		SDL_EnableScreenSaver();
 	else
 		SDL_DisableScreenSaver();
 
-	_LOG(LOG_STD, "Screen saver setted in to: %d.", (int)isScreecnSaver());
+	_LOG(LOG_STD, "Screen saver setted in to: %d.", (int)IsScreenSaver());
 }
 
-void ModuleWindow::setFullScreen(bool set)
+void ModuleWindow::SetFullScreen(bool set)
 {
 	if (window)
 	{
@@ -195,27 +189,27 @@ void ModuleWindow::setFullScreen(bool set)
 		_LOG(LOG_ERROR, "Error setting fullscreen, window pointer is NULL");
 }
 
-bool ModuleWindow::isFullScreen()
+bool ModuleWindow::IsFullScreen()const
 {
 	return fullscreen;
 }
 
-bool ModuleWindow::isResizable() const
+bool ModuleWindow::IsResizable() const
 {
 	return resizable;
 }
 
-void ModuleWindow::setResizable(bool set)
+void ModuleWindow::SetResizable(bool set)
 {
 	resizable = set; //cant change this, save it to load it on next exe
 }
 
-bool ModuleWindow::isBorderless() const
+bool ModuleWindow::IsBorderless() const
 {
 	return borderless;
 }
 
-void ModuleWindow::setBorderless(bool set)
+void ModuleWindow::SetBorderless(bool set)
 {
 	if (set != borderless && !fullscreen && !fullscreenDesktop)
 	{
@@ -224,12 +218,12 @@ void ModuleWindow::setBorderless(bool set)
 	}
 }
 
-bool ModuleWindow::isFullscreenDesktop() const
+bool ModuleWindow::IsFullscreenDesktop() const
 {
 	return fullscreenDesktop;
 }
 
-void ModuleWindow::setFullScreenDesktop(bool set)
+void ModuleWindow::SetFullScreenDesktop(bool set)
 {
 	if (set != fullscreenDesktop)
 	{
@@ -248,7 +242,7 @@ void ModuleWindow::setFullScreenDesktop(bool set)
 	}
 }
 
-void ModuleWindow::setBorder(bool set)
+void ModuleWindow::SetBorder(bool set)
 {
 	if (SDL_GetWindowFlags(window) != SDL_WINDOW_FULLSCREEN)
 	{
@@ -262,7 +256,7 @@ void ModuleWindow::setBorder(bool set)
 
 }
 
-void ModuleWindow::setGrab(bool set)
+void ModuleWindow::SetGrab(bool set)
 {
 	if (window)
 	{
@@ -276,7 +270,7 @@ void ModuleWindow::setGrab(bool set)
 
 }
 
-void ModuleWindow::setPosition(int x, int y)
+void ModuleWindow::SetPosition(int x, int y)
 {
 	if (window)
 	{
@@ -286,7 +280,7 @@ void ModuleWindow::setPosition(int x, int y)
 		_LOG(LOG_ERROR, "Error setting window position, window pointer is NULL");
 }
 
-void ModuleWindow::getPosition(int& w, int& h)
+void ModuleWindow::GetPosition(int& w, int& h)const
 {
 	if (window)
 	{
@@ -296,7 +290,7 @@ void ModuleWindow::getPosition(int& w, int& h)
 		_LOG(LOG_ERROR, "Error getting window position, window pointer is NULL.");
 }
 
-void ModuleWindow::setSize(int w, int h)
+void ModuleWindow::SetSize(int w, int h)
 {
 	if (window && w >= 0 && h >= 0)
 	{
@@ -308,46 +302,46 @@ void ModuleWindow::setSize(int w, int h)
 		_LOG(LOG_ERROR, "Error setting window size, window pointer is NULL");
 }
 
-void ModuleWindow::getWindowSize(int& width, int& height)const
+void ModuleWindow::GetWindowSize(int& width, int& height)const
 {
 	width = this->width;
 	height = this->height;
 }
 
-int ModuleWindow::getWidth()
+int ModuleWindow::GetWidth()const
 {
 	return width;
 }
 
-void ModuleWindow::setWidth(int width)
+void ModuleWindow::SetWidth(int width)
 {
 	if (width > 0)
 	{
 		this->width = width;
-		setSize(width, height);
+		SetSize(width, height);
 	}
 }
 
-void ModuleWindow::setHeight(int height)
+void ModuleWindow::SetHeight(int height)
 {
 	if (height > 0)
 	{
 		this->height = height;
-		setSize(width, height);
+		SetSize(width, height);
 	}
 }
 
-int ModuleWindow::getHeight()
+int ModuleWindow::GetHeight()const
 {
 	return height;
 }
 
-int ModuleWindow::getWinSize()const
+int ModuleWindow::GetWinSize()const
 {
 	return winSize;
 }
 
-bool ModuleWindow::setBrightness(float bright)
+bool ModuleWindow::SetBrightness(float bright)
 {
 	bool ret = true;
 
@@ -369,12 +363,12 @@ bool ModuleWindow::setBrightness(float bright)
 	return ret;
 }
 
-float ModuleWindow::getBrightness()
+float ModuleWindow::GetBrightness()const
 {
 	return SDL_GetWindowBrightness(window);
 }
 
-void ModuleWindow::getRange(int& minW, int& minH, int& maxW, int& maxH)
+void ModuleWindow::GetRange(int& minW, int& minH, int& maxW, int& maxH)const
 {
 	minW = 640;
 	minH = 480;
@@ -393,7 +387,7 @@ void ModuleWindow::getRange(int& minW, int& minH, int& maxW, int& maxH)
 	}
 }
 
-int ModuleWindow::getRefresh()
+int ModuleWindow::GetRefresh()const
 {
 	uint ret = 0;
 
@@ -408,7 +402,7 @@ int ModuleWindow::getRefresh()
 	return ret;
 }
 
-void ModuleWindow::setIcon(SDL_Surface* icon)
+void ModuleWindow::SetIcon(SDL_Surface* icon)
 {
 	if (window)
 	{
@@ -418,12 +412,12 @@ void ModuleWindow::setIcon(SDL_Surface* icon)
 		_LOG(LOG_ERROR, "Error setting window icon, window pointer is NULL.");
 }
 
-void ModuleWindow::onGlobalEvent(const Event& e)
+void ModuleWindow::OnGlobalEvent(const Event& e)
 {
 	//TODO
 }
 
-/*void ModuleWindow::setIcon(const char* file) //TODO: can use it when textures are ready
+/*void ModuleWindow::SetIcon(const char* file) //TODO: can use it when textures are ready
 {
 	if (window)
 	{

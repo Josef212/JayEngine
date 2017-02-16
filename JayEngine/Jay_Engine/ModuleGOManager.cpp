@@ -30,8 +30,8 @@ ModuleGOManager::ModuleGOManager(bool startEnabled) : Module(startEnabled)
 	_LOG(LOG_STD, "Manager: Creation.");
 	name.assign("module_manager");
 
-	sceneRootObject = new GameObject(NULL, 0);
-	sceneRootObject->setName("SceneRootNode");
+	sceneRootObject = new GameObject(nullptr, 0);
+	sceneRootObject->SetName("SceneRootNode");
 	currentScene.assign("scene.json");
 }
 
@@ -43,12 +43,12 @@ ModuleGOManager::~ModuleGOManager()
 		RELEASE(sceneRootObject);
 }
 
-bool ModuleGOManager::init(FileParser* conf)
+bool ModuleGOManager::Init(FileParser* conf)
 {
 	_LOG(LOG_STD, "Manager: Init.");
 
 	sceneTree = new JOctree();
-	sceneTree->setRoot(AABB::FromCenterAndSize(float3(0, 0, 0), float3(1000, 1000, 1000)));
+	sceneTree->SetRoot(AABB::FromCenterAndSize(float3(0, 0, 0), float3(1000, 1000, 1000)));
 
 	if (sceneRootObject)
 		return true;
@@ -56,39 +56,39 @@ bool ModuleGOManager::init(FileParser* conf)
 		return false;
 }
 
-bool ModuleGOManager::start()
+bool ModuleGOManager::Start()
 {
 	bool ret = true;
 
-	GameObject* cam = createCamera();
+	GameObject* cam = CreateCamera();
 	if (cam)
 	{
-		cam->setName("Main Camera");
-		app->renderer3D->setActiveCamera((Camera*)cam->findComponent(CAMERA)[0]);
+		cam->SetName("Main Camera");
+		app->renderer3D->SetActiveCamera((Camera*)cam->GetComponents(CMP_CAMERA)[0]);
 	}
 
 	return ret;
 }
 
-update_status ModuleGOManager::preUpdate(float dt)
+update_status ModuleGOManager::PreUpdate(float dt)
 {
-	removeFlaggedGO();
+	RemoveFlaggedGO();
 
 	if (sceneRootObject && sceneRootObject->transform)
 	{
-		sceneRootObject->recCalcTransform(sceneRootObject->transform->getLocalTransform());
-		sceneRootObject->recCalcBoxes();
+		sceneRootObject->RecCalcTransform(sceneRootObject->transform->GetLocalTransform());
+		sceneRootObject->RecCalcBoxes();
 	}
 
 	if (mustSaveScene)
 	{
-		saveSceneNow(currentScene.c_str());
+		SaveSceneNow(currentScene.c_str());
 		mustSaveScene = false;
 	}
 
 	if (mustLoadScene)
 	{
-		loadSceneNow(currentScene.c_str());
+		LoadSceneNow(currentScene.c_str());
 		mustLoadScene = false;
 	}
 
@@ -96,278 +96,205 @@ update_status ModuleGOManager::preUpdate(float dt)
 	return UPDATE_CONTINUE;
 }
 
-update_status ModuleGOManager::update(float dt)
+update_status ModuleGOManager::Update(float dt)
 {
-	if (app->isPlaySate() && sceneRootObject)
-		sceneRootObject->update(dt);
+	if (app->IsPlaySate() && sceneRootObject)
+		sceneRootObject->Update(dt);
 
 	return UPDATE_CONTINUE;
 }
 
-update_status ModuleGOManager::postUpdate(float dt)
+update_status ModuleGOManager::PostUpdate(float dt)
 {
 	return UPDATE_CONTINUE;
 }
 
-bool ModuleGOManager::cleanUp()
+bool ModuleGOManager::CleanUp()
 {
 	RELEASE(sceneRootObject);
 
 	return true;
 }
 
-void ModuleGOManager::draw()
+void ModuleGOManager::Draw()
 {
-	Camera* cam = (app->isPlaySate()) ? (app->renderer3D->getActiveCamera()) : (app->camera->getCamera());
+	Camera* cam = (app->IsPlaySate()) ? (app->renderer3D->GetActiveCamera()) : (app->camera->GetCamera());
 
 	if (sceneRootObject && cam)
 	{
-		if (cam && cam->isCullingActive())
+		if (cam && cam->IsCullingActive())
 		{
 			std::vector<GameObject*> vec;
-			sceneTree->collectCandidates(vec, cam->frustum);
+			sceneTree->CollectCandidates(vec, cam->frustum);
 			for (uint i = 0; i < vec.size(); ++i)
-				vec[i]->draw(false);
+				vec[i]->Draw(false);
 		}
 		else
-			sceneRootObject->draw(true);
+			sceneRootObject->Draw(true);
 	}
 }
 
-void ModuleGOManager::removeFlaggedGO()
+void ModuleGOManager::RemoveFlaggedGO()
 {
 	if (sceneRootObject->removeFlag)
 	{
 		for (uint i = 0; i < sceneRootObject->childrens.size(); ++i)
 		{
 			if (sceneRootObject->childrens[i])
-				sceneRootObject->childrens[i]->remove();
+				sceneRootObject->childrens[i]->Remove();
 		}
 		sceneRootObject->removeFlag = false;
 	}
 
-	if (sceneRootObject->recRemoveFlagged())
+	if (sceneRootObject->RecRemoveFlagged())
 	{
 		Event ev(Event::GAME_OBJECT_DESTROYED);
-		app->sendGlobalEvent(ev);
+		app->SendGlobalEvent(ev);
 	}
 }
 
-GameObject* ModuleGOManager::getSceneroot()const
+GameObject* ModuleGOManager::GetSceneroot()const
 {
 	return sceneRootObject;
 }
 
-GameObject* ModuleGOManager::createGameObject(GameObject* parent)
+GameObject* ModuleGOManager::CreateGameObject(GameObject* parent)
 {
 	if (!parent)
 		parent = sceneRootObject;
 
-	return sceneRootObject->addChild();
+	return sceneRootObject->AddChild();
 }
 
-GameObject* ModuleGOManager::createEmptyGO()
+GameObject* ModuleGOManager::CreateEmptyGO()
 {
-	GameObject* ret = NULL;
+	GameObject* ret = nullptr;
 	
 	if (sceneRootObject)
 	{
 		if (selected)
-			ret = selected->addChild();
+			ret = selected->AddChild();
 		else
-			ret = sceneRootObject->addChild();
+			ret = sceneRootObject->AddChild();
 	}
 	else
-		_LOG(LOG_ERROR, "Can't create an empty game object because sceene root node is NULL.");
+		_LOG(LOG_ERROR, "Can't create an empty game object because sceene root node is nullptr.");
 
 	return ret;
 }
 
-GameObject* ModuleGOManager::createEmptyGoWithAABB(float xP, float yP, float zP) //TMP
+GameObject* ModuleGOManager::CreateCamera()
 {
-	GameObject* ret = NULL;
+	GameObject* ret = nullptr;
 
 	if (sceneRootObject)
 	{
-		if (selected)
-			ret = selected->addChild();
-		else
-			ret = sceneRootObject->addChild();
-
-		ret->enclosingBox.SetFromCenterAndSize(float3(xP, yP, zP), float3(2, 2, 2));
-		insertGameObjectToTree(ret);
-	}
-	else
-		_LOG(LOG_ERROR, "Can't create an empty game object because sceene root node is NULL.");
-
-	return ret;
-}
-
-GameObject* ModuleGOManager::createCamera()
-{
-	GameObject* ret = NULL;
-
-	if (sceneRootObject)
-	{
-		ret = sceneRootObject->addChild();
+		ret = sceneRootObject->AddChild();
 		if (ret)
 		{
-			ret->addComponent(CAMERA);
-			ret->setName("Camera");
+			ret->AddComponent(CMP_CAMERA);
+			ret->SetName("Camera");
 		}
 	}
 	else
-		_LOG(LOG_ERROR, "Can't create an empty game object because sceene root node is NULL.");
+		_LOG(LOG_ERROR, "Can't create an empty game object because sceene root node is nullptr.");
 
 	return ret;
 }
 
-Component* ModuleGOManager::addTransform()
-{
-	Transform* ret = NULL;
-
-	if (selected)
-	{
-		Transform* trans = selected->transform;
-		if(!trans)
-			trans = (Transform*)selected->findComponent(TRANSFORMATION)[0];
-
-		if(!trans)
-			ret = (Transform*)selected->addComponent(TRANSFORMATION);
-	}
-
-	return ret;
-}
-
-Component* ModuleGOManager::addMesh()
-{
-	Mesh* ret = NULL;
-
-	if (selected)
-	{
-		selected->addComponent(MESH);
-	}
-
-	return ret;
-}
-
-Component* ModuleGOManager::addMaterial()
-{
-	Material* ret = NULL;
-
-	if (selected)
-	{
-		selected->addComponent(MATERIAL);
-	}
-
-	return ret;
-}
-
-Component* ModuleGOManager::addCamera()
-{
-	Material* ret = NULL;
-
-	if (selected)
-	{
-		selected->addComponent(CAMERA);
-	}
-
-	return ret;
-}
-
-GameObject* ModuleGOManager::getSelected()const
+GameObject* ModuleGOManager::GetSelected()const
 {
 	return selected;
 }
 
-void ModuleGOManager::select(GameObject* toSelect)
+void ModuleGOManager::Select(GameObject* toSelect)
 {
 	selected = toSelect;
 }
 
-void ModuleGOManager::drawDebug()
+void ModuleGOManager::DrawDebug()
 {
 	if (sceneRootObject)
-		sceneRootObject->drawDebug();
+		sceneRootObject->DrawDebug();
 
 	if (showTree && sceneTree)
 	{
 		std::vector<AABB> boxes;
-		sceneTree->collectTreeBoxes(boxes);
+		sceneTree->CollectTreeBoxes(boxes);
 
 		for (uint i = 0; i < boxes.size(); ++i)
 		{
-			drawBoxDebug(boxes[i], Red);
+			DrawBoxDebug(boxes[i], Red);
 		}
 
-		sceneTree->coollectBoxes(boxes);
+		sceneTree->CoollectBoxes(boxes);
 
 		for (uint i = 0; i < boxes.size(); ++i)
 		{
-			drawBoxDebug(boxes[i], Yellow);
+			DrawBoxDebug(boxes[i], Yellow);
 		}
 	}//DEL_COM
 }
 
-void ModuleGOManager::makeGOShowAABoxRec(GameObject* obj, bool show)
+void ModuleGOManager::MakeGOShowAABoxRec(GameObject* obj, bool show)
 {
 	if (obj)
 	{
 		obj->drawEnclosingAABB = show;
 		for (uint i = 0; i < obj->childrens.size(); ++i)
 		{
-			makeGOShowAABoxRec(obj->childrens[i], show);
+			MakeGOShowAABoxRec(obj->childrens[i], show);
 		}
 	}
 }
 
-void ModuleGOManager::makeGOShowOBoxRec(GameObject* obj, bool show)
+void ModuleGOManager::MakeGOShowOBoxRec(GameObject* obj, bool show)
 {
 	if (obj)
 	{
 		obj->drawOrientedBox = show;
 		for (uint i = 0; i < obj->childrens.size(); ++i)
 		{
-			makeGOShowOBoxRec(obj->childrens[i], show);
+			MakeGOShowOBoxRec(obj->childrens[i], show);
 		}
 	}
 }
 
-void ModuleGOManager::insertGameObjectToTree(GameObject* obj)
+void ModuleGOManager::InsertGameObjectToTree(GameObject* obj)
 {
 	if (sceneTree && obj)
-		sceneTree->insert(obj);
+		sceneTree->Insert(obj);
 }
 
-void ModuleGOManager::eraseGameObjectFromTree(GameObject* obj)
+void ModuleGOManager::EraseGameObjectFromTree(GameObject* obj)
 {
 	if (sceneTree && obj)
-		sceneTree->erase(obj);
+		sceneTree->Erase(obj);
 }
 
-GameObject* ModuleGOManager::getGameObjectFromId(UID id)
+GameObject* ModuleGOManager::GetGameObjectFromId(UID id)
 {
-	return (id != 0) ? (recFindGO(id, sceneRootObject)) : (NULL);
+	return (id != 0) ? (RecFindGO(id, sceneRootObject)) : (nullptr);
 }
 
-GameObject* ModuleGOManager::recFindGO(UID id, GameObject* go)
+GameObject* ModuleGOManager::RecFindGO(UID id, GameObject* go)
 {
-	if (go->getGOId() == id)
+	if (go->GetGOId() == id)
 		return go;
 
-	GameObject* ret = NULL;
+	GameObject* ret = nullptr;
 	
 	
 	for (uint i = 0; !ret && i < go->childrens.size(); ++i)
 	{
-		ret = recFindGO(id, go->childrens[i]);
+		ret = RecFindGO(id, go->childrens[i]);
 	}
 	
 
 	return ret;
 }
 
-GameObject* ModuleGOManager::validateGO(const GameObject* point)const
+GameObject* ModuleGOManager::ValidateGO(const GameObject* point)const
 {
 	if (point == sceneRootObject)
 		return sceneRootObject;
@@ -378,15 +305,15 @@ GameObject* ModuleGOManager::validateGO(const GameObject* point)const
 			return (GameObject*)point;
 	}
 
-	return NULL;
+	return nullptr;
 }
 
-void ModuleGOManager::saveScene()
+void ModuleGOManager::SaveScene()
 {
 	mustSaveScene = true;
 }
 
-void ModuleGOManager::loadScene()
+void ModuleGOManager::LoadScene()
 {
 	mustLoadScene = true;
 }
@@ -394,7 +321,7 @@ void ModuleGOManager::loadScene()
 /**
 	saveScene and loadScene must be used to load and save full scenes.
 */
-bool ModuleGOManager::saveSceneNow(const char* name, const char* path)
+bool ModuleGOManager::SaveSceneNow(const char* name, const char* path)
 {
 	bool ret = false;
 
@@ -424,14 +351,14 @@ bool ModuleGOManager::saveSceneNow(const char* name, const char* path)
 		for (uint i = 0; i < sceneRootObject->childrens.size(); ++i)
 		{
 			if (sceneRootObject->childrens[i])
-				ret = sceneRootObject->childrens[i]->saveGO(scene);
+				ret = sceneRootObject->childrens[i]->SaveGO(scene);
 		}
 
 		if (ret)
 		{
-			char* buf = NULL;
+			char* buf = nullptr;
 			uint size = scene.writeJson(&buf, false);
-			if (app->fs->save(fullPath, buf, size) != size)
+			if (app->fs->Save(fullPath, buf, size) != size)
 			{
 				_LOG(LOG_ERROR, "Error saving the scene!");
 			}
@@ -454,7 +381,7 @@ bool ModuleGOManager::saveSceneNow(const char* name, const char* path)
 	return ret;
 }
 
-bool ModuleGOManager::loadSceneNow(const char* name, const char* path)
+bool ModuleGOManager::LoadSceneNow(const char* name, const char* path)
 {
 	bool ret = false;
 
@@ -464,7 +391,7 @@ bool ModuleGOManager::loadSceneNow(const char* name, const char* path)
 		return ret;
 	}
 
-	setCurrentScene(name); //TMP
+	SetCurrentScene(name); //TMP
 
 	char fullPath[128];
 	if (!path)
@@ -474,14 +401,14 @@ bool ModuleGOManager::loadSceneNow(const char* name, const char* path)
 
 	_LOG(LOG_INFO, "Loading scene: %s.", fullPath);
 
-	char* buffer = NULL;
-	uint size = app->fs->load(fullPath, &buffer);
+	char* buffer = nullptr;
+	uint size = app->fs->Load(fullPath, &buffer);
 
 	if (size > 0 && buffer)
 	{
 		FileParser file(buffer);
 
-		loadSceneOrPrefabs(file);
+		LoadSceneOrPrefabs(file);
 	}
 	else
 	{
@@ -497,9 +424,9 @@ bool ModuleGOManager::loadSceneNow(const char* name, const char* path)
 /**
 	loadPrefabs should be used to load objects like fbx that have been exported.
 */
-GameObject* ModuleGOManager::loadPrefab(const char* file, const char* path)
+GameObject* ModuleGOManager::LoadPrefab(const char* file, const char* path)
 {
-	GameObject* ret = NULL;
+	GameObject* ret = nullptr;
 
 	//-------------------------------------------------
 
@@ -521,14 +448,14 @@ GameObject* ModuleGOManager::loadPrefab(const char* file, const char* path)
 
 	//-------------------------------------------------
 
-	char* buffer = NULL;
-	uint size = app->fs->load(fullPath, &buffer);
+	char* buffer = nullptr;
+	uint size = app->fs->Load(fullPath, &buffer);
 
 	if (size > 0 && buffer)
 	{
 		FileParser file(buffer);
 
-		loadSceneOrPrefabs(file);
+		LoadSceneOrPrefabs(file);
 	}
 	else
 	{
@@ -540,18 +467,18 @@ GameObject* ModuleGOManager::loadPrefab(const char* file, const char* path)
 	return ret;
 }
 
-void ModuleGOManager::loadSceneOrPrefabs(const FileParser& file)
+void ModuleGOManager::LoadSceneOrPrefabs(const FileParser& file)
 {
 	//TMP: must adapt create GO 
-	select(NULL);
+	Select(nullptr);
 
 	int goCount = file.getArraySize("GameObjects");
-	GameObject* tmpRoot = new GameObject(NULL, 0);
+	GameObject* tmpRoot = new GameObject(nullptr, 0);
 	std::map<GameObject*, uint> relations;
 	for (uint i = 0; i < goCount; ++i)
 	{
-		GameObject* go = tmpRoot->addChild();
-		go->loadGO(&file.getArray("GameObjects", i), relations);
+		GameObject* go = tmpRoot->AddChild();
+		go->LoadGO(&file.getArray("GameObjects", i), relations);
 	}
 
 	for (std::map<GameObject*, uint>::iterator it = relations.begin(); it != relations.end(); ++it)
@@ -561,78 +488,78 @@ void ModuleGOManager::loadSceneOrPrefabs(const FileParser& file)
 
 		if (parentID > 0)
 		{
-			GameObject* parentGO = recFindGO(parentID, tmpRoot);
+			GameObject* parentGO = RecFindGO(parentID, tmpRoot);
 			if (parentGO)
-				go->setNewParent(parentGO);
+				go->SetNewParent(parentGO);
 		}
 		else if(parentID == 0)
-			go->setNewParent(sceneRootObject);
+			go->SetNewParent(sceneRootObject);
 	}
 
 	for (uint i = 0; i < tmpRoot->childrens.size(); ++i)
 	{
 		if (tmpRoot->childrens[i])
-			tmpRoot->childrens[i]->setNewParent(sceneRootObject);
+			tmpRoot->childrens[i]->SetNewParent(sceneRootObject);
 	}
 
-	sceneRootObject->recCalcTransform(sceneRootObject->transform->getLocalTransform(), true);
-	sceneRootObject->recCalcBoxes();
+	sceneRootObject->RecCalcTransform(sceneRootObject->transform->GetLocalTransform(), true);
+	sceneRootObject->RecCalcBoxes();
 
 	//TODO: iterate all relations go->Init(); ???
 }
 
-void ModuleGOManager::cleanRoot()
+void ModuleGOManager::CleanRoot()
 {
 	if (sceneRootObject)
-		sceneRootObject->remove();
+		sceneRootObject->Remove();
 }
 
-void ModuleGOManager::cleanRootNow()
+void ModuleGOManager::CleanRootNow()
 {
 	if (sceneRootObject)
 	{
 		for (uint i = 0; i < sceneRootObject->childrens.size(); ++i)
 		{
 			if (sceneRootObject->childrens[i])
-				sceneRootObject->childrens[i]->remove();
+				sceneRootObject->childrens[i]->Remove();
 		}
 
-		if (sceneRootObject->recRemoveFlagged())
+		if (sceneRootObject->RecRemoveFlagged())
 		{
 			Event ev(Event::GAME_OBJECT_DESTROYED);
-			app->sendGlobalEvent(ev);
+			app->SendGlobalEvent(ev);
 		}
 	}
 }
 
-void ModuleGOManager::onGlobalEvent(const Event& e)
+void ModuleGOManager::OnGlobalEvent(const Event& e)
 {
-	recRecieveEvent(sceneRootObject, e);
+	RecRecieveEvent(sceneRootObject, e);
 
 	switch (e.type)
 	{
 	case Event::eventType::PLAY:
-		onPlay();
+		OnPlay();
 		break;
 
 	case Event::eventType::STOP:
-		onStop();
+		OnStop();
 		break;
 
 	case Event::eventType::PAUSE:
-		onPause();
+		OnPause();
 		break;
 	}
 
-	selected = validateGO(selected);
+	selected = ValidateGO(selected);
 }
 
-void ModuleGOManager::recRecieveEvent(GameObject* obj, const Event& e)
+void ModuleGOManager::RecRecieveEvent(GameObject* obj, const Event& e)
 {
 	switch (e.type)
 	{
 	case Event::eventType::GAME_OBJECT_DESTROYED: 
-		obj->onGameObjectDestroyed();
+		obj->OnGameObjectDestroyed();
 		break;
 
 	default:
@@ -642,22 +569,22 @@ void ModuleGOManager::recRecieveEvent(GameObject* obj, const Event& e)
 	for (uint i = 0; i < obj->childrens.size(); ++i)
 	{
 		if (obj->childrens[i])
-			recRecieveEvent(obj->childrens[i], e);
+			RecRecieveEvent(obj->childrens[i], e);
 	}
 }
 
 /**
 	On play scene should be automatically save.
 */
-void ModuleGOManager::onPlay()
+void ModuleGOManager::OnPlay()
 {
-	saveScene();
+	SaveScene();
 }
 
 /**
 	TODO: What scene should do on pause.
 */
-void ModuleGOManager::onPause()
+void ModuleGOManager::OnPause()
 {
 
 }
@@ -665,13 +592,13 @@ void ModuleGOManager::onPause()
 /**
 	On stop clean the scene and current scene should be automatically load to recover the editor state.
 */
-void ModuleGOManager::onStop()
+void ModuleGOManager::OnStop()
 {
 	//First clean the scene
-	cleanRootNow();
+	CleanRootNow();
 
 	//Second load the scene
-	loadScene();
+	LoadScene();
 }
 
 /**
@@ -679,7 +606,7 @@ void ModuleGOManager::onStop()
 	For now this is just a setter for the current scene string that is stored in the module.
 	This string is used to reload the scene on play-stop.
 */
-bool ModuleGOManager::setCurrentScene(const char* scene)
+bool ModuleGOManager::SetCurrentScene(const char* scene)
 {
 	bool ret = false;
 
@@ -705,14 +632,14 @@ bool ModuleGOManager::setCurrentScene(const char* scene)
 	return ret;
 }
 
-const char* ModuleGOManager::getCurrentScene()
+const char* ModuleGOManager::GetCurrentScene()
 {
 	return currentScene.c_str();
 }
 
-GameObject* ModuleGOManager::loadCube()//TODO: Resource manager?? Save primitives there, etc.
+GameObject* ModuleGOManager::LoadCube()//TODO: Resource manager?? Save primitives there, etc.
 {
-	GameObject* ret = NULL;
+	GameObject* ret = nullptr;
 
 	if (!sceneRootObject)
 		return ret;

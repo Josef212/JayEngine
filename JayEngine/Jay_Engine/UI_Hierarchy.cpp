@@ -10,9 +10,8 @@
 
 #include "ModuleWindow.h"
 
-UI_Hierarchy::UI_Hierarchy() : UI_Comp()
+UI_Hierarchy::UI_Hierarchy(bool startEnalbed) : UI_Panel(startEnalbed)
 {
-	active = true;
 }
 
 
@@ -20,18 +19,18 @@ UI_Hierarchy::~UI_Hierarchy()
 {
 }
 
-void UI_Hierarchy::draw()
+void UI_Hierarchy::Draw()
 {
-	int w = app->window->getWidth();
-	int h = app->window->getHeight();
+	int w = app->window->GetWidth();
+	int h = app->window->GetHeight();
 	
 	ImGui::SetNextWindowPos(ImVec2(0, 20));
 	ImGui::SetNextWindowSize(ImVec2(360, 560));
 
 	ImGui::Begin("Hierarchy", &active);
 	{
-		GameObject* root = app->goManager->getSceneroot();
-		GameObject* selected = app->goManager->getSelected();
+		GameObject* root = app->goManager->GetSceneroot();
+		GameObject* selected = app->goManager->GetSelected();
 
 		ImGuiTreeNodeFlags nodeFlags = ImGuiTreeNodeFlags_OpenOnArrow | ImGuiTreeNodeFlags_OpenOnDoubleClick;
 		if (!selected)
@@ -42,12 +41,12 @@ void UI_Hierarchy::draw()
 			ImGui::PushStyleVar(ImGuiStyleVar_IndentSpacing, ImGui::GetFontSize() * 3); // Increase spacing to differentiate leaves from expanded contents.
 
 			if (ImGui::IsItemClicked())
-				app->goManager->select(NULL);
+				app->goManager->Select(nullptr);
 
 			if (root)
 			{
 				for (uint i = 0; i < root->childrens.size(); ++i)
-					hierarchyRecursive(root->childrens[i], selected);
+					HierarchyRecursive(root->childrens[i], selected);
 			}
 
 			ImGui::PopStyleVar();
@@ -57,7 +56,7 @@ void UI_Hierarchy::draw()
 	}
 }
 
-void UI_Hierarchy::hierarchyRecursive(GameObject* node, GameObject* selected)
+void UI_Hierarchy::HierarchyRecursive(GameObject* node, GameObject* selected)
 {
 	ImGuiTreeNodeFlags nodeFlags = 0;
 	if (node == selected)
@@ -70,14 +69,14 @@ void UI_Hierarchy::hierarchyRecursive(GameObject* node, GameObject* selected)
 	else
 		nodeFlags |= ImGuiTreeNodeFlags_Leaf;
 
-	if (ImGui::TreeNodeEx(node->getName(), nodeFlags))
+	if (ImGui::TreeNodeEx(node->GetName(), nodeFlags))
 	{
 		if (ImGui::IsItemClicked())
-			app->goManager->select(node);
+			app->goManager->Select(node);
 
 		for (uint i = 0; i < node->childrens.size(); ++i)
 		{
-			hierarchyRecursive(node->childrens[i], selected);
+			HierarchyRecursive(node->childrens[i], selected);
 		}
 		ImGui::TreePop();
 	}

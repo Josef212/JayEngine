@@ -1,5 +1,5 @@
-#ifndef __RESOURCESHADER_H__
-#define __RESOURCESHADER_H__
+#ifndef __RESOURCESHADER__
+#define __RESOURCESHADER__
 
 #include "Resource.h"
 #include <string>
@@ -10,17 +10,17 @@ public:
 	ResourceShader(uint UID);
 	virtual ~ResourceShader();
 
-	bool isShaderReady();
+	bool IsShaderReady();
 
-	bool vertexShaderInMemory();
-	bool fragtalShaderInMemory();
-	bool vertexAndFragtalInMemory();
+	bool VertexShaderInMemory();
+	bool FragtalShaderInMemory();
+	bool VertexAndFragtalInMemory();
 
-	void removeVertexShaderStr();
-	void removeFragtalShaderStr();
-	void removeVertexAndFragtalShaderStr();
+	void RemoveVertexShaderStr();
+	void RemoveFragtalShaderStr();
+	void RemoveVertexAndFragtalShaderStr();
 
-	void applydefaultShader();
+	void ApplydefaultShader();
 
 private:
 
@@ -37,4 +37,4 @@ public:
 
 };
 
-#endif // !__RESOURCESHADER_H__
+#endif // !__RESOURCESHADER__

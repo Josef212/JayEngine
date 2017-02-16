@@ -1,7 +1,6 @@
-#ifndef __IMPORTERFBX_H__
-#define __IMPORTERFBX_H__
+#ifndef __IMPORTER_SCENE__
+#define __IMPORTER_SCENE__
 
-#include "Importer.h"
 #include <string>
 #include <map>
 
@@ -11,22 +10,22 @@ class ResourceMesh;
 class ResourceScene;
 class GameObject;
 
-class ImporterScene :	public Importer
+class ImporterScene
 {
 public:
 	ImporterScene();
 	virtual ~ImporterScene();
 
-	bool import(const char* originalFile, std::string& exportedFile, const char* originalFileExtension, UID& resUID);
+	bool Import(const char* originalFile, std::string& exportedFile, const char* originalFileExtension, UID& resUID);
 
-	bool loadResource(ResourceScene* resource);
+	bool LoadResource(ResourceScene* resource);
 
 private:
-	void recImport(const aiScene* scene, const aiNode* node, GameObject* parent, const std::string& basePath, const std::string& file);
+	void RecImport(const aiScene* scene, const aiNode* node, GameObject* parent, const std::string& basePath, const std::string& file);
 public:
 
 private:
 	std::map<int, ResourceMesh*> meshesImported;//Key is the index from scene->meshes
 };
 
-#endif // !__IMPORTERFBX_H__
+#endif // !__IMPORTER_SCENE__

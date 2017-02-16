@@ -1,5 +1,5 @@
-#ifndef __APPLICATION_H_
-#define __APPLICATION_H_
+#ifndef __APPLICATION__
+#define __APPLICATION__
 
 #include "Time.h"
 #include "Globals.h"
@@ -55,6 +55,7 @@ public:
 
 	bool debug = false;
 	bool quit = false;
+	bool forceEditor = false;
 
 	gameState state = EDITOR;
 
@@ -81,49 +82,49 @@ public:
 	Application();
 	~Application();
 
-	bool init();
-	update_status update();
-	bool cleanUp();
+	bool Init();
+	update_status Update();
+	bool CleanUp();
 
-	void drawDebug();
+	void DrawDebug();
 
-	const char* getOrganitzation();
-	const char* getTitle();
-	void setOrganitzation(const char* org);
-	void setTitle(const char* titl);
+	const char* GetOrganitzation();
+	const char* GetTitle();
+	void SetOrganitzation(const char* org);
+	void SetTitle(const char* titl);
 
-	uint getMaxFPS();
-	void setMaxFPS(int maxFPS);
+	uint GetMaxFPS();
+	void SetMaxFPS(int maxFPS);
 
-	void log(const char* str, logType type);
-	void browse(const char* url) const;
+	void Log(const char* str, logType type);
+	void Browse(const char* url) const;
 
-	void saveGame();//TODO: saves files etc
-	void loadGame();
+	void SaveGame();//TODO: saves files etc
+	void LoadGame();
 
-	gameState getGameState()const;
-	bool isEditorState();
-	bool isPlaySate();
-	bool isPauseState();
+	gameState GetGameState()const;
+	bool IsEditorState();
+	bool IsPlaySate();
+	bool IsPauseState();
 
-	void setPlay();
-	void setPause();
-	void setStop();
+	void SetPlay();
+	void SetPause();
+	void SetStop();
 
-	void sendGlobalEvent(const Event& e);
-	void onGlobalEvent(const Event& e);
+	void SendGlobalEvent(const Event& e);
+	void OnGlobalEvent(const Event& e);
 
 private:
-	void addModule(Module* mod);
-	void prepareUpdate();
-	void finishUpdate();
+	void AddModule(Module* mod);
+	void PrepareUpdate();
+	void FinishUpdate();
 
-	void readConfig(FileParser* conf);
+	void ReadConfig(FileParser* conf);
 
-	bool saveGameNow(); //Basically for config, if in any module needs to save a json just save it there
-	bool loadGameNow(); //same as in save but loading
+	bool SaveGameNow(); //Basically for config, if in any module needs to save a json just save it there
+	bool LoadGameNow(); //same as in save but loading
 };
 
 extern Application* app;
 
-#endif // !__APPLICATION_H_
+#endif // !__APPLICATION__

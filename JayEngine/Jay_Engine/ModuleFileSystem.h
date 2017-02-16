@@ -1,5 +1,5 @@
-#ifndef __MODULEFILESYSTEM_H__
-#define __MODULEFILESYSTEM_H__
+#ifndef __MODULEFILESYSTEM__
+#define __MODULEFILESYSTEM__
 
 #include "Module.h"
 #include <vector>
@@ -13,30 +13,30 @@ public:
 	ModuleFileSystem(bool startEnabled = true);
 	~ModuleFileSystem();
 
-	bool init(FileParser* conf);
-	bool cleanUp();
+	bool Init(FileParser* conf)override;
+	bool CleanUp()override;
 
-	bool addPath(const char* pathOrZip, const char* mountPoint = NULL);
-	bool exist(const char* file);
-	bool isDirectory(const char* file);
-	bool makeDirectory(const char* dir, const char* mount = NULL);
-	const char* getSaveDirectory()const
+	bool AddPath(const char* pathOrZip, const char* mountPoint = NULL);
+	bool Exist(const char* file);
+	bool IsDirectory(const char* file);
+	bool MakeDirectory(const char* dir, const char* mount = NULL);
+	const char* GetSaveDirectory()const
 	{
 		return "save/";
 	}
 
-	const char* getBasePath();
+	const char* GetBasePath();
 
-	uint getFilesOnDir(const char* dir, std::vector<std::string>& files);
+	uint GetFilesOnDir(const char* dir, std::vector<std::string>& files);
 
-	uint load(const char* file, const char* path, char** buffer)const;
-	uint load(const char* file, char** buffer)const;
-	SDL_RWops* load(const char* file)const;
-	unsigned int save(const char* file, const char* buffer, unsigned int size)const;
+	uint Load(const char* file, const char* path, char** buffer)const;
+	uint Load(const char* file, char** buffer)const;
+	SDL_RWops* Load(const char* file)const;
+	uint Save(const char* file, const char* buffer, unsigned int size)const;
 
-	void splitPath(const char* originalPath, std::string* path, std::string* file = NULL, std::string* extension = NULL);
-	void normalizePath(char* path);
-	void normalizePath(std::string& path);
+	void SplitPath(const char* originalPath, std::string* path, std::string* file = NULL, std::string* extension = NULL);
+	void NormalizePath(char* path);
+	void NormalizePath(std::string& path);
 };
 
-#endif // !__MODULEFILESYSTEM_H__
+#endif // !__MODULEFILESYSTEM__

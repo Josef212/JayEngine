@@ -1,11 +1,11 @@
-#ifndef __MODULEEDITOR_H__
-#define __MODULEEDITOR_H__
+#ifndef __MODULE_EDITOR__
+#define __MODULE_EDITOR__
 
 #include "Module.h"
 #include <list>
 #include <string>
 
-class UI_Comp;
+class UI_Panel;
 class UI_Conf;
 class UI_Console;
 class UI_Hierarchy;
@@ -19,38 +19,38 @@ public:
 	ModuleEditor(bool startEnabled = true);
 	~ModuleEditor();
 
-	bool init(FileParser* conf);
-	bool start();
-	update_status preUpdate(float dt);
-	update_status update(float dt);
-	bool cleanUp();
+	bool Init(FileParser* conf)override;
+	bool Start()override;
+	update_status PreUpdate(float dt)override;
+	update_status Update(float dt)override;
+	bool CleanUp()override;
 
-	void drawEditor();
-	void passInput(SDL_Event* inputEvent);
+	void DrawEditor();
+	void PassInput(SDL_Event* inputEvent);
 
-	void logFPS(float fps, float ms);
-	void log(const char* str, logType type);
+	void LogFPS(float fps, float ms);
+	void Log(const char* str, logType type);
 
-	bool usingMouse()const;
-	bool usingKeyboard()const;
+	bool UsingMouse()const;
+	bool UsingKeyboard()const;
 
 private:
-	void openDirWin(const char* path);
-	void openSaveBrowser(const char* path);
-	void openLoadBrowser(const char* path);
-	void playMenu();
-	void setStyle();
-	void timeDisplay();
+	void OpenDirWin(const char* path);
+	void OpenSaveBrowser(const char* path);
+	void OpenLoadBrowser(const char* path);
+	void PlayMenu();
+	void SetStyle();
+	void TimeDisplay();
 
 public:
-	std::list<UI_Comp*> uiList;
+	std::list<UI_Panel*> uiList;
 
-	UI_Conf* conf = NULL;
-	UI_Console* console = NULL;
-	UI_Hierarchy* hieracy = NULL;
-	UI_Inspector* inspector = NULL;
-	UI_Tree* tree = NULL;
-	UI_Resources* resources = NULL;
+	UI_Conf* conf = nullptr;
+	UI_Console* console = nullptr;
+	UI_Hierarchy* hieracy = nullptr;
+	UI_Inspector* inspector = nullptr;
+	UI_Tree* tree = nullptr;
+	UI_Resources* resources = nullptr;
 
 private: //TODO: So many booleans are needed????
 	bool showImGuiDemo = false;
@@ -68,4 +68,4 @@ private: //TODO: So many booleans are needed????
 
 };
 
-#endif // !__MODULEEDITOR_H__
+#endif // !__MODULE_EDITOR__

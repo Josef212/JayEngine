@@ -1,5 +1,5 @@
-#ifndef __RESOURCETEXTURE_H__
-#define __RESOURCETEXTURE_H__
+#ifndef __RESOURCETEXTURE__
+#define __RESOURCETEXTURE__
 
 #include "Resource.h"
 
@@ -27,10 +27,10 @@ public:
 	ResourceTexture(UID uuid);
 	virtual ~ResourceTexture();
 
-	bool loadToMemory()override;
-	bool removeFromMemory()override;
+	bool LoadToMemory()override;
+	bool RemoveFromMemory()override;
 
-	const char* getFormatStr()const;
+	const char* GetFormatStr()const;
 
 public:
 	uint width = 0;
@@ -46,4 +46,4 @@ public:
 
 };
 
-#endif // !__RESOURCETEXTURE_H__
+#endif // !__RESOURCETEXTURE__

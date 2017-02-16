@@ -11,20 +11,20 @@ public:
 	Time();
 	virtual ~Time();
 
-	void updateTime();
-	void updateGameTime();
+	void UpdateTime();
+	void UpdateGameTime();
 
-	void startGameTimer();
-	void stopGameTimer();
-	void restartGameTimer();
-	void cleanGameTimer();
+	void StartGameTimer();
+	void StopGameTimer();
+	void RestartGameTimer();
+	void CleanGameTimer();
 
-	float editorDT()const;
-	uint64 editorFrames()const;
-	float elapsedTime()const;
+	float EditorDT()const;
+	uint64 EditorFrames()const;
+	float ElapsedTime()const;
 
 	float DT()const;
-	uint64 gameFrames()const;
+	uint64 GameFrames()const;
 
 private:
 

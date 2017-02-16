@@ -46,7 +46,7 @@ ImporterScene::~ImporterScene()
 }
 
 
-bool ImporterScene::import(const char* originalFile, std::string& exportedFile, const char* originalFileExtension, UID& resUID)
+bool ImporterScene::Import(const char* originalFile, std::string& exportedFile, const char* originalFileExtension, UID& resUID)
 {
 	bool ret = false;
 
@@ -54,7 +54,7 @@ bool ImporterScene::import(const char* originalFile, std::string& exportedFile, 
 		return ret;
 
 	char* buffer = NULL;
-	uint size = app->fs->load(originalFile, &buffer);
+	uint size = app->fs->Load(originalFile, &buffer);
 
 	const aiScene* scene = NULL;
 
@@ -72,15 +72,15 @@ bool ImporterScene::import(const char* originalFile, std::string& exportedFile, 
 	if (scene && scene->HasMeshes())
 	{
 		std::string path, file;
-		app->fs->splitPath(originalFile, &path, &file);
+		app->fs->SplitPath(originalFile, &path, &file);
 
 		meshesImported.clear();
 
-		GameObject* go = app->goManager->createGameObject();
-		go->setName(file.c_str());
+		GameObject* go = app->goManager->CreateGameObject();
+		go->SetName(file.c_str());
 
 		//Recursive create game objects.
-		recImport(scene, scene->mRootNode, go, path, file);
+		RecImport(scene, scene->mRootNode, go, path, file);
 
 		//TODO: Process bones.
 
@@ -94,9 +94,9 @@ bool ImporterScene::import(const char* originalFile, std::string& exportedFile, 
 
 		for (uint i = 0; i < go->childrens.size(); ++i)
 			if (go->childrens[i])
-				go->childrens[i]->saveGO(save);
+				go->childrens[i]->SaveGO(save);
 
-		resUID = app->resourceManager->getNewUID();
+		resUID = app->resourceManager->GetNewUID();
 
 		char name[128];
 		sprintf_s(name, 128, "%d%s", resUID, SCENE_EXTENSION);
@@ -107,18 +107,18 @@ bool ImporterScene::import(const char* originalFile, std::string& exportedFile, 
 		char* buf = NULL;
 		uint _size = save.writeJson(&buf, false); //TODO: When finish testing change to fast mode.
 
-		if (app->fs->save(fullPath, buf, _size) == _size)
+		if (app->fs->Save(fullPath, buf, _size) == _size)
 			ret = true;
 
 		RELEASE_ARRAY(buf);
 
-		go->remove();
+		go->Remove();
 	}
 
 	return ret;
 }
 
-void ImporterScene::recImport(const aiScene* scene, const aiNode* node, GameObject* parent, const std::string& basePath, const std::string& file)
+void ImporterScene::RecImport(const aiScene* scene, const aiNode* node, GameObject* parent, const std::string& basePath, const std::string& file)
 {
 	static std::string name;
 	name = (node->mName.length > 0) ? node->mName.C_Str() : "unnamed";
@@ -132,14 +132,14 @@ void ImporterScene::recImport(const aiScene* scene, const aiNode* node, GameObje
 	float3 scl(scaling.x, scaling.y, scaling.z);
 	Quat rot(rotation.x, rotation.y, rotation.z, rotation.w);
 
-	GameObject* go = parent->addChild();
-	go->setName(name.c_str());
+	GameObject* go = parent->AddChild();
+	go->SetName(name.c_str());
 
 	Transform* trans = go->transform;
 
-	trans->setLocalPosition(pos);
-	trans->setLocalScale(scl);
-	trans->setLocalRotation(rot);
+	trans->SetLocalPosition(pos);
+	trans->SetLocalScale(scl);
+	trans->SetLocalRotation(rot);
 
 	//TODO: Load meta data
 
@@ -158,8 +158,8 @@ void ImporterScene::recImport(const aiScene* scene, const aiNode* node, GameObje
 				name = node->mName.C_Str();
 				name += "_submesh";
 			}
-			childGO = go->addChild();
-			childGO->setName(name.c_str());
+			childGO = go->AddChild();
+			childGO->SetName(name.c_str());
 		}
 		else
 			childGO = go;
@@ -171,7 +171,7 @@ void ImporterScene::recImport(const aiScene* scene, const aiNode* node, GameObje
 			aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
 			uint numTextures = material->GetTextureCount(aiTextureType_DIFFUSE); //TODO: Someday add other textures as normal maps etc
 
-			Material* cMat = (Material*)childGO->addComponent(ComponentType::MATERIAL);
+			Material* cMat = (Material*)childGO->AddComponent(ComponentType::CMP_MATERIAL);
 
 			aiColor4D col;
 			material->Get(AI_MATKEY_COLOR_DIFFUSE, col);
@@ -184,14 +184,14 @@ void ImporterScene::recImport(const aiScene* scene, const aiNode* node, GameObje
 			{
 				//Need to import that texture
 				std::string texPath(str.C_Str());
-				app->fs->normalizePath(texPath);
+				app->fs->NormalizePath(texPath);
 
 				//If exist import it. Might check if i should change the path before.
 				std::string texFile;
-				app->fs->splitPath(texPath.c_str(), NULL, &texFile);
+				app->fs->SplitPath(texPath.c_str(), NULL, &texFile);
 				
-				cMat->textureResource = (ResourceTexture*)app->resourceManager->getResourceFromUID(app->resourceManager->importFile(texFile.c_str(), true));
-				cMat->textureResource->addInstance();
+				cMat->textureResource = (ResourceTexture*)app->resourceManager->GetResourceFromUID(app->resourceManager->ImportFile(texFile.c_str(), true));
+				cMat->textureResource->AddInstance();
 			}
 
 			//TODO:Check assimp for embedded textures... For now will normally import textures.
@@ -200,7 +200,7 @@ void ImporterScene::recImport(const aiScene* scene, const aiNode* node, GameObje
 
 
 		//Add mesh
-		Mesh* cmesh = (Mesh*)childGO->addComponent(ComponentType::MESH);
+		Mesh* cmesh = (Mesh*)childGO->AddComponent(ComponentType::CMP_MESH);
 		//Will track of meshes already loaded in order to not import twice same meshes
 		std::map<int, ResourceMesh*>::iterator tmp = meshesImported.find(meshIndex);
 		if (tmp != meshesImported.end())
@@ -211,12 +211,12 @@ void ImporterScene::recImport(const aiScene* scene, const aiNode* node, GameObje
 		else
 		{
 			//Need to import that mesh
-			ResourceMesh* resMesh = (ResourceMesh*)app->resourceManager->createNewResource(ResourceType::RESOURCE_MESH);
-			app->resourceManager->meshImporter->importMesh(mesh, resMesh);
+			ResourceMesh* resMesh = (ResourceMesh*)app->resourceManager->CreateNewResource(ResourceType::RESOURCE_MESH);
+			app->resourceManager->meshImporter->ImportMesh(mesh, resMesh);
 			resMesh->originalFile.assign(file);
 			meshesImported.insert(std::pair<int, ResourceMesh*>(meshIndex, resMesh));
 			cmesh->meshResource = resMesh;
-			resMesh->addInstance();
+			resMesh->AddInstance();
 		}
 
 
@@ -224,12 +224,12 @@ void ImporterScene::recImport(const aiScene* scene, const aiNode* node, GameObje
 
 	//Recursive generate all childs GO
 	for (uint j = 0; j < node->mNumChildren; ++j)
-		recImport(scene, node->mChildren[j], go, basePath, file);
+		RecImport(scene, node->mChildren[j], go, basePath, file);
 }
 
 //------------------------------------
 
-bool ImporterScene::loadResource(ResourceScene* resource)
+bool ImporterScene::LoadResource(ResourceScene* resource)
 {
 	bool ret = false;
 
@@ -237,18 +237,18 @@ bool ImporterScene::loadResource(ResourceScene* resource)
 		return ret;
 
 	std::string path(DEFAULT_PREF_SAVE_PATHS);
-	path.append(resource->getExportedFile());
+	path.append(resource->exportedFile.c_str());
 
 	_LOG(LOG_INFO, "Loading prefab/scene resource from: '%s'.", path.c_str());
 
 	char* buffer = NULL;
-	uint size = app->fs->load(path.c_str(), &buffer);
+	uint size = app->fs->Load(path.c_str(), &buffer);
 
 	if (buffer && size > 0)
 	{
 		FileParser file(buffer);
 
-		app->goManager->loadSceneOrPrefabs(file);
+		app->goManager->LoadSceneOrPrefabs(file);
 
 		ret = true;
 	}

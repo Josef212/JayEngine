@@ -15,7 +15,7 @@ ModuleInput::ModuleInput(bool startEnabled) : Module(startEnabled)
 
 	keyboard = new KEY_STATE[MAX_KEYS];
 	memset(keyboard, KEY_IDLE, sizeof(KEY_STATE) * MAX_KEYS);
-	memset(mouse_buttons, KEY_IDLE, sizeof(KEY_STATE) * MAX_MOUSE_BUTTONS);
+	memset(mouseButtons, KEY_IDLE, sizeof(KEY_STATE) * MAX_MOUSE_BUTTONS);
 }
 
 // Destructor
@@ -26,7 +26,7 @@ ModuleInput::~ModuleInput()
 }
 
 // Called before render is available
-bool ModuleInput::init(FileParser* conf)
+bool ModuleInput::Init(FileParser* conf)
 {
 	_LOG(LOG_STD, "Input: Init.");
 	_LOG(LOG_INFO, "Init SDL input event system");
@@ -46,7 +46,7 @@ bool ModuleInput::init(FileParser* conf)
 }
 
 // Called every draw update
-update_status ModuleInput::preUpdate(float dt)
+update_status ModuleInput::PreUpdate(float dt)
 {
 	SDL_PumpEvents();
 
@@ -72,25 +72,25 @@ update_status ModuleInput::preUpdate(float dt)
 
 	Uint32 buttons = SDL_GetMouseState(&mouseX, &mouseY);
 
-	mouseX /= app->window->getWinSize();
-	mouseY /= app->window->getWinSize();
+	mouseX /= app->window->GetWinSize();
+	mouseY /= app->window->GetWinSize();
 	wheelY = 0;
 
 	for(int i = 0; i < 5; ++i)
 	{
 		if(buttons & SDL_BUTTON(i))
 		{
-			if(mouse_buttons[i] == KEY_IDLE)
-				mouse_buttons[i] = KEY_DOWN;
+			if(mouseButtons[i] == KEY_IDLE)
+				mouseButtons[i] = KEY_DOWN;
 			else
-				mouse_buttons[i] = KEY_REPEAT;
+				mouseButtons[i] = KEY_REPEAT;
 		}
 		else
 		{
-			if(mouse_buttons[i] == KEY_REPEAT || mouse_buttons[i] == KEY_DOWN)
-				mouse_buttons[i] = KEY_UP;
+			if(mouseButtons[i] == KEY_REPEAT || mouseButtons[i] == KEY_DOWN)
+				mouseButtons[i] = KEY_UP;
 			else
-				mouse_buttons[i] = KEY_IDLE;
+				mouseButtons[i] = KEY_IDLE;
 		}
 	}
 
@@ -99,7 +99,7 @@ update_status ModuleInput::preUpdate(float dt)
 	SDL_Event e;
 	while(SDL_PollEvent(&e))
 	{
-		app->editor->passInput(&e);
+		app->editor->PassInput(&e);
 
 		switch(e.type)
 		{
@@ -108,11 +108,11 @@ update_status ModuleInput::preUpdate(float dt)
 			break;
 
 			case SDL_MOUSEMOTION:
-			mouseX = e.motion.x / app->window->getWinSize();
-			mouseY = e.motion.y / app->window->getWinSize();
+			mouseX = e.motion.x / app->window->GetWinSize();
+			mouseY = e.motion.y / app->window->GetWinSize();
 
-			mouseXMotion = e.motion.xrel / app->window->getWinSize();
-			mouseYMotion = e.motion.yrel / app->window->getWinSize();
+			mouseXMotion = e.motion.xrel / app->window->GetWinSize();
+			mouseYMotion = e.motion.yrel / app->window->GetWinSize();
 			break;
 
 			case SDL_QUIT:
@@ -128,7 +128,7 @@ update_status ModuleInput::preUpdate(float dt)
 						Event ev(Event::WIN_RESIZE);
 						ev.point2d.x = e.window.data1;
 						ev.point2d.y = e.window.data2;
-						app->sendGlobalEvent(ev);
+						app->SendGlobalEvent(ev);
 				}
 			}
 			break;
@@ -141,7 +141,7 @@ update_status ModuleInput::preUpdate(float dt)
 }
 
 // Called before quitting
-bool ModuleInput::cleanUp()
+bool ModuleInput::CleanUp()
 {
 	_LOG(LOG_STD, "Input: CleanUp.");
 	_LOG(LOG_INFO, "Quitting SDL input event subsystem");

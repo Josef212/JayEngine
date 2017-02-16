@@ -1,18 +1,18 @@
-#ifndef __UICONF_H__
-#define __UICONF_H__
+#ifndef __UI_CONF__
+#define __UI_CONF__
 
-#include "UI_Comp.h"
+#include "UI_Panel.h"
 
 #define MAX_FPS_LOG 100
 
-class UI_Conf : public UI_Comp
+class UI_Conf : public UI_Panel
 {
 public:
-	UI_Conf();
+	UI_Conf(bool startEnalbed = false);
 	~UI_Conf();
 
-	void draw();
-	void pushFpsMs(float _fps, float _ms);
+	void Draw()override;
+	void PushFpsMs(float _fps, float _ms);
 
 public:
 
@@ -22,4 +22,4 @@ private:
 	int arraySize = 0;
 };
 
-#endif //__UICONF_H__
+#endif //__UI_CONF__

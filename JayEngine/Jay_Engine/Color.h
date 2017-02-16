@@ -1,5 +1,5 @@
-#ifndef __COLOR_H__
-#define __COLOR_H__
+#ifndef __COLOR__
+#define __COLOR__
 
 
 struct Color
@@ -35,4 +35,4 @@ extern Color Yellow;
 extern Color Pink;
 extern Color ClearBlue;
 
-#endif // !__COLOR_H__
+#endif // !__COLOR__

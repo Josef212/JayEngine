@@ -29,17 +29,7 @@ SceneTry::~SceneTry()
 {
 }
 
-bool SceneTry::init()
-{
-	/*ilInit();
-	iluInit();
-	ilutInit();
-	ilutRenderer(ILUT_OPENGL);*/
-
-	return true;
-}
-
-bool SceneTry::start()
+bool SceneTry::Start()
 {//TMP: create a cube with an array
 	//loadVerticesBuffer(&vArray);
 	/*float s = 0.5;
@@ -94,17 +84,17 @@ bool SceneTry::start()
 	return true;
 }
 
-update_status SceneTry::preUpdate(float dt)
+update_status SceneTry::PreUpdate(float dt)
 {
 	return UPDATE_CONTINUE;
 }
 
-update_status SceneTry::update(float dt)
+update_status SceneTry::Update(float dt)
 {
 	return UPDATE_CONTINUE;
 }
 
-update_status SceneTry::postUpdate(float dt)
+update_status SceneTry::PostUpdate(float dt)
 {
 	///cubeWithTriVertices(texId);
 
@@ -236,7 +226,7 @@ update_status SceneTry::postUpdate(float dt)
 	return UPDATE_CONTINUE;
 }
 
-bool SceneTry::cleanUp()
+bool SceneTry::CleanUp()
 {
 	//ilShutDown();
 	return true;

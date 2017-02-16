@@ -1,7 +1,8 @@
+#ifndef __LIGHT__
+#define __LIGHT__
 
-#pragma once
 #include "Color.h"
-#include "glmath.h"
+#include "Math.h"
 
 struct Light
 {
@@ -14,8 +15,10 @@ struct Light
 
 	Color ambient;
 	Color diffuse;
-	vec3 position;
+	float3 position = float3::zero;
 
 	int ref;
 	bool on;
 };
+
+#endif // !__LIGHT__

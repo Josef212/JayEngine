@@ -1,5 +1,5 @@
-#ifndef __RANDGEN_H__
-#define __RANDGEN_H__
+#ifndef __RANDGEN__
+#define __RANDGEN__
 
 #include "Globals.h"
 #include "Math.h"
@@ -10,13 +10,13 @@ public:
 	RandGen();
 	~RandGen();
 
-	uint32 getRandInt();
-	int getRandInt(int min, int max);
-	float getRandFloat();
-	float getRandFloat(float min, float max);
+	uint32 GetRandInt();
+	int GetRandInt(int min, int max);
+	float GetRandFloat();
+	float GetRandFloat(float min, float max);
 
 private:
 	LCG* lgc = NULL;
 };
 
-#endif // !__RANDGEN_H__
+#endif // !__RANDGEN__

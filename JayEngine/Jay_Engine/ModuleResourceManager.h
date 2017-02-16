@@ -1,5 +1,5 @@
-#ifndef __MODULERESOURCEMANAGER_H__
-#define __MODULERESOURCEMANAGER_H__
+#ifndef __MODULERESOURCEMANAGER__
+#define __MODULERESOURCEMANAGER__
 
 #include "Module.h"
 
@@ -14,7 +14,6 @@ class ResourceShader;
 
 enum ResourceType;
 
-class Importer;
 class ImporterScene;
 class ImporterMesh;
 class ImporterTexture;
@@ -26,57 +25,57 @@ public:
 	ModuleResourceManager(bool startEnabled = true);
 	~ModuleResourceManager();
 
-	bool init(FileParser* conf);
-	bool start();
-	bool cleanUp();
+	bool Init(FileParser* conf)override;
+	bool Start()override;
+	bool CleanUp()override;
 
 	/**
 		Import a file depending on the format and return its UID.
 	*/
-	UID importFile(const char* fileInAssets, bool checkFirst = false);
+	UID ImportFile(const char* fileInAssets, bool checkFirst = false);
 
 	/**
 		Load a resource.
 	*/
-	bool loadResource(Resource* resource);
+	bool LoadResource(Resource* resource);
 	
 	/** 
 		Search in resources if there is a resource with file name passed, if found return its UID, if not 0;
 	*/
-	UID findResource(const char* fileInAssets)const;
+	UID FindResourceInAssets(const char* fileInAssets)const;
 
 	/**
 		Return resource type from file extension.
 	*/
-	ResourceType getTypeFromExtension(const char* extension);
+	ResourceType GetTypeFromExtension(const char* extension);
 
 	/**
 		Called when a resource is removed, if it was tha last instance will remove from memory if not just rest an instance
 	*/
-	void onResourceRemove(Resource* resource);
+	void OnResourceRemove(Resource* resource);
 
-	UID getNewUID();
+	UID GetNewUID();
 
-	Resource* createNewResource(ResourceType type, UID forceUID = 0);
-	Resource* getResourceFromUID(UID uuid);
+	Resource* CreateNewResource(ResourceType type, UID forceUID = 0);
+	Resource* GetResourceFromUID(UID uuid);
 
-	bool addResource(Resource* res, UID uuid);
-	bool removeResource(UID uuid);
+	bool AddResource(Resource* res, UID uuid);
+	bool RemoveResource(UID uuid);
 
-	bool addPrefab(const char* originalFile, const char* exportedFile); //Both will be raw file names, path must be added
+	bool AddPrefab(const char* originalFile, const char* exportedFile); //Both will be raw file names, path must be added
 
-	void getResourcesOfType(std::vector<Resource*>& res, ResourceType type)const;
+	void GetResourcesOfType(std::vector<Resource*>& res, ResourceType type)const;
 
-	ResourceShader* getDefaultShader()const;
+	ResourceShader* GetDefaultShader()const;
 
 private:
-	bool autoImportFBX();
-	bool checkAllPrefabs();
+	bool AutoImportFBX();
+	bool CheckAllPrefabs();
 
-	bool loadResources();
-	bool saveResources();
+	bool LoadResources();
+	bool SaveResources();
 
-	void loadBasicResources();
+	void LoadBasicResources();
 
 public:
 	ImporterScene* sceneImporter = NULL;
@@ -99,4 +98,4 @@ private:
 
 };
 
-#endif // !__MODULERESOURCEMANAGER_H__
+#endif // !__MODULERESOURCEMANAGER__

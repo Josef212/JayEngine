@@ -4,7 +4,7 @@
 
 //-------------------------------------
 
-void beginDebugDraw()
+void BeginDebugDraw()
 {
 	glDisable(GL_TEXTURE_2D);
 	glDisable(GL_LIGHTING);
@@ -14,7 +14,7 @@ void beginDebugDraw()
 	glColor4f(1.f, 1.f, 1.f, 1.f);
 }
 
-void endDebugDraw()
+void EndDebugDraw()
 {
 	glEnable(GL_CULL_FACE);
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -26,7 +26,7 @@ void endDebugDraw()
 
 //-------------------------------------
 
-void drawBoxDebug(AABB& box, Color color)
+void DrawBoxDebug(AABB& box, Color color)
 {
 	float3 vertices[8];
 	box.GetCornerPoints(vertices);
@@ -68,7 +68,7 @@ void drawBoxDebug(AABB& box, Color color)
 	glEnd();
 }
 
-void drawBoxDebug(OBB& box, Color color)
+void DrawBoxDebug(OBB& box, Color color)
 {
 	float3 vertices[8];
 	box.GetCornerPoints(vertices);
@@ -110,12 +110,12 @@ void drawBoxDebug(OBB& box, Color color)
 	glEnd();
 }
 
-void drawSphereDebug()
+void DrawSphereDebug()
 {
 
 }
 
-void drawFrustumDebug(Frustum& frustum, Color color)
+void DrawFrustumDebug(Frustum& frustum, Color color)
 {
 	float3 vertices[8];
 	frustum.GetCornerPoints(vertices);

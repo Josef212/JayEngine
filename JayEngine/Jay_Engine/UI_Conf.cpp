@@ -8,7 +8,7 @@
 #include "ModuleCamera3D.h"
 #include "Camera.h"
 
-UI_Conf::UI_Conf() : UI_Comp()
+UI_Conf::UI_Conf(bool startEnalbed) : UI_Panel(startEnalbed)
 {
 }
 
@@ -16,26 +16,26 @@ UI_Conf::UI_Conf() : UI_Comp()
 UI_Conf::~UI_Conf()
 {}
 
-void UI_Conf::draw()
+void UI_Conf::Draw()
 {
 	ImGui::Begin("Configuration", &active);
 	{
 		if (ImGui::CollapsingHeader("Application"))
 		{
 			static char appName[60];
-			strcpy_s(appName, 60, app->getTitle());
-			if (ImGui::InputText("App Name", appName, 60)) app->setTitle(appName);
+			strcpy_s(appName, 60, app->GetTitle());
+			if (ImGui::InputText("App Name", appName, 60)) app->SetTitle(appName);
 
 			static char org[60];
-			strcpy_s(org, 60, app->getOrganitzation());
-			if (ImGui::InputText("Organitzation", org, 60)) app->setOrganitzation(org);
+			strcpy_s(org, 60, app->GetOrganitzation());
+			if (ImGui::InputText("Organitzation", org, 60)) app->SetOrganitzation(org);
 
-			static int maxFPS = app->getMaxFPS();
-			if (ImGui::SliderInt("Max FPS", &maxFPS, 0, 240)) app->setMaxFPS(maxFPS);				
+			static int maxFPS = app->GetMaxFPS();
+			if (ImGui::SliderInt("Max FPS", &maxFPS, 0, 240)) app->SetMaxFPS(maxFPS);				
 
 			ImGui::Text("Limit Framrerate:");
 			ImGui::SameLine();
-			ImGui::TextColored(ImVec4(1, 1, 0, 1), "%i", maxFPS);//app->getMaxFPS());
+			ImGui::TextColored(ImVec4(1, 1, 0, 1), "%i", maxFPS);//app->GetMaxFPS());
 
 			char title[25];
 			sprintf_s(title, 25, "Framerate %.1f", fps[arraySize - 1]);
@@ -48,63 +48,63 @@ void UI_Conf::draw()
 		if (ImGui::CollapsingHeader("Window"))
 		{
 			ImGui::Text("Icon:");//TODO: add functionality to change app icon
-			float brightness = app->window->getBrightness();
-			if (ImGui::SliderFloat("Brightness", &brightness, 0.0f, 1.0f)) app->window->setBrightness(brightness);
+			float brightness = app->window->GetBrightness();
+			if (ImGui::SliderFloat("Brightness", &brightness, 0.0f, 1.0f)) app->window->SetBrightness(brightness);
 		
 			int width, height, minW, minH, maxW, maxH;
-			app->window->getWindowSize(width, height);
-			app->window->getRange(minW, minH, maxW, maxH);
-			if (ImGui::SliderInt("Width", &width, minW, maxW)) app->window->setWidth(width);
-			if (ImGui::SliderInt("Height", &height, minH, maxH)) app->window->setHeight(height);
+			app->window->GetWindowSize(width, height);
+			app->window->GetRange(minW, minH, maxW, maxH);
+			if (ImGui::SliderInt("Width", &width, minW, maxW)) app->window->SetWidth(width);
+			if (ImGui::SliderInt("Height", &height, minH, maxH)) app->window->SetHeight(height);
 
 			int x = 0, y = 0;
 			int maxX = maxW - width;
 			int maxY = maxH - height;
-			app->window->getPosition(x, y);
-			if (ImGui::SliderInt("Position X", &x, 0, maxX)) app->window->setPosition(x, y);
-			if (ImGui::SliderInt("Position Y", &y, 0, maxY)) app->window->setPosition(x, y);
+			app->window->GetPosition(x, y);
+			if (ImGui::SliderInt("Position X", &x, 0, maxX)) app->window->SetPosition(x, y);
+			if (ImGui::SliderInt("Position Y", &y, 0, maxY)) app->window->SetPosition(x, y);
 
-			if (ImGui::InputInt("PositionX", &x)) app->window->setPosition(x, y);
-			if (ImGui::InputInt("PositionY", &y)) app->window->setPosition(x, y);
+			if (ImGui::InputInt("PositionX", &x)) app->window->SetPosition(x, y);
+			if (ImGui::InputInt("PositionY", &y)) app->window->SetPosition(x, y);
 
 			ImGui::Text("Refresh rate:");
 			ImGui::SameLine();
-			ImGui::TextColored(ImVec4(1, 1, 0, 1), "%i", app->window->getRefresh());
+			ImGui::TextColored(ImVec4(1, 1, 0, 1), "%i", app->window->GetRefresh());
 
 			ImGui::Separator();
 
-			bool fullscreen = app->window->isFullScreen();
-			bool resizable = app->window->isResizable();
-			bool borderless = app->window->isBorderless();
-			bool fullscreenDesktop = app->window->isFullscreenDesktop();
-			if (ImGui::Checkbox("Fullscreen", &fullscreen)) app->window->setFullScreen(fullscreen);
+			bool fullscreen = app->window->IsFullScreen();
+			bool resizable = app->window->IsResizable();
+			bool borderless = app->window->IsBorderless();
+			bool fullscreenDesktop = app->window->IsFullscreenDesktop();
+			if (ImGui::Checkbox("Fullscreen", &fullscreen)) app->window->SetFullScreen(fullscreen);
 			ImGui::SameLine();
-			if (ImGui::Checkbox("Resizable", &resizable)) app->window->setResizable(resizable);
+			if (ImGui::Checkbox("Resizable", &resizable)) app->window->SetResizable(resizable);
 			ImGui::SameLine();
 			ImGui::TextColored(ImVec4(0.69, 0.13, 0.13, 1), "Reset app too apply."); //TODO: add functionality to save and load to change resizale
-			if (ImGui::Checkbox("Borderless", &borderless)) app->window->setBorderless(borderless);
+			if (ImGui::Checkbox("Borderless", &borderless)) app->window->SetBorderless(borderless);
 			ImGui::SameLine();
-			if (ImGui::Checkbox("FullDesktop", &fullscreenDesktop)) app->window->setFullScreenDesktop(fullscreenDesktop);
+			if (ImGui::Checkbox("FullDesktop", &fullscreenDesktop)) app->window->SetFullScreenDesktop(fullscreenDesktop);
 		}
 
 		if (ImGui::CollapsingHeader("Renderer"))
 		{
-			bool vSync = app->renderer3D->getVSync();
-			if (ImGui::Checkbox("VSync", &vSync)) app->renderer3D->setVSync(vSync);
+			bool vSync = app->renderer3D->GetVSync();
+			if (ImGui::Checkbox("VSync", &vSync)) app->renderer3D->SetVSync(vSync);
 		}
 
 		if (ImGui::CollapsingHeader("EditorCamera"))
 		{
-			Camera* cam = app->camera->getCamera();
+			Camera* cam = app->camera->GetCamera();
 			ImGui::ColorEdit4("Background:", (float*)&cam->background, false);
 
-			float nearP = cam->getNearPlaneDist();
-			float farP = cam->getFarPlaneDist();
-			float fov = cam->getFOV();
+			float nearP = cam->GetNearPlaneDist();
+			float farP = cam->GetFarPlaneDist();
+			float fov = cam->GetFOV();
 
-			if (ImGui::DragFloat("Near plane:", &nearP)) cam->setNearPlaneDist(nearP);
-			if (ImGui::DragFloat("Far plane:", &farP))cam->setFarPlaneDist(farP);
-			if (ImGui::DragFloat("Field of view:", &fov))cam->setFOV(fov);
+			if (ImGui::DragFloat("Near plane:", &nearP)) cam->SetNearPlaneDist(nearP);
+			if (ImGui::DragFloat("Far plane:", &farP))cam->SetFarPlaneDist(farP);
+			if (ImGui::DragFloat("Field of view:", &fov))cam->SetFOV(fov);
 
 			ImGui::DragFloat("Move speed: ", &app->camera->moveSpeed);
 			ImGui::DragFloat("Rotation speed: ", &app->camera->rotSpeed);
@@ -113,17 +113,17 @@ void UI_Conf::draw()
 
 			ImGui::Text("Aspect ratio: ");
 			ImGui::SameLine();
-			ImGui::TextColored(ImVec4(1, 1, 0, 1), "%f.", cam->getAspectRatio());
+			ImGui::TextColored(ImVec4(1, 1, 0, 1), "%f.", cam->GetAspectRatio());
 
-			bool culling = cam->isCullingActive();
-			if (ImGui::Checkbox("Culling", &culling))cam->setCulling(culling);
+			bool culling = cam->IsCullingActive();
+			if (ImGui::Checkbox("Culling", &culling))cam->SetCulling(culling);
 		}
 
 		if (ImGui::CollapsingHeader("FileSystem"))
 		{
 			ImGui::Text("Base path: ");
 			ImGui::SameLine();
-			ImGui::TextColored(ImVec4(1, 1, 0, 1), app->fs->getBasePath());
+			ImGui::TextColored(ImVec4(1, 1, 0, 1), app->fs->GetBasePath());
 
 			ImGui::Text("Read path: ");
 			ImGui::SameLine();
@@ -137,11 +137,11 @@ void UI_Conf::draw()
 		if (ImGui::CollapsingHeader("Input"))
 		{
 			int x, y, motX, motY, w;
-			x = app->input->getMouseX();
-			y = app->input->getMouseY();
-			motX = app->input->getMouseXMotion();
-			motY = app->input->getMouseYMotion();
-			w = app->input->getWheelYMotion();
+			x = app->input->GetMouseX();
+			y = app->input->GetMouseY();
+			motX = app->input->GetMouseXMotion();
+			motY = app->input->GetMouseYMotion();
+			w = app->input->GetWheelYMotion();
 			ImGui::Text("Mouse position: ");
 			ImGui::SameLine();
 			ImGui::TextColored(ImVec4(1, 1, 0, 1), "%d,%d", x, y);
@@ -157,21 +157,21 @@ void UI_Conf::draw()
 		{
 			ImGui::Text("SDL Version: ");
 			ImGui::SameLine();
-			ImGui::TextColored(ImVec4(1, 1, 0, 1), "%d.%d.%d", app->info->getInfo()->sdlVersion.major, app->info->getInfo()->sdlVersion.minor, app->info->getInfo()->sdlVersion.patch);
+			ImGui::TextColored(ImVec4(1, 1, 0, 1), "%d.%d.%d", app->info->GetInfo()->sdlVersion.major, app->info->GetInfo()->sdlVersion.minor, app->info->GetInfo()->sdlVersion.patch);
 
 			ImGui::Separator();
 
 			ImGui::Text("CPUs: ");
 			ImGui::SameLine();
-			ImGui::TextColored(ImVec4(1, 1, 0, 1), "%dCores (Cache: %dKb)", app->info->getInfo()->cpuCores, app->info->getInfo()->cpuCacheSize);
+			ImGui::TextColored(ImVec4(1, 1, 0, 1), "%dCores (Cache: %dKb)", app->info->GetInfo()->cpuCores, app->info->GetInfo()->cpuCacheSize);
 
 			ImGui::Text("System RAM: ");
 			ImGui::SameLine();
-			ImGui::TextColored(ImVec4(1, 1, 0, 1), "%dGb", app->info->getInfo()->ram);
+			ImGui::TextColored(ImVec4(1, 1, 0, 1), "%dGb", app->info->GetInfo()->ram);
 
 			ImGui::Text("Caps: ");
 			ImGui::SameLine();
-			ImGui::TextColored(ImVec4(1, 1, 0, 1), "%s", app->info->getCaps());
+			ImGui::TextColored(ImVec4(1, 1, 0, 1), "%s", app->info->GetCaps());
 
 			ImGui::Separator();
 
@@ -184,7 +184,7 @@ void UI_Conf::draw()
 	
 }
 
-void UI_Conf::pushFpsMs(float _fps, float _ms)
+void UI_Conf::PushFpsMs(float _fps, float _ms)
 {
 	if (arraySize == MAX_FPS_LOG)
 	{

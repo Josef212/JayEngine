@@ -128,11 +128,9 @@
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Color.cpp" />
-    <ClCompile Include="Component.cpp" />
     <ClCompile Include="DrawDebug.cpp" />
     <ClCompile Include="FileParser.cpp" />
     <ClCompile Include="GameObject.cpp" />
-    <ClCompile Include="glmath.cpp" />
     <ClCompile Include="HrdInfo.cpp" />
     <ClCompile Include="imGUI\imgui.cpp" />
     <ClCompile Include="imGUI\imgui_demo.cpp" />
@@ -141,7 +139,6 @@
     <ClCompile Include="ImporterScene.cpp" />
     <ClCompile Include="ImporterShader.cpp" />
     <ClCompile Include="ImporterTexture.cpp" />
-    <ClCompile Include="Importer.cpp" />
     <ClCompile Include="ImporterMesh.cpp" />
     <ClCompile Include="JOctree.cpp" />
     <ClCompile Include="Light.cpp" />
@@ -195,7 +192,6 @@
     <ClCompile Include="PhysBody3D.cpp" />
     <ClCompile Include="Primitive.cpp" />
     <ClCompile Include="RandGen.cpp" />
-    <ClCompile Include="Resource.cpp" />
     <ClCompile Include="ResourceScene.cpp" />
     <ClCompile Include="ResourceShader.cpp" />
     <ClCompile Include="ResourceTexture.cpp" />
@@ -205,7 +201,6 @@
     <ClCompile Include="Time.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Transform.cpp" />
-    <ClCompile Include="UI_Comp.cpp" />
     <ClCompile Include="UI_Conf.cpp" />
     <ClCompile Include="UI_Console.cpp" />
     <ClCompile Include="UI_Hierarchy.cpp" />
@@ -222,7 +217,6 @@
     <ClInclude Include="Event.h" />
     <ClInclude Include="FileParser.h" />
     <ClInclude Include="GameObject.h" />
-    <ClInclude Include="glmath.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="HrdInfo.h" />
     <ClInclude Include="imGUI\imconfig.h" />
@@ -235,7 +229,6 @@
     <ClInclude Include="ImporterScene.h" />
     <ClInclude Include="ImporterShader.h" />
     <ClInclude Include="ImporterTexture.h" />
-    <ClInclude Include="Importer.h" />
     <ClInclude Include="ImporterMesh.h" />
     <ClInclude Include="JOctree.h" />
     <ClInclude Include="Light.h" />
@@ -329,7 +322,7 @@
     <ClInclude Include="Time.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Transform.h" />
-    <ClInclude Include="UI_Comp.h" />
+    <ClInclude Include="UI_Panel.h" />
     <ClInclude Include="UI_Conf.h" />
     <ClInclude Include="UI_Console.h" />
     <ClInclude Include="UI_Hierarchy.h" />

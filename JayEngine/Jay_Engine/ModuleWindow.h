@@ -1,5 +1,5 @@
-#ifndef __ModuleWindow_H__
-#define __ModuleWindow_H__
+#ifndef __MODULE_WINDOW__
+#define __MODULE_WINDOW__
 
 #include "Module.h"
 #include "SDL/include/SDL.h"
@@ -13,73 +13,73 @@ public:
 	ModuleWindow(bool startEnabled = true);
 	virtual ~ModuleWindow();
 
-	bool init(FileParser* conf);
-	bool cleanUp();
+	bool Init(FileParser* conf)override;
+	bool CleanUp()override;
 
-	void setTitle(const char* title);
+	void SetTitle(const char* title);
 
-	SDL_Window* getWindow() { return window; }	
+	SDL_Window* GetWindow() { return window; }	
 
-	void hideWindow();
-	void maximizeWindow();
-	void minimizaWindow();
-	void restoreWindow();
-	void showWindow();
-	void raiseWindow();
+	void HideWindow();
+	void MaximizeWindow();
+	void MinimizaWindow();
+	void RestoreWindow();
+	void ShowWindow();
+	void RaiseWindow();
 
-	bool isScreecnSaver();
-	void setScreenSaver(bool set);
+	bool IsScreenSaver()const;
+	void SetScreenSaver(bool set);
 
-	void setFullScreen(bool set);
-	bool isFullScreen();
+	void SetFullScreen(bool set);
+	bool IsFullScreen()const;
 
-	void setResizable(bool set);
-	bool isResizable() const;
+	void SetResizable(bool set);
+	bool IsResizable() const;
 
-	bool isBorderless() const;
-	void setBorderless(bool set);
+	bool IsBorderless() const;
+	void SetBorderless(bool set);
 
-	bool isFullscreenDesktop() const;
-	void setFullScreenDesktop(bool set);
+	bool IsFullscreenDesktop() const;
+	void SetFullScreenDesktop(bool set);
 
-	void setBorder(bool set);
+	void SetBorder(bool set);
 
-	void setGrab(bool set);
+	void SetGrab(bool set);
 
-	void setPosition(int x, int y);
-	void getPosition(int& w, int& h);
+	void SetPosition(int x, int y);
+	void GetPosition(int& w, int& h)const;
 
-	void setSize(int w, int h);
-	void getWindowSize(int& width, int& height) const;
-	void setWidth(int width);
-	int getWidth();
-	void setHeight(int height);
-	int getHeight();
+	void SetSize(int w, int h);
+	void GetWindowSize(int& width, int& height) const;
+	void SetWidth(int width);
+	int GetWidth()const;
+	void SetHeight(int height);
+	int GetHeight()const;
 
-	int getWinSize()const;
+	int GetWinSize()const;
 	
-	bool setBrightness(float bright);
-	float getBrightness();
+	bool SetBrightness(float bright);
+	float GetBrightness()const;
 	
-	void getRange(int& minW, int& minH, int& maxW, int& maxH);
-	int getRefresh();
+	void GetRange(int& minW, int& minH, int& maxW, int& maxH)const;
+	int GetRefresh()const;
 
-	void onGlobalEvent(const Event& e);
+	void OnGlobalEvent(const Event& e);
 
-	void setIcon(SDL_Surface* icon);
+	void SetIcon(SDL_Surface* icon);
 	//void setIcon(const char* file);
 
 private:
 	int winSize = 1;
-	int width;
-	int height;
+	int width = 1;
+	int height = 1;
 	bool fullscreen, resizable, borderless, fullscreenDesktop;//TODO: save and load changes on this variables
 
 	//The window we'll be rendering to
-	SDL_Window* window;
+	SDL_Window* window = nullptr;
 
 	//The surface contained by the window
-	SDL_Surface* screenSurface;
+	SDL_Surface* screenSurface = nullptr;
 };
 
-#endif // __ModuleWindow_H__
+#endif // __MODULE_WINDOW__

@@ -5,7 +5,7 @@
 #include "ModuleGOManager.h"
 #include "GameObject.h"
 
-UI_Tree::UI_Tree()
+UI_Tree::UI_Tree(bool startEnalbed) : UI_Panel(startEnalbed)
 {
 }
 
@@ -14,7 +14,7 @@ UI_Tree::~UI_Tree()
 {
 }
 
-void UI_Tree::draw()
+void UI_Tree::Draw()
 {
 	ImGui::Begin("Scene tree", &active);
 	{
@@ -37,7 +37,7 @@ void UI_Tree::draw()
 	ImGui::End();
 }
 
-void UI_Tree::recursiveDrawTree(oTreeNode* treeNode, uint index)
+void UI_Tree::RecursiveDrawTree(OcTreeNode* treeNode, uint index)
 {
 	if (treeNode)
 	{
@@ -51,15 +51,15 @@ void UI_Tree::recursiveDrawTree(oTreeNode* treeNode, uint index)
 
 			for (std::list<GameObject*>::iterator it = treeNode->objects.begin(); it != treeNode->objects.end(); ++it)
 			{
-				ImGui::TreeNodeEx((*it)->getName(), ImGuiTreeNodeFlags_Leaf);
+				ImGui::TreeNodeEx((*it)->GetName(), ImGuiTreeNodeFlags_Leaf);
 				if (ImGui::IsItemClicked())
-					app->goManager->select((*it));
+					app->goManager->Select((*it));
 				ImGui::TreePop();
 			}
 
 			for (unsigned int i = 0; i < 8; ++i)
 				if (treeNode->childs[i])
-					recursiveDrawTree(treeNode->childs[i], i);
+					RecursiveDrawTree(treeNode->childs[i], i);
 
 			ImGui::TreePop();
 		}

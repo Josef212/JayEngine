@@ -1,5 +1,5 @@
-#ifndef __MODULEGOMANAGER_H__
-#define __MODULEGOMANAGER_H__
+#ifndef __MODULEGOMANAGER__
+#define __MODULEGOMANAGER__
 
 #include "Module.h"
 #include <string>
@@ -19,83 +19,77 @@ public:
 	ModuleGOManager(bool startEnabled = true);
 	virtual ~ModuleGOManager();
 
-	bool init(FileParser* conf);
-	bool start();
-	update_status preUpdate(float dt);
-	update_status update(float dt);
-	update_status postUpdate(float dt);
-	bool cleanUp();
+	bool Init(FileParser* conf)override;
+	bool Start()override;
+	update_status PreUpdate(float dt)override;
+	update_status Update(float dt)override;
+	update_status PostUpdate(float dt)override;
+	bool CleanUp()override;
 
-	void draw();
+	void Draw();
 
-	void removeFlaggedGO();
+	void RemoveFlaggedGO();
 
-	GameObject* getSceneroot()const;
-	GameObject* getGameObjectFromId(UID id);
+	GameObject* GetSceneroot()const;
+	GameObject* GetGameObjectFromId(UID id);
 
 
-	GameObject* createGameObject(GameObject* parent = NULL);
-	GameObject* createEmptyGO();
-	GameObject* createEmptyGoWithAABB(float xP, float yP, float zP); //TMP
-	GameObject* createCamera();
+	GameObject* CreateGameObject(GameObject* parent = nullptr);
+	GameObject* CreateEmptyGO();
+	GameObject* CreateCamera();
 
-	Component* addTransform();
-	Component* addMesh();
-	Component* addMaterial();
-	Component* addCamera();
+	GameObject* GetSelected()const;
+	void Select(GameObject* toSelect);
 
-	GameObject* getSelected()const;
-	void select(GameObject* toSelect);
+	GameObject* ValidateGO(const GameObject* point)const;
 
-	GameObject* validateGO(const GameObject* point)const;
+	GameObject* LoadPrefab(const char* file, const char* path = nullptr); //Must be a json wich contains all .jof and .dds, etc
 
-	GameObject* loadPrefab(const char* file, const char* path = NULL); //Must be a json wich contains all .jof and .dds, etc
+	void CleanRoot();
+	void CleanRootNow();
 
-	void cleanRoot();
-	void cleanRootNow();
+	GameObject* LoadCube();
 
-	GameObject* loadCube();
+	void DrawDebug();
 
-	void drawDebug();
+	void MakeGOShowAABoxRec(GameObject* obj, bool show);
+	void MakeGOShowOBoxRec(GameObject* obj, bool show);
 
-	void makeGOShowAABoxRec(GameObject* obj, bool show);
-	void makeGOShowOBoxRec(GameObject* obj, bool show);
+	void InsertGameObjectToTree(GameObject* obj);
+	void EraseGameObjectFromTree(GameObject* obj); //DEL_COM
 
-	void insertGameObjectToTree(GameObject* obj);
-	void eraseGameObjectFromTree(GameObject* obj); //DEL_COM
+	void SaveScene();
+	void LoadScene();
 
-	void saveScene();
-	void loadScene();
+	void LoadSceneOrPrefabs(const FileParser& file);
 
-	void loadSceneOrPrefabs(const FileParser& file);
+	bool SetCurrentScene(const char* scene);
+	const char* GetCurrentScene();
 
-	bool setCurrentScene(const char* scene);
-	const char* getCurrentScene();
-
-	void onGlobalEvent(const Event& e);
+	void OnGlobalEvent(const Event& e);
 
 private:
-	GameObject* recFindGO(UID id, GameObject* go);
-	void recRecieveEvent(GameObject* obj, const Event& e);
+	GameObject* RecFindGO(UID id, GameObject* go);
+	void RecRecieveEvent(GameObject* obj, const Event& e);
 
-	bool saveSceneNow(const char* name, const char* path = NULL);
-	bool loadSceneNow(const char* name, const char* path = NULL);
+	bool SaveSceneNow(const char* name, const char* path = nullptr);
+	bool LoadSceneNow(const char* name, const char* path = nullptr);
 
-	void onPlay();
-	void onPause();
-	void onStop();
+	void OnPlay();
+	void OnPause();
+	void OnStop();
 
 public:
 	bool showEnclosingBoxes = false;
 	bool showOrientedBoxes = false;
 	bool showTree = false;
 
-	JOctree* sceneTree = NULL;
+	JOctree* sceneTree = nullptr;
 
 private:
 
-	GameObject* sceneRootObject = NULL;
-	GameObject* selected = NULL;
+	GameObject* sceneRootObject = nullptr;
+	GameObject* selected = nullptr;
 
 	bool mustSaveScene = false;
 	bool mustLoadScene = false;
@@ -106,4 +100,4 @@ private:
 	*/
 };
 
-#endif // !__MODULEGOMANAGER_H__
+#endif // !__MODULEGOMANAGER__

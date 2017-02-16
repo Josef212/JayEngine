@@ -1,5 +1,5 @@
-#ifndef __MODULEINPUT_H__
-#define __MODULEINPUT_H__
+#ifndef __MODULEINPUT__
+#define __MODULEINPUT__
 
 #include "Module.h"
 #include "Globals.h"
@@ -21,48 +21,60 @@ public:
 	ModuleInput(bool startEnabled = true);
 	~ModuleInput();
 
-	bool init(FileParser* conf);
-	update_status preUpdate(float dt);
-	bool cleanUp();
+	bool Init(FileParser* conf)override;
+	update_status PreUpdate(float dt)override;
+	bool CleanUp()override;
 
-	KEY_STATE getKey(int id) const
+	KEY_STATE GetKey(int id) const
 	{
 		return keyboard[id];
 	}
 
-	KEY_STATE getMouseButton(int id) const
+	KEY_STATE GetMouseButton(int id) const
 	{
-		return mouse_buttons[id];
+		return mouseButtons[id];
 	}
 
-	int getMouseX() const
+	int GetMouseX() const
 	{
 		return mouseX;
 	}
 
-	int getMouseY() const
+	int GetMouseY() const
 	{
 		return mouseY;
 	}
 
-	int getMouseXMotion() const
+	int GetMouseXMotion() const
 	{
 		return mouseXMotion;
 	}
 
-	int getMouseYMotion() const
+	int GetMouseYMotion() const
 	{
 		return mouseYMotion;
 	}
 
-	int getWheelYMotion()const
+	int GetWheelYMotion()const
 	{
 		return wheelY;
 	}
 
+	void GetMousePosition(int& x, int& y)const
+	{
+		x = mouseX;
+		y = mouseY;
+	}
+
+	void GetMouseMotion(int& x, int& y)const
+	{
+		x = mouseXMotion;
+		y = mouseYMotion;
+	}
+
 private:
 	KEY_STATE* keyboard;
-	KEY_STATE mouse_buttons[MAX_MOUSE_BUTTONS];
+	KEY_STATE mouseButtons[MAX_MOUSE_BUTTONS];
 	int mouseX;
 	int mouseY;
 	int mouseXMotion;
@@ -71,4 +83,4 @@ private:
 	int wheelY;
 };
 
-#endif // !__MODULEINPUT_H__
+#endif // !__MODULEINPUT__

@@ -1,9 +1,8 @@
-#ifndef __MODULERENDERER3D_H__
-#define __MODULERENDERER3D_H__
+#ifndef __MODULERENDERER3D__
+#define __MODULERENDERER3D__
 
 #include "Module.h"
 #include "Globals.h"
-#include "glmath.h"
 #include "Light.h"
 
 class GameObject;
@@ -18,41 +17,39 @@ public:
 	ModuleRenderer3D(bool startEnabled = true);
 	~ModuleRenderer3D();
 
-	bool init(FileParser* conf);
-	bool start();
-	update_status preUpdate(float dt);
-	update_status postUpdate(float dt);
-	bool cleanUp();
+	bool Init(FileParser* conf)override;
+	bool Start()override;
+	update_status PreUpdate(float dt)override;
+	update_status PostUpdate(float dt)override;
+	bool CleanUp()override;
 
-	void onResize(int width, int height);
+	void OnResize(int width, int height);
 
-	bool getVSync()const;
-	void setVSync(bool vsync);
+	bool GetVSync()const;
+	void SetVSync(bool vsync);
 
-	void drawGameObject(GameObject* obj);
+	void DrawGameObject(GameObject* obj);
 
-	void setActiveCamera(Camera* activeCamera);
-	Camera* getActiveCamera()const;
+	void SetActiveCamera(Camera* activeCamera);
+	Camera* GetActiveCamera()const;
 
-	void onGlobalEvent(const Event& e);
+	void OnGlobalEvent(const Event& e);
 
 private:
-	void updateProjectionMat(Camera* cam);
-	void drawWireframe(ResourceMesh* resMesh, bool selected);
-	void drawNormals(ResourceMesh* resMesh);
+	void UpdateProjectionMat(Camera* cam);
+	void DrawWireframe(ResourceMesh* resMesh, bool selected);
+	void DrawNormals(ResourceMesh* resMesh);
 
 public:
 	Light lights[MAX_LIGHTS];
-	SDL_GLContext context;
-	mat3x3 normalMatrix;
-	mat4x4 modelMatrix, viewMatrix, projectionMatrix;
 	bool showGrid = true;
 	bool editorShowGrid = showGrid;
 
 private:
-	bool vsync;
-	Camera* activeCamera = NULL;
+	SDL_GLContext context;
+	bool vsync = false;
+	Camera* activeCamera = nullptr;
 
 };
 
-#endif // !__MODULERENDERER3D_H__
+#endif // !__MODULERENDERER3D__

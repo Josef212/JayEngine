@@ -14,59 +14,47 @@
 
 Material::Material(GameObject* gObj, int id) : Component(gObj, id)
 {
-	type = MATERIAL;
+	type = CMP_MATERIAL;
 	name.assign("Material");
 }
 
 
 Material::~Material()
 {
-	clearMaterial();
+	ClearMaterial();
 }
 
-void Material::enable()
-{
-	if (!active)
-		active = true;
-}
-
-void Material::disable()
-{
-	if (active)
-		active = false;
-}
-
-void Material::init()
+void Material::Init()
 {
 
 }
 
-void Material::update(float dt)
+void Material::Update(float dt)
 {
 
 }
 
-void Material::cleanUp()
+void Material::CleanUp()
 {
 
 }
 
-bool Material::saveCMP(FileParser& sect)
+bool Material::SaveCMP(FileParser& sect)
 {
 	bool ret = true;
 
 	sect.addInt("comp_type", (int)type);
-	sect.addBool("active", active);
+	sect.addBool("active", selfActive);
 	sect.addInt("UUID", id);
-	sect.addInt("go_UUID", object->getGOId());
+	sect.addInt("go_UUID", object->GetGOId());
 	sect.addColor("mat_col", color);
 
 	if (textureResource)
 	{
 		sect.addBool("have_res", true);
-		sect.addInt("resource_id", textureResource->getUID());
-		sect.addString("resource_exported_file", textureResource->getExportedFile());
-		sect.addString("resource_original_file", textureResource->getOriginalFile());
+		sect.addInt("resource_id", textureResource->GetUID());
+		sect.addString("resource_exported_file", textureResource->exportedFile.c_str());
+		sect.addString("resource_original_file", textureResource->originalFile.c_str());
 	}
 	else
 		sect.addBool("have_res", false);
@@ -74,18 +62,18 @@ bool Material::saveCMP(FileParser& sect)
 	return ret;
 }
 
-bool Material::loadCMP(FileParser& sect)
+bool Material::LoadCMP(FileParser& sect)
 {
 	bool ret = true;
 
-	active = sect.getBool("active", true);
+	selfActive = sect.getBool("active", true);
 	id = sect.getInt("UUID", 0);
 
 	color = sect.getColor("mat_col", Yellow);
 
 	if (sect.getBool("have_res", false))
 	{
-		setResource(sect.getInt("resource_id", 0));
+		SetResource(sect.getInt("resource_id", 0));
 	}
 
 	return ret;
@@ -94,36 +82,36 @@ bool Material::loadCMP(FileParser& sect)
 
 //-------------------------------------
 
-void Material::setResource(UID resUID)
+void Material::SetResource(UID resUID)
 {
-	ResourceTexture* res = (ResourceTexture*)app->resourceManager->getResourceFromUID(resUID);
+	ResourceTexture* res = (ResourceTexture*)app->resourceManager->GetResourceFromUID(resUID);
 
 	if (res)
 	{
-		if (!res->isInMemory())
+		if (!res->IsInMemory())
 		{
 			//If is not in memory load it.
-			if (!app->resourceManager->loadResource(res))
+			if (!app->resourceManager->LoadResource(res))
 			{
-				_LOG(LOG_ERROR, "Error loading resource '%s'.", res->getExportedFile());
+				_LOG(LOG_ERROR, "Error loading resource '%s'.", res->exportedFile.c_str());
 			}
 			else
 			{
-				_LOG(LOG_STD, "Just loaded resource '%s'.", res->getExportedFile());
+				_LOG(LOG_STD, "Just loaded resource '%s'.", res->exportedFile.c_str());
 			}
 		}
 		else
-			res->addInstance();
+			res->AddInstance();
 
 		textureResource = res;
 	}
 }
 
-void Material::clearMaterial()
+void Material::ClearMaterial()
 {
 	if (textureResource)
 	{
-		app->resourceManager->onResourceRemove(textureResource);
-		textureResource = NULL;
+		app->resourceManager->OnResourceRemove(textureResource);
+		textureResource = nullptr;
 	}
 }

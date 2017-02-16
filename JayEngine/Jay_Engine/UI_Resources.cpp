@@ -25,9 +25,8 @@
 #include "OpenGL.h"
 
 
-UI_Resources::UI_Resources()
+UI_Resources::UI_Resources(bool startEnalbed) : UI_Panel(startEnalbed)
 {
-	active = true;
 	infoW = 300;
 	infoH = 150;
 }
@@ -37,7 +36,7 @@ UI_Resources::~UI_Resources()
 {
 }
 
-void UI_Resources::draw()
+void UI_Resources::Draw()
 {
 	ImGui::SetNextWindowPos(ImVec2(0, 580));
 	ImGui::SetNextWindowSize(ImVec2(360, 440));
@@ -51,9 +50,9 @@ void UI_Resources::draw()
 
 		if (ImGui::CollapsingHeader("Prefabs"))
 		{
-			app->resourceManager->getResourcesOfType(resources, ResourceType::RESOURCE_SCENE);
+			app->resourceManager->GetResourcesOfType(resources, ResourceType::RESOURCE_SCENE);
 
-			prefabs(resources);
+			Prefabs(resources);
 		}
 
 		//------------------------------------
@@ -62,9 +61,9 @@ void UI_Resources::draw()
 		if (ImGui::CollapsingHeader("Textures"))
 		{
 			resources.clear();
-			app->resourceManager->getResourcesOfType(resources, ResourceType::RESOURCE_TEXTURE);
+			app->resourceManager->GetResourcesOfType(resources, ResourceType::RESOURCE_TEXTURE);
 
-			textures(resources);
+			Textures(resources);
 		}
 
 		//------------------------------------
@@ -73,9 +72,9 @@ void UI_Resources::draw()
 		if (ImGui::CollapsingHeader("Meshes"))
 		{
 			resources.clear();
-			app->resourceManager->getResourcesOfType(resources, ResourceType::RESOURCE_MESH);
+			app->resourceManager->GetResourcesOfType(resources, ResourceType::RESOURCE_MESH);
 
-			meshes(resources);
+			Meshes(resources);
 		}
 
 		//------------------------------------
@@ -85,15 +84,15 @@ void UI_Resources::draw()
 		{
 			if (ImGui::Button("Create new shader"))
 			{
-				ResourceShader* sh = (ResourceShader*)app->resourceManager->createNewResource(ResourceType::RESOURCE_SHADER);
-				sh->applydefaultShader();
-				app->resourceManager->shaderImporter->saveShader(sh);
+				ResourceShader* sh = (ResourceShader*)app->resourceManager->CreateNewResource(ResourceType::RESOURCE_SHADER);
+				sh->ApplydefaultShader();
+				app->resourceManager->shaderImporter->SaveShader(sh);
 			}
 
 			resources.clear();
-			app->resourceManager->getResourcesOfType(resources, ResourceType::RESOURCE_SHADER);
+			app->resourceManager->GetResourcesOfType(resources, ResourceType::RESOURCE_SHADER);
 
-			shaders(resources);
+			Shaders(resources);
 		}
 
 		//------------------------------------
@@ -108,13 +107,13 @@ void UI_Resources::draw()
 	}
 
 	if (shaderEditorOpen && currentShaderEditing)
-		shaderEditor(currentShaderEditing);
+		ShaderEditor(currentShaderEditing);
 }
 
 
 //-----------------------------
 
-void UI_Resources::prefabs(std::vector<Resource*> prefs)
+void UI_Resources::Prefabs(std::vector<Resource*> prefs)
 {
 	static int scSelected = -1;
 
@@ -133,7 +132,7 @@ void UI_Resources::prefabs(std::vector<Resource*> prefs)
 			else
 				nodeFlags |= ImGuiTreeNodeFlags_Leaf;
 
-			if (ImGui::TreeNodeEx(res->getOriginalFile(), nodeFlags))
+			if (ImGui::TreeNodeEx(res->originalFile.c_str(), nodeFlags))
 			{
 				if (scSelected == i)
 				{
@@ -142,11 +141,11 @@ void UI_Resources::prefabs(std::vector<Resource*> prefs)
 					{
 						ImGui::Text("Exported file:");
 						ImGui::SameLine();
-						ImGui::TextColored(ImVec4(1, 1, 0, 1), "%s.", res->getExportedFile());
+						ImGui::TextColored(ImVec4(1, 1, 0, 1), "%s.", res->exportedFile.c_str());
 
 						ImGui::Text("Instances in memory:");
 						ImGui::SameLine();
-						ImGui::TextColored(ImVec4(1, 1, 0, 1), "%d.", res->countReferences());
+						ImGui::TextColored(ImVec4(1, 1, 0, 1), "%d.", res->CountReferences());
 						ImGui::TextColored(ImVec4(1, 0, 0, 1), "This might not be correct, will fix in future updates.");
 
 						//---------------
@@ -154,7 +153,7 @@ void UI_Resources::prefabs(std::vector<Resource*> prefs)
 						//---------------
 
 						if(ImGui::Button("Load prefab to scene"))
-							app->resourceManager->loadResource(res);
+							app->resourceManager->LoadResource(res);
 
 						ImGui::EndChild();
 						ImGui::PopStyleVar();
@@ -172,7 +171,7 @@ void UI_Resources::prefabs(std::vector<Resource*> prefs)
 
 //-----------------------------
 
-void UI_Resources::meshes(std::vector<Resource*> meshes)
+void UI_Resources::Meshes(std::vector<Resource*> meshes)
 {
 	static int mSelected = -1;
 
@@ -191,7 +190,7 @@ void UI_Resources::meshes(std::vector<Resource*> meshes)
 			else
 				nodeFlags |= ImGuiTreeNodeFlags_Leaf;
 
-			if (ImGui::TreeNodeEx(res->getExportedFile(), nodeFlags))
+			if (ImGui::TreeNodeEx(res->exportedFile.c_str(), nodeFlags))
 			{
 				if (mSelected == i)
 				{
@@ -200,15 +199,15 @@ void UI_Resources::meshes(std::vector<Resource*> meshes)
 					{
 						ImGui::Text("Original file:");
 						ImGui::SameLine();
-						ImGui::TextColored(ImVec4(1, 1, 0, 1), "%s.", res->getOriginalFile());
+						ImGui::TextColored(ImVec4(1, 1, 0, 1), "%s.", res->originalFile.c_str());
 
 						ImGui::Text("Instances in memory:");
 						ImGui::SameLine();
-						ImGui::TextColored(ImVec4(1, 1, 0, 1), "%d.", res->countReferences());
+						ImGui::TextColored(ImVec4(1, 1, 0, 1), "%d.", res->CountReferences());
 
 						//-------------
 
-						if (res->isInMemory())
+						if (res->IsInMemory())
 						{
 							ImGui::Text("Num vertices:");
 							ImGui::SameLine();
@@ -238,35 +237,35 @@ void UI_Resources::meshes(std::vector<Resource*> meshes)
 
 						if (ImGui::BeginPopup("meshes popup"))
 						{
-							ImGui::MenuItem("GO selected", NULL, false, false);
+							ImGui::MenuItem("GO selected", nullptr, false, false);
 							ImGui::Separator();
 
-							GameObject* selected = app->goManager->getSelected();
+							GameObject* selected = app->goManager->GetSelected();
 
 							if (!selected)
-								ImGui::MenuItem("Not game object", NULL, false, false);
+								ImGui::MenuItem("Not game object", nullptr, false, false);
 							else
 							{
-								std::vector<Component*> cmp = selected->findComponent(ComponentType::MESH);
+								std::vector<Component*> cmp = selected->GetComponents(ComponentType::CMP_MESH);
 								for (uint j = 0; j < cmp.size(); ++j)
 								{
 									if (cmp[j])
 									{
 										static char mName[32];
-										sprintf_s(mName, 32, "%s", cmp[j]->getName());
+										sprintf_s(mName, 32, "%s", cmp[j]->GetName());
 										if (ImGui::MenuItem(mName))
 										{
-											cmp[j]->setResource(res->getUID());
+											cmp[j]->SetResource(res->GetUID());
 										}
 									}
 								}
 
 								if (ImGui::MenuItem("Add component mesh"))
 								{
-									Mesh* m = (Mesh*)selected->addComponent(ComponentType::MESH);
+									Mesh* m = (Mesh*)selected->AddComponent(ComponentType::CMP_MESH);
 									if (m)
 									{
-										m->setResource(res->getUID());
+										m->SetResource(res->GetUID());
 									}
 								}
 
@@ -291,7 +290,7 @@ void UI_Resources::meshes(std::vector<Resource*> meshes)
 
 //-----------------------------
 
-void UI_Resources::textures(std::vector<Resource*> texs)
+void UI_Resources::Textures(std::vector<Resource*> texs)
 {
 	static int txSelected = -1;
 
@@ -310,7 +309,7 @@ void UI_Resources::textures(std::vector<Resource*> texs)
 			else
 				nodeFlags |= ImGuiTreeNodeFlags_Leaf;
 
-			if (ImGui::TreeNodeEx(res->getOriginalFile(), nodeFlags))
+			if (ImGui::TreeNodeEx(res->originalFile.c_str(), nodeFlags))
 			{
 				if (txSelected == i)
 				{
@@ -319,13 +318,13 @@ void UI_Resources::textures(std::vector<Resource*> texs)
 					{
 						ImGui::Text("Exported file:");
 						ImGui::SameLine();
-						ImGui::TextColored(ImVec4(1, 1, 0, 1), "%s.", res->getExportedFile());
+						ImGui::TextColored(ImVec4(1, 1, 0, 1), "%s.", res->exportedFile.c_str());
 
 						ImGui::Text("Instances in memory: ");
 						ImGui::SameLine();
-						ImGui::TextColored(ImVec4(1, 1, 0, 1), "%d.", res->countReferences());
+						ImGui::TextColored(ImVec4(1, 1, 0, 1), "%d.", res->CountReferences());
 						
-						if (res->isInMemory())
+						if (res->IsInMemory())
 						{
 							ImGui::Text("Width:");
 							ImGui::SameLine();
@@ -353,7 +352,7 @@ void UI_Resources::textures(std::vector<Resource*> texs)
 
 							ImGui::Text("Format:");
 							ImGui::SameLine();
-							ImGui::TextColored(ImVec4(1, 1, 0, 1), "%s.", res->getFormatStr());
+							ImGui::TextColored(ImVec4(1, 1, 0, 1), "%s.", res->GetFormatStr());
 
 							uint texIndex = res->textureGlID;
 							glBindTexture(GL_TEXTURE_2D, texIndex);
@@ -397,36 +396,36 @@ void UI_Resources::textures(std::vector<Resource*> texs)
 
 						if (ImGui::BeginPopup("tex popup"))
 						{
-							ImGui::MenuItem("GO selected", NULL, false, false);
+							ImGui::MenuItem("GO selected", nullptr, false, false);
 							ImGui::Separator();
 
-							GameObject* selected = app->goManager->getSelected();
+							GameObject* selected = app->goManager->GetSelected();
 
 							if (!selected)
-								ImGui::MenuItem("Not game object", NULL, false, false);
+								ImGui::MenuItem("Not game object", nullptr, false, false);
 							else
 							{
 								//TODO: Adapt this to material component and multitextures.
-								std::vector<Component*> cmp = selected->findComponent(ComponentType::MATERIAL);
+								std::vector<Component*> cmp = selected->GetComponents(ComponentType::CMP_MATERIAL);
 								for (uint j = 0; j < cmp.size(); ++j)
 								{
 									if (cmp[j])
 									{
 										static char tName[32];
-										sprintf_s(tName, 32, "%s", cmp[j]->getName());
+										sprintf_s(tName, 32, "%s", cmp[j]->GetName());
 										if (ImGui::MenuItem(tName))
 										{
-											cmp[j]->setResource(res->getUID());
+											cmp[j]->SetResource(res->GetUID());
 										}
 									}
 								}
 								
 								if (ImGui::MenuItem("Add component material"))
 								{
-									Material* mat = (Material*)selected->addComponent(ComponentType::MATERIAL);
+									Material* mat = (Material*)selected->AddComponent(ComponentType::CMP_MATERIAL);
 									if (mat)
 									{
-										mat->setResource(res->getUID());
+										mat->SetResource(res->GetUID());
 									}
 								}
 							}
@@ -451,7 +450,7 @@ void UI_Resources::textures(std::vector<Resource*> texs)
 
 //-----------------------------
 
-void UI_Resources::shaders(std::vector<Resource*> shds)
+void UI_Resources::Shaders(std::vector<Resource*> shds)
 {
 	static int sSelected = -1;
 
@@ -475,7 +474,7 @@ void UI_Resources::shaders(std::vector<Resource*> shds)
 				if (sSelected == i)
 				{
 					if (ImGui::Button("Force compile"))
-						app->resourceManager->shaderImporter->compileShader(res);
+						app->resourceManager->shaderImporter->CompileShader(res);
 
 					ImGui::SameLine();
 
@@ -484,24 +483,24 @@ void UI_Resources::shaders(std::vector<Resource*> shds)
 
 					if (ImGui::BeginPopup("shaders popup"))
 					{
-						ImGui::MenuItem("GO selected", NULL, false, false);
+						ImGui::MenuItem("GO selected", nullptr, false, false);
 						ImGui::Separator();
 
-						GameObject* selected = app->goManager->getSelected();
+						GameObject* selected = app->goManager->GetSelected();
 
 						if (!selected)
-							ImGui::MenuItem("Not game object", NULL, false, false);
+							ImGui::MenuItem("Not game object", nullptr, false, false);
 						else
 						{
 							//TODO: Adapt this to material component and multitextures.
-							std::vector<Component*> cmp = selected->findComponent(ComponentType::MATERIAL);
+							std::vector<Component*> cmp = selected->GetComponents(ComponentType::CMP_MATERIAL);
 							for (uint j = 0; j < cmp.size(); ++j)
 							{
 								Material* mat = (Material*)cmp[j];
 								if (mat)
 								{
 									static char tName[32];
-									sprintf_s(tName, 32, "%s", mat->getName());
+									sprintf_s(tName, 32, "%s", mat->GetName());
 									if (ImGui::MenuItem(tName))
 									{
 										mat->shaderResource = res;
@@ -511,7 +510,7 @@ void UI_Resources::shaders(std::vector<Resource*> shds)
 
 							if (ImGui::MenuItem("Add component material"))
 							{
-								Material* mat = (Material*)selected->addComponent(ComponentType::MATERIAL);
+								Material* mat = (Material*)selected->AddComponent(ComponentType::CMP_MATERIAL);
 								if (mat)
 								{
 									mat->shaderResource = res;
@@ -530,8 +529,8 @@ void UI_Resources::shaders(std::vector<Resource*> shds)
 						//Load it to memory.
 						shaderEditorOpen = true;
 						currentShaderEditing = res;
-						if (!res->vertexAndFragtalInMemory())
-							app->resourceManager->shaderImporter->loadShaderToMemory(res);
+						if (!res->VertexAndFragtalInMemory())
+							app->resourceManager->shaderImporter->LoadShaderToMemory(res);
 					}
 				}
 
@@ -546,7 +545,7 @@ void UI_Resources::shaders(std::vector<Resource*> shds)
 
 //-----------------------------
 
-void UI_Resources::shaderEditor(ResourceShader* resShader)
+void UI_Resources::ShaderEditor(ResourceShader* resShader)
 {
 	if (!resShader)
 		return;
@@ -576,18 +575,18 @@ void UI_Resources::shaderEditor(ResourceShader* resShader)
 
 		if (ImGui::Button("Compile shader"))
 		{
-			app->resourceManager->shaderImporter->saveShader(resShader);
-			app->resourceManager->shaderImporter->compileShader(resShader);
+			app->resourceManager->shaderImporter->SaveShader(resShader);
+			app->resourceManager->shaderImporter->CompileShader(resShader);
 		}
 
 		ImGui::SameLine();
 
 		if (ImGui::Button("Save shader"))
-			app->resourceManager->shaderImporter->saveShader(resShader);
+			app->resourceManager->shaderImporter->SaveShader(resShader);
 
 		if (ImGui::Button("Close"))
 		{
-			currentShaderEditing = NULL;
+			currentShaderEditing = nullptr;
 			shaderEditorOpen = false;
 		}
 

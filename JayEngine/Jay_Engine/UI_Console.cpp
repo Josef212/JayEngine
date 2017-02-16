@@ -1,17 +1,16 @@
 #include "UI_Console.h"
 #include "Globals.h"
 
-UI_Console::UI_Console() : UI_Comp()
+UI_Console::UI_Console(bool startEnalbed) : UI_Panel(startEnalbed)
 {
 	lastLogColor = ImColor(255, 255, 255);
-	active = true;
 }
 
 UI_Console::~UI_Console()
 {
 }
 
-void UI_Console::draw()
+void UI_Console::Draw()
 {
 	int w = ImGui::GetIO().DisplaySize.x;
 	int h = ImGui::GetIO().DisplaySize.y;
@@ -56,7 +55,7 @@ void UI_Console::draw()
 	}
 }
 
-void UI_Console::logUi(const char* str, logType type)
+void UI_Console::LogUi(const char* str, logType type)
 {
 	//logs.append(str);
 	scrollDown = true;

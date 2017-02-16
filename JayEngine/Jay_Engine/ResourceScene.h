@@ -1,5 +1,5 @@
-#ifndef __RESOURCESCENE_H__
-#define __RESOURCESCENE_H__
+#ifndef __RESOURCESCENE__
+#define __RESOURCESCENE__
 
 #include "Resource.h"
 
@@ -10,4 +10,4 @@ public:
 	virtual ~ResourceScene();
 };
 
-#endif
+#endif //!__RESOURCESCENE__

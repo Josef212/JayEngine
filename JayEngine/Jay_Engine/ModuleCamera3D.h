@@ -1,5 +1,5 @@
-#ifndef __MODULECAMERA3D_H__
-#define __MODULECAMERA3D_H__
+#ifndef __MODULECAMERA3D__
+#define __MODULECAMERA3D__
 
 #include "Module.h"
 #include "Globals.h"
@@ -14,22 +14,22 @@ public:
 	ModuleCamera3D(bool startEnabled = true);
 	~ModuleCamera3D();
 
-	bool init(FileParser* conf);
-	bool start();
-	update_status update(float dt);
-	bool cleanUp();
+	bool Init(FileParser* conf)override;
+	bool Start()override;
+	update_status Update(float dt)override;
+	bool CleanUp()override;
 
-	void look(const float3& position, const float3& reference, bool rotateAroundReference = false);
-	void lookAt(const float3& spot);
-	void lookAt(float dx, float dy);
-	void move(float dt);
-	void rotate(float dt);
-	void setPos(const float3& pos);
-	void orbit(float dx, float dy);
-	void zoom(float dt);
+	void Look(const float3& position, const float3& reference, bool rotateAroundReference = false);
+	void LookAt(const float3& spot);
+	void LookAt(float dx, float dy);
+	void Move(float dt);
+	void Rotate(float dt);
+	void SetPos(const float3& pos);
+	void Orbit(float dx, float dy);
+	void Zoom(float dt);
 
-	GameObject* getEditorCameraObj()const;
-	Camera* getCamera();
+	GameObject* GetEditorCameraObj()const;
+	Camera* GetCamera();
 
 private:
 
@@ -45,4 +45,4 @@ private:
 
 };
 
-#endif // !__MODULECAMERA3D_H__
+#endif // !__MODULECAMERA3D__

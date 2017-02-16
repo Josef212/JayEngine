@@ -1,5 +1,5 @@
-#ifndef __GAMEOBJECT_H__
-#define __GAMEOBJECT_H__
+#ifndef __GAMEOBJECT__
+#define __GAMEOBJECT__
 
 #include "Globals.h"
 #include "Component.h"
@@ -18,45 +18,48 @@ class FileParser;
 class GameObject
 {
 public:
-	GameObject(GameObject* parent, uint32 id);
+	GameObject(GameObject* parent, UID id);
 	virtual ~GameObject();
 
-	void init();
-	void update(float dt); //Only called on play mode
-	void cleanUp();
+	void Init();
+	void Update(float dt); //Only called on play mode
+	void CleanUp();
 
-	void draw(bool drawChilds);
+	void Draw(bool drawChilds);
 
-	Component* addComponent(ComponentType type);
-	GameObject* addChild();
+	GameObject* AddChild();
+	Component* AddComponent(ComponentType type);
 
-	std::vector<Component*> findComponent(ComponentType type);
-	int hasComponent(ComponentType type);
+	Component* GetComponent(ComponentType type)const;
+	std::vector<Component*> GetComponents(ComponentType type);
+	bool HasComponent(ComponentType type)const;
+	uint CountComponents(ComponentType type)const;
 
-	GameObject* getParent() const;
-	void setNewParent(GameObject* newParent, bool force = false);
+	GameObject* GetParent() const;
+	void SetNewParent(GameObject* newParent, bool force = false);
 
-	int getGOId()const;
-	const char* getName()const;
-	void setName(const char* str);
+	UID GetGOId()const;
+	const char* GetName()const;
+	void SetName(const char* str);
 
-	void remove();
+	void Remove();
 
-	bool isGOActive();
-	void setGOEnable(bool set);
+	bool IsGOActive();
+	void SetSelfActive(bool set);
 
-	void drawDebug();
+	void DrawDebug();
 
-	void recCalcTransform(const float4x4& parentTrans, bool force = false);
-	void recCalcBoxes();
-	void recalcBox();
-	bool recRemoveFlagged();
+	void RecCalcTransform(const float4x4& parentTrans, bool force = false);
+	void RecCalcBoxes();
+	void RecalcBox();
 
-	void onGameObjectDestroyed();
+	bool RecRemoveFlagged();
+
+	void OnGameObjectDestroyed();
 
 	//TMP
-	bool saveGO(FileParser& file, std::map<uint, uint>* duplicate = NULL)const;
-	bool loadGO(FileParser* file, std::map<GameObject*, uint>& relations);
+	bool SaveGO(FileParser& file, std::map<uint, uint>* duplicate = nullptr)const;
+	bool LoadGO(FileParser* file, std::map<GameObject*, uint>& relations);
 
 private:
 
@@ -67,6 +70,7 @@ public:
 
 	AABB enclosingBox;
 	OBB orientedBox;
+
 	bool drawEnclosingAABB = false;
 	bool drawOrientedBox = false;
 
@@ -74,17 +78,17 @@ public:
 
 	/**Just a pointer to transformation component
 	in order to agile transform search. May be transform info should be in game object class */
-	Transform* transform = NULL;
+	Transform* transform = nullptr;
 
 private:
 	std::string name;
-	int nextCompId = 0;
-	uint32 id = 0;
-	GameObject* parent = NULL;
-	bool goActive = true;
+	int nextCompId = -1;
+	UID id = 0;
+	GameObject* parent = nullptr;
+	bool selfActive = true;
 
-	bool goWasDirty = true;
+	bool wasDirty = true;
 
 };
 
-#endif // !__GAMEOBJECT_H__
+#endif // !__GAMEOBJECT__

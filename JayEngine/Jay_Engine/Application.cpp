@@ -44,21 +44,21 @@ Application::Application()
 	sceneTry = new SceneTry();
 
 	// Main Modules
-	addModule(editor);
-	addModule(fs);
-	addModule(window);
-	addModule(camera);
-	addModule(input);
-	addModule(audio);
-	//addModule(physics);
-	addModule(goManager);
-	addModule(resourceManager);
+	AddModule(editor);
+	AddModule(fs);
+	AddModule(window);
+	AddModule(camera);
+	AddModule(input);
+	AddModule(audio);
+	//AddModule(physics);
+	AddModule(goManager);
+	AddModule(resourceManager);
 	
 	// Scenes
-	addModule(sceneTry);
+	AddModule(sceneTry);
 
 	// Renderer last
-	addModule(renderer3D);
+	AddModule(renderer3D);
 }
 
 Application::~Application()
@@ -74,16 +74,16 @@ Application::~Application()
 	RELEASE(info);
 }
 
-bool Application::init()
+bool Application::Init()
 {
 	bool ret = true;
 
-	char* buffer = NULL;
-	uint size = fs->load("config.json", SETTINGS_PATH, &buffer);
+	char* buffer = nullptr;
+	uint size = fs->Load("config.json", SETTINGS_PATH, &buffer);
 
 	FileParser conf(buffer);
 
-	readConfig(&conf.getSection("app"));
+	ReadConfig(&conf.getSection("app"));
 
 	//NOTE/TODO: For now will pass Config on init but maybe will pass on start too
 
@@ -92,7 +92,7 @@ bool Application::init()
 	_LOG(LOG_STD, "Application Init --------------");
 	for(; it != modules.end() && ret == true; ++it)
 	{
-		ret = (*it)->init(&conf.getSection((*it)->name.c_str()));
+		ret = (*it)->Init(&conf.getSection((*it)->name.c_str()));
 	}
 
 	// After all Init calls we call Start() in all modules
@@ -101,11 +101,11 @@ bool Application::init()
 
 	for (; it != modules.end() && ret == true; ++it)
 	{
-		if ((*it)->isEnabled())
-			ret = (*it)->start();
+		if ((*it)->IsEnabled())
+			ret = (*it)->Start();
 	}
 
-	info->setInfo();
+	info->SetInfo();
 
 	RELEASE_ARRAY(buffer);
 
@@ -113,25 +113,25 @@ bool Application::init()
 }
 
 // ---------------------------------------------
-void Application::prepareUpdate()
+void Application::PrepareUpdate()
 {
-	time->updateTime();
+	time->UpdateTime();
 
-	if (isPlaySate())
-		time->updateGameTime();
+	if (IsPlaySate())
+		time->UpdateGameTime();
 
 	dt = (float)msTimer.ReadSec();
 	msTimer.Start();
 }
 
 // ---------------------------------------------
-void Application::finishUpdate()
+void Application::FinishUpdate()
 {
 	if (saveNextFrame)
-		saveGameNow();
+		SaveGameNow();
 
 	if (loadNextFrame)
-		loadGameNow();
+		LoadGameNow();
 
 	++frames;
 	++fpsCounter;
@@ -150,44 +150,44 @@ void Application::finishUpdate()
 		SDL_Delay(cappedMs - lastFrameMs);
 
 	if (editor)
-		editor->logFPS((float)lastFps, (float)lastFrameMs);
+		editor->LogFPS((float)lastFps, (float)lastFrameMs);
 }
 
 // Call PreUpdate, Update and PostUpdate on all modules
-update_status Application::update()
+update_status Application::Update()
 {
 	update_status ret = UPDATE_CONTINUE;
 
-	if (input->getKey(SDL_SCANCODE_F1) == KEY_DOWN)
+	if (input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
 		debug = !debug;
 
-	prepareUpdate();
+	PrepareUpdate();
 	
 	std::list<Module*>::iterator it = modules.begin();
 	
 	for(; it != modules.end() && ret == UPDATE_CONTINUE; ++it)
 	{
-		if ((*it)->isEnabled())
-			ret = (*it)->preUpdate(dt);
+		if ((*it)->IsEnabled())
+			ret = (*it)->PreUpdate(dt);
 	}
 
 	it = modules.begin();
 
 	for (; it != modules.end() && ret == UPDATE_CONTINUE; ++it)
 	{
-		if ((*it)->isEnabled())
-			ret = (*it)->update(dt);
+		if ((*it)->IsEnabled())
+			ret = (*it)->Update(dt);
 	}
 
 	it = modules.begin();
 
 	for (; it != modules.end() && ret == UPDATE_CONTINUE; ++it)
 	{
-		if ((*it)->isEnabled())
-			ret = (*it)->postUpdate(dt);
+		if ((*it)->IsEnabled())
+			ret = (*it)->PostUpdate(dt);
 	}
 
-	finishUpdate();
+	FinishUpdate();
 
 	if (quit)
 		ret = UPDATE_STOP;
@@ -195,66 +195,66 @@ update_status Application::update()
 	return ret;
 }
 
-bool Application::cleanUp()
+bool Application::CleanUp()
 {
 	bool ret = true;
 
 	_LOG(LOG_STD, "Application CleaUp --------------");
 	for (std::list<Module*>::reverse_iterator it = modules.rbegin(); it != modules.rend(); ++it)
 	{
-		ret = (*it)->cleanUp();
+		ret = (*it)->CleanUp();
 	}
 
 	return ret;
 }
 
-void Application::drawDebug()
+void Application::DrawDebug()
 {
 	std::list<Module*>::iterator it = modules.begin();
 	for (; it != modules.end(); ++it)
-		if ((*it)->isEnabled())
-			(*it)->drawDebug();
+		if ((*it)->IsEnabled())
+			(*it)->DrawDebug();
 }
 
-void Application::addModule(Module* mod)
+void Application::AddModule(Module* mod)
 {
 	modules.push_back(mod);
 }
 
-const char* Application::getOrganitzation()
+const char* Application::GetOrganitzation()
 {
 	return organitzation.c_str();
 }
 
-const char* Application::getTitle()
+const char* Application::GetTitle()
 {
 	return title.c_str();
 }
 
-void Application::setOrganitzation(const char* org)
+void Application::SetOrganitzation(const char* org)
 {
 	if(org && org != organitzation)
 		organitzation.assign(org);
 	//TODO: filesystem should ajust
 }
 
-void Application::setTitle(const char* titl)
+void Application::SetTitle(const char* titl)
 {
 	if (titl && titl != title)
 	{
 		title.assign(titl);
-		window->setTitle(titl);
+		window->SetTitle(titl);
 		//TODO: filesystem should ajust
 	}
 }
 
-void Application::log(const char* str, logType type)
+void Application::Log(const char* str, logType type)
 {
 	logs.append(str);
-	editor->log(str, type);
+	editor->Log(str, type);
 }
 
-uint Application::getMaxFPS()
+uint Application::GetMaxFPS()
 {
 	if (cappedMs > 0)
 		return (uint)((1.0f / (float)cappedMs) * 1000.0f);
@@ -262,7 +262,7 @@ uint Application::getMaxFPS()
 		return 0;
 }
 
-void Application::setMaxFPS(int maxFPS)
+void Application::SetMaxFPS(int maxFPS)
 {
 	if (maxFPS > 0)
 		cappedMs = 1000 / maxFPS;
@@ -270,30 +270,30 @@ void Application::setMaxFPS(int maxFPS)
 		cappedMs = 0;
 }
 
-void Application::browse(const char * url) const
+void Application::Browse(const char * url) const
 {
-	ShellExecuteA(NULL, "open", url, NULL, NULL, SW_SHOWNORMAL);
+	ShellExecuteA(nullptr, "open", url, nullptr, nullptr, SW_SHOWNORMAL);
 }
 
-void Application::readConfig(FileParser* conf)
+void Application::ReadConfig(FileParser* conf)
 {
-	setOrganitzation(conf->getString("organitzation", "Josef21296"));
-	setTitle(conf->getString("app_name", "JayEngine"));
-	setMaxFPS(conf->getInt("fps_limit", 0));
+	SetOrganitzation(conf->getString("organitzation", "Josef21296"));
+	SetTitle(conf->getString("app_name", "JayEngine"));
+	SetMaxFPS(conf->getInt("fps_limit", 0));
 	state = EDITOR; //TODO: check in config
 }
 
-void Application::saveGame()
+void Application::SaveGame()
 {
 	saveNextFrame = true;
 }
 
-void Application::loadGame()
+void Application::LoadGame()
 {
 	loadNextFrame = true;
 }
 
-bool Application::saveGameNow() //TODO: pass the file name or set it from a string in .h in order to select it from the app
+bool Application::SaveGameNow() //TODO: pass the file name or set it from a string in .h in order to select it from the app
 {
 	bool ret = false;
 
@@ -302,11 +302,11 @@ bool Application::saveGameNow() //TODO: pass the file name or set it from a stri
 	FileParser conf;
 
 	for (std::list<Module*>::iterator it = modules.begin(); it != modules.end(); ++it)
-		(*it)->save(&conf.addSection((*it)->name.c_str()));
+		(*it)->Save(&conf.addSection((*it)->name.c_str()));
 	
 	char* buffer;
 	uint size = conf.writeJson(&buffer, false);
-	if (app->fs->save("Data/Settings/c.json", buffer, size) != size)
+	if (app->fs->Save("Data/Settings/c.json", buffer, size) != size)
 		_LOG(LOG_ERROR, "Could not save json.");
 
 	RELEASE_ARRAY(buffer);
@@ -316,17 +316,17 @@ bool Application::saveGameNow() //TODO: pass the file name or set it from a stri
 	return ret;
 }
 
-bool Application::loadGameNow()
+bool Application::LoadGameNow()
 {
 	bool ret = false;
 
-	char* buffer = NULL;
-	uint size = fs->load("c.json", SETTINGS_PATH, &buffer);
+	char* buffer = nullptr;
+	uint size = fs->Load("c.json", SETTINGS_PATH, &buffer);
 
 	FileParser conf(buffer);
 
 	for (std::list<Module*>::iterator it = modules.begin(); it != modules.end(); ++it)
-		(*it)->load(&conf.getSection((*it)->name.c_str()));
+		(*it)->Load(&conf.getSection((*it)->name.c_str()));
 	
 	_LOG(LOG_INFO_REM, "LOADING!!!");
 	loadNextFrame = false;
@@ -334,77 +334,77 @@ bool Application::loadGameNow()
 	return ret;
 }
 
-gameState Application::getGameState()const
+gameState Application::GetGameState()const
 {
 	return state;
 }
 
-bool Application::isEditorState()
+bool Application::IsEditorState()
 {
 	return state == EDITOR;
 }
 
-bool Application::isPlaySate()
+bool Application::IsPlaySate()
 {
 	return state == PLAY;
 }
 
-bool Application::isPauseState()
+bool Application::IsPauseState()
 {
 	return state == PAUSE;
 }
 
-void Application::sendGlobalEvent(const Event& e)
+void Application::SendGlobalEvent(const Event& e)
 {
-	onGlobalEvent(e);
+	OnGlobalEvent(e);
 
 	for (std::list<Module*>::iterator it = modules.begin(); it != modules.end(); ++it)
 	{
-		if ((*it)->isEnabled())
-			(*it)->onGlobalEvent(e);
+		if ((*it)->IsEnabled())
+			(*it)->OnGlobalEvent(e);
 	}
 }
 
-void Application::setPlay()
+void Application::SetPlay()
 {
 	Event ev(Event::eventType::PLAY);
-	sendGlobalEvent(ev);
+	SendGlobalEvent(ev);
 	state = PLAY;
 }
 
-void Application::setPause()
+void Application::SetPause()
 {
 	Event ev(Event::eventType::PAUSE);
-	sendGlobalEvent(ev);
+	SendGlobalEvent(ev);
 	state = PAUSE;
 }
 
-void Application::setStop()
+void Application::SetStop()
 {
 	Event ev(Event::eventType::STOP);
-	sendGlobalEvent(ev);
+	SendGlobalEvent(ev);
 	state = EDITOR;
 }
 
-void Application::onGlobalEvent(const Event& e)
+void Application::OnGlobalEvent(const Event& e)
 {
 	switch (e.type)
 	{
 		case Event::eventType::PLAY:
 			if (state == PAUSE)				//Can do this ifs because we change the game state after this 
-				time->startGameTimer();
+				time->StartGameTimer();
 			else if(state == EDITOR)
-				time->restartGameTimer();
+				time->RestartGameTimer();
 		break;
 
 		case Event::eventType::PAUSE:
 			if(state == PLAY)
-				time->stopGameTimer();
+				time->StopGameTimer();
 
 		break;
 
 		case Event::eventType::STOP:
-			time->cleanGameTimer();
+			time->CleanGameTimer();
 		break;
 	}
 }

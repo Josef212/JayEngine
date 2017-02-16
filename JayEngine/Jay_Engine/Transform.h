@@ -1,5 +1,5 @@
-#ifndef __TRANSFORM_H__
-#define __TRANSFORM_H__
+#ifndef __TRANSFORM__
+#define __TRANSFORM__
 
 #include "Component.h"
 #include "Math.h"
@@ -12,49 +12,48 @@ public:
 	Transform(GameObject* gObj, int id);
 	virtual ~Transform();
 
-	void enable();
-	void disable();
+	void Enable()override;
 
-	void init();
-	void update(float dt);
-	void cleanUp();
+	void Init()override;
+	void Update(float dt)override;
+	void CleanUp()override;
 
 	//----------------------------------------
 
 	//Translation
-	float3 getLocalPosition()const;
-	float3 getGlobalPosition()const;
+	float3 GetLocalPosition()const;
+	float3 GetGlobalPosition()const;
 
-	void setLocalPosition(const float3& pos);
+	void SetLocalPosition(const float3& pos);
 
 	//Scale
-	float3 getLocalScale()const;
+	float3 GetLocalScale()const;
 
-	void setLocalScale(const float3& scl);
+	void SetLocalScale(const float3& scl);
 
 	//Rotation
-	float3 getLocalRotation()const;
-	Quat getLocalQuatRotation()const;
+	float3 GetLocalRotation()const;
+	Quat GetLocalQuatRotation()const;
 
-	void setLocalRotation(float3& eulerRot);
-	void setLocalRotation(const Quat& rot);
+	void SetLocalRotation(float3& eulerRot);
+	void SetLocalRotation(const Quat& rot);
 
 	//Transform matrix
-	const float4x4 getGlobalTransform()const;
-	const float4x4 getLocalTransform()const;
+	const float4x4 GetGlobalTransform()const;
+	const float4x4 GetLocalTransform()const;
 
-	void setLocalTransform(const float4x4& transform);
+	void SetLocalTransform(const float4x4& transform);
 
 	//OpenGL
-	const float* getGlobalTransformGL()const;
+	const float* GetGlobalTransformGL()const;
 
 	//----------------------------------------
 
 
-	void updateTransform(const float4x4& parentMat);
+	void UpdateTransform(const float4x4& parentMat);
 
-	bool saveCMP(FileParser& sect);
-	bool loadCMP(FileParser& sect);
+	bool SaveCMP(FileParser& sect)override;
+	bool LoadCMP(FileParser& sect)override;
 
 private:
 
@@ -73,4 +72,4 @@ private:
 
 };
 
-#endif // !__TRANSFORMATION_H__
+#endif // !__TRANSFORM__

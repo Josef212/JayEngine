@@ -13,7 +13,7 @@ ModuleEventSystem::~ModuleEventSystem()
 {
 }
 
-void ModuleEventSystem::sendGlobalEvent(const Event& e)
+void ModuleEventSystem::SendGlobalEvent(const Event& e)
 {
-	app->sendGlobalEvent(e);
+	app->SendGlobalEvent(e);
 }

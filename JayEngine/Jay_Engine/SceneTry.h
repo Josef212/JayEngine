@@ -10,12 +10,11 @@ public:
 	SceneTry(bool startEnabled = true);
 	~SceneTry();
 
-	bool init();
-	bool start();
-	update_status preUpdate(float dt);
-	update_status update(float dt);
-	update_status postUpdate(float dt);
-	bool cleanUp();
+	bool Start()override;
+	update_status PreUpdate(float dt)override;
+	update_status Update(float dt)override;
+	update_status PostUpdate(float dt)override;
+	bool CleanUp()override;
 
 	//TMP
 	/*uint vArray = 0;

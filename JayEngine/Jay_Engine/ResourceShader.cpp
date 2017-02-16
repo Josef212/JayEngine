@@ -22,44 +22,44 @@ ResourceShader::~ResourceShader()
 }
 
 
-bool ResourceShader::isShaderReady()
+bool ResourceShader::IsShaderReady()
 {
 	return shaderID > 0;
 }
 
-bool ResourceShader::vertexShaderInMemory()
+bool ResourceShader::VertexShaderInMemory()
 {
 	return !vertexShaderStr.empty();
 }
 
-bool ResourceShader::fragtalShaderInMemory()
+bool ResourceShader::FragtalShaderInMemory()
 {
 	return !fragtalShaderStr.empty();
 }
 
-bool ResourceShader::vertexAndFragtalInMemory()
+bool ResourceShader::VertexAndFragtalInMemory()
 {
-	return vertexShaderInMemory() && fragtalShaderInMemory();
+	return VertexShaderInMemory() && FragtalShaderInMemory();
 }
 
-void ResourceShader::removeVertexShaderStr()
+void ResourceShader::RemoveVertexShaderStr()
 {
 	vertexShaderStr.clear();
 }
 
-void ResourceShader::removeFragtalShaderStr()
+void ResourceShader::RemoveFragtalShaderStr()
 {
 	fragtalShaderStr.clear();
 }
 
-void ResourceShader::removeVertexAndFragtalShaderStr()
+void ResourceShader::RemoveVertexAndFragtalShaderStr()
 {
-	removeVertexShaderStr(); removeFragtalShaderStr();
+	RemoveVertexShaderStr(); RemoveFragtalShaderStr();
 }
 
 
-void ResourceShader::applydefaultShader()
+void ResourceShader::ApplydefaultShader()
 {
-	vertexShaderStr = app->resourceManager->shaderImporter->getDefaultVertexShaderStr();
-	fragtalShaderStr = app->resourceManager->shaderImporter->getDefaultFragtalShaderStr();
+	vertexShaderStr = app->resourceManager->shaderImporter->GetDefaultVertexShaderStr();
+	fragtalShaderStr = app->resourceManager->shaderImporter->GetDefaultFragtalShaderStr();
 }

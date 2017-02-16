@@ -1,5 +1,5 @@
-#ifndef __CAMERACOMP_H__
-#define __CAMERACOMP_H__
+#ifndef __CAMERA__COMP__
+#define __CAMERA__COMP__
 
 #include "Component.h"
 #include "Math.h"
@@ -14,39 +14,39 @@ public:
 	Camera(GameObject* gObj, int id);
 	virtual ~Camera();
 
-	float getFOV()const; //Vertical FOV
-	void setFOV(float vFOV); //Vertical FOV
+	float GetFOV()const; //Vertical FOV
+	void SetFOV(float vFOV); //Vertical FOV
 
-	float getFarPlaneDist()const;
-	void setFarPlaneDist(float farPlaneD);
+	float GetFarPlaneDist()const;
+	void SetFarPlaneDist(float farPlaneD);
 
-	float getNearPlaneDist()const;
-	void setNearPlaneDist(float nearPlaneD);
+	float GetNearPlaneDist()const;
+	void SetNearPlaneDist(float nearPlaneD);
 
-	float getAspectRatio()const;
-	void setAspectRatio(float ratio);
+	float GetAspectRatio()const;
+	void SetAspectRatio(float ratio);
 
-	bool isCullingActive()const;
-	void setCulling(bool set);
+	bool IsCullingActive()const;
+	void SetCulling(bool set);
 
-	Color getBackground();
-	void getBackground(float& r, float& g, float& b, float& a);
-	void setBackground(float r, float g, float b, float a);
+	Color GetBackground();
+	void GetBackground(float& r, float& g, float& b, float& a);
+	void SetBackground(float r, float g, float b, float a);
 
 	//View matrix must update every frame
-	float* getGLViewMatrix();
+	float* GetGLViewMatrix();
 	//Projection matrix every time camera is changed like fov or window is resized
-	float* getGLProjectMatrix();
+	float* GetGLProjectMatrix();
 
-	void lookAt(const float3 spot);
-	void look(const float3 spot, const float3 pos);
+	void LookAt(const float3 spot);
+	void Look(const float3 spot, const float3 pos);
 
-	void onTransformUpdate(Transform* trans);
+	void OnTransformUpdate(Transform* trans)override;
 
-	void debugDraw();
+	void DebugDraw()override;
 
-	bool saveCMP(FileParser& sect);
-	bool loadCMP(FileParser& sect);
+	bool SaveCMP(FileParser& sect)override;
+	bool LoadCMP(FileParser& sect)override;
 
 private:
 
@@ -65,4 +65,4 @@ private:
 };
 
 
-#endif // !__CAMERACOMP_H__
+#endif // !__CAMERA__COMP__

@@ -1,7 +1,7 @@
-#ifndef __UI_INSPECTOR_H__
-#define __UI_INSPECTOR_H__
+#ifndef __UI_INSPECTOR__
+#define __UI_INSPECTOR__
 
-#include "UI_Comp.h"
+#include "UI_Panel.h"
 
 class GameObject;
 class Transform;
@@ -9,19 +9,19 @@ class Mesh;
 class Material;
 class Camera;
 
-class UI_Inspector : public UI_Comp
+class UI_Inspector : public UI_Panel
 {
 public:
-	UI_Inspector();
+	UI_Inspector(bool startEnalbed = false);
 	~UI_Inspector();
 
-	void draw();
+	void Draw()override;
 
 private:
-	void drawTransformation(GameObject* selected);
-	void drawMesh(GameObject* selected, Mesh* mesh);
-	void drawMaterial(GameObject* selected, Material* mat);
-	void drawCamera(GameObject* selected, Camera* cam);
+	void DrawTransformation(GameObject* selected);
+	void DrawMesh(GameObject* selected, Mesh* mesh);
+	void DrawMaterial(GameObject* selected, Material* mat);
+	void DrawCamera(GameObject* selected, Camera* cam);
 
 public:
 
@@ -29,4 +29,4 @@ private:
 	uint windowW = 1, windowH = 1;
 };
 
-#endif // !__UI_INSPECTOR_H__
+#endif // !__UI_INSPECTOR__

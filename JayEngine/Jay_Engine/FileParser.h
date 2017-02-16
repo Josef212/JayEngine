@@ -1,5 +1,5 @@
-#ifndef __FILEPARSER_H__
-#define __FILEPARSER_H__
+#ifndef __FILEPARSER__
+#define __FILEPARSER__
 
 #include "Globals.h"
 #include "MathGeoLib\include\Math\float3.h"
@@ -72,4 +72,4 @@ private:
 };
 
 
-#endif //! __FILEPARSER_H__
+#endif //! __FILEPARSER__

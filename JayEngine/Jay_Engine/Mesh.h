@@ -1,5 +1,5 @@
-#ifndef __MESH_H__
-#define __MESH_H__
+#ifndef __MESH__
+#define __MESH__
 
 #include "Component.h"
 #include "Math.h"
@@ -13,21 +13,18 @@ public:
 	Mesh(GameObject* gObj, int id);
 	virtual ~Mesh();
 
-	void enable();
-	void disable();
+	void Init()override;
+	void Update(float dt)override;
+	void CleanUp()override;
 
-	void init();
-	void update(float dt);
-	void cleanUp();
+	void GetBox(AABB& box)const override;
 
-	void getBox(AABB& box)const;
+	void ClearMesh();
 
-	void clearMesh();
+	bool SaveCMP(FileParser& sect)override;
+	bool LoadCMP(FileParser& sect)override;
 
-	bool saveCMP(FileParser& sect);
-	bool loadCMP(FileParser& sect);
-
-	void setResource(UID resUID);
+	void SetResource(UID resUID)override;
 
 private:
 
@@ -41,4 +38,4 @@ private:
 	bool onVRAM = false;
 };
 
-#endif // !__MESH_H__
+#endif // !__MESH__

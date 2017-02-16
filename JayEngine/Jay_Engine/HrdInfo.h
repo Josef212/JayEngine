@@ -1,5 +1,5 @@
-#ifndef __HRDINFO_H__
-#define __HRDINFO_H__
+#ifndef __HRDINFO__
+#define __HRDINFO__
 
 //Actually will provide some more info not only harware
 
@@ -29,11 +29,11 @@ public:
 	HrdInfo();
 	~HrdInfo();
 
-	void setInfo();
-	void logHrdInfo();
-	Hrd* getInfo() { return &info; }
-	void setCaps();
-	const char* getCaps();
+	void SetInfo();
+	void LogHrdInfo();
+	Hrd* GetInfo() { return &info; }
+	void SetCaps();
+	const char* GetCaps();
 };
 
-#endif // !__HRDINFO_H__
+#endif // !__HRDINFO__

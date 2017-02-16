@@ -1,28 +1,28 @@
-#ifndef __UIRESOURCES_H__
-#define __UIRESOURCES_H__
+#ifndef __UI_RESOURCES__
+#define __UI_RESOURCES__
 
-#include "UI_Comp.h"
+#include "UI_Panel.h"
 #include <vector>
 
 class Resource;
 class ResourceShader;
 
-class UI_Resources : public UI_Comp
+class UI_Resources : public UI_Panel
 {
 public:
-	UI_Resources();
+	UI_Resources(bool startEnalbed = false);
 	virtual ~UI_Resources();
 
-	void draw();
+	void Draw()override;
 
 
 private:
-	void prefabs(std::vector<Resource*> prefs);
-	void meshes(std::vector<Resource*> texs);
-	void textures(std::vector<Resource*> texs);
-	void shaders(std::vector<Resource*> shds);
+	void Prefabs(std::vector<Resource*> prefs);
+	void Meshes(std::vector<Resource*> texs);
+	void Textures(std::vector<Resource*> texs);
+	void Shaders(std::vector<Resource*> shds);
 
-	void shaderEditor(ResourceShader* resShader);
+	void ShaderEditor(ResourceShader* resShader);
 
 
 private:
@@ -32,4 +32,4 @@ private:
 	int infoW, infoH;
 };
 
-#endif // !__UIRESOURCES_H__
+#endif // !__UI_RESOURCES__

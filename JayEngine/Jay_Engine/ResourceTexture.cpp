@@ -14,14 +14,14 @@ ResourceTexture::~ResourceTexture()
 {
 }
 
-bool ResourceTexture::loadToMemory()
+bool ResourceTexture::LoadToMemory()
 {
 	bool ret = false;
 
 	return ret;
 }
 
-bool ResourceTexture::removeFromMemory()
+bool ResourceTexture::RemoveFromMemory()
 {
 	if (textureGlID > 0) 
 	{
@@ -31,7 +31,7 @@ bool ResourceTexture::removeFromMemory()
 	return false;
 }
 
-const char* ResourceTexture::getFormatStr()const
+const char* ResourceTexture::GetFormatStr()const
 {
 	static const char* formats[] = {
 		"color index", "rgb", "rgba", "bgr", "bgra", "luminance", "unknown" };

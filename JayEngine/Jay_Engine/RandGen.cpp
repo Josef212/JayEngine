@@ -11,22 +11,22 @@ RandGen::~RandGen()
 	RELEASE(lgc);
 }
 
-uint32 RandGen::getRandInt()
+uint32 RandGen::GetRandInt()
 {
 	return lgc->Int();
 }
 
-int	RandGen::getRandInt(int min, int max)
+int	RandGen::GetRandInt(int min, int max)
 {
 	return lgc->Int(min, max);
 }
 
-float RandGen::getRandFloat()
+float RandGen::GetRandFloat()
 {
 	return lgc->Float();
 }
 
-float RandGen::getRandFloat(float min, float max)
+float RandGen::GetRandFloat(float min, float max)
 {
 	return lgc->Float(min, max);
 }

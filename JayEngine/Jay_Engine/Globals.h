@@ -1,5 +1,5 @@
-#ifndef __GLOBALS_H__
-#define __GLOBALS_H__
+#ifndef __GLOBALS__
+#define __GLOBALS__
 
 #include <windows.h>
 #include <stdio.h>
@@ -55,6 +55,7 @@ void _log(logType type, const char file[], int line, const char* format, ...);
 #define DEGTORAD 0.0174532925199432957f
 #define RADTODEG 57.295779513082320876f
 #define HAVE_M_PI
+#define PI 3.14159265358979323846264338327950288
 
 typedef unsigned int uint;
 typedef unsigned __int32 uint32;
@@ -112,4 +113,4 @@ char* clearTexPath(char* path);
 #define VERTEX_SHADER_EXTENSION ".jayvertex"
 #define FRAGTAL_SHADER_EXTENSION ".jayfragtal"
 
-#endif
+#endif //!__GLOBALS__

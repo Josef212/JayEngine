@@ -5,7 +5,7 @@
 
 Transform::Transform(GameObject* gObj, int id) : Component(gObj, id)
 {
-	type = TRANSFORMATION;
+	type = CMP_TRANSFORMATION;
 	translation.Set(0.f, 0.f, 0.f);
 	scale.Set(1.f, 1.f, 1.f);
 	rotation.Set(0.f, 0.f, 0.f, 1.f);
@@ -19,28 +19,24 @@ Transform::~Transform()
 		object->transform = NULL;
 }
 
-void Transform::enable()
+void Transform::Enable()
 {
-	if (!active)
-		active = true;
+	if (!selfActive)
+		selfActive = true;
+
+	localTransformChanged = true;	
 }
 
-void Transform::disable()
-{
-	if (active)
-		active = false;
-}
-
-void Transform::init()
+void Transform::Init()
 {
 
 }
 
-void Transform::update(float dt)
+void Transform::Update(float dt)
 {
 }
 
-void Transform::cleanUp()
+void Transform::CleanUp()
 {
 
 }
@@ -48,46 +44,46 @@ void Transform::cleanUp()
 //---------------------------------------
 
 //Translation
-float3 Transform::getLocalPosition()const
+float3 Transform::GetLocalPosition()const
 {
 	return translation;
 }
 
-float3 Transform::getGlobalPosition()const
+float3 Transform::GetGlobalPosition()const
 {
 	return globalTransform.TranslatePart();
 }
 
-void Transform::setLocalPosition(const float3& pos)
+void Transform::SetLocalPosition(const float3& pos)
 {
 	translation = pos;
 	localTransformChanged = true;
 }
 
 //Scale
-float3 Transform::getLocalScale()const
+float3 Transform::GetLocalScale()const
 {
 	return scale;
 }
 
-void Transform::setLocalScale(const float3& scl)
+void Transform::SetLocalScale(const float3& scl)
 {
 	scale = scl;
 	localTransformChanged = true;
 }
 
 //Rotation
-float3 Transform::getLocalRotation()const
+float3 Transform::GetLocalRotation()const
 {
 	return editorRotation;
 }
 
-Quat Transform::getLocalQuatRotation()const
+Quat Transform::GetLocalQuatRotation()const
 {
 	return rotation;
 }
 
-void Transform::setLocalRotation(float3& eulerRot)
+void Transform::SetLocalRotation(float3& eulerRot)
 {
 	eulerRot.x *= DEGTORAD;
 	eulerRot.y *= DEGTORAD;
@@ -100,7 +96,7 @@ void Transform::setLocalRotation(float3& eulerRot)
 	localTransformChanged = true;
 }
 
-void Transform::setLocalRotation(const Quat& rot)
+void Transform::SetLocalRotation(const Quat& rot)
 {
 	rotation = rot;
 	editorRotation = rotation.ToEulerXYZ().Abs();
@@ -108,17 +104,17 @@ void Transform::setLocalRotation(const Quat& rot)
 }
 
 //Transform matrix
-const float4x4 Transform::getGlobalTransform()const
+const float4x4 Transform::GetGlobalTransform()const
 {
 	return globalTransform;
 }
 
-const float4x4 Transform::getLocalTransform()const
+const float4x4 Transform::GetLocalTransform()const
 {
 	return localTransform;
 }
 
-void Transform::setLocalTransform(const float4x4& transform)
+void Transform::SetLocalTransform(const float4x4& transform)
 {
 	transform.Decompose(translation, rotation, scale);
 	editorRotation = rotation.ToEulerXYZ().Abs();
@@ -126,7 +122,7 @@ void Transform::setLocalTransform(const float4x4& transform)
 }
 
 //OpenGL
-const float* Transform::getGlobalTransformGL()const
+const float* Transform::GetGlobalTransformGL()const
 {
 	return globalTransform.Transposed().ptr();
 }
@@ -134,21 +130,21 @@ const float* Transform::getGlobalTransformGL()const
 
 //---------------------------------------
 
-void Transform::updateTransform(const float4x4& parentMat)
+void Transform::UpdateTransform(const float4x4& parentMat)
 {
 	localTransformChanged = false;
 	localTransform = float4x4::FromTRS(translation, rotation, scale);
 	globalTransform = parentMat * localTransform;
 }
 
-bool Transform::saveCMP(FileParser& sect)
+bool Transform::SaveCMP(FileParser& sect)
 {
 	bool ret = true;
 
 	sect.addInt("comp_type", (int)type);
-	sect.addBool("active", active);
+	sect.addBool("active", selfActive);
 	sect.addInt("UUID", id);
-	sect.addInt("go_UUID", object->getGOId());
+	sect.addInt("go_UUID", object->GetGOId());
 
 	sect.addFloat3("position", translation);
 	sect.addFloat3("scale", scale);
@@ -157,22 +153,22 @@ bool Transform::saveCMP(FileParser& sect)
 	return ret;
 }
 
-bool Transform::loadCMP(FileParser& sect)
+bool Transform::LoadCMP(FileParser& sect)
 {
 	bool ret = true;
 
-	active = sect.getBool("active", true);
+	selfActive = sect.getBool("active", true);
 	id = sect.getInt("UUID", 0);
 
-	setLocalPosition(sect.getFloat3("position", float3::zero));
-	setLocalScale(sect.getFloat3("scale", float3(1, 1, 1)));
+	SetLocalPosition(sect.getFloat3("position", float3::zero));
+	SetLocalScale(sect.getFloat3("scale", float3(1, 1, 1)));
 	Quat r;
 	r.x = sect.getFloat("rotation", 0.f, 0);
 	r.y = sect.getFloat("rotation", 0.f, 1);
 	r.z = sect.getFloat("rotation", 0.f, 2);
 	r.w = sect.getFloat("rotation", 1.f, 3);
 
-	setLocalRotation(r);
+	SetLocalRotation(r);
 
 	return ret;
 }

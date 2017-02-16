@@ -46,13 +46,13 @@ ImporterShader::~ImporterShader()
 {
 }
 
-void ImporterShader::compileShader(ResourceShader* resShader)
+void ImporterShader::CompileShader(ResourceShader* resShader)
 {
 	if (!resShader)
 		return;
 
-	if (!resShader->vertexAndFragtalInMemory())
-		loadShaderToMemory(resShader);
+	if (!resShader->VertexAndFragtalInMemory())
+		LoadShaderToMemory(resShader);
 
 	const char* str = resShader->vertexShaderStr.c_str();
 	GLuint vS = glCreateShader(GL_VERTEX_SHADER);
@@ -103,10 +103,10 @@ void ImporterShader::compileShader(ResourceShader* resShader)
 	glDeleteShader(vS);
 	glDeleteShader(fS);
 
-	resShader->removeVertexAndFragtalShaderStr();
+	resShader->RemoveVertexAndFragtalShaderStr();
 }
 
-uint ImporterShader::loadDefaultShader(ResourceShader* resShader)
+uint ImporterShader::LoadDefaultShader(ResourceShader* resShader)
 {
 	uint shaderRet = 0;
 
@@ -172,37 +172,37 @@ uint ImporterShader::loadDefaultShader(ResourceShader* resShader)
 	return shaderRet;
 }
 
-const char* ImporterShader::getDefaultVertexShaderStr()const
+const char* ImporterShader::GetDefaultVertexShaderStr()const
 {
 	return defaultVertexShader.c_str();
 }
 
-const char* ImporterShader::getDefaultFragtalShaderStr()const
+const char* ImporterShader::GetDefaultFragtalShaderStr()const
 {
 	return defaultFragmentShader.c_str();
 }
 
 
-void ImporterShader::freeShader(uint shaderId)
+void ImporterShader::FreeShader(uint shaderId)
 {
 	if (shaderId > 0)
 		glDeleteProgram(shaderId);
 }
 
-void ImporterShader::firstCompile(ResourceShader* resShader)
+void ImporterShader::FirstCompile(ResourceShader* resShader)
 {
 	if (!resShader)
 		return;
 
-	if (!resShader->isInMemory())
-		loadShaderToMemory(resShader);
+	if (!resShader->IsInMemory())
+		LoadShaderToMemory(resShader);
 
-	compileShader(resShader);
+	CompileShader(resShader);
 
-	resShader->removeVertexAndFragtalShaderStr();
+	resShader->RemoveVertexAndFragtalShaderStr();
 }
 
-void ImporterShader::loadShaderToMemory(ResourceShader* resShader)
+void ImporterShader::LoadShaderToMemory(ResourceShader* resShader)
 {
 	if (!resShader)
 		return;
@@ -213,7 +213,7 @@ void ImporterShader::loadShaderToMemory(ResourceShader* resShader)
 	path.append(resShader->vertexFile);
 
 	char* buffer = NULL;
-	uint size = app->fs->load(path.c_str(), &buffer);
+	uint size = app->fs->Load(path.c_str(), &buffer);
 
 	if (buffer && size > 0)
 	{
@@ -230,7 +230,7 @@ void ImporterShader::loadShaderToMemory(ResourceShader* resShader)
 	path.append(resShader->fragtalFile);
 
 	size = 0;
-	size = app->fs->load(path.c_str(), &buffer);
+	size = app->fs->Load(path.c_str(), &buffer);
 
 	if (buffer && size > 0)
 	{
@@ -242,19 +242,19 @@ void ImporterShader::loadShaderToMemory(ResourceShader* resShader)
 	RELEASE_ARRAY(buffer);
 }
 
-void ImporterShader::saveShader(ResourceShader* resShader)
+void ImporterShader::SaveShader(ResourceShader* resShader)
 {
 	if (!resShader)
 		return;
 
-	if (!resShader->vertexAndFragtalInMemory())
+	if (!resShader->VertexAndFragtalInMemory())
 		return;
 
 	std::string path(DEFAULT_SHADER_SAVE_PATH);
 	path.append(resShader->vertexFile);
 
 	uint size = resShader->vertexShaderStr.size();
-	if (app->fs->save(path.c_str(), resShader->vertexShaderStr.c_str(), size) != size)
+	if (app->fs->Save(path.c_str(), resShader->vertexShaderStr.c_str(), size) != size)
 		_LOG(LOG_ERROR, "Error saving vertex shader.");
 
 	size = 0;
@@ -262,6 +262,6 @@ void ImporterShader::saveShader(ResourceShader* resShader)
 	path.assign(DEFAULT_SHADER_SAVE_PATH);
 	path.append(resShader->fragtalFile);
 	size = resShader->fragtalShaderStr.size();
-	if(app->fs->save(path.c_str(), resShader->fragtalShaderStr.c_str(), size) != size)
+	if(app->fs->Save(path.c_str(), resShader->fragtalShaderStr.c_str(), size) != size)
 		_LOG(LOG_ERROR, "Error saving fragtal shader.");
 }

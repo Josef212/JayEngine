@@ -3,34 +3,32 @@
 	loads a shader to edit it and compile it.
 */
 
-#ifndef __IMPORTERSHADER_H__
-#define __IMPORTERSHADER_H__
-
-#include "Importer.h"
+#ifndef __IMPORTER_SHADER__
+#define __IMPORTER_SHADER__
 
 #include <string>
 
 class ResourceShader;
 
-class ImporterShader : public Importer
+class ImporterShader
 {
 public:
 	ImporterShader();
 	virtual ~ImporterShader();
 
 	//This must only be called once, TODO: maybe do this on constructor and save the default shader id here
-	uint loadDefaultShader(ResourceShader* resShader);
+	uint LoadDefaultShader(ResourceShader* resShader);
 
-	const char* getDefaultVertexShaderStr()const;
-	const char* getDefaultFragtalShaderStr()const;
+	const char* GetDefaultVertexShaderStr()const;
+	const char* GetDefaultFragtalShaderStr()const;
 
-	void freeShader(uint shaderId);
+	void FreeShader(uint shaderId);
 
-	void loadShaderToMemory(ResourceShader* resShader);
-	void saveShader(ResourceShader* resShader);
-	void compileShader(ResourceShader* resShader);
+	void LoadShaderToMemory(ResourceShader* resShader);
+	void SaveShader(ResourceShader* resShader);
+	void CompileShader(ResourceShader* resShader);
 
-	void firstCompile(ResourceShader* resShader);
+	void FirstCompile(ResourceShader* resShader);
 
 private:
 	std::string defaultVertexShader;
@@ -38,4 +36,4 @@ private:
 
 };
 
-#endif // !__IMPORTERSHADER_H__
+#endif // !__IMPORTER_SHADER__

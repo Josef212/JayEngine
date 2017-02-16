@@ -7,7 +7,7 @@
 #pragma comment( lib, "SDL/lib/win32/SDL2.lib" )
 #pragma comment( lib, "SDL/lib/win32/SDL2main.lib" )
 
-enum main_states
+enum MainStates
 {
 	MAIN_CREATION,
 	MAIN_START,
@@ -24,7 +24,7 @@ int main(int argc, char ** argv)
 	_LOG(LOG_STD, "Starting game engine %s...", TITLE);
 
 	int mainReturn = EXIT_FAILURE;
-	main_states state = MAIN_CREATION;
+	MainStates state = MAIN_CREATION;
 
 	while (state != MAIN_EXIT)
 	{
@@ -40,7 +40,7 @@ int main(int argc, char ** argv)
 		case MAIN_START:
 
 			_LOG(LOG_STD, "-------------- Application Init --------------");
-			if (app->init() == false)
+			if (app->Init() == false)
 			{
 				_LOG(LOG_ERROR, "Application Init exits with ERROR");
 				state = MAIN_EXIT;
@@ -55,7 +55,7 @@ int main(int argc, char ** argv)
 
 		case MAIN_UPDATE:
 		{
-			int updateReturn = app->update();
+			int updateReturn = app->Update();
 
 			if (updateReturn == UPDATE_ERROR)
 			{
@@ -71,7 +71,7 @@ int main(int argc, char ** argv)
 		case MAIN_FINISH:
 
 			_LOG(LOG_STD, "-------------- Application CleanUp --------------");
-			if (app->cleanUp() == false)
+			if (app->CleanUp() == false)
 			{
 				_LOG(LOG_ERROR, "Application CleanUp exits with ERROR");
 			}

@@ -1,15 +1,15 @@
-#ifndef __DRAWDEBUG_H__
-#define __DRAWDEBUG_H__
+#ifndef __DRAWDEBUG__
+#define __DRAWDEBUG__
 
 #include "Math.h"
 #include "Color.h"
 
-void beginDebugDraw();
-void endDebugDraw();
+void BeginDebugDraw();
+void EndDebugDraw();
 
-void drawBoxDebug(AABB& box, Color color = White);
-void drawBoxDebug(OBB& box, Color color = White);
-void drawSphereDebug();
-void drawFrustumDebug(Frustum& frustum, Color color = Yellow);
+void DrawBoxDebug(AABB& box, Color color = White);
+void DrawBoxDebug(OBB& box, Color color = White);
+void DrawSphereDebug();
+void DrawFrustumDebug(Frustum& frustum, Color color = Yellow);
 
-#endif // !__DRAWDEBUG_H__
+#endif // !__DRAWDEBUG__

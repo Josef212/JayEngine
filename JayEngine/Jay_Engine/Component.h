@@ -1,5 +1,5 @@
-#ifndef __COMPONENT_H__
-#define __COMPONENT_H__
+#ifndef __COMPONENT__
+#define __COMPONENT__
 
 #include "Globals.h"
 #include "Math.h"
@@ -11,55 +11,62 @@ class Transform;
 
 enum ComponentType
 {
-	UNKNOWN = -1,
-	TRANSFORMATION,
-	MESH,
-	MATERIAL,
-	CAMERA
+	CMP_UNKNOWN = -1,
+	CMP_TRANSFORMATION,
+	CMP_MESH,
+	CMP_MATERIAL,
+	CMP_CAMERA,
+	CMP_SPRITE_RENDERER,
+	CMP_MAP
 };
 
 class Component
 {
 public:
-	Component(GameObject* gObj, int id);
-	virtual ~Component();
-	
-	virtual void enable();
-	virtual void disable();
-	void switchActive();
-
-	virtual void init();
-	virtual void update(float dt);
-	virtual void cleanUp();
-
-	const bool isEnable()const;
-	const char* getName();
-	void setName(const char* str);
-	int getId();
-
-	void remove();
-
-	virtual void onGameObjectDestroyed() {}
-
-	virtual void getBox(AABB& box)const {}
-	virtual void onTransformUpdate(Transform* trans) {}
-
-	virtual void debugDraw();
-
-	virtual bool saveCMP(FileParser& sect);
-	virtual bool loadCMP(FileParser& sect);
-
-	virtual void setResource(UID resUID) {}
-
-public:
-	ComponentType type = UNKNOWN;
+	ComponentType type = CMP_UNKNOWN;
 	bool removeFlag = false;
 
 protected:
 	std::string name;
-	bool active = true;
-	GameObject* object = NULL;
+	bool selfActive = true;
+	GameObject* object = nullptr;
 	int id = -1;
+
+public:
+	Component(GameObject* gObj, int id) : object(gObj), id(id)
+	{}
+	
+	virtual ~Component()
+	{}
+
+	virtual void Enable() { selfActive = true; }
+	virtual void Disable() { selfActive = false; }
+	void SwitchActive() { selfActive = !selfActive; }
+
+	virtual void Init() {}
+	virtual void Update(float dt) {}
+	virtual void CleanUp() {}
+
+	const bool IsEnable()const { return selfActive; }
+	const char* GetName() { return name.c_str(); }
+	void SetName(const char* str) { if (str) name.assign(str); }
+	int GetId() { return id; }
+
+	void Remove() { removeFlag = true; }
+
+	virtual void OnGameObjectDestroyed() {}
+
+	virtual void GetBox(AABB& box)const {}
+	virtual void OnTransformUpdate(Transform* trans) {}
+
+	virtual void DebugDraw() {}
+
+	virtual bool SaveCMP(FileParser& sect) { return false; }
+	virtual bool LoadCMP(FileParser& sect) { return false; }
+
+	virtual void SetResource(UID resUID) {}
+
+
 };
 
-#endif // !__COMPONENT_H__
+#endif // !__COMPONENT__

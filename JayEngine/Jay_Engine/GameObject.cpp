@@ -20,11 +20,11 @@
 #include "FileParser.h"
 
 
-GameObject::GameObject(GameObject* parent, uint32 id) : parent(parent), id(id)
+GameObject::GameObject(GameObject* parent, UID id) : parent(parent), id(id)
 {
 	name.assign("Game Object");
-	init();
-	transform = (Transform*)addComponent(TRANSFORMATION);
+	Init();
+	transform = (Transform*)AddComponent(CMP_TRANSFORMATION);
 }
 
 
@@ -37,74 +37,74 @@ GameObject::~GameObject()
 		RELEASE(childrens[j]);
 }
 
-void GameObject::init()
+void GameObject::Init()
 {
 }
 
-void GameObject::update(float dt)
+void GameObject::Update(float dt)
 {
 	for (uint j = 0; j < components.size(); ++j)
 	{
-		components[j]->update(dt);
+		components[j]->Update(dt);
 	}
 	for (uint i = 0; i < childrens.size(); ++i)
 	{
-		childrens[i]->update(dt);
+		childrens[i]->Update(dt);
 	}
 }
 
-void GameObject::cleanUp()
+void GameObject::CleanUp()
 {
 	for (uint i = 0; i < components.size(); ++i)
 	{
-		components[i]->cleanUp();
+		components[i]->CleanUp();
 	}
 
 	for (uint i = 0; i < childrens.size(); ++i)
 	{
-		childrens[i]->cleanUp();
+		childrens[i]->CleanUp();
 	}
 }
 
-const char* GameObject::getName()const
+const char* GameObject::GetName()const
 {
 	return name.c_str();
 }
 
-void GameObject::setName(const char* str)
+void GameObject::SetName(const char* str)
 {
 	if (str)
 		name.assign(str);
 }
 
-int GameObject::getGOId()const
+UID GameObject::GetGOId()const
 {
 	return id;
 }
 
-bool GameObject::isGOActive()
+bool GameObject::IsGOActive()
 {
-	return goActive;
+	return selfActive;
 }
 
-void GameObject::setGOEnable(bool set)
+void GameObject::SetSelfActive(bool set)
 {
-	goActive = set;
+	selfActive = set;
 }
 
-Component* GameObject::addComponent(ComponentType type)
+Component* GameObject::AddComponent(ComponentType type)
 {
-	Component* ret = NULL;
+	Component* ret = nullptr;
 
 	switch (type)
 	{
-		case UNKNOWN:
+		case CMP_UNKNOWN:
 			_LOG(LOG_ERROR, "Error while creating component, no component type.");
 		break;
 
-		case TRANSFORMATION:
+		case CMP_TRANSFORMATION:
 		{
-			if (hasComponent(TRANSFORMATION) == 0)
+			if (!HasComponent(CMP_TRANSFORMATION))
 			{
 				ret = new Transform(this, nextCompId);
 				transform = (Transform*)ret;
@@ -114,23 +114,25 @@ Component* GameObject::addComponent(ComponentType type)
 		}
 		break;
 
-		case MESH:
+		case CMP_MESH:
 		{
 			ret = new Mesh(this, nextCompId);
 		}
 		break;
 
-		case MATERIAL:
+		case CMP_MATERIAL:
 		{
 			ret = new Material(this, nextCompId);
 		}
 		break;
 
-		case CAMERA:
+		case CMP_CAMERA:
 		{
 			ret = new Camera(this, nextCompId);
 		}
 		break;
+
+		//TODO: more cases
 	}
 
 	if (ret)
@@ -142,22 +144,22 @@ Component* GameObject::addComponent(ComponentType type)
 	return ret;
 }
 
-GameObject* GameObject::addChild()
+GameObject* GameObject::AddChild()
 {
-	GameObject* ret = NULL;
+	GameObject* ret = nullptr;
 
-	ret = new GameObject(this, app->random->getRandInt());
+	ret = new GameObject(this, app->random->GetRandInt());
 	childrens.push_back(ret);
 
 	return ret;
 }
 
-void GameObject::remove()
+void GameObject::Remove()
 {
 	removeFlag = true;
 }
 
-bool GameObject::recRemoveFlagged()
+bool GameObject::RecRemoveFlagged()
 {
 	bool ret = false;
 
@@ -165,7 +167,7 @@ bool GameObject::recRemoveFlagged()
 	{
 		if (components[i] && components[i]->removeFlag)
 		{
-			components[i]->cleanUp();
+			components[i]->CleanUp();
 			RELEASE(components[i]);
 			components.erase(components.begin() + i);
 		}
@@ -176,15 +178,15 @@ bool GameObject::recRemoveFlagged()
 		GameObject* tmp = *it;
 		if (tmp && tmp->removeFlag)
 		{
-			tmp->cleanUp();
-			app->goManager->eraseGameObjectFromTree(tmp);
+			tmp->CleanUp();
+			app->goManager->EraseGameObjectFromTree(tmp);
 			RELEASE(tmp);
 			it = childrens.erase(it);
 			ret = true;
 		}
 		else
 		{
-			ret |= tmp->recRemoveFlagged();
+			ret |= tmp->RecRemoveFlagged();
 			++it;
 		}
 	}
@@ -192,14 +194,25 @@ bool GameObject::recRemoveFlagged()
 	return ret;
 }
 
-void GameObject::onGameObjectDestroyed()
+void GameObject::OnGameObjectDestroyed()
 {
 	for (uint i = 0; i < components.size(); ++i)
 		if (components[i])
-			components[i]->onGameObjectDestroyed();
+			components[i]->OnGameObjectDestroyed();
 }
 
-std::vector<Component*> GameObject::findComponent(ComponentType type)
+Component* GameObject::GetComponent(ComponentType type)const
+{
+	for (uint i = 0; i < components.size(); ++i)
+	{
+		if (components[i] && components[i]->type == type)
+			return components[i];
+	}
+
+	return nullptr;
+}
+
+std::vector<Component*> GameObject::GetComponents(ComponentType type)
 {
 	std::vector<Component*> ret;
 
@@ -210,12 +223,23 @@ std::vector<Component*> GameObject::findComponent(ComponentType type)
 	}
 
 	if (ret.empty())
-		ret.push_back(NULL);
+		ret.push_back(nullptr);
 
 	return ret;
 }
 
-int GameObject::hasComponent(ComponentType type)
+bool GameObject::HasComponent(ComponentType type)const
+{
+	for (uint i = 0; i < components.size(); ++i)
+	{
+		if (components[i]->type == type)
+			return true;
+	}
+
+	return false;
+}
+
+uint GameObject::CountComponents(ComponentType type)const
 {
 	int ret = 0;
 
@@ -228,89 +252,89 @@ int GameObject::hasComponent(ComponentType type)
 	return ret;
 }
 
-GameObject* GameObject::getParent() const
+GameObject* GameObject::GetParent() const
 {
 	return parent;
 }
 
-void GameObject::draw(bool drawChilds) //Only use this if culling is not active
+void GameObject::Draw(bool drawChilds) //Only use this if culling is not active
 {
-	if (!isGOActive())
+	if (!selfActive)
 		return;
 
-	app->renderer3D->drawGameObject(this);
+	app->renderer3D->DrawGameObject(this);
 		
 	if (drawChilds)
 	{
 		for (uint i = 0; i < childrens.size(); ++i)
 			if (childrens[i])
-				childrens[i]->draw(true);
+				childrens[i]->Draw(true);
 	}
 }
 
-void GameObject::drawDebug()
+void GameObject::DrawDebug()
 {
 	for (uint j = 0; j < components.size(); ++j)
 	{
 		if (components[j])
-			components[j]->debugDraw();
+			components[j]->DebugDraw();
 	}
 
 	for (uint i = 0; i < childrens.size(); ++i)
 	{
 		if(childrens[i])
-			childrens[i]->drawDebug();
+			childrens[i]->DrawDebug();
 	}
 
 	if (drawEnclosingAABB)
-		drawBoxDebug(enclosingBox, Green);
+		DrawBoxDebug(enclosingBox, Green);
 	if (drawOrientedBox)
-		drawBoxDebug(orientedBox, ClearBlue);
+		DrawBoxDebug(orientedBox, ClearBlue);
 }
 
-void GameObject::recCalcTransform(const float4x4& parentTrans, bool force)
+void GameObject::RecCalcTransform(const float4x4& parentTrans, bool force)
 {
 	if (transform && transform->localTransformChanged || force)
 	{
 		force = true;
-		goWasDirty = true;
-		transform->updateTransform(parentTrans);
+		wasDirty = true;
+		transform->UpdateTransform(parentTrans);
 
 		for (uint i = 0; i < components.size(); ++i)
 			if (components[i])
-				components[i]->onTransformUpdate(transform);
+				components[i]->OnTransformUpdate(transform);
 
-		app->goManager->eraseGameObjectFromTree(this);
-		app->goManager->insertGameObjectToTree(this);
+		app->goManager->EraseGameObjectFromTree(this);
+		app->goManager->InsertGameObjectToTree(this);
 	}
 	else
-		goWasDirty = false;
+		wasDirty = false;
 
 	for (uint i = 0; i < childrens.size(); ++i)
 		if (childrens[i] && transform)
-			childrens[i]->recCalcTransform(transform->getGlobalTransform(), force);
+			childrens[i]->RecCalcTransform(transform->GetGlobalTransform(), force);
 }
 
-void GameObject::recCalcBoxes()
+void GameObject::RecCalcBoxes()
 {
-	if (goWasDirty)
+	if (wasDirty)
 	{
-		recalcBox();
+		RecalcBox();
 
 		orientedBox = enclosingBox;
 		if (orientedBox.IsFinite() && transform)
 		{
-			orientedBox.Transform(transform->getGlobalTransform());
+			orientedBox.Transform(transform->GetGlobalTransform());
 			enclosingBox.SetFrom(orientedBox);
 		}
 	}
 
 	for (uint i = 0; i < childrens.size(); ++i)
 		if (childrens[i] && transform)
-			childrens[i]->recCalcBoxes();
+			childrens[i]->RecCalcBoxes();
 }
 
-void GameObject::recalcBox()
+void GameObject::RecalcBox()
 {
 	enclosingBox.SetNegativeInfinity();
 
@@ -318,12 +342,12 @@ void GameObject::recalcBox()
 	for (uint i = 0; i < components.size(); ++i)
 	{
 		Component* cmp = components[i];
-		if (cmp && cmp->isEnable())
-			cmp->getBox(enclosingBox);
+		if (cmp && cmp->IsEnable())
+			cmp->GetBox(enclosingBox);
 	}
 }
 
-void GameObject::setNewParent(GameObject* newParent, bool force)
+void GameObject::SetNewParent(GameObject* newParent, bool force)
 {
 	if (newParent == parent)
 		return;
@@ -340,27 +364,27 @@ void GameObject::setNewParent(GameObject* newParent, bool force)
 	if (newParent)
 		newParent->childrens.push_back(this);
 
-	goWasDirty = true;
+	wasDirty = true;
 
 	if (force && transform && newParent && newParent->transform)
 	{
-		float4x4 tmp = transform->getGlobalTransform();
-		transform->setLocalTransform(tmp * newParent->transform->getLocalTransform().Inverted());
+		float4x4 tmp = transform->GetGlobalTransform();
+		transform->SetLocalTransform(tmp * newParent->transform->GetLocalTransform().Inverted());
 	}
 }
 
-bool GameObject::saveGO(FileParser& file, std::map<uint, uint>* duplicate)const
+bool GameObject::SaveGO(FileParser& file, std::map<uint, uint>* duplicate)const
 {
 	bool ret = true;
 
 	FileParser f;
 
 	uint uidToSave = id;
-	uint parentID = (parent) ? parent->getGOId() : 0;
+	uint parentID = (parent) ? parent->GetGOId() : 0;
 
 	if (duplicate)
 	{
-		uidToSave = app->random->getRandInt();
+		uidToSave = app->random->GetRandInt();
 		(*duplicate)[id] = uidToSave;
 
 		std::map<uint, uint>::iterator it = duplicate->find(parentID);
@@ -380,7 +404,7 @@ bool GameObject::saveGO(FileParser& file, std::map<uint, uint>* duplicate)const
 		if (components[i])
 		{
 			FileParser cmp;
-			components[i]->saveCMP(cmp);
+			components[i]->SaveCMP(cmp);
 			f.addArrayEntry(cmp);
 		}
 	}
@@ -390,13 +414,13 @@ bool GameObject::saveGO(FileParser& file, std::map<uint, uint>* duplicate)const
 	for (uint i = 0; i < childrens.size(); ++i)
 	{
 		if (childrens[i])
-			childrens[i]->saveGO(file, duplicate);
+			childrens[i]->SaveGO(file, duplicate);
 	}
 
 	return ret;
 }
 
-bool GameObject::loadGO(FileParser* file, std::map<GameObject*, uint>& relations)
+bool GameObject::LoadGO(FileParser* file, std::map<GameObject*, uint>& relations)
 {
 	bool ret = true;
 
@@ -411,14 +435,14 @@ bool GameObject::loadGO(FileParser* file, std::map<GameObject*, uint>& relations
 	{
 		FileParser cmp(file->getArray("components", i));
 		ComponentType type = (ComponentType)cmp.getInt("comp_type", -1);
-		if (type != UNKNOWN)
+		if (type != CMP_UNKNOWN)
 		{
-			if (type == TRANSFORMATION)
-				transform->loadCMP(cmp);
+			if (type == CMP_TRANSFORMATION)
+				transform->LoadCMP(cmp);
 			else
 			{
-				Component* c = addComponent(type);
-				c->loadCMP(cmp);
+				Component* c = AddComponent(type);
+				c->LoadCMP(cmp);
 			}
 		}
 		else

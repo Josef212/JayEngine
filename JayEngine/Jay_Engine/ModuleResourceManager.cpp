@@ -15,7 +15,6 @@
 //TMP
 #include "Timer.h"
 
-#include "Importer.h"
 #include "ImporterScene.h"
 #include "ImporterMesh.h"
 #include "ImporterTexture.h"
@@ -47,7 +46,7 @@ ModuleResourceManager::~ModuleResourceManager()
 	if (shaderImporter) RELEASE(shaderImporter);
 }
 
-bool ModuleResourceManager::init(FileParser* conf)
+bool ModuleResourceManager::Init(FileParser* conf)
 {
 	_LOG(LOG_STD, "Resource manager: Init.");
 	bool ret = true;
@@ -55,43 +54,43 @@ bool ModuleResourceManager::init(FileParser* conf)
 	return ret;
 }
 
-bool ModuleResourceManager::start()
+bool ModuleResourceManager::Start()
 {
 	_LOG(LOG_STD, "Importer: Start.");
 
-	loadResources();
-	loadBasicResources();
-	autoImportFBX();
+	LoadResources();
+	LoadBasicResources();
+	AutoImportFBX();
 
 	return true;
 }
 
-bool ModuleResourceManager::cleanUp()
+bool ModuleResourceManager::CleanUp()
 {
 	_LOG(LOG_STD, "Resource manager: CleanUp.");
 	bool ret = true;
 
-	saveResources();
+	SaveResources();
 
 	//TODO: Make sure all resources are free
 
 	if (defaultShader > 0)
-		shaderImporter->freeShader(defaultShader->shaderID);
+		shaderImporter->FreeShader(defaultShader->shaderID);
 	
 	return ret;
 }
 
-UID ModuleResourceManager::getNewUID()
+UID ModuleResourceManager::GetNewUID()
 {
-	return app->random->getRandInt();
+	return app->random->GetRandInt();
 }
 
-Resource* ModuleResourceManager::createNewResource(ResourceType type, UID forceUID)
+Resource* ModuleResourceManager::CreateNewResource(ResourceType type, UID forceUID)
 {
-	Resource* ret = NULL;
+	Resource* ret = nullptr;
 
-	if(forceUID == 0 || getResourceFromUID(forceUID))
-		forceUID = getNewUID();
+	if(forceUID == 0 || GetResourceFromUID(forceUID))
+		forceUID = GetNewUID();
 
 	switch (type)
 	{
@@ -125,7 +124,7 @@ Resource* ModuleResourceManager::createNewResource(ResourceType type, UID forceU
 	return ret;
 }
 
-ResourceType ModuleResourceManager::getTypeFromExtension(const char* extension)
+ResourceType ModuleResourceManager::GetTypeFromExtension(const char* extension)
 {
 	ResourceType ret = RESOURCE_UNKNOWN;
 
@@ -156,17 +155,17 @@ ResourceType ModuleResourceManager::getTypeFromExtension(const char* extension)
 	return ret;
 }
 
-Resource* ModuleResourceManager::getResourceFromUID(UID uuid)
+Resource* ModuleResourceManager::GetResourceFromUID(UID uuid)
 {
 	std::map<UID, Resource*>::iterator it = resources.find(uuid);
 
-	return (it != resources.end()) ? ((*it).second) : (NULL);
+	return (it != resources.end()) ? ((*it).second) : (nullptr);
 }
 
-UID ModuleResourceManager::findResource(const char* fileInAssets)const
+UID ModuleResourceManager::FindResourceInAssets(const char* fileInAssets)const
 {
 	std::string file(fileInAssets);
-	app->fs->normalizePath(file);
+	app->fs->NormalizePath(file);
 
 	for (std::map<UID, Resource*>::const_iterator it = resources.begin(); it != resources.end(); ++it)
 	{
@@ -177,23 +176,23 @@ UID ModuleResourceManager::findResource(const char* fileInAssets)const
 	return 0;
 }
 
-UID ModuleResourceManager::importFile(const char* fileInAssets, bool checkFirst)
+UID ModuleResourceManager::ImportFile(const char* fileInAssets, bool checkFirst)
 {
 	UID ret = 0;
 
 	std::string original(fileInAssets);
 	std::string path, file, ext;
-	app->fs->normalizePath(original);
-	app->fs->splitPath(original.c_str(), &path, &file, &ext);
+	app->fs->NormalizePath(original);
+	app->fs->SplitPath(original.c_str(), &path, &file, &ext);
 	
 	if (checkFirst)
 	{
-		ret = findResource(file.c_str());
+		ret = FindResourceInAssets(file.c_str());
 		if (ret != 0)
 			return ret;
 	}
 
-	ResourceType type = getTypeFromExtension(ext.c_str());
+	ResourceType type = GetTypeFromExtension(ext.c_str());
 
 	bool succes = false;
 	std::string exportedFile;
@@ -204,7 +203,7 @@ UID ModuleResourceManager::importFile(const char* fileInAssets, bool checkFirst)
 		//TODO: Add more cases for new resources type.
 
 	case RESOURCE_TEXTURE:
-		succes = textureImporter->import(file.c_str(), exportedFile, resUID);
+		succes = textureImporter->Import(file.c_str(), exportedFile, resUID);
 		break;
 
 	case RESOURCE_SCENE:
@@ -216,7 +215,7 @@ UID ModuleResourceManager::importFile(const char* fileInAssets, bool checkFirst)
 			full.assign(path);
 		full.append(file);
 
-		succes = sceneImporter->import(full.c_str(), exportedFile, ext.c_str(), resUID); 
+		succes = sceneImporter->Import(full.c_str(), exportedFile, ext.c_str(), resUID);
 	}
 		break;
 
@@ -228,15 +227,15 @@ UID ModuleResourceManager::importFile(const char* fileInAssets, bool checkFirst)
 	//If import has success then create the resource. And assign name and ID info, not all info only needed info to reload resource
 	if (succes)
 	{
-		Resource* res = createNewResource(type, resUID);
+		Resource* res = CreateNewResource(type, resUID);
 		res->originalFile = file;
 		std::string eFile;
-		app->fs->normalizePath(exportedFile);
-		app->fs->splitPath(exportedFile.c_str(), NULL, &eFile);
+		app->fs->NormalizePath(exportedFile);
+		app->fs->SplitPath(exportedFile.c_str(), nullptr, &eFile);
 		res->exportedFile = eFile;
-		ret = res->getUID();
+		ret = res->GetUID();
 
-		_LOG(LOG_INFO, "Just imported from '%s' to '%s'.", res->getOriginalFile(), res->getExportedFile());
+		_LOG(LOG_INFO, "Just imported from '%s' to '%s'.", res->originalFile.c_str(), res->exportedFile.c_str());
 	}
 	else
 	{
@@ -246,25 +245,25 @@ UID ModuleResourceManager::importFile(const char* fileInAssets, bool checkFirst)
 	return ret;
 }
 
-bool ModuleResourceManager::loadResource(Resource* resource)
+bool ModuleResourceManager::LoadResource(Resource* resource)
 {
 	bool ret = false;
 
 	if (!resource)
 		return ret;
 
-	switch (resource->getResourceType())
+	switch (resource->GetType())
 	{
 	case ResourceType::RESOURCE_MESH:
-		ret = meshImporter->loadResource((ResourceMesh*)resource);
+		ret = meshImporter->LoadResource((ResourceMesh*)resource);
 		break;
 
 	case ResourceType::RESOURCE_TEXTURE:
-		ret = textureImporter->loadResource((ResourceTexture*)resource);
+		ret = textureImporter->LoadResource((ResourceTexture*)resource);
 		break;
 
 	case ResourceType::RESOURCE_SCENE:
-		ret = sceneImporter->loadResource((ResourceScene*)resource);
+		ret = sceneImporter->LoadResource((ResourceScene*)resource);
 		break;
 
 	case ResourceType::RESOURCE_SHADER:
@@ -284,26 +283,26 @@ bool ModuleResourceManager::loadResource(Resource* resource)
 	}
 
 	if(ret)
-		resource->addInstance();
+		resource->AddInstance();
 
 	return ret;
 }
 
-void ModuleResourceManager::onResourceRemove(Resource* resource)
+void ModuleResourceManager::OnResourceRemove(Resource* resource)
 {
 	if (!resource)
 		return;
 
-	if (resource->countReferences() <= 1)
+	if (resource->CountReferences() <= 1)
 	{
 		//Current instances are 1 or less remove from memory.
-		resource->removeFromMemory();
+		resource->RemoveFromMemory();
 	}
 
-	resource->removeInstance();
+	resource->RemoveInstance();
 }
 
-bool ModuleResourceManager::addResource(Resource* res, UID uuid)
+bool ModuleResourceManager::AddResource(Resource* res, UID uuid)
 {
 	bool ret = true;
 
@@ -317,21 +316,21 @@ bool ModuleResourceManager::addResource(Resource* res, UID uuid)
 	return ret;
 }
 
-bool ModuleResourceManager::removeResource(UID uuid)
+bool ModuleResourceManager::RemoveResource(UID uuid)
 {
 	bool ret = false;
 
-	Resource* res = getResourceFromUID(uuid);
+	Resource* res = GetResourceFromUID(uuid);
 
 	if (res)
 	{
-		res->removeInstance();
+		res->RemoveInstance();
 
-		if (res->countReferences() <= 0)
+		if (res->CountReferences() <= 0)
 		{
 			//Must remove it from the map and clean the info
 			resources.erase(uuid);
-			res->removeFromMemory();
+			res->RemoveFromMemory();
 			RELEASE(res);
 		}
 	}
@@ -339,7 +338,7 @@ bool ModuleResourceManager::removeResource(UID uuid)
 	return ret;
 }
 
-bool ModuleResourceManager::addPrefab(const char* originalFile, const char* exportedFile)
+bool ModuleResourceManager::AddPrefab(const char* originalFile, const char* exportedFile)
 {
 	bool ret = true;
 
@@ -363,33 +362,33 @@ bool ModuleResourceManager::addPrefab(const char* originalFile, const char* expo
 	On engine start check all fbx and import them if havent been imported yet.
 	//TODO: This might be done every certain time in order to check if new files have been dropped directly to the folder.
 */
-bool ModuleResourceManager::autoImportFBX()
+bool ModuleResourceManager::AutoImportFBX()
 {
 	bool ret = true;
 
 	std::vector<std::string> fbxs;
-	uint fbxCount = app->fs->getFilesOnDir(DEFAULT_FB_PATH, fbxs);
+	uint fbxCount = app->fs->GetFilesOnDir(DEFAULT_FB_PATH, fbxs);
 
 	if (fbxCount > 0)
 	{
 		for (uint i = 0; i < fbxCount; ++i)
 		{
-			importFile(fbxs[i].c_str(), true);
+			ImportFile(fbxs[i].c_str(), true);
 		}
 	}
 
 	return ret;
 }
 
-bool ModuleResourceManager::loadResources()
+bool ModuleResourceManager::LoadResources()
 {
 	//Might change this if primitives added
 	bool ret = false;
 
 	std::string path(SETTINGS_PATH);
 	path.append("resources.json");
-	char* buffer = NULL;
-	uint size = app->fs->load(path.c_str(), &buffer);
+	char* buffer = nullptr;
+	uint size = app->fs->Load(path.c_str(), &buffer);
 
 	if (buffer && size > 0) 
 	{
@@ -402,10 +401,10 @@ bool ModuleResourceManager::loadResources()
 			ResourceType type = (ResourceType)res.getInt("type", RESOURCE_UNKNOWN);
 			UID uid = res.getInt("UID", 0);
 
-			if (getResourceFromUID(uid)) //If a resource with given UID is found jus continue.
+			if (GetResourceFromUID(uid)) //If a resource with given UID is found jus continue.
 				continue;
 
-			Resource* r = createNewResource(type, uid);
+			Resource* r = CreateNewResource(type, uid);
 			r->originalFile = res.getString("original_file", "???");
 			r->exportedFile = res.getString("exported_file", "???");
 
@@ -416,7 +415,7 @@ bool ModuleResourceManager::loadResources()
 				s->fragtalFile = res.getString("fragtal_shader", "???");
 				s->shaderName = res.getString("sh_name", "???");
 				//Must compile the shader every time engine start
-				shaderImporter->compileShader(s);
+				shaderImporter->CompileShader(s);
 			}
 		}
 	}
@@ -426,7 +425,7 @@ bool ModuleResourceManager::loadResources()
 	return ret;
 }
 
-bool ModuleResourceManager::saveResources()
+bool ModuleResourceManager::SaveResources()
 {
 	bool ret = false;
 
@@ -438,12 +437,12 @@ bool ModuleResourceManager::saveResources()
 	{
 		FileParser res;
 		//---
-		res.addInt("UID", it->second->getUID());
-		res.addInt("type", it->second->getResourceType());
-		res.addString("original_file", it->second->getOriginalFile());
-		res.addString("exported_file", it->second->getExportedFile());
+		res.addInt("UID", it->second->GetUID());
+		res.addInt("type", it->second->GetType());
+		res.addString("original_file", it->second->originalFile.c_str());
+		res.addString("exported_file", it->second->exportedFile.c_str());
 		//---
-		if (it->second->getResourceType() == ResourceType::RESOURCE_SHADER)
+		if (it->second->GetType() == ResourceType::RESOURCE_SHADER)
 		{
 			ResourceShader* s = (ResourceShader*)it->second;
 			res.addString("vertex_shader", s->vertexFile.c_str());
@@ -454,13 +453,13 @@ bool ModuleResourceManager::saveResources()
 		save.addArrayEntry(res);
 	}
 
-	char* buffer = NULL;
+	char* buffer = nullptr;
 	uint size = save.writeJson(&buffer, false); //TODO: Fast write
 
 	std::string path(SETTINGS_PATH);
 	path.append("resources.json");
 
-	if (app->fs->save(path.c_str(), buffer, size) == size)
+	if (app->fs->Save(path.c_str(), buffer, size) == size)
 		ret = true;
 
 	RELEASE_ARRAY(buffer);
@@ -468,24 +467,24 @@ bool ModuleResourceManager::saveResources()
 	return ret;
 }
 
-void ModuleResourceManager::getResourcesOfType(std::vector<Resource*>& res, ResourceType type)const
+void ModuleResourceManager::GetResourcesOfType(std::vector<Resource*>& res, ResourceType type)const
 {
 	for (std::map<UID, Resource*>::const_iterator it = resources.begin(); it != resources.end(); ++it)
 	{
-		if (it->second->getResourceType() == type)
+		if (it->second->GetType() == type)
 			res.push_back(it->second);
 	}
 }
 
-void ModuleResourceManager::loadBasicResources()
+void ModuleResourceManager::LoadBasicResources()
 {
 	defaultShader = new ResourceShader(0);
-	shaderImporter->loadDefaultShader(defaultShader);
+	shaderImporter->LoadDefaultShader(defaultShader);
 
 	//TODO: Load primitives and checkers.
 }
 
-ResourceShader* ModuleResourceManager::getDefaultShader()const
+ResourceShader* ModuleResourceManager::GetDefaultShader()const
 {
 	return defaultShader;
 }
@@ -504,12 +503,12 @@ ResourceShader* ModuleResourceManager::getDefaultShader()const
 
 
 
-bool ModuleResourceManager::checkAllPrefabs() //Is this really important??? //TODO: Instead of doing this why not serialitzate the prefabs map and check files from there??
+bool ModuleResourceManager::CheckAllPrefabs() //Is this really important??? //TODO: Instead of doing this why not serialitzate the prefabs map and check files from there??
 {
 	bool ret = true;
 
 	std::vector<std::string> prefabs;
-	uint count = app->fs->getFilesOnDir(DEFAULT_PREF_SAVE_PATHS, prefabs);
+	uint count = app->fs->GetFilesOnDir(DEFAULT_PREF_SAVE_PATHS, prefabs);
 
 	/**
 		If there are files in this directory lets check all and see if all the resources they need exist.
@@ -521,8 +520,8 @@ bool ModuleResourceManager::checkAllPrefabs() //Is this really important??? //TO
 			//TODO: search for fbx original file, if it no longer exist delete all the files involved in this prefab.
 
 			std::string fileName(DEFAULT_PREF_SAVE_PATHS + prefabs[i]);
-			char* buffer = NULL;
-			uint size = app->fs->load(fileName.c_str(), &buffer);
+			char* buffer = nullptr;
+			uint size = app->fs->Load(fileName.c_str(), &buffer);
 
 			if (size > 0 && buffer)
 			{

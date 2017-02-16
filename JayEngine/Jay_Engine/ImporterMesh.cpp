@@ -33,7 +33,7 @@ ImporterMesh::~ImporterMesh()
 	aiDetachAllLogStreams();
 }
 
-void ImporterMesh::importMesh(const aiMesh* mesh, ResourceMesh* resMesh)
+void ImporterMesh::ImportMesh(const aiMesh* mesh, ResourceMesh* resMesh)
 {
 	if (!mesh || !resMesh)
 	{
@@ -42,11 +42,11 @@ void ImporterMesh::importMesh(const aiMesh* mesh, ResourceMesh* resMesh)
 	}
 
 	//First set the exported file name of the resource from its uuid and own extension
-	std::string outName(DEFAULT_MESH_SAVE_PATH + std::to_string(resMesh->getUID()) + MESH_EXTENSION);
+	std::string outName(DEFAULT_MESH_SAVE_PATH + std::to_string(resMesh->GetUID()) + MESH_EXTENSION);
 	//Will also put the uuid at the start of the file in order to not get the uuid from the file name
 
 	//TODO: set origin file
-	resMesh->exportedFile.assign(std::to_string(resMesh->getUID()) + MESH_EXTENSION);
+	resMesh->exportedFile.assign(std::to_string(resMesh->GetUID()) + MESH_EXTENSION);
 
 	_LOG(LOG_INFO_REM, "New mesh is going to be serialized: %s.", outName.c_str());
 
@@ -168,7 +168,7 @@ void ImporterMesh::importMesh(const aiMesh* mesh, ResourceMesh* resMesh)
 	bytes = sizeof(AABB);
 	memcpy(cursor, &resMesh->aabb.minPoint.x, bytes);
 
-	if (app->fs->save(outName.c_str(), data, size) != size)
+	if (app->fs->Save(outName.c_str(), data, size) != size)
 		_LOG(LOG_ERROR, "ERROR saving the mesh.");
 
 	RELEASE_ARRAY(data);
@@ -177,7 +177,7 @@ void ImporterMesh::importMesh(const aiMesh* mesh, ResourceMesh* resMesh)
 
 //----------------
 
-bool ImporterMesh::loadResource(ResourceMesh* resource)
+bool ImporterMesh::LoadResource(ResourceMesh* resource)
 {
 	bool ret = false;
 
@@ -185,12 +185,12 @@ bool ImporterMesh::loadResource(ResourceMesh* resource)
 		return ret;
 
 	std::string path(DEFAULT_MESH_SAVE_PATH);
-	path.append(resource->getExportedFile());
+	path.append(resource->exportedFile.c_str());
 
 	_LOG(LOG_INFO, "Loading mesh resource from: '%s'.", path.c_str());
 
 	char* data = NULL;
-	uint size = app->fs->load(path.c_str(), &data); 
+	uint size = app->fs->Load(path.c_str(), &data); 
 
 	if (data && size > 0)
 	{

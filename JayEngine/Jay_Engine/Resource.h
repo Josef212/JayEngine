@@ -1,5 +1,5 @@
-#ifndef __RESOURCE_H__
-#define __RESOURCE_H__
+#ifndef __RESOURCE__
+#define __RESOURCE__
 
 #include "Globals.h"
 #include <string>
@@ -18,26 +18,24 @@ enum ResourceType
 class Resource
 {
 public:
-	Resource(UID uuid, ResourceType resType = RESOURCE_UNKNOWN);
-	virtual ~Resource();
+	Resource(UID uuid, ResourceType resType = RESOURCE_UNKNOWN) : uuid(uuid), resType(resType)
+	{}
 
-	ResourceType getResourceType()const;
+	virtual ~Resource()
+	{}
 
-	UID getUID()const;
-	void setUID(UID uid); //NOTE: Care when use it. //TODO: Check for other ways
+	ResourceType GetType()const { return resType; }
+	UID GetUID()const { return uuid; }
 
-	const char* getOriginalFile()const;
-	const char* getExportedFile()const;
+	bool IsInMemory()const { return instancesInMemory > 0; }
 
-	bool isInMemory()const;
+	virtual bool LoadToMemory() { return false; }
+	virtual bool RemoveFromMemory() { return false; }
 
-	virtual bool loadToMemory();
-	virtual bool removeFromMemory();
+	uint CountReferences()const { return instancesInMemory; }
 
-	uint countReferences()const;
-
-	void addInstance();
-	void removeInstance();
+	void AddInstance() { ++instancesInMemory; }
+	void RemoveInstance() { --instancesInMemory; }
 
 private:
 
@@ -52,4 +50,4 @@ protected:
 	uint instancesInMemory = 0;
 };
 
-#endif // !__RESOURCE_H__
+#endif // !__RESOURCE__

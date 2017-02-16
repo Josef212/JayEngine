@@ -1,6 +1,7 @@
-#ifndef __MODULE_H__
-#define __MODULE_H__
+#ifndef __MODULE__
+#define __MODULE__
 
+#include "Globals.h"
 #include <string>
 #include "Event.h"
 
@@ -22,79 +23,79 @@ public:
 	virtual ~Module()
 	{}
 
-	bool isEnabled() const
+	bool IsEnabled() const
 	{
 		return enabled;
 	}
 
-	void enable()
+	void Enable()
 	{
 		if (enabled == false)
 		{
 			enabled = true;
-			start();
+			Start();
 		}
 	}
 
-	bool disable()
+	bool Disable()
 	{
 		bool ret = true;
 		if (enabled == true)
 		{
 			enabled = false;
-			ret = cleanUp();
+			ret = CleanUp();
 		}
 		return ret;
 	}
 
-	virtual bool init(FileParser* conf)
+	virtual bool Init(FileParser* conf)
 	{
 		return true; 
 	}
 
-	virtual bool start()
+	virtual bool Start()
 	{
 		return true;
 	}
 
-	virtual update_status preUpdate(float dt)
+	virtual update_status PreUpdate(float dt)
 	{
 		return UPDATE_CONTINUE;
 	}
 
-	virtual update_status update(float dt)
+	virtual update_status Update(float dt)
 	{
 		return UPDATE_CONTINUE;
 	}
 
-	virtual update_status postUpdate(float dt)
+	virtual update_status PostUpdate(float dt)
 	{
 		return UPDATE_CONTINUE;
 	}
 
-	virtual bool cleanUp() 
+	virtual bool CleanUp() 
 	{ 
 		return true; 
 	}
 
-	virtual bool save(FileParser* sect)
+	virtual bool Save(FileParser* sect)
 	{
 		return true;
 	}
 
-	virtual bool load(FileParser* sect)
+	virtual bool Load(FileParser* sect)
 	{
 		return true;
 	}
 
-	virtual void drawDebug()
+	virtual void DrawDebug()
 	{}
 
-	virtual void onCollision(PhysBody3D* body1, PhysBody3D* body2)
+	virtual void OnCollision(PhysBody3D* body1, PhysBody3D* body2)
 	{}
 
-	virtual void onGlobalEvent(const Event& e)
+	virtual void OnGlobalEvent(const Event& e)
 	{}
 };
 
-#endif // !__MODULE_H__
+#endif // !__MODULE__

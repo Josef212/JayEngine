@@ -1,5 +1,5 @@
-#ifndef __MODULEEVENTSYSTEM_H__
-#define __MODULEEVENTSYSTEM_H__
+#ifndef __MODULE_EVENT_SYSTEM__
+#define __MODULE_EVENT_SYSTEM__
 
 
 #include "Module.h"
@@ -12,7 +12,7 @@ public:
 	ModuleEventSystem();
 	virtual ~ModuleEventSystem();
 
-	void sendGlobalEvent(const Event& e);
+	void SendGlobalEvent(const Event& e);
 };
 
-#endif // !__MODULEEVENTSYSTEM_H__
+#endif // !__MODULE_EVENT_SYSTEM__

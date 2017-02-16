@@ -4,22 +4,22 @@
 #define MAX_NODE_OBJECTS 8
 
 //---------------------------------------------------
-//---------------oTreeNode----------------------------
+//---------------OcTreeNode----------------------------
 //---------------------------------------------------
 
 
-oTreeNode::oTreeNode(const AABB& _box) : box(_box)
+OcTreeNode::OcTreeNode(const AABB& _box) : box(_box)
 {
 	for (unsigned int i = 0; i < 8; ++i)
 		childs[i] = nullptr;
 	parent = nullptr;
 }
 
-oTreeNode::~oTreeNode()
+OcTreeNode::~OcTreeNode()
 {
 }
 
-void oTreeNode::insert(GameObject* obj)
+void OcTreeNode::Insert(GameObject* obj)
 {
 	if (!obj)
 		return;
@@ -29,14 +29,14 @@ void oTreeNode::insert(GameObject* obj)
 	else
 	{
 		if (childs[0] == nullptr)
-			divideNode();
+			DivideNode();
 
 		objects.push_back(obj);
-		ajustNode();
+		AjustNode();
 	}
 }
 
-void oTreeNode::erase(GameObject* obj)
+void OcTreeNode::Erase(GameObject* obj)
 {
 	std::list<GameObject*>::iterator tmp = std::find(objects.begin(), objects.end(), obj);
 	if (tmp != objects.end())
@@ -44,27 +44,10 @@ void oTreeNode::erase(GameObject* obj)
 
 	if (childs[0] != nullptr)
 		for (unsigned int i = 0; i < 8; ++i)
-			if (childs[i])childs[i]->erase(obj);
-
-	/*if (childs[0]) //TODO: delete all tree boxes id are empty
-	{
-		bool delChilds = true;
-		for (unsigned int i = 0; i < 8; ++i)
-			if (childs[i] && !childs[i]->objects.empty())
-				delChilds = false;
-
-		//Delchilds is still true, delete all childs
-		if (delChilds)
-		{
-			for (unsigned int i = 0; i < 8; ++i)
-			{
-				delete childs[i];
-			}
-		}
-	}*/
+			if (childs[i])childs[i]->Erase(obj);
 }
 
-void oTreeNode::coollectBoxes(std::vector<AABB>& vec)
+void OcTreeNode::CoollectBoxes(std::vector<AABB>& vec)
 {
 	for (std::list<GameObject*>::iterator it = objects.begin(); it != objects.end(); ++it)
 	{
@@ -73,10 +56,10 @@ void oTreeNode::coollectBoxes(std::vector<AABB>& vec)
 
 	for (unsigned int i = 0; i < 8; ++i)
 		if (childs[i] != nullptr)
-			childs[i]->coollectBoxes(vec);
+			childs[i]->CoollectBoxes(vec);
 }
 
-void oTreeNode::coollectGO(std::vector<GameObject*>& vec)
+void OcTreeNode::CoollectGO(std::vector<GameObject*>& vec)
 {
 	for (std::list<GameObject*>::iterator it = objects.begin(); it != objects.end(); ++it)
 	{
@@ -85,10 +68,10 @@ void oTreeNode::coollectGO(std::vector<GameObject*>& vec)
 
 	for (unsigned int i = 0; i < 8; ++i)
 		if (childs[i] != nullptr)
-			childs[i]->coollectGO(vec);
+			childs[i]->CoollectGO(vec);
 }
 
-void oTreeNode::divideNode()
+void OcTreeNode::DivideNode()
 {
 	float3 center = box.CenterPoint();
 	float3 center2 = float3::zero;
@@ -104,67 +87,75 @@ void oTreeNode::divideNode()
 	//----------North-east
 	center2.Set(center.x + sx, center.y + sy, center.z + sz);
 	tmp.SetFromCenterAndSize(center2, size2);
-	childs[0] = new oTreeNode(tmp);
+	childs[0] = new OcTreeNode(tmp);
 
 	//----------South-east
 	center2.Set(center.x + sx, center.y + sy, center.z - sz);
 	tmp.SetFromCenterAndSize(center2, size2);
-	childs[1] = new oTreeNode(tmp);
+	childs[1] = new OcTreeNode(tmp);
 
 	//----------South-west
 	center2.Set(center.x - sx, center.y + sy, center.z - sz);
 	tmp.SetFromCenterAndSize(center2, size2);
-	childs[2] = new oTreeNode(tmp);
+	childs[2] = new OcTreeNode(tmp);
 
 	//----------North-east
 	center2.Set(center.x - sx, center.y + sy, center.z + sz);
 	tmp.SetFromCenterAndSize(center2, size2);
-	childs[3] = new oTreeNode(tmp);
+	childs[3] = new OcTreeNode(tmp);
 
 	//----------BOT----------
 	//----------North-east
 	center2.Set(center.x + sx, center.y - sy, center.z + sz);
 	tmp.SetFromCenterAndSize(center2, size2);
-	childs[4] = new oTreeNode(tmp);
+	childs[4] = new OcTreeNode(tmp);
 
 	//----------South-east
 	center2.Set(center.x + sx, center.y - sy, center.z - sz);
 	tmp.SetFromCenterAndSize(center2, size2);
-	childs[5] = new oTreeNode(tmp);
+	childs[5] = new OcTreeNode(tmp);
 
 	//----------South-west
 	center2.Set(center.x - sx, center.y - sy, center.z - sz);
 	tmp.SetFromCenterAndSize(center2, size2);
-	childs[6] = new oTreeNode(tmp);
+	childs[6] = new OcTreeNode(tmp);
 
 	//----------North-east
 	center2.Set(center.x - sx, center.y - sy, center.z + sz);
 	tmp.SetFromCenterAndSize(center2, size2);
-	childs[7] = new oTreeNode(tmp);
+	childs[7] = new OcTreeNode(tmp);
 
 	for (unsigned int i = 0; i < 8; ++i)
 		childs[i]->parent = this;
 }
 
-void oTreeNode::ajustNode()
+void OcTreeNode::AjustNode()
 {
 	std::list<GameObject*>::iterator it = objects.begin();
 	while (it != objects.end())
 	{
 		GameObject* tmp = (*it);
-		if (intersectsAllChilds(tmp->enclosingBox))
+		AABB b(tmp->enclosingBox);
+
+		bool intersections[8];
+		for (unsigned int i = 0; i < 8; ++i)
+			intersections[i] = childs[i]->box.Intersects(b);
+
+		if (intersections[0] && intersections[1] && intersections[2] && intersections[3] && intersections[4] && intersections[5] && intersections[6] && intersections[7])
+		{
 			++it; //Let the object in parent if it intersects with all childs
+		}
 		else
 		{
 			it = objects.erase(it);
 			for (unsigned int i = 0; i < 8; ++i)
 				if (childs[i]->box.Intersects(tmp->enclosingBox)) //box.MinimalEnclosingAABB().Intersects()
-					childs[i]->insert(tmp);
+					childs[i]->Insert(tmp);
 		}
 	}
 }
 
-bool oTreeNode::intersectsAllChilds(const AABB& _box)
+bool OcTreeNode::IntersectsAllChilds(const AABB& _box)
 {
 	unsigned int count = 0;
 
@@ -175,15 +166,15 @@ bool oTreeNode::intersectsAllChilds(const AABB& _box)
 	return count == 4;
 }
 
-void oTreeNode::collectTreeBoxes(std::vector<AABB>& vec)
+void OcTreeNode::CollectTreeBoxes(std::vector<AABB>& vec)
 {
 	vec.push_back(box);
 
 	for (unsigned int i = 0; i < 8; ++i)
-		if (childs[i]) childs[i]->collectTreeBoxes(vec);
+		if (childs[i]) childs[i]->CollectTreeBoxes(vec);
 }
 
-void oTreeNode::collectCandidates(std::vector<GameObject*>& vec, const Frustum& frustum)
+void OcTreeNode::CollectCandidates(std::vector<GameObject*>& vec, const Frustum& frustum)
 {
 	if (frustum.Intersects(box))
 		for (std::list<GameObject*>::iterator it = objects.begin(); it != objects.end(); ++it)
@@ -191,7 +182,7 @@ void oTreeNode::collectCandidates(std::vector<GameObject*>& vec, const Frustum& 
 				vec.push_back((*it));
 
 	for (unsigned int i = 0; i < 8; ++i)
-		if (childs[i])childs[i]->collectCandidates(vec, frustum);
+		if (childs[i])childs[i]->CollectCandidates(vec, frustum);
 }
 
 //---------------------------------------------------
@@ -206,31 +197,31 @@ JOctree::JOctree()
 
 JOctree::~JOctree()
 {
-	clear();
+	Clear();
 }
 
-void JOctree::insert(GameObject* obj)
+void JOctree::Insert(GameObject* obj)
 {
 	if (rootNode && obj)
 		if (rootNode->box.Intersects(obj->enclosingBox))
-			rootNode->insert(obj);
+			rootNode->Insert(obj);
 }
 
-void JOctree::erase(GameObject* obj)
+void JOctree::Erase(GameObject* obj)
 {
 	if (rootNode && obj)
-		rootNode->erase(obj);
+		rootNode->Erase(obj);
 }
 
-void JOctree::setRoot(const AABB& _box)
+void JOctree::SetRoot(const AABB& _box)
 {
 	if (rootNode)
 		delete(rootNode);
 
-	rootNode = new oTreeNode(_box);
+	rootNode = new OcTreeNode(_box);
 }
 
-void JOctree::clear()
+void JOctree::Clear()
 {
 
 	if (rootNode)
@@ -238,27 +229,27 @@ void JOctree::clear()
 	rootNode = nullptr;
 }
 
-void JOctree::coollectBoxes(std::vector<AABB>& vec)
+void JOctree::CoollectBoxes(std::vector<AABB>& vec)
 {
 	if (rootNode)
-		rootNode->coollectBoxes(vec);
+		rootNode->CoollectBoxes(vec);
 }
 
-void JOctree::coollectGO(std::vector<GameObject*>& vec)
+void JOctree::CoollectGO(std::vector<GameObject*>& vec)
 {
 	if (rootNode)
-		rootNode->coollectGO(vec);
+		rootNode->CoollectGO(vec);
 }
 
-void JOctree::collectTreeBoxes(std::vector<AABB>& vec)
+void JOctree::CollectTreeBoxes(std::vector<AABB>& vec)
 {
 	if (rootNode)
-		rootNode->collectTreeBoxes(vec);
+		rootNode->CollectTreeBoxes(vec);
 }
 
-void JOctree::collectCandidates(std::vector<GameObject*>& vec, const Frustum& frustum)
+void JOctree::CollectCandidates(std::vector<GameObject*>& vec, const Frustum& frustum)
 {
 	if (rootNode)
 		if (frustum.Intersects(rootNode->box))
-			rootNode->collectCandidates(vec, frustum);
+			rootNode->CollectCandidates(vec, frustum);
 }

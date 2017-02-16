@@ -1,20 +1,20 @@
-#ifndef __UICCONSOLE_H__
-#define __UICCONSOLE_H__
+#ifndef __UI_CCONSOLE__
+#define __UI_CCONSOLE__
 
-#include "UI_Comp.h"
+#include "UI_Panel.h"
 #include <vector>
 #include <string>
 
 enum logType;
 
-class UI_Console : public UI_Comp
+class UI_Console : public UI_Panel
 {
 public:
-	UI_Console();
+	UI_Console(bool startEnalbed = false);
 	~UI_Console();
 
-	void draw();
-	void logUi(const char* str, logType type);
+	void Draw()override;
+	void LogUi(const char* str, logType type);
 
 private:
 	ImGuiTextBuffer logs;
@@ -25,4 +25,4 @@ private:
 };
 
 
-#endif //__UICCONSOLE_H__
+#endif //__UI_CCONSOLE__

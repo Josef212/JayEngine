@@ -1,6 +1,6 @@
 /*
-#ifndef __MODULEPHYSICS3D_H__
-#define __MODULEPHYSICS3D_H__
+#ifndef __MODULEPHYSICS3D__
+#define __MODULEPHYSICS3D__
 
 #include "Module.h"
 #include "Globals.h"
@@ -78,4 +78,4 @@ public:
 	Primitive point;
 };
 
-#endif //__MODULEPHYSICS3D_H__ */
+#endif //__MODULEPHYSICS3D__ */
