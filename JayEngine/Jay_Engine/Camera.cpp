@@ -179,21 +179,21 @@ bool Camera::SaveCMP(FileParser& sect)
 {
 	bool ret = true;
 
-	sect.addInt("comp_type", (int)type);
-	sect.addBool("active", selfActive);
-	sect.addInt("UUID", id);
-	sect.addInt("go_UUID", object->GetGOId());
+	sect.AddInt("comp_type", (int)type);
+	sect.AddBool("active", selfActive);
+	sect.AddInt("UUID", id);
+	sect.AddInt("go_UUID", object->GetGOId());
 
-	sect.addFloat("near_plane", nearPlaneDist);
-	sect.addFloat("far_plane", farPlaneDist);
-	sect.addFloat("fov", FOV);
-	sect.addFloat("aspect_ratio", aspectRatio);
+	sect.AddFloat("near_plane", nearPlaneDist);
+	sect.AddFloat("far_plane", farPlaneDist);
+	sect.AddFloat("fov", FOV);
+	sect.AddFloat("aspect_ratio", aspectRatio);
 
-	sect.addFloat3("cam_pos", frustum.pos);
-	sect.addColor("bg_color", background);
+	sect.AddFloat3("cam_pos", frustum.pos);
+	sect.AddColor("bg_color", background);
 
 	if (app->renderer3D->GetActiveCamera() == this)
-		sect.addBool("is_active_cam", true);
+		sect.AddBool("is_active_cam", true);
 
 	return ret;
 }
@@ -202,18 +202,18 @@ bool Camera::LoadCMP(FileParser& sect)
 {
 	bool ret = true;
 
-	selfActive = sect.getBool("active", true);
-	id = sect.getInt("UUID", 0);
+	selfActive = sect.GetBool("active", true);
+	id = sect.GetInt("UUID", 0);
 
-	nearPlaneDist = sect.getFloat("near_plane", 0.f);
-	farPlaneDist = sect.getFloat("far_plane", 0.f);
-	FOV = sect.getFloat("fov", 0.f);
-	SetAspectRatio(sect.getFloat("aspect_ratio", 1.3f));
+	nearPlaneDist = sect.GetFloat("near_plane", 0.f);
+	farPlaneDist = sect.GetFloat("far_plane", 0.f);
+	FOV = sect.GetFloat("fov", 0.f);
+	SetAspectRatio(sect.GetFloat("aspect_ratio", 1.3f));
 
-	frustum.pos = sect.getFloat3("cam_pos", float3::zero);
-	background = sect.getColor("bg_color", Black);
+	frustum.pos = sect.GetFloat3("cam_pos", float3::zero);
+	background = sect.GetColor("bg_color", Black);
 
-	if (sect.getBool("is_active_cam", false))
+	if (sect.GetBool("is_active_cam", false))
 		app->renderer3D->SetActiveCamera(this);
 
 	return ret;

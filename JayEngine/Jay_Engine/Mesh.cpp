@@ -53,23 +53,23 @@ bool Mesh::SaveCMP(FileParser& sect)
 {
 	bool ret = true;
 
-	sect.addInt("comp_type", (int)type);
-	sect.addBool("active", selfActive);
-	sect.addInt("UUID", id);
-	sect.addInt("go_UUID", object->GetGOId());
+	sect.AddInt("comp_type", (int)type);
+	sect.AddBool("active", selfActive);
+	sect.AddInt("UUID", id);
+	sect.AddInt("go_UUID", object->GetGOId());
 
 	if (meshResource)
 	{
-		sect.addBool("have_res", true);
-		sect.addInt("resource_id", meshResource->GetUID());
-		sect.addString("resource_exported_file", meshResource->exportedFile.c_str());
-		sect.addString("resource_original_file", meshResource->originalFile.c_str());
+		sect.AddBool("have_res", true);
+		sect.AddInt("resource_id", meshResource->GetUID());
+		sect.AddString("resource_exported_file", meshResource->exportedFile.c_str());
+		sect.AddString("resource_original_file", meshResource->originalFile.c_str());
 	}
 	else
-		sect.addBool("have_res", false);
+		sect.AddBool("have_res", false);
 
-	sect.addBool("wireframe", renderWireframe);
-	sect.addBool("normals", renderNormals);
+	sect.AddBool("wireframe", renderWireframe);
+	sect.AddBool("normals", renderNormals);
 
 	return ret;
 }
@@ -78,16 +78,16 @@ bool Mesh::LoadCMP(FileParser& sect)
 {
 	bool ret = true;
 
-	selfActive = sect.getBool("active", true);
-	id = sect.getInt("UUID", 0);
+	selfActive = sect.GetBool("active", true);
+	id = sect.GetInt("UUID", 0);
 
-	if (sect.getBool("have_res", false))
+	if (sect.GetBool("have_res", false))
 	{
-		SetResource(sect.getInt("resource_id", 0));
+		SetResource(sect.GetInt("resource_id", 0));
 	}
 
-	renderWireframe = sect.getBool("wireframe", false);
-	renderNormals = sect.getBool("normals", false);
+	renderWireframe = sect.GetBool("wireframe", false);
+	renderNormals = sect.GetBool("normals", false);
 
 	return ret;
 }

@@ -83,7 +83,7 @@ bool Application::Init()
 
 	FileParser conf(buffer);
 
-	ReadConfig(&conf.getSection("app"));
+	ReadConfig(&conf.GetSection("app"));
 
 	//NOTE/TODO: For now will pass Config on init but maybe will pass on start too
 
@@ -92,7 +92,7 @@ bool Application::Init()
 	_LOG(LOG_STD, "Application Init --------------");
 	for(; it != modules.end() && ret == true; ++it)
 	{
-		ret = (*it)->Init(&conf.getSection((*it)->name.c_str()));
+		ret = (*it)->Init(&conf.GetSection((*it)->name.c_str()));
 	}
 
 	// After all Init calls we call Start() in all modules
@@ -277,9 +277,9 @@ void Application::Browse(const char * url) const
 
 void Application::ReadConfig(FileParser* conf)
 {
-	SetOrganitzation(conf->getString("organitzation", "Josef21296"));
-	SetTitle(conf->getString("app_name", "JayEngine"));
-	SetMaxFPS(conf->getInt("fps_limit", 0));
+	SetOrganitzation(conf->GetString("organitzation", "Josef21296"));
+	SetTitle(conf->GetString("app_name", "JayEngine"));
+	SetMaxFPS(conf->GetInt("fps_limit", 0));
 	state = EDITOR; //TODO: check in config
 }
 
@@ -302,10 +302,10 @@ bool Application::SaveGameNow() //TODO: pass the file name or set it from a stri
 	FileParser conf;
 
 	for (std::list<Module*>::iterator it = modules.begin(); it != modules.end(); ++it)
-		(*it)->Save(&conf.addSection((*it)->name.c_str()));
+		(*it)->Save(&conf.AddSection((*it)->name.c_str()));
 	
 	char* buffer;
-	uint size = conf.writeJson(&buffer, false);
+	uint size = conf.WriteJson(&buffer, false);
 	if (app->fs->Save("Data/Settings/c.json", buffer, size) != size)
 		_LOG(LOG_ERROR, "Could not save json.");
 
@@ -326,7 +326,7 @@ bool Application::LoadGameNow()
 	FileParser conf(buffer);
 
 	for (std::list<Module*>::iterator it = modules.begin(); it != modules.end(); ++it)
-		(*it)->Load(&conf.getSection((*it)->name.c_str()));
+		(*it)->Load(&conf.GetSection((*it)->name.c_str()));
 	
 	_LOG(LOG_INFO_REM, "LOADING!!!");
 	loadNextFrame = false;

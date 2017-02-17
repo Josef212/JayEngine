@@ -43,21 +43,21 @@ bool Material::SaveCMP(FileParser& sect)
 {
 	bool ret = true;
 
-	sect.addInt("comp_type", (int)type);
-	sect.addBool("active", selfActive);
-	sect.addInt("UUID", id);
-	sect.addInt("go_UUID", object->GetGOId());
-	sect.addColor("mat_col", color);
+	sect.AddInt("comp_type", (int)type);
+	sect.AddBool("active", selfActive);
+	sect.AddInt("UUID", id);
+	sect.AddInt("go_UUID", object->GetGOId());
+	sect.AddColor("mat_col", color);
 
 	if (textureResource)
 	{
-		sect.addBool("have_res", true);
-		sect.addInt("resource_id", textureResource->GetUID());
-		sect.addString("resource_exported_file", textureResource->exportedFile.c_str());
-		sect.addString("resource_original_file", textureResource->originalFile.c_str());
+		sect.AddBool("have_res", true);
+		sect.AddInt("resource_id", textureResource->GetUID());
+		sect.AddString("resource_exported_file", textureResource->exportedFile.c_str());
+		sect.AddString("resource_original_file", textureResource->originalFile.c_str());
 	}
 	else
-		sect.addBool("have_res", false);
+		sect.AddBool("have_res", false);
 
 	return ret;
 }
@@ -66,14 +66,14 @@ bool Material::LoadCMP(FileParser& sect)
 {
 	bool ret = true;
 
-	selfActive = sect.getBool("active", true);
-	id = sect.getInt("UUID", 0);
+	selfActive = sect.GetBool("active", true);
+	id = sect.GetInt("UUID", 0);
 
-	color = sect.getColor("mat_col", Yellow);
+	color = sect.GetColor("mat_col", Yellow);
 
-	if (sect.getBool("have_res", false))
+	if (sect.GetBool("have_res", false))
 	{
-		SetResource(sect.getInt("resource_id", 0));
+		SetResource(sect.GetInt("resource_id", 0));
 	}
 
 	return ret;

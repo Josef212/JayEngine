@@ -392,12 +392,12 @@ bool GameObject::SaveGO(FileParser& file, std::map<uint, uint>* duplicate)const
 			parentID = it->second;
 	}
 
-	f.addInt("UUID", id);
-	f.addInt("parent_id", parentID);
+	f.AddInt("UUID", id);
+	f.AddInt("parent_id", parentID);
 
-	f.addString("name", name.c_str());
+	f.AddString("name", name.c_str());
 
-	f.addArray("components");
+	f.AddArray("components");
 
 	for (uint i = 0; i < components.size(); ++i)
 	{
@@ -405,11 +405,11 @@ bool GameObject::SaveGO(FileParser& file, std::map<uint, uint>* duplicate)const
 		{
 			FileParser cmp;
 			components[i]->SaveCMP(cmp);
-			f.addArrayEntry(cmp);
+			f.AddArrayEntry(cmp);
 		}
 	}
 
-	file.addArrayEntry(f);
+	file.AddArrayEntry(f);
 
 	for (uint i = 0; i < childrens.size(); ++i)
 	{
@@ -424,17 +424,17 @@ bool GameObject::LoadGO(FileParser* file, std::map<GameObject*, uint>& relations
 {
 	bool ret = true;
 
-	id = file->getInt("UUID", id);
-	uint parent = file->getInt("parent_id", 0);
+	id = file->GetInt("UUID", id);
+	uint parent = file->GetInt("parent_id", 0);
 	relations[this] = parent;
 
-	name = file->getString("name", "unnamed");
+	name = file->GetString("name", "unnamed");
 
-	int cmpCount = file->getArraySize("components");
+	int cmpCount = file->GetArraySize("components");
 	for (uint i = 0; i < cmpCount; ++i)
 	{
-		FileParser cmp(file->getArray("components", i));
-		ComponentType type = (ComponentType)cmp.getInt("comp_type", -1);
+		FileParser cmp(file->GetArray("components", i));
+		ComponentType type = (ComponentType)cmp.GetInt("comp_type", -1);
 		if (type != CMP_UNKNOWN)
 		{
 			if (type == CMP_TRANSFORMATION)

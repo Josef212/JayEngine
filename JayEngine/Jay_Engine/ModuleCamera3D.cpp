@@ -38,10 +38,10 @@ ModuleCamera3D::~ModuleCamera3D()
 
 bool ModuleCamera3D::Init(FileParser* conf)
 {
-	moveSpeed = conf->getFloat("mov_speed", 10.f);
-	rotSpeed = conf->getFloat("rot_speed", 3.f);
-	zoomSpeed = conf->getFloat("zoom_speed", 500.f);
-	distToReference = conf->getFloat("dist_ref", 10.f);
+	moveSpeed = conf->GetFloat("mov_speed", 10.f);
+	rotSpeed = conf->GetFloat("rot_speed", 3.f);
+	zoomSpeed = conf->GetFloat("zoom_speed", 500.f);
+	distToReference = conf->GetFloat("dist_ref", 10.f);
 
 	if (!defaultCamera || !defaultCameraComp)
 		return false;

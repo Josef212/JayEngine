@@ -17,52 +17,46 @@ public:
 	FileParser(JSON_Object* section);
 	virtual ~FileParser();
 
-	FileParser getSection(const char* sectionName);
-	FileParser addSection(const char* sectionName);
+	FileParser GetSection(const char* sectionName);
+	FileParser AddSection(const char* sectionName);
 
-	const char* getString(const char* name, const char* defaultStr, int index = -1);//TODO
-	bool getBool(const char* name, bool defaultBool, int index = -1);
-	int getInt(const char* name, int defaultInt, int index = -1);
-	float getFloat(const char* name, float defaultFloat, int index = -1);
+	const char* GetString(const char* name, const char* defaultStr, int index = -1);//TODO
+	bool GetBool(const char* name, bool defaultBool, int index = -1);
+	int GetInt(const char* name, int defaultInt, int index = -1);
+	float GetFloat(const char* name, float defaultFloat, int index = -1);
 
-	double getDouble(const char* name, double defaultDouble, int index = -1);
-	float* getFloatArray(const char* name); //Get floats from array  with index
+	double GetDouble(const char* name, double defaultDouble, int index = -1);
+	float* GetFloatArray(const char* name); //Get floats from array  with index
 
-	FileParser getArray(const char* name, int index)const;
-	int getArraySize(const char* name)const;
+	FileParser GetArray(const char* name, int index)const;
+	int GetArraySize(const char* name)const;
 
-	float3 getFloat3(const char* name, float3 default);
-	Color getColor(const char* name, Color default);
-	//getArray
-	//getUID
-	//FileParser getArray...
+	float3 GetFloat3(const char* name, float3 default);
+	Color GetColor(const char* name, Color default);
 
-	bool addString(const char* name, const char* value);
-	bool addBool(const char* name, bool value);
-	bool addInt(const char* name, int value);
-	bool addFloat(const char* name, float value);
-	bool addDouble(const char* name, double value);
+	bool AddString(const char* name, const char* value);
+	bool AddBool(const char* name, bool value);
+	bool AddInt(const char* name, int value);
+	bool AddFloat(const char* name, float value);
+	bool AddDouble(const char* name, double value);
 
-	bool addArray(const char* name);
-	bool addArrayEntry(const FileParser& file);
+	bool AddArray(const char* name);
+	bool AddArrayEntry(const FileParser& file);
 
-	bool addFloat3(const char* name, float3 vec);
-	bool addColor(const char* name, Color col);
+	bool AddFloat3(const char* name, float3 vec);
+	bool AddColor(const char* name, Color col);
 
-	bool addIntArray(const char* name, int* iArray, uint size);
-	bool addFloatArray(const char* name, float* fArray, uint size);
-	bool addBoolArray(const char* name, bool* bArray, uint size);
-	bool addStringArray(const char* name, const char** sArray, uint size);
-	//addArray
-	//addUID
-	//getArray(FileParser)...
+	bool AddIntArray(const char* name, int* iArray, uint size);
+	bool AddFloatArray(const char* name, float* fArray, uint size);
+	bool AddBoolArray(const char* name, bool* bArray, uint size);
+	bool AddStringArray(const char* name, const char** sArray, uint size);
 
-	uint writeJson(char** buffer, bool fastMode = true);
+	uint WriteJson(char** buffer, bool fastMode = true);
 
 private:
-	JSON_Value* getVal(const char* valName, int index);
-	uint writeStyled(char** buffer);
-	uint writeFast(char** buffer);
+	JSON_Value* GetVal(const char* valName, int index);
+	uint WriteStyled(char** buffer);
+	uint WriteFast(char** buffer);
 
 private:
 	JSON_Object* objRoot = NULL;

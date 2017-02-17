@@ -394,26 +394,26 @@ bool ModuleResourceManager::LoadResources()
 	{
 		FileParser file(buffer);
 
-		int count = file.getArraySize("Resources");
+		int count = file.GetArraySize("Resources");
 		for (uint i = 0; i < count; ++i)
 		{
-			FileParser res(file.getArray("Resources", i));
-			ResourceType type = (ResourceType)res.getInt("type", RESOURCE_UNKNOWN);
-			UID uid = res.getInt("UID", 0);
+			FileParser res(file.GetArray("Resources", i));
+			ResourceType type = (ResourceType)res.GetInt("type", RESOURCE_UNKNOWN);
+			UID uid = res.GetInt("UID", 0);
 
 			if (GetResourceFromUID(uid)) //If a resource with given UID is found jus continue.
 				continue;
 
 			Resource* r = CreateNewResource(type, uid);
-			r->originalFile = res.getString("original_file", "???");
-			r->exportedFile = res.getString("exported_file", "???");
+			r->originalFile = res.GetString("original_file", "???");
+			r->exportedFile = res.GetString("exported_file", "???");
 
 			if (type == ResourceType::RESOURCE_SHADER)
 			{
 				ResourceShader* s = (ResourceShader*)r;
-				s->vertexFile = res.getString("vertex_shader", "???");
-				s->fragtalFile = res.getString("fragtal_shader", "???");
-				s->shaderName = res.getString("sh_name", "???");
+				s->vertexFile = res.GetString("vertex_shader", "???");
+				s->fragtalFile = res.GetString("fragtal_shader", "???");
+				s->shaderName = res.GetString("sh_name", "???");
 				//Must compile the shader every time engine start
 				shaderImporter->CompileShader(s);
 			}
@@ -431,30 +431,30 @@ bool ModuleResourceManager::SaveResources()
 
 	FileParser save;
 
-	save.addArray("Resources");
+	save.AddArray("Resources");
 
 	for (std::map<UID, Resource*>::const_iterator it = resources.begin(); it != resources.end(); ++it)
 	{
 		FileParser res;
 		//---
-		res.addInt("UID", it->second->GetUID());
-		res.addInt("type", it->second->GetType());
-		res.addString("original_file", it->second->originalFile.c_str());
-		res.addString("exported_file", it->second->exportedFile.c_str());
+		res.AddInt("UID", it->second->GetUID());
+		res.AddInt("type", it->second->GetType());
+		res.AddString("original_file", it->second->originalFile.c_str());
+		res.AddString("exported_file", it->second->exportedFile.c_str());
 		//---
 		if (it->second->GetType() == ResourceType::RESOURCE_SHADER)
 		{
 			ResourceShader* s = (ResourceShader*)it->second;
-			res.addString("vertex_shader", s->vertexFile.c_str());
-			res.addString("fragtal_shader", s->fragtalFile.c_str());
-			res.addString("sh_name", s->shaderName.c_str());
+			res.AddString("vertex_shader", s->vertexFile.c_str());
+			res.AddString("fragtal_shader", s->fragtalFile.c_str());
+			res.AddString("sh_name", s->shaderName.c_str());
 		}
 		//---
-		save.addArrayEntry(res);
+		save.AddArrayEntry(res);
 	}
 
 	char* buffer = nullptr;
-	uint size = save.writeJson(&buffer, false); //TODO: Fast write
+	uint size = save.WriteJson(&buffer, false); //TODO: Fast write
 
 	std::string path(SETTINGS_PATH);
 	path.append("resources.json");
@@ -526,14 +526,14 @@ bool ModuleResourceManager::CheckAllPrefabs() //Is this really important??? //TO
 			if (size > 0 && buffer)
 			{
 				FileParser file(buffer);
-				int goCount = file.getArraySize("GameObjects");
+				int goCount = file.GetArraySize("GameObjects");
 				for (uint j = 0; j < goCount; ++j)
 				{
-					FileParser go = file.getArray("GameObjects", j);
-					int cmpCount = file.getArraySize("Components");
+					FileParser go = file.GetArray("GameObjects", j);
+					int cmpCount = file.GetArraySize("Components");
 					for (uint t = 0; t < cmpCount; ++t)
 					{
-						FileParser cmp(file.getArray("Components", t));
+						FileParser cmp(file.GetArray("Components", t));
 						//TODO: Check here all resources.
 					}
 				}

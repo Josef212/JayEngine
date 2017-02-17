@@ -90,7 +90,7 @@ bool ImporterScene::Import(const char* originalFile, std::string& exportedFile, 
 
 		//Serialize Game Objects recursively.
 		FileParser save;
-		save.addArray("GameObjects");
+		save.AddArray("GameObjects");
 
 		for (uint i = 0; i < go->childrens.size(); ++i)
 			if (go->childrens[i])
@@ -105,7 +105,7 @@ bool ImporterScene::Import(const char* originalFile, std::string& exportedFile, 
 		sprintf_s(fullPath, 256, "%s%s", DEFAULT_PREF_SAVE_PATHS, name);
 
 		char* buf = NULL;
-		uint _size = save.writeJson(&buf, false); //TODO: When finish testing change to fast mode.
+		uint _size = save.WriteJson(&buf, false); //TODO: When finish testing change to fast mode.
 
 		if (app->fs->Save(fullPath, buf, _size) == _size)
 			ret = true;

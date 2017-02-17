@@ -141,14 +141,14 @@ bool Transform::SaveCMP(FileParser& sect)
 {
 	bool ret = true;
 
-	sect.addInt("comp_type", (int)type);
-	sect.addBool("active", selfActive);
-	sect.addInt("UUID", id);
-	sect.addInt("go_UUID", object->GetGOId());
+	sect.AddInt("comp_type", (int)type);
+	sect.AddBool("active", selfActive);
+	sect.AddInt("UUID", id);
+	sect.AddInt("go_UUID", object->GetGOId());
 
-	sect.addFloat3("position", translation);
-	sect.addFloat3("scale", scale);
-	sect.addFloatArray("rotation", rotation.ptr(), 4);
+	sect.AddFloat3("position", translation);
+	sect.AddFloat3("scale", scale);
+	sect.AddFloatArray("rotation", rotation.ptr(), 4);
 
 	return ret;
 }
@@ -157,16 +157,16 @@ bool Transform::LoadCMP(FileParser& sect)
 {
 	bool ret = true;
 
-	selfActive = sect.getBool("active", true);
-	id = sect.getInt("UUID", 0);
+	selfActive = sect.GetBool("active", true);
+	id = sect.GetInt("UUID", 0);
 
-	SetLocalPosition(sect.getFloat3("position", float3::zero));
-	SetLocalScale(sect.getFloat3("scale", float3(1, 1, 1)));
+	SetLocalPosition(sect.GetFloat3("position", float3::zero));
+	SetLocalScale(sect.GetFloat3("scale", float3(1, 1, 1)));
 	Quat r;
-	r.x = sect.getFloat("rotation", 0.f, 0);
-	r.y = sect.getFloat("rotation", 0.f, 1);
-	r.z = sect.getFloat("rotation", 0.f, 2);
-	r.w = sect.getFloat("rotation", 1.f, 3);
+	r.x = sect.GetFloat("rotation", 0.f, 0);
+	r.y = sect.GetFloat("rotation", 0.f, 1);
+	r.z = sect.GetFloat("rotation", 0.f, 2);
+	r.w = sect.GetFloat("rotation", 1.f, 3);
 
 	SetLocalRotation(r);
 

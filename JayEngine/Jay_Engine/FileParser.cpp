@@ -42,7 +42,7 @@ FileParser::~FileParser()
 //---------------Getters--------------------------
 //------------------------------------------------
 
-JSON_Value* FileParser::getVal(const char* valName, int index)
+JSON_Value* FileParser::GetVal(const char* valName, int index)
 {
 	if (index < 0)
 		return json_object_get_value(objRoot, valName);
@@ -53,49 +53,49 @@ JSON_Value* FileParser::getVal(const char* valName, int index)
 	}
 }
 
-FileParser FileParser::getSection(const char* sectionName)
+FileParser FileParser::GetSection(const char* sectionName)
 {
 	//assert(sectionName);
 	return FileParser(json_object_get_object(objRoot, sectionName));
 }
 
-const char* FileParser::getString(const char* name, const char* defaultStr, int index)
+const char* FileParser::GetString(const char* name, const char* defaultStr, int index)
 {
-	JSON_Value* val = getVal(name, index);
+	JSON_Value* val = GetVal(name, index);
 	return (val) ? (json_value_get_string(val)) : (defaultStr);
 }
 
-bool FileParser::getBool(const char* name, bool defaultBool, int index)
+bool FileParser::GetBool(const char* name, bool defaultBool, int index)
 {
-	JSON_Value* val = getVal(name, index);
+	JSON_Value* val = GetVal(name, index);
 	return (val) ? (json_value_get_boolean(val)) : (defaultBool);
 }
 
-int FileParser::getInt(const char* name, int defaultInt, int index)
+int FileParser::GetInt(const char* name, int defaultInt, int index)
 {
-	JSON_Value* val = getVal(name, index);
+	JSON_Value* val = GetVal(name, index);
 	return (val) ? ((int)json_value_get_number(val)) : (defaultInt);
 }
 
-float FileParser::getFloat(const char* name, float defaultFloat, int index)
+float FileParser::GetFloat(const char* name, float defaultFloat, int index)
 {
-	JSON_Value* val = getVal(name, index);
+	JSON_Value* val = GetVal(name, index);
 	return (val) ? ((float)json_value_get_number(val)) : (defaultFloat);
 }
 
-double FileParser::getDouble(const char* name, double defaultDouble, int index)
+double FileParser::GetDouble(const char* name, double defaultDouble, int index)
 {
-	JSON_Value* val = getVal(name, index);
+	JSON_Value* val = GetVal(name, index);
 	return (val) ? ((double)json_value_get_number(val)) : (defaultDouble);
 }
 
-float* FileParser::getFloatArray(const char* name)
+float* FileParser::GetFloatArray(const char* name)
 {
 	//For now we can get a float or any value type from array using the float getter + index
 	return NULL;
 }
 
-FileParser FileParser::getArray(const char* name, int index)const
+FileParser FileParser::GetArray(const char* name, int index)const
 {
 	JSON_Array* array = json_object_get_array(objRoot, name);
 	if (array)
@@ -103,7 +103,7 @@ FileParser FileParser::getArray(const char* name, int index)const
 	return FileParser((JSON_Object*)NULL);
 }
 
-int FileParser::getArraySize(const char* name)const
+int FileParser::GetArraySize(const char* name)const
 {
 	int ret = -1;
 	JSON_Array* array = json_object_get_array(objRoot, name);
@@ -112,17 +112,17 @@ int FileParser::getArraySize(const char* name)const
 	return ret;
 }
 
-float3 FileParser::getFloat3(const char* name, float3 default)
+float3 FileParser::GetFloat3(const char* name, float3 default)
 {
-	return float3(getFloat(name, default.x, 0), getFloat(name, default.y, 1), getFloat(name, default.z, 2));
+	return float3(GetFloat(name, default.x, 0), GetFloat(name, default.y, 1), GetFloat(name, default.z, 2));
 }
 
-Color FileParser::getColor(const char* name, Color default)
+Color FileParser::GetColor(const char* name, Color default)
 {
-	return Color(getFloat(name, default.r, 0),
-		getFloat(name, default.g, 1),
-		getFloat(name, default.b, 2),
-		getFloat(name, default.a, 3));
+	return Color(GetFloat(name, default.r, 0),
+		GetFloat(name, default.g, 1),
+		GetFloat(name, default.b, 2),
+		GetFloat(name, default.a, 3));
 }
 
 //--------------------------------------
@@ -131,38 +131,38 @@ Color FileParser::getColor(const char* name, Color default)
 //---------------Setters--------------------------
 //------------------------------------------------
 
-FileParser FileParser::addSection(const char* sectionName)
+FileParser FileParser::AddSection(const char* sectionName)
 {
 	json_object_set_value(objRoot, sectionName, json_value_init_object());
-	return getSection(sectionName);
+	return GetSection(sectionName);
 }
 
-bool FileParser::addString(const char* name, const char* value)
+bool FileParser::AddString(const char* name, const char* value)
 {
 	return json_object_set_string(objRoot, name, value) == JSONSuccess;
 }
 
-bool FileParser::addBool(const char* name, bool value)
+bool FileParser::AddBool(const char* name, bool value)
 {
 	return json_object_set_boolean(objRoot, name, value) == JSONSuccess;
 }
 
-bool FileParser::addInt(const char* name, int value)
+bool FileParser::AddInt(const char* name, int value)
 {
 	return json_object_set_number(objRoot, name, (double)value) == JSONSuccess;
 }
 
-bool FileParser::addFloat(const char* name, float value)
+bool FileParser::AddFloat(const char* name, float value)
 {
 	return json_object_set_number(objRoot, name, (double)value) == JSONSuccess;
 }
 
-bool FileParser::addDouble(const char* name, double value)
+bool FileParser::AddDouble(const char* name, double value)
 {
 	return json_object_set_number(objRoot, name, value) == JSONSuccess;
 }
 
-bool FileParser::addArray(const char* name)
+bool FileParser::AddArray(const char* name)
 {
 	JSON_Value* val = json_value_init_array();
 	array = json_value_get_array(val);
@@ -170,14 +170,14 @@ bool FileParser::addArray(const char* name)
 	return json_object_set_value(objRoot, name, val) == JSONSuccess;
 }
 
-bool FileParser::addArrayEntry(const FileParser& file)
+bool FileParser::AddArrayEntry(const FileParser& file)
 {
 	if (array)
 		return json_array_append_value(array, json_value_deep_copy(file.valRoot)) == JSONSuccess;
 	return false;
 }
 
-bool FileParser::addIntArray(const char* name, int* fArray, uint size)
+bool FileParser::AddIntArray(const char* name, int* fArray, uint size)
 {
 	if (!name || !fArray || size <= 0)
 		return false;
@@ -192,7 +192,7 @@ bool FileParser::addIntArray(const char* name, int* fArray, uint size)
 	return true;
 }
 
-bool FileParser::addFloatArray(const char* name, float* iArray, uint size)
+bool FileParser::AddFloatArray(const char* name, float* iArray, uint size)
 {
 	if (!name || !iArray || size <= 0)
 		return false;
@@ -207,7 +207,7 @@ bool FileParser::addFloatArray(const char* name, float* iArray, uint size)
 	return true;
 }
 
-bool FileParser::addBoolArray(const char* name, bool* bArray, uint size)
+bool FileParser::AddBoolArray(const char* name, bool* bArray, uint size)
 {
 	if (!name || !bArray || size <= 0)
 		return false;
@@ -222,7 +222,7 @@ bool FileParser::addBoolArray(const char* name, bool* bArray, uint size)
 	return true;
 }
 
-bool FileParser::addStringArray(const char* name, const char** sArray, uint size)
+bool FileParser::AddStringArray(const char* name, const char** sArray, uint size)
 {
 	if (!name || !sArray || size <= 0)
 		return false;
@@ -237,24 +237,24 @@ bool FileParser::addStringArray(const char* name, const char** sArray, uint size
 	return true;
 }
 
-bool FileParser::addFloat3(const char* name, float3 vec)
+bool FileParser::AddFloat3(const char* name, float3 vec)
 {
-	return addFloatArray(name, vec.ptr(), 3);
+	return AddFloatArray(name, vec.ptr(), 3);
 }
 
-bool FileParser::addColor(const char* name, Color col)
+bool FileParser::AddColor(const char* name, Color col)
 {
-	return addFloatArray(name, &col, 4);
+	return AddFloatArray(name, &col, 4);
 }
 
 //--------------------------------------
 
-uint FileParser::writeJson(char** buffer, bool fastMode)
+uint FileParser::WriteJson(char** buffer, bool fastMode)
 {
-	return (fastMode) ? (writeFast(buffer)) : (writeStyled(buffer));
+	return (fastMode) ? (WriteFast(buffer)) : (WriteStyled(buffer));
 }
 
-uint FileParser::writeFast(char** buffer)
+uint FileParser::WriteFast(char** buffer)
 {
 	uint ret = json_serialization_size(valRoot);
 	*buffer = new char[ret];
@@ -263,7 +263,7 @@ uint FileParser::writeFast(char** buffer)
 	return ret;
 }
 
-uint FileParser::writeStyled(char** buffer)
+uint FileParser::WriteStyled(char** buffer)
 {
 	uint ret = json_serialization_size_pretty(valRoot);
 	*buffer = new char[ret];

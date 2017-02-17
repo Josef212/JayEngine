@@ -166,26 +166,26 @@ bool ModuleAudio::PlayFx(unsigned int id, int repeat)
 
 bool ModuleAudio::Save(FileParser* sect)
 {
-	sect->addBool("test", true);
-	sect->addInt("teste", 10);
+	sect->AddBool("test", true);
+	sect->AddInt("teste", 10);
 	float a[4] = { 0.f, 1.f, 2.f, 3.f };
-	sect->addFloatArray("test_ar", a, 4);
+	sect->AddFloatArray("test_ar", a, 4);
 	
-	sect->addFloat3("test_float3", float3(2, 1, 2));
+	sect->AddFloat3("test_float3", float3(2, 1, 2));
 
 	return true;
 }
 
 bool ModuleAudio::Load(FileParser* sect)
 {
-	int b = (int)sect->getBool("test", false);
+	int b = (int)sect->GetBool("test", false);
 
 	_LOG(LOG_WARN, "Getting a bool from audio module: %d.", b);
-	_LOG(LOG_WARN, "Getting an int from audio module: %d.", sect->getInt("teste", 0));
+	_LOG(LOG_WARN, "Getting an int from audio module: %d.", sect->GetInt("teste", 0));
 
-	_LOG(LOG_INFO_REM, "Getting float array: %f.", sect->getFloat("test_ar", 0.f, 2));
+	_LOG(LOG_INFO_REM, "Getting float array: %f.", sect->GetFloat("test_ar", 0.f, 2));
 
-	float3 g = sect->getFloat3("test_float3", float3(0, 0, 0));
+	float3 g = sect->GetFloat3("test_float3", float3(0, 0, 0));
 	_LOG(LOG_INFO_REM, "Getting float3.x: %f.", g.x);
 	_LOG(LOG_INFO_REM, "Getting float3.y: %f.", g.y);
 	_LOG(LOG_INFO_REM, "Getting float3.z: %f.", g.z);

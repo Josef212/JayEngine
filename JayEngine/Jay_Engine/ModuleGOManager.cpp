@@ -345,7 +345,7 @@ bool ModuleGOManager::SaveSceneNow(const char* name, const char* path)
 
 		//TODO: scene name?
 
-		scene.addArray("GameObjects");
+		scene.AddArray("GameObjects");
 		//TODO: add some meta before go??
 
 		for (uint i = 0; i < sceneRootObject->childrens.size(); ++i)
@@ -357,7 +357,7 @@ bool ModuleGOManager::SaveSceneNow(const char* name, const char* path)
 		if (ret)
 		{
 			char* buf = nullptr;
-			uint size = scene.writeJson(&buf, false);
+			uint size = scene.WriteJson(&buf, false);
 			if (app->fs->Save(fullPath, buf, size) != size)
 			{
 				_LOG(LOG_ERROR, "Error saving the scene!");
@@ -472,13 +472,13 @@ void ModuleGOManager::LoadSceneOrPrefabs(const FileParser& file)
 	//TMP: must adapt create GO 
 	Select(nullptr);
 
-	int goCount = file.getArraySize("GameObjects");
+	int goCount = file.GetArraySize("GameObjects");
 	GameObject* tmpRoot = new GameObject(nullptr, 0);
 	std::map<GameObject*, uint> relations;
 	for (uint i = 0; i < goCount; ++i)
 	{
 		GameObject* go = tmpRoot->AddChild();
-		go->LoadGO(&file.getArray("GameObjects", i), relations);
+		go->LoadGO(&file.GetArray("GameObjects", i), relations);
 	}
 
 	for (std::map<GameObject*, uint>::iterator it = relations.begin(); it != relations.end(); ++it)
