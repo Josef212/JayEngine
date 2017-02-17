@@ -85,10 +85,6 @@ Quat Transform::GetLocalQuatRotation()const
 
 void Transform::SetLocalRotation(float3& eulerRot)
 {
-	eulerRot.x *= DEGTORAD;
-	eulerRot.y *= DEGTORAD;
-	eulerRot.z *= DEGTORAD;
-
 	float3 eRot = eulerRot - editorRotation;
 	Quat qRot = Quat::FromEulerXYZ(eRot.x, eRot.y, eRot.z);
 	rotation = rotation * qRot;

@@ -11,6 +11,9 @@
 #include "ImporterTexture.h"
 #include "ImporterScene.h"
 #include "ImporterShader.h"
+#include "Application.h"
+
+#include "ModuleWindow.h"
 
 //Resources
 #include "ResourceMesh.h"
@@ -38,8 +41,14 @@ UI_Resources::~UI_Resources()
 
 void UI_Resources::Draw()
 {
-	ImGui::SetNextWindowPos(ImVec2(0, 580));
-	ImGui::SetNextWindowSize(ImVec2(360, 440));
+	int w = app->window->GetWidth();
+	int h = app->window->GetHeight();
+
+	//ImGui::SetNextWindowPos(ImVec2(0, 580));
+	//ImGui::SetNextWindowSize(ImVec2(360, 440));
+
+	ImGui::SetNextWindowPos(ImVec2(0, h*0.5 + 10));
+	ImGui::SetNextWindowSize(ImVec2(w * 0.2, (h - 20)*0.5 - 65));
 
 	ImGui::Begin("Resources", &active);
 	{

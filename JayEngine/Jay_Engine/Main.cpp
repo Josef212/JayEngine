@@ -3,6 +3,10 @@
 #include "Application.h"
 #include "Time.h"
 
+#ifdef _DEBUG
+	#include "mmgr\mmgr.h"
+#endif // _DEBUG
+
 #include "SDL/include/SDL.h"
 #pragma comment( lib, "SDL/lib/win32/SDL2.lib" )
 #pragma comment( lib, "SDL/lib/win32/SDL2main.lib" )
@@ -21,7 +25,7 @@ Time* time = NULL;
 
 int main(int argc, char ** argv)
 {
-	_LOG(LOG_STD, "Starting game engine %s...", TITLE);
+	_LOG(LOG_STD, "Starting game engine %s from '%s'.", TITLE, argv[0]);
 
 	int mainReturn = EXIT_FAILURE;
 	MainStates state = MAIN_CREATION;
@@ -85,9 +89,14 @@ int main(int argc, char ** argv)
 		}
 	}
 
+	RELEASE(app);
+
 	_LOG(LOG_STD, "Exiting game engine %s...\n", TITLE);
 
-	delete app;
+#ifdef _DEBUG
+	int leaks = MAX(0, m_getMemoryStatistics().totalAllocUnitCount - 23);
+	_LOG(LOG_INFO, "Exiting with %d memory leaks!\n", (leaks > 0) ? leaks : 0);
+#endif // _DEBUG
 
 	return mainReturn;
 }

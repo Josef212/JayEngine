@@ -24,8 +24,11 @@ void UI_Hierarchy::Draw()
 	int w = app->window->GetWidth();
 	int h = app->window->GetHeight();
 	
+	//ImGui::SetNextWindowPos(ImVec2(0, 20));
+	//ImGui::SetNextWindowSize(ImVec2(360, 560));
+
 	ImGui::SetNextWindowPos(ImVec2(0, 20));
-	ImGui::SetNextWindowSize(ImVec2(360, 560));
+	ImGui::SetNextWindowSize(ImVec2(w*0.2, (h -20)*0.5));
 
 	ImGui::Begin("Hierarchy", &active);
 	{

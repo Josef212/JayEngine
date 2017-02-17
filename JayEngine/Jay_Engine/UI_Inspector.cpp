@@ -34,14 +34,16 @@ UI_Inspector::~UI_Inspector()
 
 void UI_Inspector::Draw()
 {
-	ImGuiIO& io = ImGui::GetIO();
-	windowW = io.DisplaySize.x;
-	windowH = io.DisplaySize.y;
+	int w = app->window->GetWidth();
+	int h = app->window->GetHeight();
+
+	//ImGui::SetNextWindowPos(ImVec2(1570, 20));
+	//ImGui::SetNextWindowSize(ImVec2(350, 810));
+
+	ImGui::SetNextWindowPos(ImVec2(w*0.8, 20));
+	ImGui::SetNextWindowSize(ImVec2(w*0.2, (h - 20)*0.8 - 55));
 
 	GameObject* selected = app->goManager->GetSelected();
-
-	ImGui::SetNextWindowPos(ImVec2(1570, 20));
-	ImGui::SetNextWindowSize(ImVec2(350, 810));
 
 	ImGui::Begin("Inspector", &active);
 	{
@@ -129,7 +131,7 @@ void UI_Inspector::DrawTransformation(GameObject* selected)
 	//Scale
 	if (ImGui::DragFloat3("Scale:", (float*)&scale)) trans->SetLocalScale(scale);
 	//Rotation
-	if (ImGui::DragFloat3("Rotation:", (float*)&rot, 0.5f)) trans->SetLocalRotation(rot);
+	if (ImGui::SliderAngle3("Rotation:", (float*)&rot, 0.5f)) trans->SetLocalRotation(rot);
 
 	ImGui::Separator();
 }
