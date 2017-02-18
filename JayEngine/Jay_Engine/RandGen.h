@@ -16,7 +16,7 @@ public:
 	float GetRandFloat(float min, float max);
 
 private:
-	LCG* lgc = NULL;
+	LCG* lgc = nullptr;
 };
 
 #endif // !__RANDGEN__

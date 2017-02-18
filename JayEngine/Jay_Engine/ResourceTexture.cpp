@@ -1,6 +1,7 @@
 #include "Application.h"
 #include "ResourceTexture.h"
 
+#include "ImporterTexture.h"
 #include "ModuleResourceManager.h"
 
 #include "OpenGL.h"
@@ -14,11 +15,19 @@ ResourceTexture::~ResourceTexture()
 {
 }
 
-bool ResourceTexture::LoadToMemory()
+void ResourceTexture::Save(FileParser& file)
 {
-	bool ret = false;
+	Resource::Save(file);
+}
 
-	return ret;
+void ResourceTexture::Load(FileParser& file)
+{
+	Resource::Load(file);
+}
+
+bool ResourceTexture::LoadInMemory()
+{
+	return app->resourceManager->textureImporter->LoadResource(this);
 }
 
 bool ResourceTexture::RemoveFromMemory()
@@ -39,5 +48,5 @@ const char* ResourceTexture::GetFormatStr()const
 	if (format >= 0 && format <= UNKNOWN)
 		return formats[format];
 	else
-		return NULL;
+		return nullptr;
 }

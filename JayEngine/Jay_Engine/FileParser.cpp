@@ -49,7 +49,7 @@ JSON_Value* FileParser::GetVal(const char* valName, int index)
 	else
 	{
 		JSON_Array* ary = json_object_get_array(objRoot, valName);
-		return (ary) ? (json_array_get_value(ary, index)) : (NULL);
+		return (ary) ? (json_array_get_value(ary, index)) : (nullptr);
 	}
 }
 
@@ -92,7 +92,7 @@ double FileParser::GetDouble(const char* name, double defaultDouble, int index)
 float* FileParser::GetFloatArray(const char* name)
 {
 	//For now we can get a float or any value type from array using the float getter + index
-	return NULL;
+	return nullptr;
 }
 
 FileParser FileParser::GetArray(const char* name, int index)const
@@ -100,7 +100,7 @@ FileParser FileParser::GetArray(const char* name, int index)const
 	JSON_Array* array = json_object_get_array(objRoot, name);
 	if (array)
 		return FileParser(json_array_get_object(array, index));
-	return FileParser((JSON_Object*)NULL);
+	return FileParser((JSON_Object*)nullptr);
 }
 
 int FileParser::GetArraySize(const char* name)const

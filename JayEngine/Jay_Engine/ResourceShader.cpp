@@ -21,6 +21,21 @@ ResourceShader::~ResourceShader()
 {
 }
 
+void ResourceShader::Save(FileParser& file)
+{
+	Resource::Save(file);
+}
+
+void ResourceShader::Load(FileParser& file)//TODO: vertex, fragtal, geometry, etc.
+{
+	Resource::Load(file);
+}
+
+bool ResourceShader::LoadInMemory()
+{
+	return false;
+}
+
 
 bool ResourceShader::IsShaderReady()
 {

@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "ResourceMesh.h"
 
+#include "ImporterMesh.h"
 #include "ModuleResourceManager.h"
 #include "ModuleFileSystem.h"
 
@@ -16,7 +17,22 @@ ResourceMesh::~ResourceMesh()
 {
 }
 
-void ResourceMesh::LoadMeshResource(const char* fileName, const char* path)
+bool ResourceMesh::LoadInMemory()
+{
+	app->resourceManager->meshImporter->LoadResource(this);
+}
+
+void ResourceMesh::Save(FileParser& file)
+{
+	Resource::Save(file);
+}
+
+void ResourceMesh::Load(FileParser& file)
+{
+	Resource::Load(file);
+}
+
+void ResourceMesh::LoadMeshResource(const char* fileName, const char* path)//TODO: Remove this
 {
 	if (!fileName)
 	{
@@ -101,7 +117,7 @@ void ResourceMesh::LoadMeshResource(const char* fileName, const char* path)
 
 }
 
-bool ResourceMesh::LoadToMemory()
+bool ResourceMesh::LoadInMemory()
 {
 	bool ret = false;
 

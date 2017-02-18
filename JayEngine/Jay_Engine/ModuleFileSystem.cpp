@@ -134,7 +134,7 @@ uint ModuleFileSystem::GetFilesOnDir(const char* dir, std::vector<std::string>& 
 	uint ret = 0;
 
 	char** rc = PHYSFS_enumerateFiles(dir);
-	for (char** it = rc; *it != NULL; ++it)
+	for (char** it = rc; *it != nullptr; ++it)
 	{
 		files.push_back(*it);
 		++ret;
@@ -209,13 +209,13 @@ SDL_RWops* ModuleFileSystem::Load(const char* file)const
 	if (size > 0)
 	{
 		SDL_RWops* r = SDL_RWFromConstMem(buffer, size);
-		if (r != NULL)
+		if (r != nullptr)
 			r->close = closeSdlRwops;
 
 		return r;
 	}
 	else
-		return NULL;
+		return nullptr;
 }
 
 unsigned int ModuleFileSystem::Save(const char* file, const char* buffer, unsigned int size)const

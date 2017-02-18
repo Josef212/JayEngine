@@ -22,6 +22,11 @@ public:
 
 	void ApplydefaultShader();
 
+	bool LoadInMemory()override;
+
+	void Save(FileParser& file)override;
+	void Load(FileParser& file)override;
+
 private:
 
 

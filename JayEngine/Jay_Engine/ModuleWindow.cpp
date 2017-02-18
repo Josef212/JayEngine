@@ -66,7 +66,7 @@ bool ModuleWindow::Init(FileParser* conf)
 
 		window = SDL_CreateWindow(app->GetTitle(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, flags);
 
-		if(window == NULL)
+		if(window == nullptr)
 		{
 			_LOG(LOG_ERROR, "Window could not be created! SDL_Error: %s\n", SDL_GetError());
 			ret = false;
@@ -87,7 +87,7 @@ bool ModuleWindow::CleanUp()
 	_LOG(LOG_STD, "Window: CleanUp.");
 
 	//Destroy window
-	if(window != NULL)
+	if(window != nullptr)
 	{
 		SDL_DestroyWindow(window);
 	}
@@ -186,7 +186,7 @@ void ModuleWindow::SetFullScreen(bool set)
 		}
 	}
 	else
-		_LOG(LOG_ERROR, "Error setting fullscreen, window pointer is NULL");
+		_LOG(LOG_ERROR, "Error setting fullscreen, window pointer is nullptr");
 }
 
 bool ModuleWindow::IsFullScreen()const
@@ -266,7 +266,7 @@ void ModuleWindow::SetGrab(bool set)
 			SDL_SetWindowGrab(window, SDL_FALSE);
 	}
 	else
-		_LOG(LOG_ERROR, "Error setting grab, window pointer is NULL");
+		_LOG(LOG_ERROR, "Error setting grab, window pointer is nullptr");
 
 }
 
@@ -277,7 +277,7 @@ void ModuleWindow::SetPosition(int x, int y)
 		SDL_SetWindowPosition(window, x, y);
 	}
 	else
-		_LOG(LOG_ERROR, "Error setting window position, window pointer is NULL");
+		_LOG(LOG_ERROR, "Error setting window position, window pointer is nullptr");
 }
 
 void ModuleWindow::GetPosition(int& w, int& h)const
@@ -287,7 +287,7 @@ void ModuleWindow::GetPosition(int& w, int& h)const
 		SDL_GetWindowPosition(window, &w, &h);
 	}
 	else
-		_LOG(LOG_ERROR, "Error getting window position, window pointer is NULL.");
+		_LOG(LOG_ERROR, "Error getting window position, window pointer is nullptr.");
 }
 
 void ModuleWindow::SetSize(int w, int h)
@@ -299,7 +299,7 @@ void ModuleWindow::SetSize(int w, int h)
 		SDL_SetWindowSize(window, w, h);
 	}
 	else
-		_LOG(LOG_ERROR, "Error setting window size, window pointer is NULL");
+		_LOG(LOG_ERROR, "Error setting window size, window pointer is nullptr");
 }
 
 void ModuleWindow::GetWindowSize(int& width, int& height)const
@@ -358,7 +358,7 @@ bool ModuleWindow::SetBrightness(float bright)
 		}
 	}
 	else
-		_LOG(LOG_ERROR, "Error setting brightness, window pointer is NULL");
+		_LOG(LOG_ERROR, "Error setting brightness, window pointer is nullptr");
 
 	return ret;
 }
@@ -409,7 +409,7 @@ void ModuleWindow::SetIcon(SDL_Surface* icon)
 		SDL_SetWindowIcon(window, icon);
 	}
 	else
-		_LOG(LOG_ERROR, "Error setting window icon, window pointer is NULL.");
+		_LOG(LOG_ERROR, "Error setting window icon, window pointer is nullptr.");
 }
 
 void ModuleWindow::OnGlobalEvent(const Event& e)
@@ -425,5 +425,5 @@ void ModuleWindow::OnGlobalEvent(const Event& e)
 		SDL_SetWindowIcon(window, surface);
 	}
 	else
-		_LOG(LOG_ERROR, "Error setting window icon, window pointer is NULL.");
+		_LOG(LOG_ERROR, "Error setting window icon, window pointer is nullptr.");
 }*/

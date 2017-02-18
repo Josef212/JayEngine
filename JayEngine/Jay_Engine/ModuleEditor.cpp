@@ -441,7 +441,7 @@ void ModuleEditor::OpenSaveBrowser(const char* path)
 			}
 			else
 			{//TODO: input will be clean??
-			 //app->goManager->loadFBX(file, NULL); //TODO: add goManager save scene
+			 //app->goManager->loadFBX(file, nullptr); //TODO: add goManager save scene
 				_LOG(LOG_INFO, "Saving file, name: %s.", fileName);
 				showSaveWin = !showSaveWin;
 			}
@@ -496,7 +496,7 @@ void ModuleEditor::OpenLoadBrowser(const char* path)
 			}
 			else
 			{//TODO: input will be clean??
-			 //app->goManager->loadFBX(file, NULL); //TODO: add goManager save scene
+			 //app->goManager->loadFBX(file, nullptr); //TODO: add goManager save scene
 				_LOG(LOG_INFO, "Loading file, name: %s.", fileName);
 				showLoadWin = !showLoadWin;
 			}

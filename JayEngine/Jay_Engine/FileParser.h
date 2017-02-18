@@ -59,9 +59,9 @@ private:
 	uint WriteFast(char** buffer);
 
 private:
-	JSON_Object* objRoot = NULL;
-	JSON_Value* valRoot = NULL;
-	JSON_Array* array = NULL;
+	JSON_Object* objRoot = nullptr;
+	JSON_Value* valRoot = nullptr;
+	JSON_Array* array = nullptr;
 	bool clean = false;
 };
 

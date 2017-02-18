@@ -177,7 +177,7 @@ bool ModuleRenderer3D::Start()
 // PreUpdate: clear buffer
 update_status ModuleRenderer3D::PreUpdate(float dt)
 {
-	Camera* cam = (app->GetGameState() != gameState::EDITOR) ? (activeCamera) : (app->camera->GetCamera());  //TODO: When active camera is NULL and play state, strange things happen
+	Camera* cam = (app->GetGameState() != gameState::EDITOR) ? (activeCamera) : (app->camera->GetCamera());  //TODO: When active camera is nullptr and play state, strange things happen
 
 	if (cam && cam->projectMatrixChanged)
 	{
@@ -397,7 +397,7 @@ void ModuleRenderer3D::DrawGameObject(GameObject* obj)
 
 					//----------------------------------
 					//Texture.
-					ResourceTexture* resTex = (mat) ? mat->textureResource : NULL;
+					ResourceTexture* resTex = (mat) ? mat->textureResource : nullptr;
 					if (resTex)
 					{
 						GLint texture = glGetUniformLocation(shID, "ourTexture");
@@ -444,7 +444,7 @@ void ModuleRenderer3D::DrawGameObject(GameObject* obj)
 
 					//----------------------------------
 
-					glDrawElements(GL_TRIANGLES, resMesh->numIndices, GL_UNSIGNED_INT, NULL);
+					glDrawElements(GL_TRIANGLES, resMesh->numIndices, GL_UNSIGNED_INT, nullptr);
 
 					//----------------------------------
 
@@ -488,7 +488,7 @@ void ModuleRenderer3D::DrawWireframe(ResourceMesh* resMesh, bool selected)
 	glEnableClientState(GL_VERTEX_ARRAY);
 
 	glBindBuffer(GL_ARRAY_BUFFER, resMesh->idVertices);
-	glVertexPointer(3, GL_FLOAT, 0, NULL);
+	glVertexPointer(3, GL_FLOAT, 0, nullptr);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, resMesh->idIndices);
 
 	glDisable(GL_LIGHTING);
@@ -506,7 +506,7 @@ void ModuleRenderer3D::DrawWireframe(ResourceMesh* resMesh, bool selected)
 		glDisable(GL_CULL_FACE);
 	}
 
-	glDrawElements(GL_TRIANGLES, resMesh->numIndices, GL_UNSIGNED_INT, NULL);
+	glDrawElements(GL_TRIANGLES, resMesh->numIndices, GL_UNSIGNED_INT, nullptr);
 
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glEnable(GL_LIGHTING);

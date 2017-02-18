@@ -20,8 +20,8 @@ enum MainStates
 	MAIN_EXIT
 };
 
-Application* app = NULL;
-Time* time = NULL;
+Application* app = nullptr;
+Time* time = nullptr;
 
 int main(int argc, char ** argv)
 {

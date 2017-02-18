@@ -27,7 +27,7 @@ private:
 
 private:
 	bool shaderEditorOpen = false;
-	ResourceShader* currentShaderEditing = NULL;
+	ResourceShader* currentShaderEditing = nullptr;
 
 	int infoW, infoH;
 };

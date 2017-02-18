@@ -16,7 +16,7 @@
 
 #pragma comment (lib, "Assimp/libx86/assimp.lib")
 
-ImporterMesh::ImporterMesh()
+ImporterMesh::ImporterMesh() : Importer()
 {
 	_LOG(LOG_STD, "Creating a mesh importer.");
 
@@ -177,19 +177,21 @@ void ImporterMesh::ImportMesh(const aiMesh* mesh, ResourceMesh* resMesh)
 
 //----------------
 
-bool ImporterMesh::LoadResource(ResourceMesh* resource)
+bool ImporterMesh::LoadResource(Resource* resource)
 {
 	bool ret = false;
 
 	if (!resource)
 		return ret;
 
+	ResourceMesh* res = (ResourceMesh*)resource;
+
 	std::string path(DEFAULT_MESH_SAVE_PATH);
 	path.append(resource->exportedFile.c_str());
 
 	_LOG(LOG_INFO, "Loading mesh resource from: '%s'.", path.c_str());
 
-	char* data = NULL;
+	char* data = nullptr;
 	uint size = app->fs->Load(path.c_str(), &data); 
 
 	if (data && size > 0)
@@ -201,76 +203,76 @@ bool ImporterMesh::LoadResource(ResourceMesh* resource)
 		//Ranges
 		memcpy(ranges, cursor, bytes);
 
-		resource->numIndices = ranges[0];
-		resource->numVertices = ranges[1];
-		resource->numNormals = ranges[2];
-		resource->numTexCoords = ranges[3];
+		res->numIndices = ranges[0];
+		res->numVertices = ranges[1];
+		res->numNormals = ranges[2];
+		res->numTexCoords = ranges[3];
 
 		//Indices
 		cursor += bytes;
-		bytes = sizeof(uint) * resource->numIndices;
+		bytes = sizeof(uint) * res->numIndices;
 
-		resource->indices = new uint[resource->numIndices];
-		memcpy(resource->indices, cursor, bytes);
+		res->indices = new uint[res->numIndices];
+		memcpy(res->indices, cursor, bytes);
 
 		//Vertices
 		cursor += bytes;
-		bytes = sizeof(float) * resource->numVertices * 3;
+		bytes = sizeof(float) * res->numVertices * 3;
 
-		resource->vertices = new float[resource->numVertices * 3];
-		memcpy(resource->vertices, cursor, bytes);
+		res->vertices = new float[res->numVertices * 3];
+		memcpy(res->vertices, cursor, bytes);
 
 		//Normals
 		if (ranges[2] > 0)
 		{
 			cursor += bytes;
-			bytes = sizeof(float) * resource->numNormals * 3;
+			bytes = sizeof(float) * res->numNormals * 3;
 
-			resource->normals = new float[resource->numNormals * 3];
-			memcpy(resource->normals, cursor, bytes);
+			res->normals = new float[res->numNormals * 3];
+			memcpy(res->normals, cursor, bytes);
 		}
 
 		//UV's
 		if (ranges[3] > 0)
 		{
 			cursor += bytes;
-			bytes = sizeof(float) * resource->numTexCoords * 2;
+			bytes = sizeof(float) * res->numTexCoords * 2;
 
-			resource->texCoords = new float[resource->numTexCoords * 2];
-			memcpy(resource->texCoords, cursor, bytes);
+			res->texCoords = new float[res->numTexCoords * 2];
+			memcpy(res->texCoords, cursor, bytes);
 		}
 
 		//AABB
 		cursor += bytes;
 		bytes = sizeof(AABB);
 
-		memcpy(&resource->aabb.minPoint.x, cursor, bytes);
+		memcpy(&res->aabb.minPoint.x, cursor, bytes);
 
 		RELEASE_ARRAY(data);
 
-		if (resource->numVertices > 0 && resource->numIndices > 0)
+		if (res->numVertices > 0 && res->numIndices > 0)
 		{
-			glGenBuffers(1, (GLuint*)&resource->idVertices);
-			glGenBuffers(1, (GLuint*)&resource->idIndices);
+			glGenBuffers(1, (GLuint*)&res->idVertices);
+			glGenBuffers(1, (GLuint*)&res->idIndices);
 
-			glBindBuffer(GL_ARRAY_BUFFER, resource->idVertices);
-			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * resource->numVertices * 3, resource->vertices, GL_STATIC_DRAW);
+			glBindBuffer(GL_ARRAY_BUFFER, res->idVertices);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * res->numVertices * 3, res->vertices, GL_STATIC_DRAW);
 
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, resource->idIndices);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * resource->numIndices, resource->indices, GL_STATIC_DRAW);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, res->idIndices);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * res->numIndices, res->indices, GL_STATIC_DRAW);
 
-			if (resource->numNormals > 0)
+			if (res->numNormals > 0)
 			{
-				glGenBuffers(1, (GLuint*)&resource->idNormals);
-				glBindBuffer(GL_ARRAY_BUFFER, resource->idNormals);
-				glBufferData(GL_ARRAY_BUFFER, sizeof(float) * resource->numNormals * 3, resource->normals, GL_STATIC_DRAW);
+				glGenBuffers(1, (GLuint*)&res->idNormals);
+				glBindBuffer(GL_ARRAY_BUFFER, res->idNormals);
+				glBufferData(GL_ARRAY_BUFFER, sizeof(float) * res->numNormals * 3, res->normals, GL_STATIC_DRAW);
 			}
 
-			if (resource->numTexCoords> 0)
+			if (res->numTexCoords> 0)
 			{
-				glGenBuffers(1, (GLuint*)&resource->idTexCoords);
-				glBindBuffer(GL_ARRAY_BUFFER, resource->idTexCoords);
-				glBufferData(GL_ARRAY_BUFFER, sizeof(float) * resource->numTexCoords * 2, resource->texCoords, GL_STATIC_DRAW);
+				glGenBuffers(1, (GLuint*)&res->idTexCoords);
+				glBindBuffer(GL_ARRAY_BUFFER, res->idTexCoords);
+				glBufferData(GL_ARRAY_BUFFER, sizeof(float) * res->numTexCoords * 2, res->texCoords, GL_STATIC_DRAW);
 			}
 
 			ret = true;

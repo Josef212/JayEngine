@@ -40,8 +40,8 @@ public:
 	float distToReference = 10.f;
 
 private:
-	GameObject* defaultCamera = NULL;
-	Camera* defaultCameraComp = NULL;
+	GameObject* defaultCamera = nullptr;
+	Camera* defaultCameraComp = nullptr;
 
 };
 

@@ -28,7 +28,7 @@
 #pragma comment (lib, "Assimp/libx86/assimp.lib")
 
 
-ImporterScene::ImporterScene()
+ImporterScene::ImporterScene() : Importer()
 {
 	_LOG(LOG_STD, "Creating a fbx importer.");
 
@@ -45,6 +45,10 @@ ImporterScene::~ImporterScene()
 	aiDetachAllLogStreams();
 }
 
+bool ImporterScene::LoadResource(Resource* resource)
+{
+	return false;
+}
 
 bool ImporterScene::Import(const char* originalFile, std::string& exportedFile, const char* originalFileExtension, UID& resUID)
 {
@@ -53,10 +57,10 @@ bool ImporterScene::Import(const char* originalFile, std::string& exportedFile, 
 	if (!originalFile || !originalFileExtension)
 		return ret;
 
-	char* buffer = NULL;
+	char* buffer = nullptr;
 	uint size = app->fs->Load(originalFile, &buffer);
 
-	const aiScene* scene = NULL;
+	const aiScene* scene = nullptr;
 
 	if (buffer && size > 0)
 	{
@@ -104,7 +108,7 @@ bool ImporterScene::Import(const char* originalFile, std::string& exportedFile, 
 		char fullPath[256];
 		sprintf_s(fullPath, 256, "%s%s", DEFAULT_PREF_SAVE_PATHS, name);
 
-		char* buf = NULL;
+		char* buf = nullptr;
 		uint _size = save.WriteJson(&buf, false); //TODO: When finish testing change to fast mode.
 
 		if (app->fs->Save(fullPath, buf, _size) == _size)
@@ -148,7 +152,7 @@ void ImporterScene::RecImport(const aiScene* scene, const aiNode* node, GameObje
 		int meshIndex = node->mMeshes[i];
 		const aiMesh* mesh = scene->mMeshes[meshIndex];
 
-		GameObject* childGO = NULL;
+		GameObject* childGO = nullptr;
 
 		if (node->mNumMeshes > 1)
 		{
@@ -188,7 +192,7 @@ void ImporterScene::RecImport(const aiScene* scene, const aiNode* node, GameObje
 
 				//If exist import it. Might check if i should change the path before.
 				std::string texFile;
-				app->fs->SplitPath(texPath.c_str(), NULL, &texFile);
+				app->fs->SplitPath(texPath.c_str(), nullptr, &texFile);
 				
 				cMat->textureResource = (ResourceTexture*)app->resourceManager->GetResourceFromUID(app->resourceManager->ImportFile(texFile.c_str(), true));
 				cMat->textureResource->AddInstance();
@@ -241,7 +245,7 @@ bool ImporterScene::LoadResource(ResourceScene* resource)
 
 	_LOG(LOG_INFO, "Loading prefab/scene resource from: '%s'.", path.c_str());
 
-	char* buffer = NULL;
+	char* buffer = nullptr;
 	uint size = app->fs->Load(path.c_str(), &buffer);
 
 	if (buffer && size > 0)

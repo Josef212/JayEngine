@@ -18,7 +18,7 @@ ModuleCamera3D::ModuleCamera3D(bool startEnabled) : Module(startEnabled)
 	name.assign("module_camera3d");
 
 	if (!defaultCamera)
-		defaultCamera = new GameObject(NULL, 0); 
+		defaultCamera = new GameObject(nullptr, 0); 
 	//NOTE: editor camera is not in the scene tree so must be deleted manually.
 	//This camera should never be the camera of the game!!!
 

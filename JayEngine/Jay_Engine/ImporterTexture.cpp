@@ -15,7 +15,7 @@
 #pragma comment(lib, "Devil/libx86/ILUT.lib")
 
 
-ImporterTexture::ImporterTexture()
+ImporterTexture::ImporterTexture() : Importer()
 {
 	_LOG(LOG_STD, "Creating a texture importer.");
 
@@ -42,10 +42,10 @@ bool ImporterTexture::Import(const char* originalFile, std::string& exportedFile
 	bool ret = false;
 
 	std::string file, ext, origin;
-	app->fs->SplitPath(originalFile, NULL, &file, &ext);
+	app->fs->SplitPath(originalFile, nullptr, &file, &ext);
 	origin.assign(DEFAULT_TEXTURES_PATH + file);
 
-	char* buffer = NULL;
+	char* buffer = nullptr;
 	uint size = app->fs->Load(origin.c_str(), &buffer);
 
 	if (buffer && size > 0)
@@ -75,12 +75,12 @@ bool ImporterTexture::ImportBuf(const void* buffer, uint size, std::string& expo
 		ilEnable(IL_FILE_OVERWRITE);
 
 		ILuint _size;
-		ILubyte* data = NULL;
+		ILubyte* data = nullptr;
 
 		//3-Set format (DDS, DDS compression)
 		ilSetInteger(IL_DXTC_FORMAT, IL_DXT5);
 		//4-Get size
-		_size = ilSaveL(IL_DDS, NULL, 0);
+		_size = ilSaveL(IL_DDS, nullptr, 0);
 		if (_size > 0)
 		{
 			//5-If size is more than 0 create the image buffer
@@ -112,7 +112,7 @@ bool ImporterTexture::ImportBuf(const void* buffer, uint size, std::string& expo
 	return ret;
 }
 
-bool ImporterTexture::LoadResource(ResourceTexture* resource)
+bool ImporterTexture::LoadResource(Resource* resource)
 {
 	bool ret = false;
 
@@ -122,12 +122,14 @@ bool ImporterTexture::LoadResource(ResourceTexture* resource)
 	if (resource->exportedFile.empty())
 		return ret;
 
+	ResourceTexture* res = (ResourceTexture*)resource;
+
 	std::string path(DEFAULT_TEXTURE_SAVE_PATH);
 	path.append(resource->exportedFile.c_str());
 
 	_LOG(LOG_INFO, "Loading textures resource from: '%s'.", path.c_str());
 
-	char* data = NULL;
+	char* data = nullptr;
 	uint size = app->fs->Load(path.c_str(), &data);
 
 	if (data && size > 0)
@@ -141,45 +143,45 @@ bool ImporterTexture::LoadResource(ResourceTexture* resource)
 			ILinfo info;
 			iluGetImageInfo(&info);
 
-			resource->width = info.Width;
-			resource->height = info.Height;
-			resource->bpp = (uint)info.Bpp;
-			resource->depth = info.Depth;
-			resource->mips = info.NumMips;
-			resource->bytes = info.SizeOfData;
+			res->width = info.Width;
+			res->height = info.Height;
+			res->bpp = (uint)info.Bpp;
+			res->depth = info.Depth;
+			res->mips = info.NumMips;
+			res->bytes = info.SizeOfData;
 
 			switch (info.Format)
 			{
 			case IL_COLOUR_INDEX:
-				resource->format = ResourceTexture::COLOR_INDEX;
+				res->format = ResourceTexture::COLOR_INDEX;
 				break;
 
 			case IL_RGB:
-				resource->format = ResourceTexture::RGB;
+				res->format = ResourceTexture::RGB;
 				break;
 
 			case IL_RGBA:
-				resource->format = ResourceTexture::RGBA;
+				res->format = ResourceTexture::RGBA;
 				break;
 
 			case IL_BGR:
-				resource->format = ResourceTexture::BGR;
+				res->format = ResourceTexture::BGR;
 				break;
 
 			case IL_BGRA:
-				resource->format = ResourceTexture::BGRA;
+				res->format = ResourceTexture::BGRA;
 				break;
 
 			case IL_LUMINANCE:
-				resource->format = ResourceTexture::LUMINANCE;
+				res->format = ResourceTexture::LUMINANCE;
 					break;
 
 			default:
-				resource->format = ResourceTexture::UNKNOWN;
+				res->format = ResourceTexture::UNKNOWN;
 				break;
 			}
 
-			resource->textureGlID = ilutGLBindTexImage();
+			res->textureGlID = ilutGLBindTexImage();
 			ilDeleteImages(1, &image);
 
 			ret = true;

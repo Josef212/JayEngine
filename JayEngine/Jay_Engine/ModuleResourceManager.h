@@ -78,18 +78,18 @@ private:
 	void LoadBasicResources();
 
 public:
-	ImporterScene* sceneImporter = NULL;
-	ImporterMesh* meshImporter = NULL;
-	ImporterTexture* textureImporter = NULL;
-	ImporterShader* shaderImporter = NULL;
+	ImporterScene* sceneImporter = nullptr;
+	ImporterMesh* meshImporter = nullptr;
+	ImporterTexture* textureImporter = nullptr;
+	ImporterShader* shaderImporter = nullptr;
 
 private:
 	std::map<UID, Resource*> resources;
 
 	std::vector<ResourceMesh*> primitives;
-	ResourceTexture* checkers = NULL;
+	ResourceTexture* checkers = nullptr;
 
-	ResourceShader* defaultShader = NULL;
+	ResourceShader* defaultShader = nullptr;
 
 
 

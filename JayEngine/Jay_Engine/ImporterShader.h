@@ -6,15 +6,18 @@
 #ifndef __IMPORTER_SHADER__
 #define __IMPORTER_SHADER__
 
+#include "Importer.h"
 #include <string>
 
 class ResourceShader;
 
-class ImporterShader
+class ImporterShader : public Importer
 {
 public:
 	ImporterShader();
 	virtual ~ImporterShader();
+
+	bool LoadResource(Resource* resource)override;
 
 	//This must only be called once, TODO: maybe do this on constructor and save the default shader id here
 	uint LoadDefaultShader(ResourceShader* resShader);

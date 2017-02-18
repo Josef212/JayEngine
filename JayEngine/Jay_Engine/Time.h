@@ -32,8 +32,8 @@ public:
 
 private:
 	//Real---------------------------------------
-	Timer* msTimer = NULL;
-	Timer* fpsTimer = NULL; //Dont really usefull
+	Timer* msTimer = nullptr;
+	Timer* fpsTimer = nullptr; //Dont really usefull
 	uint64 frameCount = 0;
 	float realDT = 0;
 	uint fpsCounter = 0;
@@ -42,7 +42,7 @@ private:
 	float elapsed = 0.0f;
 
 	//Game----------------------------------------
-	Timer* msGameTimer = NULL;
+	Timer* msGameTimer = nullptr;
 	uint64 gameFrameCount = 0;
 	float gameDT = 0;
 	uint gameFPSCounter = 0;

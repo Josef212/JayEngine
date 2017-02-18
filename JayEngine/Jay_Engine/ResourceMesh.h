@@ -12,8 +12,11 @@ public:
 
 	void LoadMeshResource(const char* fileName, const char* path = nullptr);
 
-	bool LoadToMemory()override;
+	bool LoadInMemory()override;
 	bool RemoveFromMemory()override;
+
+	void Save(FileParser& file)override;
+	void Load(FileParser& file)override;
 
 private:
 

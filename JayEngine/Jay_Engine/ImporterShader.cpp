@@ -7,7 +7,7 @@
 
 #include "OpenGL.h"
 
-ImporterShader::ImporterShader()
+ImporterShader::ImporterShader() : Importer()
 {
 	defaultVertexShader = std::string(
 		"#version 330 core\n"
@@ -46,6 +46,11 @@ ImporterShader::~ImporterShader()
 {
 }
 
+bool ImporterShader::LoadResource(Resource* resource)
+{
+	return false;
+}
+
 void ImporterShader::CompileShader(ResourceShader* resShader)
 {
 	if (!resShader)
@@ -56,7 +61,7 @@ void ImporterShader::CompileShader(ResourceShader* resShader)
 
 	const char* str = resShader->vertexShaderStr.c_str();
 	GLuint vS = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vS, 1, &str, NULL);
+	glShaderSource(vS, 1, &str, nullptr);
 	glCompileShader(vS);
 
 	GLint success;
@@ -64,20 +69,20 @@ void ImporterShader::CompileShader(ResourceShader* resShader)
 	if (success == 0)
 	{
 		GLchar infoLog[512];
-		glGetShaderInfoLog(vS, 512, NULL, infoLog);
+		glGetShaderInfoLog(vS, 512, nullptr, infoLog);
 		_LOG(LOG_ERROR, "Vertex shader compilation error: %s.", infoLog);
 	}
 
 	str = resShader->fragtalShaderStr.c_str();
 	GLuint fS = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fS, 1, &str, NULL);
+	glShaderSource(fS, 1, &str, nullptr);
 	glCompileShader(fS);
 
 	glGetShaderiv(fS, GL_COMPILE_STATUS, &success);
 	if (success == 0)
 	{
 		GLchar infoLog[512];
-		glGetShaderInfoLog(fS, 512, NULL, infoLog);
+		glGetShaderInfoLog(fS, 512, nullptr, infoLog);
 		_LOG(LOG_ERROR, "Fragment shader compilation error: %s.", infoLog);
 	}
 
@@ -91,7 +96,7 @@ void ImporterShader::CompileShader(ResourceShader* resShader)
 	if (success == 0)
 	{
 		GLchar infoLog[512];
-		glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
+		glGetProgramInfoLog(shaderProgram, 512, nullptr, infoLog);
 		_LOG(LOG_ERROR, "Shader link error: %s.", infoLog);
 	}
 
@@ -116,7 +121,7 @@ uint ImporterShader::LoadDefaultShader(ResourceShader* resShader)
 	const char* str = defaultVertexShader.c_str();
 	GLuint vertexShader;
 	vertexShader = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vertexShader, 1, &str, NULL);
+	glShaderSource(vertexShader, 1, &str, nullptr);
 	glCompileShader(vertexShader);
 
 	GLint success;
@@ -124,21 +129,21 @@ uint ImporterShader::LoadDefaultShader(ResourceShader* resShader)
 	if (success == 0)
 	{
 		GLchar infoLog[512];
-		glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
+		glGetShaderInfoLog(vertexShader, 512, nullptr, infoLog);
 		_LOG(LOG_ERROR, "Vertex shader compilation error: %s.", infoLog);
 	}
 
 	str = defaultFragmentShader.c_str();
 	GLuint fragmentShader;
 	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragmentShader, 1, &str, NULL);
+	glShaderSource(fragmentShader, 1, &str, nullptr);
 	glCompileShader(fragmentShader);
 
 	glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
 	if (success == 0)
 	{
 		GLchar infoLog[512];
-		glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
+		glGetShaderInfoLog(fragmentShader, 512, nullptr, infoLog);
 		_LOG(LOG_ERROR, "Fragment shader compilation error: %s.", infoLog);
 	}
 
@@ -152,7 +157,7 @@ uint ImporterShader::LoadDefaultShader(ResourceShader* resShader)
 	if (success == 0)
 	{
 		GLchar infoLog[512];
-		glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
+		glGetProgramInfoLog(shaderProgram, 512, nullptr, infoLog);
 		_LOG(LOG_ERROR, "Shader link error: %s.", infoLog);
 	}
 
@@ -212,7 +217,7 @@ void ImporterShader::LoadShaderToMemory(ResourceShader* resShader)
 	std::string path(DEFAULT_SHADER_SAVE_PATH);
 	path.append(resShader->vertexFile);
 
-	char* buffer = NULL;
+	char* buffer = nullptr;
 	uint size = app->fs->Load(path.c_str(), &buffer);
 
 	if (buffer && size > 0)

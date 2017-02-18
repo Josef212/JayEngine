@@ -142,7 +142,7 @@ bool ModulePhysics3D::CleanUp()
 	LOG("Destroying 3D Physics simulation");
 	world->removeRigidBody(ground);
 	delete ground;
-	ground = NULL;
+	ground = nullptr;
 
 	// Remove from the world all collision bodies
 	for(int i = world->getNumCollisionObjects() - 1; i >= 0; i--)
@@ -302,7 +302,7 @@ void ModulePhysics3D::DeleteBody(PhysBody3D* body)
 	bodies.del(bodies.findNode(body));
 	world->removeRigidBody(body->body);
 	delete body;
-	body = NULL;
+	body = nullptr;
 }
 
 // =============================================

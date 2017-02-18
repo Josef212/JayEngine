@@ -27,7 +27,10 @@ public:
 	ResourceTexture(UID uuid);
 	virtual ~ResourceTexture();
 
-	bool LoadToMemory()override;
+	void Save(FileParser& file)override;
+	void Load(FileParser& file)override;
+
+	bool LoadInMemory()override;
 	bool RemoveFromMemory()override;
 
 	const char* GetFormatStr()const;

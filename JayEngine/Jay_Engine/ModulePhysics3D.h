@@ -57,7 +57,7 @@ private:
 	p2List<btTypedConstraint*> constraints;
 	p2List<PhysVehicle3D*> vehicles;
 
-	btRigidBody* ground = NULL;
+	btRigidBody* ground = nullptr;
 };
 
 class DebugDrawer : public btIDebugDraw

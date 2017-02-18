@@ -3,6 +3,7 @@
 
 #include "Globals.h"
 #include <string>
+#include "FileParser.h"
 
 enum ResourceType
 {
@@ -27,9 +28,21 @@ public:
 	ResourceType GetType()const { return resType; }
 	UID GetUID()const { return uuid; }
 
+	const char* GetOriginalFileStr()const { return originalFile.c_str(); }
+	const char* GetExportedFileStr()const { return exportedFile.c_str(); }
+
 	bool IsInMemory()const { return instancesInMemory > 0; }
 
-	virtual bool LoadToMemory() { return false; }
+	bool LoadToMemory()
+	{
+		if (instancesInMemory > 0)
+			++instancesInMemory;
+		else
+			instancesInMemory = LoadInMemory() ? 1 : 0;
+
+		return instancesInMemory > 0; 
+	}
+	
 	virtual bool RemoveFromMemory() { return false; }
 
 	uint CountReferences()const { return instancesInMemory; }
@@ -37,7 +50,24 @@ public:
 	void AddInstance() { ++instancesInMemory; }
 	void RemoveInstance() { --instancesInMemory; }
 
-private:
+	virtual void Save(FileParser& file)
+	{
+		file.AddInt("UID", uuid);
+		file.AddInt("type", (int)resType);
+		file.AddString("original_file", originalFile.c_str());
+		file.AddString("exported_file", exportedFile.c_str());
+	}
+
+	virtual void Load(FileParser& file)
+	{
+		uuid = file.GetInt("UID", 0);
+		resType = (ResourceType)file.GetInt("type", -1);
+		originalFile = file.GetString("original_file", "???");
+		exportedFile = file.GetString("exported_file", "???");
+	}
+
+protected:
+	virtual bool LoadInMemory() = 0;
 
 public:
 	std::string originalFile;

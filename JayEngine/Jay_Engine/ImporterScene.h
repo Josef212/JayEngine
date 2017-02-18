@@ -1,6 +1,7 @@
 #ifndef __IMPORTER_SCENE__
 #define __IMPORTER_SCENE__
 
+#include "Importer.h"
 #include <string>
 #include <map>
 
@@ -10,7 +11,7 @@ class ResourceMesh;
 class ResourceScene;
 class GameObject;
 
-class ImporterScene
+class ImporterScene : public Importer
 {
 public:
 	ImporterScene();
@@ -18,7 +19,7 @@ public:
 
 	bool Import(const char* originalFile, std::string& exportedFile, const char* originalFileExtension, UID& resUID);
 
-	bool LoadResource(ResourceScene* resource);
+	bool LoadResource(Resource* resource)override;
 
 private:
 	void RecImport(const aiScene* scene, const aiNode* node, GameObject* parent, const std::string& basePath, const std::string& file);

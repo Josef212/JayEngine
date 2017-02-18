@@ -37,21 +37,21 @@ enum gameState
 class Application
 {
 public:
-	ModuleFileSystem* fs = NULL;
-	ModuleWindow* window = NULL;
-	ModuleInput* input = NULL;
-	ModuleAudio* audio = NULL;
-	ModuleRenderer3D* renderer3D = NULL;
-	ModuleCamera3D* camera = NULL;
-	ModulePhysics3D* physics = NULL;
-	ModuleEditor* editor = NULL;
-	ModuleResourceManager* resourceManager = NULL;
-	ModuleGOManager* goManager = NULL;
+	ModuleFileSystem* fs = nullptr;
+	ModuleWindow* window = nullptr;
+	ModuleInput* input = nullptr;
+	ModuleAudio* audio = nullptr;
+	ModuleRenderer3D* renderer3D = nullptr;
+	ModuleCamera3D* camera = nullptr;
+	ModulePhysics3D* physics = nullptr;
+	ModuleEditor* editor = nullptr;
+	ModuleResourceManager* resourceManager = nullptr;
+	ModuleGOManager* goManager = nullptr;
 
-	SceneTry* sceneTry = NULL;
+	SceneTry* sceneTry = nullptr;
 
-	HrdInfo* info = NULL;
-	RandGen* random = NULL;
+	HrdInfo* info = nullptr;
+	RandGen* random = nullptr;
 
 	bool debug = false;
 	bool quit = false;

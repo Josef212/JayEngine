@@ -79,7 +79,7 @@ bool Application::Init()
 	bool ret = true;
 
 	char* buffer = nullptr;
-	uint size = fs->Load("config.json", SETTINGS_PATH, &buffer);
+	uint size = fs->Load("config.json", PATH_SETTINGS, &buffer);
 
 	FileParser conf(buffer);
 
@@ -171,6 +171,9 @@ update_status Application::Update()
 			ret = (*it)->PreUpdate(dt);
 	}
 
+	if (ret == UPDATE_ERROR)
+		_LOG(LOG_ERROR, "ERROR: Exit PreUpdate with error.");
+
 	it = modules.begin();
 
 	for (; it != modules.end() && ret == UPDATE_CONTINUE; ++it)
@@ -179,6 +182,9 @@ update_status Application::Update()
 			ret = (*it)->Update(dt);
 	}
 
+	if (ret == UPDATE_ERROR)
+		_LOG(LOG_ERROR, "ERROR: Exit Update with error.");
+
 	it = modules.begin();
 
 	for (; it != modules.end() && ret == UPDATE_CONTINUE; ++it)
@@ -186,6 +192,9 @@ update_status Application::Update()
 		if ((*it)->IsEnabled())
 			ret = (*it)->PostUpdate(dt);
 	}
+
+	if (ret == UPDATE_ERROR)
+		_LOG(LOG_ERROR, "ERROR: Exit PostUpdate with error.");
 
 	FinishUpdate();
 
@@ -321,7 +330,7 @@ bool Application::LoadGameNow()
 	bool ret = false;
 
 	char* buffer = nullptr;
-	uint size = fs->Load("c.json", SETTINGS_PATH, &buffer);
+	uint size = fs->Load("c.json", PATH_SETTINGS, &buffer);
 
 	FileParser conf(buffer);
 

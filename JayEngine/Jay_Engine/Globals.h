@@ -74,8 +74,6 @@ enum update_status
 char* clearTexPath(char* path);
 
 // Configuration -----------
-#define SETTINGS_PATH "Data/Settings/"
-
 #define TITLE "JayEngine"
 
 #define REPOSITORY_URL "https://github.com/Josef212/JayEngine"
@@ -94,23 +92,25 @@ char* clearTexPath(char* path);
 #define SDL_DOC_URL "https://wiki.libsdl.org/"
 #define SDL_MIXER_DOC_URL "https://www.libsdl.org/projects/SDL_mixer/docs/SDL_mixer_frame.html"
 
-#define DEFAULT_FB_PATH "Data/Assets/fbx/"
-#define DEFAULT_TEXTURES_PATH "Data/Assets/textures/"
+#define PATH_SETTINGS "Data/Settings/"
 
-#define DEFAULT_SCENE_SAVE_PATH "Data/Scenes/"
-#define DEFAULT_PREF_SAVE_PATHS "Data/Library/Prefabs/"
-#define DEFAULT_MESH_SAVE_PATH "Data/Library/Meshes/"
-#define DEFAULT_TEXTURE_SAVE_PATH "Data/Library/Textures/"
+#define PATH_ASSETS_MODEL "Data/Assets/fbx/"
+#define PATH_ASSETS_TEXTURE "Data/Assets/textures/"
 
-#define DEFAULT_SHADER_SAVE_PATH "Data/Shaders/"
+#define PATH_SCENES "Data/Scenes/"
+#define PATH_LIBRARY_PREFABS "Data/Library/Prefabs/"
+#define PATH_LIBRARY_MESH "Data/Library/Meshes/"
+#define PATH_LIBRARY_TEXTURE "Data/Library/Textures/"
 
-#define DEFAULT_TMP_DIR "Data/Library/tmp/"
+#define PATH_SHADERS "Data/Shaders/"
 
-#define MESH_EXTENSION ".jaymesh"
-#define TEXTURE_EXTENSION ".dds"
-#define MATERIAL_EXTENSION ".jaymat"
-#define SCENE_EXTENSION ".jayscene"
-#define VERTEX_SHADER_EXTENSION ".jayvertex"
-#define FRAGTAL_SHADER_EXTENSION ".jayfragtal"
+#define PATH_TMP "Data/Library/tmp/"
+
+#define EXTENSION_MESH ".jaymesh"
+#define EXTENSION_TEXTURE ".dds"
+#define EXTENSION_MATERIAL ".jaymat"
+#define EXTENSION_SCENE ".jayscene"
+#define EXTENSION_VERTEX_SHADER ".jayvertex"
+#define EXTENSION_FRAGTAL_SHADER ".jayfragtal"
 
 #endif //!__GLOBALS__

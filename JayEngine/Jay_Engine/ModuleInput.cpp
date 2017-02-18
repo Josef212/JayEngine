@@ -50,7 +50,7 @@ update_status ModuleInput::PreUpdate(float dt)
 {
 	SDL_PumpEvents();
 
-	const Uint8* keys = SDL_GetKeyboardState(NULL);
+	const Uint8* keys = SDL_GetKeyboardState(nullptr);
 	
 	for(int i = 0; i < MAX_KEYS; ++i)
 	{
