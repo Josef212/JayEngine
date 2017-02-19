@@ -23,49 +23,61 @@ enum ComponentType
 class Component
 {
 public:
-	ComponentType type = CMP_UNKNOWN;
 	bool removeFlag = false;
 
 protected:
-	std::string name;
+	ComponentType type = CMP_UNKNOWN;
 	bool selfActive = true;
 	GameObject* object = nullptr;
-	int id = -1;
 
 public:
-	Component(GameObject* gObj, int id) : object(gObj), id(id)
-	{}
+	Component(GameObject* gObj);
+	virtual ~Component();
+
+	//-----------------------------------
+
+	bool IsActive()const;
+	void Enable();
+	void Disable();
+	void SwitchActive();
+	void SetSelfActive(bool set);
+
+	void Destroy();
+
+	//-----------------------------------
 	
-	virtual ~Component()
-	{}
+	ComponentType GetType()const;
+	const char* GetTypeStr()const;
+	GameObject* GetGameObject()const;
 
-	virtual void Enable() { selfActive = true; }
-	virtual void Disable() { selfActive = false; }
-	void SwitchActive() { selfActive = !selfActive; }
+	//-----------------------------------
 
-	virtual void Init() {}
-	virtual void Update(float dt) {}
-	virtual void CleanUp() {}
+	virtual void GetBox(AABB& box)const {}
 
-	const bool IsEnable()const { return selfActive; }
-	const char* GetName() { return name.c_str(); }
-	void SetName(const char* str) { if (str) name.assign(str); }
-	int GetId() { return id; }
+	//-----------------------------------
 
-	void Remove() { removeFlag = true; }
+	virtual void OnEnable() {}
+	virtual void OnDisable() {}
+	
+	virtual void OnStart() {}
+	virtual void OnUpdate(float dt) {}
+	virtual void OnFinish() {}
+
+	virtual void OnDebugDraw() {}
+
+	virtual void OnPlay() {}
+	virtual void OnStop() {}
+	virtual void OnPause() {}
+	virtual void OnUnPause() {}
 
 	virtual void OnGameObjectDestroyed() {}
 
-	virtual void GetBox(AABB& box)const {}
 	virtual void OnTransformUpdate(Transform* trans) {}
 
-	virtual void DebugDraw() {}
+	//-----------------------------------
 
-	virtual bool SaveCMP(FileParser& sect) { return false; }
-	virtual bool LoadCMP(FileParser& sect) { return false; }
-
-	virtual void SetResource(UID resUID) {}
-
+	virtual bool SaveCMP(FileParser& sect)const = 0;
+	virtual bool LoadCMP(FileParser* sect) = 0;
 
 };
 

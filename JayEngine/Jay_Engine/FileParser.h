@@ -48,6 +48,7 @@ public:
 
 	bool AddIntArray(const char* name, int* iArray, uint size);
 	bool AddFloatArray(const char* name, float* fArray, uint size);
+	bool AddFloatArray(const char* name, const float* fArray, uint size);
 	bool AddBoolArray(const char* name, bool* bArray, uint size);
 	bool AddStringArray(const char* name, const char** sArray, uint size);
 

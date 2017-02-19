@@ -12,10 +12,9 @@
 #include "ImporterTexture.h"
 
 
-Material::Material(GameObject* gObj, int id) : Component(gObj, id)
+Material::Material(GameObject* gObj) : Component(gObj)
 {
 	type = CMP_MATERIAL;
-	name.assign("Material");
 }
 
 
@@ -24,28 +23,27 @@ Material::~Material()
 	ClearMaterial();
 }
 
-void Material::Init()
+void Material::OnStart()
 {
 
 }
 
-void Material::Update(float dt)
+void Material::OnUpdate(float dt)
 {
 
 }
 
-void Material::CleanUp()
+void Material::OnFinish()
 {
 
 }
 
-bool Material::SaveCMP(FileParser& sect)
+bool Material::SaveCMP(FileParser& sect)const
 {
 	bool ret = true;
 
 	sect.AddInt("comp_type", (int)type);
 	sect.AddBool("active", selfActive);
-	sect.AddInt("UUID", id);
 	sect.AddInt("go_UUID", object->GetGOId());
 	sect.AddColor("mat_col", color);
 
@@ -62,18 +60,17 @@ bool Material::SaveCMP(FileParser& sect)
 	return ret;
 }
 
-bool Material::LoadCMP(FileParser& sect)
+bool Material::LoadCMP(FileParser* sect)
 {
 	bool ret = true;
 
-	selfActive = sect.GetBool("active", true);
-	id = sect.GetInt("UUID", 0);
+	selfActive = sect->GetBool("active", true);
 
-	color = sect.GetColor("mat_col", Yellow);
+	color = sect->GetColor("mat_col", Yellow);
 
-	if (sect.GetBool("have_res", false))
+	if (sect->GetBool("have_res", false))
 	{
-		SetResource(sect.GetInt("resource_id", 0));
+		//SetResource(sect.GetInt("resource_id", 0));
 	}
 
 	return ret;
@@ -82,7 +79,7 @@ bool Material::LoadCMP(FileParser& sect)
 
 //-------------------------------------
 
-void Material::SetResource(UID resUID)
+/*void Material::SetResource(UID resUID)
 {
 	ResourceTexture* res = (ResourceTexture*)app->resourceManager->GetResourceFromUID(resUID);
 
@@ -105,7 +102,7 @@ void Material::SetResource(UID resUID)
 
 		textureResource = res;
 	}
-}
+}*/
 
 void Material::ClearMaterial()
 {

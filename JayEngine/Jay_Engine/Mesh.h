@@ -10,21 +10,21 @@ class FileParser;
 class Mesh : public Component
 {
 public:
-	Mesh(GameObject* gObj, int id);
+	Mesh(GameObject* gObj);
 	virtual ~Mesh();
 
-	void Init()override;
-	void Update(float dt)override;
-	void CleanUp()override;
+	void OnStart()override;
+	void OnUpdate(float dt)override;
+	void OnFinish()override;
 
 	void GetBox(AABB& box)const override;
 
 	void ClearMesh();
 
-	bool SaveCMP(FileParser& sect)override;
-	bool LoadCMP(FileParser& sect)override;
+	bool SaveCMP(FileParser& sect)const override;
+	bool LoadCMP(FileParser* sect)override;
 
-	void SetResource(UID resUID)override;
+	//void SetResource(UID resUID)override;
 
 private:
 

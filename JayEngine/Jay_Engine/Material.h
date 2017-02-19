@@ -14,17 +14,17 @@ class ResourceShader;
 class Material : public Component
 {
 public:
-	Material(GameObject* gObj, int id);
+	Material(GameObject* gObj);
 	virtual ~Material();
 
-	void Init()override;
-	void Update(float dt)override;
-	void CleanUp()override;
+	void OnStart()override;
+	void OnUpdate(float dt)override;
+	void OnFinish()override;
 
-	bool SaveCMP(FileParser& sect)override;
-	bool LoadCMP(FileParser& sect)override;
+	bool SaveCMP(FileParser& sect)const override;
+	bool LoadCMP(FileParser* sect)override;
 
-	void SetResource(UID resUID)override;
+	//void SetResource(UID resUID)override;
 	void ClearMaterial();
 
 private:

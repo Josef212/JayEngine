@@ -23,7 +23,6 @@
 GameObject::GameObject(GameObject* parent, UID id) : parent(parent), id(id)
 {
 	name.assign("Game Object");
-	Init();
 	transform = (Transform*)AddComponent(CMP_TRANSFORMATION);
 }
 
@@ -33,37 +32,120 @@ GameObject::~GameObject()
 	for (uint i = 0; i < components.size(); ++i)
 		RELEASE(components[i]);
 
-	for (uint j = 0; j < childrens.size(); ++j)
-		RELEASE(childrens[j]);
-}
-
-void GameObject::Init()
-{
+	for (uint j = 0; j < childs.size(); ++j)
+		RELEASE(childs[j]);
 }
 
 void GameObject::Update(float dt)
 {
 	for (uint j = 0; j < components.size(); ++j)
 	{
-		components[j]->Update(dt);
+		components[j]->OnUpdate(dt);
 	}
-	for (uint i = 0; i < childrens.size(); ++i)
+	for (uint i = 0; i < childs.size(); ++i)
 	{
-		childrens[i]->Update(dt);
+		childs[i]->Update(dt);
 	}
 }
 
-void GameObject::CleanUp()
+//--------------------------------------------------------
+
+void GameObject::OnStart()
 {
 	for (uint i = 0; i < components.size(); ++i)
-	{
-		components[i]->CleanUp();
-	}
+		if (components[i])
+			components[i]->OnStart();
 
-	for (uint i = 0; i < childrens.size(); ++i)
-	{
-		childrens[i]->CleanUp();
-	}
+	for (uint i = 0; i < childs.size(); ++i)
+		if (childs[i])
+			childs[i]->OnStart();
+}
+
+void GameObject::OnFinish()
+{
+	for (uint i = 0; i < components.size(); ++i)
+		if (components[i])
+			components[i]->OnFinish();
+
+	for (uint i = 0; i < childs.size(); ++i)
+		if (childs[i])
+			childs[i]->OnFinish();
+}
+
+void GameObject::OnEnable()
+{
+	for (uint i = 0; i < components.size(); ++i)
+		if (components[i])
+			components[i]->OnEnable();
+}
+
+void GameObject::OnDisable()
+{
+	for (uint i = 0; i < components.size(); ++i)
+		if (components[i])
+			components[i]->OnDisable();
+}
+
+void GameObject::OnPlay()
+{
+	for (uint i = 0; i < components.size(); ++i)
+		if (components[i])
+			components[i]->OnPlay();
+
+	for (uint i = 0; i < childs.size(); ++i)
+		if (childs[i])
+			childs[i]->OnPlay();
+}
+
+void GameObject::OnStop()
+{
+	for (uint i = 0; i < components.size(); ++i)
+		if (components[i])
+			components[i]->OnStop();
+
+	for (uint i = 0; i < childs.size(); ++i)
+		if (childs[i])
+			childs[i]->OnStop();
+}
+
+void GameObject::OnPause()
+{
+	for (uint i = 0; i < components.size(); ++i)
+		if (components[i])
+			components[i]->OnPause();
+
+	for (uint i = 0; i < childs.size(); ++i)
+		if (childs[i])
+			childs[i]->OnPause();
+}
+
+void GameObject::OnUnPause()
+{
+	for (uint i = 0; i < components.size(); ++i)
+		if (components[i])
+			components[i]->OnUnPause();
+
+	for (uint i = 0; i < childs.size(); ++i)
+		if (childs[i])
+			childs[i]->OnUnPause();
+}
+
+void GameObject::OnGameObjectDestroyed()
+{
+	for (uint i = 0; i < components.size(); ++i)
+		if (components[i])
+			components[i]->OnGameObjectDestroyed();
+
+	for (uint i = 0; i < childs.size(); ++i)
+		if (childs[i])
+			childs[i]->OnGameObjectDestroyed();
+}
+
+//--------------------------------------------------------
+
+UID GameObject::GetGOId()const
+{
+	return id;
 }
 
 const char* GameObject::GetName()const
@@ -77,19 +159,16 @@ void GameObject::SetName(const char* str)
 		name.assign(str);
 }
 
-UID GameObject::GetGOId()const
-{
-	return id;
-}
+//--------------------------------------------------------
 
-bool GameObject::IsGOActive()
+GameObject* GameObject::AddChild()
 {
-	return selfActive;
-}
+	GameObject* ret = nullptr;
 
-void GameObject::SetSelfActive(bool set)
-{
-	selfActive = set;
+	ret = new GameObject(this, app->random->GetRandInt());
+	childs.push_back(ret);
+
+	return ret;
 }
 
 Component* GameObject::AddComponent(ComponentType type)
@@ -98,114 +177,54 @@ Component* GameObject::AddComponent(ComponentType type)
 
 	switch (type)
 	{
-		case CMP_UNKNOWN:
-			_LOG(LOG_ERROR, "Error while creating component, no component type.");
+	case CMP_UNKNOWN:
+		_LOG(LOG_ERROR, "Error while creating component, no component type.");
 		break;
 
-		case CMP_TRANSFORMATION:
+	case CMP_TRANSFORMATION:
+	{
+		if (!transform && !HasComponent(CMP_TRANSFORMATION))
 		{
-			if (!HasComponent(CMP_TRANSFORMATION))
-			{
-				ret = new Transform(this, nextCompId);
-				transform = (Transform*)ret;
-			}
-			else
-				_LOG(LOG_WARN, "Can't add transform component, already has one.");
+			ret = new Transform(this);
+			transform = (Transform*)ret;
 		}
-		break;
+		else
+			_LOG(LOG_WARN, "Can't add transform component, already has one.");
+	}
+	break;
 
-		case CMP_MESH:
-		{
-			ret = new Mesh(this, nextCompId);
-		}
-		break;
+	case CMP_MESH:
+	{
+		ret = new Mesh(this);
+	}
+	break;
 
-		case CMP_MATERIAL:
-		{
-			ret = new Material(this, nextCompId);
-		}
-		break;
+	case CMP_MATERIAL:
+	{
+		ret = new Material(this);
+	}
+	break;
 
-		case CMP_CAMERA:
-		{
-			ret = new Camera(this, nextCompId);
-		}
-		break;
+	case CMP_CAMERA:
+	{
+		ret = new Camera(this);
+	}
+	break;
 
-		//TODO: more cases
+	//TODO: more cases
 	}
 
 	if (ret)
-	{
-		++nextCompId;
 		components.push_back(ret);
-	}
 
 	return ret;
-}
-
-GameObject* GameObject::AddChild()
-{
-	GameObject* ret = nullptr;
-
-	ret = new GameObject(this, app->random->GetRandInt());
-	childrens.push_back(ret);
-
-	return ret;
-}
-
-void GameObject::Remove()
-{
-	removeFlag = true;
-}
-
-bool GameObject::RecRemoveFlagged()
-{
-	bool ret = false;
-
-	for (uint i = 0; i < components.size(); ++i)
-	{
-		if (components[i] && components[i]->removeFlag)
-		{
-			components[i]->CleanUp();
-			RELEASE(components[i]);
-			components.erase(components.begin() + i);
-		}
-	}
-	
-	for (std::vector<GameObject*>::iterator it = childrens.begin(); it != childrens.end();)
-	{
-		GameObject* tmp = *it;
-		if (tmp && tmp->removeFlag)
-		{
-			tmp->CleanUp();
-			app->goManager->EraseGameObjectFromTree(tmp);
-			RELEASE(tmp);
-			it = childrens.erase(it);
-			ret = true;
-		}
-		else
-		{
-			ret |= tmp->RecRemoveFlagged();
-			++it;
-		}
-	}
-
-	return ret;
-}
-
-void GameObject::OnGameObjectDestroyed()
-{
-	for (uint i = 0; i < components.size(); ++i)
-		if (components[i])
-			components[i]->OnGameObjectDestroyed();
 }
 
 Component* GameObject::GetComponent(ComponentType type)const
 {
 	for (uint i = 0; i < components.size(); ++i)
 	{
-		if (components[i] && components[i]->type == type)
+		if (components[i] && components[i]->GetType == type)
 			return components[i];
 	}
 
@@ -218,7 +237,7 @@ std::vector<Component*> GameObject::GetComponents(ComponentType type)
 
 	for (uint i = 0; i < components.size(); ++i)
 	{
-		if (components[i] && components[i]->type == type)
+		if (components[i] && components[i]->GetType == type)
 			ret.push_back(components[i]);
 	}
 
@@ -232,7 +251,7 @@ bool GameObject::HasComponent(ComponentType type)const
 {
 	for (uint i = 0; i < components.size(); ++i)
 	{
-		if (components[i]->type == type)
+		if (components[i]->GetType == type)
 			return true;
 	}
 
@@ -245,7 +264,7 @@ uint GameObject::CountComponents(ComponentType type)const
 
 	for (uint i = 0; i < components.size(); ++i)
 	{
-		if (components[i]->type == type)
+		if (components[i]->GetType == type)
 			++ret;
 	}
 
@@ -257,18 +276,44 @@ GameObject* GameObject::GetParent() const
 	return parent;
 }
 
+void GameObject::SetNewParent(GameObject* newParent, bool force)
+{
+	if (newParent == parent)
+		return;
+
+	if (parent)
+	{
+		std::vector<GameObject*>::iterator it = std::find(parent->childs.begin(), parent->childs.end(), this);
+		if (it != parent->childs.end())
+			parent->childs.erase(it);
+	}
+
+	parent = newParent;
+
+	if (newParent)
+		newParent->childs.push_back(this);
+
+	wasDirty = true;
+
+	if (force && transform && newParent && newParent->transform)
+	{
+		float4x4 tmp = transform->GetGlobalTransform();
+		transform->SetLocalTransform(tmp * newParent->transform->GetLocalTransform().Inverted());
+	}
+}
+
 void GameObject::Draw(bool drawChilds) //Only use this if culling is not active
 {
 	if (!selfActive)
 		return;
 
 	app->renderer3D->DrawGameObject(this);
-		
+
 	if (drawChilds)
 	{
-		for (uint i = 0; i < childrens.size(); ++i)
-			if (childrens[i])
-				childrens[i]->Draw(true);
+		for (uint i = 0; i < childs.size(); ++i)
+			if (childs[i])
+				childs[i]->Draw(true);
 	}
 }
 
@@ -277,13 +322,13 @@ void GameObject::DrawDebug()
 	for (uint j = 0; j < components.size(); ++j)
 	{
 		if (components[j])
-			components[j]->DebugDraw();
+			components[j]->OnDebugDraw();
 	}
 
-	for (uint i = 0; i < childrens.size(); ++i)
+	for (uint i = 0; i < childs.size(); ++i)
 	{
-		if(childrens[i])
-			childrens[i]->DrawDebug();
+		if (childs[i])
+			childs[i]->DrawDebug();
 	}
 
 	if (drawEnclosingAABB)
@@ -291,6 +336,44 @@ void GameObject::DrawDebug()
 	if (drawOrientedBox)
 		DrawBoxDebug(orientedBox, ClearBlue);
 }
+
+void GameObject::Remove()
+{
+	removeFlag = true;
+}
+
+bool GameObject::IsGOActive()
+{
+	return selfActive;
+}
+
+void GameObject::SetSelfActive(bool set) //TODO: Iteratie all childs and set same?
+{
+	if (set && !selfActive)
+	{
+		selfActive = true;
+		OnEnable();
+	}
+	else if(!set && selfActive)
+	{
+		selfActive = false;
+		OnDisable();
+	}
+}
+
+void GameObject::Enable()//TODO: Iteratie all childs and set same?
+{
+	if (!selfActive)
+		OnEnable();
+}
+
+void GameObject::Disable()//TODO: Iteratie all childs and set same?
+{
+	if(selfActive)
+		OnDisable();
+}
+
+//--------------------------------------------------------
 
 void GameObject::RecCalcTransform(const float4x4& parentTrans, bool force)
 {
@@ -310,9 +393,9 @@ void GameObject::RecCalcTransform(const float4x4& parentTrans, bool force)
 	else
 		wasDirty = false;
 
-	for (uint i = 0; i < childrens.size(); ++i)
-		if (childrens[i] && transform)
-			childrens[i]->RecCalcTransform(transform->GetGlobalTransform(), force);
+	for (uint i = 0; i < childs.size(); ++i)
+		if (childs[i] && transform)
+			childs[i]->RecCalcTransform(transform->GetGlobalTransform(), force);
 }
 
 void GameObject::RecCalcBoxes()
@@ -329,9 +412,9 @@ void GameObject::RecCalcBoxes()
 		}
 	}
 
-	for (uint i = 0; i < childrens.size(); ++i)
-		if (childrens[i] && transform)
-			childrens[i]->RecCalcBoxes();
+	for (uint i = 0; i < childs.size(); ++i)
+		if (childs[i] && transform)
+			childs[i]->RecCalcBoxes();
 }
 
 void GameObject::RecalcBox()
@@ -342,36 +425,47 @@ void GameObject::RecalcBox()
 	for (uint i = 0; i < components.size(); ++i)
 	{
 		Component* cmp = components[i];
-		if (cmp && cmp->IsEnable())
+		if (cmp && cmp->IsActive())
 			cmp->GetBox(enclosingBox);
 	}
 }
 
-void GameObject::SetNewParent(GameObject* newParent, bool force)
+bool GameObject::RecRemoveFlagged()
 {
-	if (newParent == parent)
-		return;
+	bool ret = false;
 
-	if (parent)
+	for (uint i = 0; i < components.size(); ++i)
 	{
-		std::vector<GameObject*>::iterator it = std::find(parent->childrens.begin(), parent->childrens.end(), this);
-		if (it != parent->childrens.end())
-			parent->childrens.erase(it);
+		if (components[i] && components[i]->removeFlag)
+		{
+			components[i]->OnFinish();
+			RELEASE(components[i]);
+			components.erase(components.begin() + i);
+		}
+	}
+	
+	for (std::vector<GameObject*>::iterator it = childs.begin(); it != childs.end();)
+	{
+		GameObject* tmp = *it;
+		if (tmp && tmp->removeFlag)
+		{
+			tmp->OnFinish();
+			app->goManager->EraseGameObjectFromTree(tmp);
+			RELEASE(tmp);
+			it = childs.erase(it);
+			ret = true;
+		}
+		else
+		{
+			ret |= tmp->RecRemoveFlagged();
+			++it;
+		}
 	}
 
-	parent = newParent;
-
-	if (newParent)
-		newParent->childrens.push_back(this);
-
-	wasDirty = true;
-
-	if (force && transform && newParent && newParent->transform)
-	{
-		float4x4 tmp = transform->GetGlobalTransform();
-		transform->SetLocalTransform(tmp * newParent->transform->GetLocalTransform().Inverted());
-	}
+	return ret;
 }
+
+//--------------------------------------------------------
 
 bool GameObject::SaveGO(FileParser& file, std::map<uint, uint>* duplicate)const
 {
@@ -392,7 +486,7 @@ bool GameObject::SaveGO(FileParser& file, std::map<uint, uint>* duplicate)const
 			parentID = it->second;
 	}
 
-	f.AddInt("UUID", id);
+	f.AddInt("UUID", uidToSave);
 	f.AddInt("parent_id", parentID);
 
 	f.AddString("name", name.c_str());
@@ -411,11 +505,9 @@ bool GameObject::SaveGO(FileParser& file, std::map<uint, uint>* duplicate)const
 
 	file.AddArrayEntry(f);
 
-	for (uint i = 0; i < childrens.size(); ++i)
-	{
-		if (childrens[i])
-			childrens[i]->SaveGO(file, duplicate);
-	}
+	for (uint i = 0; i < childs.size(); ++i)
+		if (childs[i])
+			childs[i]->SaveGO(file, duplicate);
 
 	return ret;
 }
@@ -438,15 +530,17 @@ bool GameObject::LoadGO(FileParser* file, std::map<GameObject*, uint>& relations
 		if (type != CMP_UNKNOWN)
 		{
 			if (type == CMP_TRANSFORMATION)
-				transform->LoadCMP(cmp);
+				transform->LoadCMP(&cmp);
 			else
 			{
 				Component* c = AddComponent(type);
-				c->LoadCMP(cmp);
+				c->LoadCMP(&cmp);
 			}
 		}
 		else
+		{
 			_LOG(LOG_ERROR, ("Unknown component type for game object %s.!!", name.c_str()));
+		}
 	}
 
 	return ret;

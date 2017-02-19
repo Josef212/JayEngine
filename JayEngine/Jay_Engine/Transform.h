@@ -9,14 +9,14 @@ class FileParser;
 class Transform : public Component
 {
 public:
-	Transform(GameObject* gObj, int id);
+	Transform(GameObject* gObj);
 	virtual ~Transform();
 
-	void Enable()override;
+	void OnEnable()override;
 
-	void Init()override;
-	void Update(float dt)override;
-	void CleanUp()override;
+	void OnStart()override;
+	void OnUpdate(float dt)override;
+	void OnFinish()override;
 
 	//----------------------------------------
 
@@ -52,8 +52,8 @@ public:
 
 	void UpdateTransform(const float4x4& parentMat);
 
-	bool SaveCMP(FileParser& sect)override;
-	bool LoadCMP(FileParser& sect)override;
+	bool SaveCMP(FileParser& sect)const override;
+	bool LoadCMP(FileParser* sect)override;
 
 private:
 

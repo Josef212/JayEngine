@@ -138,10 +138,10 @@ void ModuleGOManager::RemoveFlaggedGO()
 {
 	if (sceneRootObject->removeFlag)
 	{
-		for (uint i = 0; i < sceneRootObject->childrens.size(); ++i)
+		for (uint i = 0; i < sceneRootObject->childs.size(); ++i)
 		{
-			if (sceneRootObject->childrens[i])
-				sceneRootObject->childrens[i]->Remove();
+			if (sceneRootObject->childs[i])
+				sceneRootObject->childs[i]->Remove();
 		}
 		sceneRootObject->removeFlag = false;
 	}

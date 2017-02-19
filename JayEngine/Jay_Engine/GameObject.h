@@ -21,11 +21,27 @@ public:
 	GameObject(GameObject* parent, UID id);
 	virtual ~GameObject();
 
-	void Init();
-	void Update(float dt); //Only called on play mode
-	void CleanUp();
+	void Update(float dt);
 
-	void Draw(bool drawChilds);
+	//------
+	void OnStart();
+	void OnFinish();
+	void OnEnable();
+	void OnDisable();
+
+	void OnPlay();
+	void OnStop();
+	void OnPause();
+	void OnUnPause();
+
+	void OnGameObjectDestroyed();
+	//------
+
+	UID GetGOId()const;
+	const char* GetName()const;
+	void SetName(const char* str);
+
+	//------
 
 	GameObject* AddChild();
 	Component* AddComponent(ComponentType type);
@@ -38,16 +54,17 @@ public:
 	GameObject* GetParent() const;
 	void SetNewParent(GameObject* newParent, bool force = false);
 
-	UID GetGOId()const;
-	const char* GetName()const;
-	void SetName(const char* str);
+	void Draw(bool drawChilds);
+	void DrawDebug();
 
 	void Remove();
 
 	bool IsGOActive();
 	void SetSelfActive(bool set);
+	void Enable();
+	void Disable();
 
-	void DrawDebug();
+	//------
 
 	void RecCalcTransform(const float4x4& parentTrans, bool force = false);
 	void RecCalcBoxes();
@@ -55,9 +72,8 @@ public:
 
 	bool RecRemoveFlagged();
 
-	void OnGameObjectDestroyed();
-
-	//TMP
+	//------
+	
 	bool SaveGO(FileParser& file, std::map<uint, uint>* duplicate = nullptr)const;
 	bool LoadGO(FileParser* file, std::map<GameObject*, uint>& relations);
 
@@ -66,7 +82,7 @@ private:
 
 public:
 	std::vector<Component*> components;
-	std::vector<GameObject*> childrens;
+	std::vector<GameObject*> childs;
 
 	AABB enclosingBox;
 	OBB orientedBox;
@@ -82,7 +98,6 @@ public:
 
 private:
 	std::string name;
-	int nextCompId = -1;
 	UID id = 0;
 	GameObject* parent = nullptr;
 	bool selfActive = true;

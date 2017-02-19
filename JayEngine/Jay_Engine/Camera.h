@@ -11,7 +11,7 @@ class FileParser;
 class Camera : public Component
 {
 public:
-	Camera(GameObject* gObj, int id);
+	Camera(GameObject* gObj);
 	virtual ~Camera();
 
 	float GetFOV()const; //Vertical FOV
@@ -43,10 +43,10 @@ public:
 
 	void OnTransformUpdate(Transform* trans)override;
 
-	void DebugDraw()override;
+	void OnDebugDraw()override;
 
-	bool SaveCMP(FileParser& sect)override;
-	bool LoadCMP(FileParser& sect)override;
+	bool SaveCMP(FileParser& sect)const override;
+	bool LoadCMP(FileParser* sect)override;
 
 private:
 

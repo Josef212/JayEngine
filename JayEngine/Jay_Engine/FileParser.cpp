@@ -177,7 +177,37 @@ bool FileParser::AddArrayEntry(const FileParser& file)
 	return false;
 }
 
-bool FileParser::AddIntArray(const char* name, int* fArray, uint size)
+bool FileParser::AddIntArray(const char* name, int* iArray, uint size)
+{
+	if (!name || !iArray || size <= 0)
+		return false;
+
+	JSON_Value* val = json_value_init_array();
+	JSON_Array* ar = json_value_get_array(val);
+	for (uint i = 0; i < size; ++i)
+		json_array_append_number(ar, iArray[i]);
+
+	json_object_set_value(objRoot, name, val);
+
+	return true;
+}
+
+bool FileParser::AddFloatArray(const char* name, float* fArray, uint size)
+{
+	if (!name || !fArray || size <= 0)
+		return false;
+
+	JSON_Value* val = json_value_init_array();
+	JSON_Array* ar = json_value_get_array(val);
+	for (uint i = 0; i < size; ++i)
+		json_array_append_number(ar, fArray[i]);
+
+	json_object_set_value(objRoot, name, val);
+	
+	return true;
+}
+
+bool FileParser::AddFloatArray(const char* name, const float* fArray, uint size)
 {
 	if (!name || !fArray || size <= 0)
 		return false;
@@ -189,21 +219,6 @@ bool FileParser::AddIntArray(const char* name, int* fArray, uint size)
 
 	json_object_set_value(objRoot, name, val);
 
-	return true;
-}
-
-bool FileParser::AddFloatArray(const char* name, float* iArray, uint size)
-{
-	if (!name || !iArray || size <= 0)
-		return false;
-
-	JSON_Value* val = json_value_init_array();
-	JSON_Array* ar = json_value_get_array(val);
-	for (uint i = 0; i < size; ++i)
-		json_array_append_number(ar, iArray[i]);
-
-	json_object_set_value(objRoot, name, val);
-	
 	return true;
 }
 

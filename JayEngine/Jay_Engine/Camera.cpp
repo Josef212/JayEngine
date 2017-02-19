@@ -11,11 +11,9 @@
 
 //MathGeolib frustum: http://clb.demon.fi/MathGeoLib/nightly/docs/Frustum_summary.php
 
-Camera::Camera(GameObject* gObj, int id) : Component(gObj, id)
+Camera::Camera(GameObject* gObj) : Component(gObj)
 {
 	type = CMP_CAMERA;
-
-	name.assign("Camera");
 
 	frustum.type = PerspectiveFrustum;
 
@@ -153,7 +151,7 @@ float* Camera::GetGLProjectMatrix()
 	return (float*)ret.v;
 }
 
-void Camera::DebugDraw()
+void Camera::OnDebugDraw()
 {
 	if(app->debug)
 		DrawFrustumDebug(frustum);
@@ -175,13 +173,12 @@ void Camera::Look(const float3 spot, const float3 pos)
 	projectMatrixChanged = true;
 }
 
-bool Camera::SaveCMP(FileParser& sect)
+bool Camera::SaveCMP(FileParser& sect)const
 {
 	bool ret = true;
 
 	sect.AddInt("comp_type", (int)type);
 	sect.AddBool("active", selfActive);
-	sect.AddInt("UUID", id);
 	sect.AddInt("go_UUID", object->GetGOId());
 
 	sect.AddFloat("near_plane", nearPlaneDist);
@@ -198,22 +195,21 @@ bool Camera::SaveCMP(FileParser& sect)
 	return ret;
 }
 
-bool Camera::LoadCMP(FileParser& sect)
+bool Camera::LoadCMP(FileParser* sect)
 {
 	bool ret = true;
 
-	selfActive = sect.GetBool("active", true);
-	id = sect.GetInt("UUID", 0);
+	selfActive = sect->GetBool("active", true);
 
-	nearPlaneDist = sect.GetFloat("near_plane", 0.f);
-	farPlaneDist = sect.GetFloat("far_plane", 0.f);
-	FOV = sect.GetFloat("fov", 0.f);
-	SetAspectRatio(sect.GetFloat("aspect_ratio", 1.3f));
+	nearPlaneDist = sect->GetFloat("near_plane", 0.f);
+	farPlaneDist = sect->GetFloat("far_plane", 0.f);
+	FOV = sect->GetFloat("fov", 0.f);
+	SetAspectRatio(sect->GetFloat("aspect_ratio", 1.3f));
 
-	frustum.pos = sect.GetFloat3("cam_pos", float3::zero);
-	background = sect.GetColor("bg_color", Black);
+	frustum.pos = sect->GetFloat3("cam_pos", float3::zero);
+	background = sect->GetColor("bg_color", Black);
 
-	if (sect.GetBool("is_active_cam", false))
+	if (sect->GetBool("is_active_cam", false))
 		app->renderer3D->SetActiveCamera(this);
 
 	return ret;

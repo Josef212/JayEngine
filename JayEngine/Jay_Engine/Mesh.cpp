@@ -7,10 +7,9 @@
 #include "ResourceMesh.h"
 
 
-Mesh::Mesh(GameObject* gObj, int id) : Component(gObj, id)
+Mesh::Mesh(GameObject* gObj) : Component(gObj)
 {
 	type = CMP_MESH;
-	name.assign("Mesh");
 }
 
 
@@ -19,17 +18,17 @@ Mesh::~Mesh()
 	ClearMesh();
 }
 
-void Mesh::Init()
+void Mesh::OnStart()
 {
 	
 }
 
-void Mesh::Update(float dt)
+void Mesh::OnUpdate(float dt)
 {
 
 }
 
-void Mesh::CleanUp()
+void Mesh::OnFinish()
 {
 	
 }
@@ -49,13 +48,12 @@ void Mesh::GetBox(AABB& box)const
 		box.Enclose(meshResource->aabb);
 }
 
-bool Mesh::SaveCMP(FileParser& sect)
+bool Mesh::SaveCMP(FileParser& sect)const
 {
 	bool ret = true;
 
 	sect.AddInt("comp_type", (int)type);
 	sect.AddBool("active", selfActive);
-	sect.AddInt("UUID", id);
 	sect.AddInt("go_UUID", object->GetGOId());
 
 	if (meshResource)
@@ -74,20 +72,19 @@ bool Mesh::SaveCMP(FileParser& sect)
 	return ret;
 }
 
-bool Mesh::LoadCMP(FileParser& sect)
+bool Mesh::LoadCMP(FileParser* sect)
 {
 	bool ret = true;
 
-	selfActive = sect.GetBool("active", true);
-	id = sect.GetInt("UUID", 0);
+	selfActive = sect->GetBool("active", true);
 
-	if (sect.GetBool("have_res", false))
+	if (sect->GetBool("have_res", false))
 	{
-		SetResource(sect.GetInt("resource_id", 0));
+		//SetResource(sect.GetInt("resource_id", 0));
 	}
 
-	renderWireframe = sect.GetBool("wireframe", false);
-	renderNormals = sect.GetBool("normals", false);
+	renderWireframe = sect->GetBool("wireframe", false);
+	renderNormals = sect->GetBool("normals", false);
 
 	return ret;
 }
@@ -95,7 +92,7 @@ bool Mesh::LoadCMP(FileParser& sect)
 
 //--------------------------
 
-void Mesh::SetResource(UID resUID)
+/*void Mesh::SetResource(UID resUID)
 {
 	//TODO: if there is already a resource, notify to manager and check if there are no more instances to remove from memory
 
@@ -121,4 +118,4 @@ void Mesh::SetResource(UID resUID)
 		meshResource = res;
 	}
 
-}
+}*/
