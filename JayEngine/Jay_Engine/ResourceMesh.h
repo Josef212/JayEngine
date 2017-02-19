@@ -18,6 +18,8 @@ public:
 	void Save(FileParser& file)override;
 	void Load(FileParser& file)override;
 
+	bool LoadInMemoryBuff();
+
 private:
 
 public:

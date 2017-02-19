@@ -19,7 +19,7 @@ ResourceMesh::~ResourceMesh()
 
 bool ResourceMesh::LoadInMemory()
 {
-	app->resourceManager->meshImporter->LoadResource(this);
+	return app->resourceManager->meshImporter->LoadResource(this);
 }
 
 void ResourceMesh::Save(FileParser& file)
@@ -44,7 +44,7 @@ void ResourceMesh::LoadMeshResource(const char* fileName, const char* path)//TOD
 
 	std::string realName;
 	if(!path)
-		realName.assign(DEFAULT_MESH_SAVE_PATH);
+		realName.assign(PATH_LIBRARY_MESH);
 	else
 		realName.assign(path);
 
@@ -117,7 +117,7 @@ void ResourceMesh::LoadMeshResource(const char* fileName, const char* path)//TOD
 
 }
 
-bool ResourceMesh::LoadInMemory()
+bool ResourceMesh::LoadInMemoryBuff()
 {
 	bool ret = false;
 

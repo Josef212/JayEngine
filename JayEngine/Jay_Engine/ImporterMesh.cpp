@@ -33,6 +33,86 @@ ImporterMesh::~ImporterMesh()
 	aiDetachAllLogStreams();
 }
 
+//------------------------------------------------------------
+
+bool LoadResource(Resource* resource)
+{
+	bool ret = false;
+
+	return ret;
+}
+
+bool Import(const aiMesh* mesh, std::string& output, UID& id)
+{
+	bool ret = false;
+
+	return ret;
+}
+
+void GenBuffers(const ResourceMesh* resource)
+{
+
+}
+
+//------------------------------------------------------------
+
+bool LoadCube(ResourceMesh* res)
+{
+	bool ret = false;
+
+	return ret;
+}
+
+bool LoadSphere(ResourceMesh* res)
+{
+	bool ret = false;
+
+	return ret;
+}
+
+bool LoadCylinder(ResourceMesh* res)
+{
+	bool ret = false;
+
+	return ret;
+}
+
+bool LoadCone(ResourceMesh* res)
+{
+	bool ret = false;
+
+	return ret;
+}
+
+bool LoadPyramid(ResourceMesh* res)
+{
+	bool ret = false;
+
+	return ret;
+}
+
+bool LoadTorus(ResourceMesh* res)
+{
+	bool ret = false;
+
+	return ret;
+}
+
+//------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+//============================================================================================
+
+
 void ImporterMesh::ImportMesh(const aiMesh* mesh, ResourceMesh* resMesh)
 {
 	if (!mesh || !resMesh)
@@ -42,11 +122,11 @@ void ImporterMesh::ImportMesh(const aiMesh* mesh, ResourceMesh* resMesh)
 	}
 
 	//First set the exported file name of the resource from its uuid and own extension
-	std::string outName(DEFAULT_MESH_SAVE_PATH + std::to_string(resMesh->GetUID()) + MESH_EXTENSION);
+	std::string outName(PATH_LIBRARY_MESH + std::to_string(resMesh->GetUID()) + EXTENSION_MESH);
 	//Will also put the uuid at the start of the file in order to not get the uuid from the file name
 
 	//TODO: set origin file
-	resMesh->exportedFile.assign(std::to_string(resMesh->GetUID()) + MESH_EXTENSION);
+	resMesh->exportedFile.assign(std::to_string(resMesh->GetUID()) + EXTENSION_MESH);
 
 	_LOG(LOG_INFO_REM, "New mesh is going to be serialized: %s.", outName.c_str());
 
@@ -186,7 +266,7 @@ bool ImporterMesh::LoadResource(Resource* resource)
 
 	ResourceMesh* res = (ResourceMesh*)resource;
 
-	std::string path(DEFAULT_MESH_SAVE_PATH);
+	std::string path(PATH_LIBRARY_MESH);
 	path.append(resource->exportedFile.c_str());
 
 	_LOG(LOG_INFO, "Loading mesh resource from: '%s'.", path.c_str());

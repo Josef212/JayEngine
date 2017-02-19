@@ -203,14 +203,14 @@ UID ModuleResourceManager::ImportFile(const char* fileInAssets, bool checkFirst)
 		//TODO: Add more cases for new resources type.
 
 	case RESOURCE_TEXTURE:
-		succes = textureImporter->Import(file.c_str(), exportedFile, resUID);
+		succes = textureImporter->Import(file.c_str(), nullptr, exportedFile, resUID);
 		break;
 
 	case RESOURCE_SCENE:
 	{
 		std::string full;
 		if (path.empty())
-			full.assign(DEFAULT_FB_PATH);
+			full.assign(PATH_ASSETS_MODEL);
 		else
 			full.assign(path);
 		full.append(file);
@@ -367,7 +367,7 @@ bool ModuleResourceManager::AutoImportFBX()
 	bool ret = true;
 
 	std::vector<std::string> fbxs;
-	uint fbxCount = app->fs->GetFilesOnDir(DEFAULT_FB_PATH, fbxs);
+	uint fbxCount = app->fs->GetFilesOnDir(PATH_ASSETS_MODEL, fbxs);
 
 	if (fbxCount > 0)
 	{
@@ -385,7 +385,7 @@ bool ModuleResourceManager::LoadResources()
 	//Might change this if primitives added
 	bool ret = false;
 
-	std::string path(SETTINGS_PATH);
+	std::string path(PATH_SETTINGS);
 	path.append("resources.json");
 	char* buffer = nullptr;
 	uint size = app->fs->Load(path.c_str(), &buffer);
@@ -456,7 +456,7 @@ bool ModuleResourceManager::SaveResources()
 	char* buffer = nullptr;
 	uint size = save.WriteJson(&buffer, false); //TODO: Fast write
 
-	std::string path(SETTINGS_PATH);
+	std::string path(PATH_SETTINGS);
 	path.append("resources.json");
 
 	if (app->fs->Save(path.c_str(), buffer, size) == size)
@@ -508,7 +508,7 @@ bool ModuleResourceManager::CheckAllPrefabs() //Is this really important??? //TO
 	bool ret = true;
 
 	std::vector<std::string> prefabs;
-	uint count = app->fs->GetFilesOnDir(DEFAULT_PREF_SAVE_PATHS, prefabs);
+	uint count = app->fs->GetFilesOnDir(PATH_LIBRARY_PREFABS, prefabs);
 
 	/**
 		If there are files in this directory lets check all and see if all the resources they need exist.
@@ -519,7 +519,7 @@ bool ModuleResourceManager::CheckAllPrefabs() //Is this really important??? //TO
 		{
 			//TODO: search for fbx original file, if it no longer exist delete all the files involved in this prefab.
 
-			std::string fileName(DEFAULT_PREF_SAVE_PATHS + prefabs[i]);
+			std::string fileName(PATH_LIBRARY_PREFABS + prefabs[i]);
 			char* buffer = nullptr;
 			uint size = app->fs->Load(fileName.c_str(), &buffer);
 

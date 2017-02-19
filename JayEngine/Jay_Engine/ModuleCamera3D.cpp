@@ -62,7 +62,7 @@ bool ModuleCamera3D::CleanUp()
 {
 	_LOG(LOG_STD, "Camera3D: CleanUp.");
 
-	defaultCamera->CleanUp();
+	defaultCamera->OnFinish();
 	RELEASE(defaultCamera);
 
 	return true;

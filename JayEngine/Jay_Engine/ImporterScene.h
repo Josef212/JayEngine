@@ -7,6 +7,7 @@
 
 struct aiNode;
 struct aiScene;
+class Resource;
 class ResourceMesh;
 class ResourceScene;
 class GameObject;

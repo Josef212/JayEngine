@@ -260,11 +260,9 @@ void UI_Resources::Meshes(std::vector<Resource*> meshes)
 								{
 									if (cmp[j])
 									{
-										static char mName[32];
-										sprintf_s(mName, 32, "%s", cmp[j]->GetName());
-										if (ImGui::MenuItem(mName))
+										if (ImGui::MenuItem(cmp[j]->GetTypeStr()))
 										{
-											cmp[j]->SetResource(res->GetUID());
+											//cmp[j]->SetResource(res->GetUID());
 										}
 									}
 								}
@@ -274,7 +272,7 @@ void UI_Resources::Meshes(std::vector<Resource*> meshes)
 									Mesh* m = (Mesh*)selected->AddComponent(ComponentType::CMP_MESH);
 									if (m)
 									{
-										m->SetResource(res->GetUID());
+										//m->SetResource(res->GetUID());
 									}
 								}
 
@@ -420,11 +418,9 @@ void UI_Resources::Textures(std::vector<Resource*> texs)
 								{
 									if (cmp[j])
 									{
-										static char tName[32];
-										sprintf_s(tName, 32, "%s", cmp[j]->GetName());
-										if (ImGui::MenuItem(tName))
+										if (ImGui::MenuItem(cmp[j]->GetTypeStr()))
 										{
-											cmp[j]->SetResource(res->GetUID());
+											//cmp[j]->SetResource(res->GetUID());
 										}
 									}
 								}
@@ -434,7 +430,7 @@ void UI_Resources::Textures(std::vector<Resource*> texs)
 									Material* mat = (Material*)selected->AddComponent(ComponentType::CMP_MATERIAL);
 									if (mat)
 									{
-										mat->SetResource(res->GetUID());
+										//mat->SetResource(res->GetUID());
 									}
 								}
 							}
@@ -508,9 +504,7 @@ void UI_Resources::Shaders(std::vector<Resource*> shds)
 								Material* mat = (Material*)cmp[j];
 								if (mat)
 								{
-									static char tName[32];
-									sprintf_s(tName, 32, "%s", mat->GetName());
-									if (ImGui::MenuItem(tName))
+									if (ImGui::MenuItem(mat->GetTypeStr()))
 									{
 										mat->shaderResource = res;
 									}

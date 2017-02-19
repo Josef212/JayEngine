@@ -241,9 +241,9 @@ void ModuleGOManager::MakeGOShowAABoxRec(GameObject* obj, bool show)
 	if (obj)
 	{
 		obj->drawEnclosingAABB = show;
-		for (uint i = 0; i < obj->childrens.size(); ++i)
+		for (uint i = 0; i < obj->childs.size(); ++i)
 		{
-			MakeGOShowAABoxRec(obj->childrens[i], show);
+			MakeGOShowAABoxRec(obj->childs[i], show);
 		}
 	}
 }
@@ -253,9 +253,9 @@ void ModuleGOManager::MakeGOShowOBoxRec(GameObject* obj, bool show)
 	if (obj)
 	{
 		obj->drawOrientedBox = show;
-		for (uint i = 0; i < obj->childrens.size(); ++i)
+		for (uint i = 0; i < obj->childs.size(); ++i)
 		{
-			MakeGOShowOBoxRec(obj->childrens[i], show);
+			MakeGOShowOBoxRec(obj->childs[i], show);
 		}
 	}
 }
@@ -285,9 +285,9 @@ GameObject* ModuleGOManager::RecFindGO(UID id, GameObject* go)
 	GameObject* ret = nullptr;
 	
 	
-	for (uint i = 0; !ret && i < go->childrens.size(); ++i)
+	for (uint i = 0; !ret && i < go->childs.size(); ++i)
 	{
-		ret = RecFindGO(id, go->childrens[i]);
+		ret = RecFindGO(id, go->childs[i]);
 	}
 	
 
@@ -299,9 +299,9 @@ GameObject* ModuleGOManager::ValidateGO(const GameObject* point)const
 	if (point == sceneRootObject)
 		return sceneRootObject;
 
-	for (uint i = 0; i < sceneRootObject->childrens.size(); ++i)
+	for (uint i = 0; i < sceneRootObject->childs.size(); ++i)
 	{
-		if (point == sceneRootObject->childrens[i])
+		if (point == sceneRootObject->childs[i])
 			return (GameObject*)point;
 	}
 
@@ -335,7 +335,7 @@ bool ModuleGOManager::SaveSceneNow(const char* name, const char* path)
 	{
 		char fullPath[128];
 		if (!path)
-			sprintf_s(fullPath, "%s%s", DEFAULT_SCENE_SAVE_PATH, name);
+			sprintf_s(fullPath, "%s%s", PATH_SCENES, name);
 		else
 			sprintf_s(fullPath, "%s%s", path, name);
 
@@ -348,10 +348,10 @@ bool ModuleGOManager::SaveSceneNow(const char* name, const char* path)
 		scene.AddArray("GameObjects");
 		//TODO: add some meta before go??
 
-		for (uint i = 0; i < sceneRootObject->childrens.size(); ++i)
+		for (uint i = 0; i < sceneRootObject->childs.size(); ++i)
 		{
-			if (sceneRootObject->childrens[i])
-				ret = sceneRootObject->childrens[i]->SaveGO(scene);
+			if (sceneRootObject->childs[i])
+				ret = sceneRootObject->childs[i]->SaveGO(scene);
 		}
 
 		if (ret)
@@ -395,7 +395,7 @@ bool ModuleGOManager::LoadSceneNow(const char* name, const char* path)
 
 	char fullPath[128];
 	if (!path)
-		sprintf_s(fullPath, "%s%s", DEFAULT_SCENE_SAVE_PATH, name);
+		sprintf_s(fullPath, "%s%s", PATH_SCENES, name);
 	else
 		sprintf_s(fullPath, "%s%s", path, name);
 
@@ -438,7 +438,7 @@ GameObject* ModuleGOManager::LoadPrefab(const char* file, const char* path)
 
 	char fullPath[128];
 	if (!path)
-		sprintf_s(fullPath, "%s", DEFAULT_PREF_SAVE_PATHS);
+		sprintf_s(fullPath, "%s", PATH_LIBRARY_PREFABS);
 	else
 		sprintf_s(fullPath, "%s", path);
 
@@ -496,10 +496,10 @@ void ModuleGOManager::LoadSceneOrPrefabs(const FileParser& file)
 			go->SetNewParent(sceneRootObject);
 	}
 
-	for (uint i = 0; i < tmpRoot->childrens.size(); ++i)
+	for (uint i = 0; i < tmpRoot->childs.size(); ++i)
 	{
-		if (tmpRoot->childrens[i])
-			tmpRoot->childrens[i]->SetNewParent(sceneRootObject);
+		if (tmpRoot->childs[i])
+			tmpRoot->childs[i]->SetNewParent(sceneRootObject);
 	}
 
 	sceneRootObject->RecCalcTransform(sceneRootObject->transform->GetLocalTransform(), true);
@@ -518,10 +518,10 @@ void ModuleGOManager::CleanRootNow()
 {
 	if (sceneRootObject)
 	{
-		for (uint i = 0; i < sceneRootObject->childrens.size(); ++i)
+		for (uint i = 0; i < sceneRootObject->childs.size(); ++i)
 		{
-			if (sceneRootObject->childrens[i])
-				sceneRootObject->childrens[i]->Remove();
+			if (sceneRootObject->childs[i])
+				sceneRootObject->childs[i]->Remove();
 		}
 
 		if (sceneRootObject->RecRemoveFlagged())
@@ -566,10 +566,10 @@ void ModuleGOManager::RecRecieveEvent(GameObject* obj, const Event& e)
 		break;
 	}
 
-	for (uint i = 0; i < obj->childrens.size(); ++i)
+	for (uint i = 0; i < obj->childs.size(); ++i)
 	{
-		if (obj->childrens[i])
-			RecRecieveEvent(obj->childrens[i], e);
+		if (obj->childs[i])
+			RecRecieveEvent(obj->childs[i], e);
 	}
 }
 

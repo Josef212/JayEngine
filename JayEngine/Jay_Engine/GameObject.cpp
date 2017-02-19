@@ -224,7 +224,7 @@ Component* GameObject::GetComponent(ComponentType type)const
 {
 	for (uint i = 0; i < components.size(); ++i)
 	{
-		if (components[i] && components[i]->GetType == type)
+		if (components[i] && components[i]->GetType() == type)
 			return components[i];
 	}
 
@@ -237,7 +237,7 @@ std::vector<Component*> GameObject::GetComponents(ComponentType type)
 
 	for (uint i = 0; i < components.size(); ++i)
 	{
-		if (components[i] && components[i]->GetType == type)
+		if (components[i] && components[i]->GetType() == type)
 			ret.push_back(components[i]);
 	}
 
@@ -251,7 +251,7 @@ bool GameObject::HasComponent(ComponentType type)const
 {
 	for (uint i = 0; i < components.size(); ++i)
 	{
-		if (components[i]->GetType == type)
+		if (components[i]->GetType() == type)
 			return true;
 	}
 
@@ -264,7 +264,7 @@ uint GameObject::CountComponents(ComponentType type)const
 
 	for (uint i = 0; i < components.size(); ++i)
 	{
-		if (components[i]->GetType == type)
+		if (components[i]->GetType() == type)
 			++ret;
 	}
 

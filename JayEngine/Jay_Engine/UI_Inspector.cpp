@@ -70,7 +70,7 @@ void UI_Inspector::Draw()
 				Component* cmp = selected->components[i];
 				if (cmp)
 				{
-					switch (cmp->type)
+					switch (cmp->GetType())
 					{
 					case CMP_TRANSFORMATION:
 						DrawTransformation(selected);
@@ -100,17 +100,14 @@ void UI_Inspector::DrawTransformation(GameObject* selected)
 	
 	if (!trans)
 		return;
-
-	char transName[60];
-	strcpy_s(transName, 60, trans->GetName());
 	
 	//Active
-	bool transActive = trans->IsEnable();
+	bool transActive = trans->IsActive();
 	if (ImGui::Checkbox("Transform:", &transActive)) trans->SwitchActive();
 
 	ImGui::SameLine();
 
-	if (ImGui::Button("Remove trans")) trans->Remove();
+	if (ImGui::Button("Remove trans")) trans->Destroy();
 
 	if (ImGui::Button("Reset transform"))
 	{
@@ -138,17 +135,15 @@ void UI_Inspector::DrawTransformation(GameObject* selected)
 
 void UI_Inspector::DrawMesh(GameObject* selected, Mesh* mesh)
 {
-	char meshName[60];
-	strcpy_s(meshName, 60, mesh->GetName());
 
 	//Active
-	bool meshActive = mesh->IsEnable();
+	bool meshActive = mesh->IsActive();
 	if (ImGui::Checkbox("Mesh:", &meshActive))
 		mesh->SwitchActive();
 
 	ImGui::SameLine();
 
-	if (ImGui::Button("Remove mesh")) mesh->Remove();
+	if (ImGui::Button("Remove mesh")) mesh->Destroy();
 
 	static uint nVertices = 0;
 	static uint nIndices = 0;
@@ -194,16 +189,13 @@ void UI_Inspector::DrawMesh(GameObject* selected, Mesh* mesh)
 
 void UI_Inspector::DrawMaterial(GameObject* selected, Material* mat)
 {
-	char matName[60];
-	strcpy_s(matName, 60, mat->GetName());
-
 	//Active
-	bool metActive = mat->IsEnable();
+	bool metActive = mat->IsActive();
 	if (ImGui::Checkbox("Material:", &metActive)) mat->SwitchActive();
 
 	ImGui::SameLine();
 
-	if (ImGui::Button("Remove material")) mat->Remove();
+	if (ImGui::Button("Remove material")) mat->Destroy();
 
 	ImGui::ColorEdit4("Color:", (float*)&mat->color, false);
 	//TODO: Show all textures

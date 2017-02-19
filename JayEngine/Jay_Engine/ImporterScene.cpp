@@ -45,11 +45,6 @@ ImporterScene::~ImporterScene()
 	aiDetachAllLogStreams();
 }
 
-bool ImporterScene::LoadResource(Resource* resource)
-{
-	return false;
-}
-
 bool ImporterScene::Import(const char* originalFile, std::string& exportedFile, const char* originalFileExtension, UID& resUID)
 {
 	bool ret = false;
@@ -96,17 +91,17 @@ bool ImporterScene::Import(const char* originalFile, std::string& exportedFile, 
 		FileParser save;
 		save.AddArray("GameObjects");
 
-		for (uint i = 0; i < go->childrens.size(); ++i)
-			if (go->childrens[i])
-				go->childrens[i]->SaveGO(save);
+		for (uint i = 0; i < go->childs.size(); ++i)
+			if (go->childs[i])
+				go->childs[i]->SaveGO(save);
 
 		resUID = app->resourceManager->GetNewUID();
 
 		char name[128];
-		sprintf_s(name, 128, "%d%s", resUID, SCENE_EXTENSION);
+		sprintf_s(name, 128, "%d%s", resUID, EXTENSION_SCENE);
 		exportedFile.assign(name);
 		char fullPath[256];
-		sprintf_s(fullPath, 256, "%s%s", DEFAULT_PREF_SAVE_PATHS, name);
+		sprintf_s(fullPath, 256, "%s%s", PATH_LIBRARY_PREFABS, name);
 
 		char* buf = nullptr;
 		uint _size = save.WriteJson(&buf, false); //TODO: When finish testing change to fast mode.
@@ -233,14 +228,14 @@ void ImporterScene::RecImport(const aiScene* scene, const aiNode* node, GameObje
 
 //------------------------------------
 
-bool ImporterScene::LoadResource(ResourceScene* resource)
+bool ImporterScene::LoadResource(Resource* resource)
 {
 	bool ret = false;
 
 	if (!resource)
 		return ret;
 
-	std::string path(DEFAULT_PREF_SAVE_PATHS);
+	std::string path(PATH_LIBRARY_PREFABS);
 	path.append(resource->exportedFile.c_str());
 
 	_LOG(LOG_INFO, "Loading prefab/scene resource from: '%s'.", path.c_str());

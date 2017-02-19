@@ -328,6 +328,12 @@
     <ClCompile Include="mmgr\mmgr.cpp">
       <Filter>Core\3Party\mmgr</Filter>
     </ClCompile>
+    <ClCompile Include="Component.cpp">
+      <Filter>Core\GameObjects</Filter>
+    </ClCompile>
+    <ClCompile Include="ComponentResource.cpp">
+      <Filter>Core\GameObjects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Module.h">
@@ -698,6 +704,12 @@
     </ClInclude>
     <ClInclude Include="mmgr\nommgr.h">
       <Filter>Core\3Party\mmgr</Filter>
+    </ClInclude>
+    <ClInclude Include="Importer.h">
+      <Filter>Core\ResourceManagement\Importers</Filter>
+    </ClInclude>
+    <ClInclude Include="ComponentResource.h">
+      <Filter>Core\GameObjects</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

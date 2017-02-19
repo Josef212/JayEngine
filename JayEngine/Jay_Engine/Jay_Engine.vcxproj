@@ -128,6 +128,8 @@
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Color.cpp" />
+    <ClCompile Include="Component.cpp" />
+    <ClCompile Include="ComponentResource.cpp" />
     <ClCompile Include="DrawDebug.cpp" />
     <ClCompile Include="FileParser.cpp" />
     <ClCompile Include="GameObject.cpp" />
@@ -215,6 +217,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="Component.h" />
+    <ClInclude Include="ComponentResource.h" />
     <ClInclude Include="DrawDebug.h" />
     <ClInclude Include="Event.h" />
     <ClInclude Include="FileParser.h" />
@@ -229,6 +232,7 @@
     <ClInclude Include="imGUI\stb_rect_pack.h" />
     <ClInclude Include="imGUI\stb_textedit.h" />
     <ClInclude Include="imGUI\stb_truetype.h" />
+    <ClInclude Include="Importer.h" />
     <ClInclude Include="ImporterScene.h" />
     <ClInclude Include="ImporterShader.h" />
     <ClInclude Include="ImporterTexture.h" />

@@ -9,6 +9,7 @@
 #include "Importer.h"
 #include <string>
 
+class Resource;
 class ResourceShader;
 
 class ImporterShader : public Importer

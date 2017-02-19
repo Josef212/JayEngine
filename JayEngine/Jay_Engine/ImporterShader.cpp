@@ -214,7 +214,7 @@ void ImporterShader::LoadShaderToMemory(ResourceShader* resShader)
 
 	//First load vertex shader
 
-	std::string path(DEFAULT_SHADER_SAVE_PATH);
+	std::string path(PATH_SHADERS);
 	path.append(resShader->vertexFile);
 
 	char* buffer = nullptr;
@@ -231,7 +231,7 @@ void ImporterShader::LoadShaderToMemory(ResourceShader* resShader)
 
 	//Second fragtal shader
 
-	path.assign(DEFAULT_SHADER_SAVE_PATH);
+	path.assign(PATH_SHADERS);
 	path.append(resShader->fragtalFile);
 
 	size = 0;
@@ -255,7 +255,7 @@ void ImporterShader::SaveShader(ResourceShader* resShader)
 	if (!resShader->VertexAndFragtalInMemory())
 		return;
 
-	std::string path(DEFAULT_SHADER_SAVE_PATH);
+	std::string path(PATH_SHADERS);
 	path.append(resShader->vertexFile);
 
 	uint size = resShader->vertexShaderStr.size();
@@ -264,7 +264,7 @@ void ImporterShader::SaveShader(ResourceShader* resShader)
 
 	size = 0;
 	
-	path.assign(DEFAULT_SHADER_SAVE_PATH);
+	path.assign(PATH_SHADERS);
 	path.append(resShader->fragtalFile);
 	size = resShader->fragtalShaderStr.size();
 	if(app->fs->Save(path.c_str(), resShader->fragtalShaderStr.c_str(), size) != size)

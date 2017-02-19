@@ -10,10 +10,10 @@ ResourceShader::ResourceShader(uint UID) : Resource(UID, RESOURCE_SHADER)
 {
 	shaderName.assign("New shader");
 	vertexFile.assign(std::to_string(uuid));
-	vertexFile.append(VERTEX_SHADER_EXTENSION);
+	vertexFile.append(EXTENSION_VERTEX_SHADER);
 
 	fragtalFile.assign(std::to_string(uuid));
-	fragtalFile.append(FRAGTAL_SHADER_EXTENSION);
+	fragtalFile.append(EXTENSION_FRAGTAL_SHADER);
 }
 
 

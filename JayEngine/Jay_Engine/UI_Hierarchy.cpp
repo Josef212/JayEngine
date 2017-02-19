@@ -48,8 +48,8 @@ void UI_Hierarchy::Draw()
 
 			if (root)
 			{
-				for (uint i = 0; i < root->childrens.size(); ++i)
-					HierarchyRecursive(root->childrens[i], selected);
+				for (uint i = 0; i < root->childs.size(); ++i)
+					HierarchyRecursive(root->childs[i], selected);
 			}
 
 			ImGui::PopStyleVar();
@@ -64,7 +64,7 @@ void UI_Hierarchy::HierarchyRecursive(GameObject* node, GameObject* selected)
 	ImGuiTreeNodeFlags nodeFlags = 0;
 	if (node == selected)
 		nodeFlags |= ImGuiTreeNodeFlags_Selected;
-	if (node->childrens.size() > 0)
+	if (node->childs.size() > 0)
 	{
 		nodeFlags |= ImGuiTreeNodeFlags_OpenOnArrow;
 		nodeFlags |= ImGuiTreeNodeFlags_OpenOnDoubleClick;
@@ -77,9 +77,9 @@ void UI_Hierarchy::HierarchyRecursive(GameObject* node, GameObject* selected)
 		if (ImGui::IsItemClicked())
 			app->goManager->Select(node);
 
-		for (uint i = 0; i < node->childrens.size(); ++i)
+		for (uint i = 0; i < node->childs.size(); ++i)
 		{
-			HierarchyRecursive(node->childrens[i], selected);
+			HierarchyRecursive(node->childs[i], selected);
 		}
 		ImGui::TreePop();
 	}

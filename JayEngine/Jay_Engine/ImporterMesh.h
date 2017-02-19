@@ -14,8 +14,21 @@ public:
 	ImporterMesh();
 	virtual ~ImporterMesh();
 
-	void ImportMesh(const aiMesh* mesh, ResourceMesh* resMesh);
 	bool LoadResource(Resource* resource)override;
+
+	bool Import(const aiMesh* mesh, std::string& output, UID& id);
+	void GenBuffers(const ResourceMesh* resource);
+
+	bool LoadCube(ResourceMesh* res);
+	bool LoadSphere(ResourceMesh* res);
+	bool LoadCylinder(ResourceMesh* res);
+	bool LoadCone(ResourceMesh* res);
+	bool LoadPyramid(ResourceMesh* res);
+	bool LoadTorus(ResourceMesh* res);
+
+
+	//Old
+	void ImportMesh(const aiMesh* mesh, ResourceMesh* resMesh);
 };
 
 #endif // !__IMPORTERMESH_H__

@@ -37,13 +37,13 @@ ImporterTexture::~ImporterTexture()
 	ilShutDown();
 }
 
-bool ImporterTexture::Import(const char* originalFile, std::string& exportedFile, UID& resUID)
+bool ImporterTexture::Import(const char* originalFile, const char* path, std::string& exportedFile, UID& resUID)
 {
 	bool ret = false;
 
 	std::string file, ext, origin;
 	app->fs->SplitPath(originalFile, nullptr, &file, &ext);
-	origin.assign(DEFAULT_TEXTURES_PATH + file);
+	origin.assign(PATH_ASSETS_TEXTURE + file);
 
 	char* buffer = nullptr;
 	uint size = app->fs->Load(origin.c_str(), &buffer);
@@ -91,9 +91,9 @@ bool ImporterTexture::ImportBuf(const void* buffer, uint size, std::string& expo
 			{
 				//Save it FS
 				resUID = app->resourceManager->GetNewUID();
-				exportedFile.assign(std::to_string(resUID) + TEXTURE_EXTENSION);
+				exportedFile.assign(std::to_string(resUID) + EXTENSION_TEXTURE);
 				char savePath[256];
-				sprintf_s(savePath, 256, "%s%s", DEFAULT_TEXTURE_SAVE_PATH, exportedFile.c_str());
+				sprintf_s(savePath, 256, "%s%s", PATH_LIBRARY_TEXTURE, exportedFile.c_str());
 
 				if (app->fs->Save(savePath, (const char*)data, _size) == _size)
 					ret = true;
@@ -124,7 +124,7 @@ bool ImporterTexture::LoadResource(Resource* resource)
 
 	ResourceTexture* res = (ResourceTexture*)resource;
 
-	std::string path(DEFAULT_TEXTURE_SAVE_PATH);
+	std::string path(PATH_LIBRARY_TEXTURE);
 	path.append(resource->exportedFile.c_str());
 
 	_LOG(LOG_INFO, "Loading textures resource from: '%s'.", path.c_str());
@@ -190,6 +190,13 @@ bool ImporterTexture::LoadResource(Resource* resource)
 	}
 
 	RELEASE_ARRAY(data);
+
+	return ret;
+}
+
+bool ImporterTexture::LoadChequers(ResourceTexture* res)
+{
+	bool ret = false;
 
 	return ret;
 }
