@@ -39,6 +39,77 @@ bool LoadResource(Resource* resource)
 {
 	bool ret = false;
 
+	if (!resource || resource->GetType() != RESOURCE_MESH || resource->exportedFile.empty())
+		return ret;
+
+	ResourceMesh* res = (ResourceMesh*)resource;
+
+	char* buffer = nullptr;
+	uint size = app->fs->Load(res->GetExportedFileStr(), PATH_LIBRARY_MESH, &buffer);
+
+	if (buffer && size > 0)
+	{
+		char* cursor = buffer;
+
+		//Ranges
+		uint ranges[5];
+		uint bytes = sizeof(ranges);
+		memcpy(ranges, cursor, bytes);
+
+		res->numIndices = ranges[0];
+		res->numVertices = ranges[1];
+
+		//Indices
+		cursor += bytes;
+		bytes = sizeof(uint) * res->numIndices;
+		res->indices = new uint[res->numIndices];
+		memcpy(res->indices, cursor, bytes);
+
+		//Vertices
+		cursor += bytes;
+		bytes = sizeof(float) * res->numVertices * 3;
+		res->vertices = new float[res->numVertices * 3];
+		memcpy(res->vertices, cursor, bytes);
+
+		//Colors
+		if (ranges[2] > 0)
+		{
+			cursor += bytes;
+			bytes = sizeof(float) * res->numVertices * 3;
+			res->colors = new float[res->numVertices * 3];
+			memcpy(res->colors, cursor, bytes);
+		}
+
+		//Normals
+		if (ranges[3] > 0)
+		{
+			cursor += bytes;
+			bytes = sizeof(float) * res->numVertices * 3;
+			res->normals = new float[res->numVertices * 3];
+			memcpy(res->normals, cursor, bytes);
+		}
+
+		//Texture Coords
+		if (ranges[4] > 0)
+		{
+			cursor += bytes;
+			bytes = sizeof(float) * res->numVertices * 2;
+			res->texCoords = new float[res->numVertices * 2];
+			memcpy(res->texCoords, cursor, bytes);
+		}
+
+		//AABB
+		cursor += bytes;
+		bytes = sizeof(AABB);
+		memcpy(&res->aabb, cursor, bytes);
+
+		ret = true;
+	}
+
+	RELEASE_ARRAY(buffer);
+
+	GenBuffers(res);
+
 	return ret;
 }
 
@@ -46,12 +117,185 @@ bool Import(const aiMesh* mesh, std::string& output, UID& id)
 {
 	bool ret = false;
 
+	if (!mesh)
+		return ret;
+
+	//Create a tmp resource to allocate all info.
+	ResourceMesh m(0);
+
+
+	//Vertices
+	m.numVertices = mesh->mNumVertices;
+	m.vertices = new float[m.numVertices * 3];
+	memcpy(m.vertices, mesh->mVertices, sizeof(float) * m.numVertices * 3);
+
+	//Faces - indices
+	if (mesh->HasFaces())
+	{
+		m.numIndices = mesh->mNumFaces * 3;
+		m.indices = new uint[m.numIndices];
+		for (uint i = 0; i < mesh->mNumFaces; ++i)
+		{
+			if (mesh->mFaces[i].mNumIndices != 3)
+				_LOG(LOG_WARN, "WARNING, geometry face with != 3 indices!");
+			
+			memcpy(&m.indices[i * 3], mesh->mFaces[i].mIndices, 3 * sizeof(uint));
+		}
+	}
+
+	//Normals
+	if (mesh->HasNormals())
+	{
+		m.normals = new float[m.numVertices * 3];
+		memcpy(m.normals, mesh->mNormals, sizeof(float) * m.numVertices * 3);
+	}
+
+	//Colors
+	if (mesh->HasVertexColors(0))
+	{
+		m.colors = new float[m.numVertices * 3];
+		memcpy(m.colors, mesh->mColors, sizeof(float) * m.numVertices * 3);
+	}
+
+	//TextureCoords
+	/*if (mesh->HasTextureCoords(0))			//If using 3D textures
+	{
+		m.texCoords = new float[m.numVertices * 3];
+		memcpy(m.texCoords, mesh->mTextureCoords, sizeof(float) * m.numVertices * 3);
+	}*/
+
+	if (mesh->HasTextureCoords(0))
+	{
+		m.texCoords = new float[m.numVertices * 2];
+		aiVector3D* tmp = mesh->mTextureCoords[0];
+		for (uint i = 0; i < m.numVertices * 2; i += 2)
+		{
+			m.texCoords[i] = tmp->x;
+			m.texCoords[i + 1] = tmp->y;
+			++tmp;
+		}
+	}
+
+	//Enclosing box
+	m.aabb.SetNegativeInfinity();
+	m.aabb.Enclose((float3*)m.vertices, m.numVertices);
+
+	//Now save the mesh into a binary file.
+
+	uint ranges[5] = {
+		m.numIndices,
+		m.numVertices,
+		(m.colors) ? m.numVertices : 0,
+		(m.normals) ? m.numVertices : 0,
+		(m.texCoords) ? m.numVertices : 0
+	};
+
+	uint size = sizeof(ranges) + sizeof(uint) * m.numIndices
+		+ sizeof(float) * m.numVertices * 3;
+	if (m.colors)sizeof(float) * m.numVertices * 3;
+	if (m.normals) size += sizeof(float) * m.numVertices * 3;
+	if (m.texCoords)sizeof(float) * m.numVertices * 3;
+	size += sizeof(AABB);
+
+	//Allocate memory
+	char* data = new char[size];
+	char* cursor = data;
+
+	//Ranges
+	uint bytes = sizeof(ranges);
+	memcpy(cursor, ranges, bytes);
+
+	//Indices
+	cursor += bytes;
+	bytes = sizeof(uint) * m.numIndices;
+	memcpy(cursor, m.indices, bytes);
+
+	//Vertices
+	cursor += bytes;
+	bytes = sizeof(float) * m.numVertices * 3;
+	memcpy(cursor, m.vertices, bytes);
+
+	//Colors
+	cursor += bytes;
+	bytes = sizeof(float) * m.numVertices * 3;
+	memcpy(cursor, m.colors, bytes);
+
+	//Normals
+	cursor += bytes;
+	bytes = sizeof(float) * m.numVertices * 3;
+	memcpy(cursor, m.normals, bytes);
+
+	//Texture Coords
+	cursor += bytes;
+	bytes = sizeof(float) * m.numVertices * 2;
+	memcpy(cursor, m.texCoords, bytes);
+
+	//AABB
+	cursor += bytes;
+	bytes = sizeof(AABB);
+	memcpy(cursor, &m.aabb, bytes);
+
+	//Ready to save
+
+	id = app->resourceManager->GetNewUID();
+	output.assign(PATH_LIBRARY_MESH + std::to_string(id) + EXTENSION_MESH);
+
+	if (app->fs->Save(output.c_str(), data, size) != size)
+	{
+		_LOG(LOG_ERROR, "ERROR: Saving a mesh: %s.", output.c_str());
+	}
+	else
+	{
+		ret = true;
+	}
+
+	RELEASE_ARRAY(data);
+
 	return ret;
 }
 
 void GenBuffers(const ResourceMesh* resource)
 {
+	if (!resource)
+		return;
 
+	if (resource->indices && resource->vertices)
+	{
+		//Vertices
+		glGenBuffers(1, (GLuint*)&resource->idVertices);
+		glBindBuffer(GL_ARRAY_BUFFER, resource->idVertices);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(float) * resource->numVertices * 3, resource->vertices, GL_STATIC_DRAW);
+
+		//Indices
+		glGenBuffers(1, (GLuint*)&resource->idIndices);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, resource->idIndices);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * resource->numIndices, resource->indices, GL_STATIC_DRAW);
+
+		//Colors
+		if (resource->colors)
+		{
+			glGenBuffers(1, (GLuint*)&resource->idColors);
+			glBindBuffer(GL_ARRAY_BUFFER, resource->idColors);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * resource->numVertices * 3, resource->colors, GL_STATIC_DRAW);
+		}
+
+		//Normals
+		if (resource->normals)
+		{
+			glGenBuffers(1, (GLuint*)&resource->idNormals);
+			glBindBuffer(GL_ARRAY_BUFFER, resource->idNormals);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * resource->numVertices * 3, resource->normals, GL_STATIC_DRAW);
+		}
+
+		//Texture Coords
+		if (resource->texCoords)
+		{
+			glGenBuffers(1, (GLuint*)&resource->idTexCoords);
+			glBindBuffer(GL_ARRAY_BUFFER, resource->idTexCoords);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * resource->numVertices * 2, resource->texCoords, GL_STATIC_DRAW);
+		}
+
+	}
 }
 
 //------------------------------------------------------------
@@ -99,265 +343,3 @@ bool LoadTorus(ResourceMesh* res)
 }
 
 //------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-//============================================================================================
-
-
-void ImporterMesh::ImportMesh(const aiMesh* mesh, ResourceMesh* resMesh)
-{
-	if (!mesh || !resMesh)
-	{
-		_LOG(LOG_ERROR, "Invalid aiMesh or resource mesh.");
-		return;
-	}
-
-	//First set the exported file name of the resource from its uuid and own extension
-	std::string outName(PATH_LIBRARY_MESH + std::to_string(resMesh->GetUID()) + EXTENSION_MESH);
-	//Will also put the uuid at the start of the file in order to not get the uuid from the file name
-
-	//TODO: set origin file
-	resMesh->exportedFile.assign(std::to_string(resMesh->GetUID()) + EXTENSION_MESH);
-
-	_LOG(LOG_INFO_REM, "New mesh is going to be serialized: %s.", outName.c_str());
-
-#pragma region Filling mesh resource
-	//----------------------------------------------
-	if (mesh->HasFaces())
-	{
-		resMesh->numIndices = mesh->mNumFaces * 3;
-		resMesh->indices = new uint[resMesh->numIndices];
-		for (uint i = 0; i < mesh->mNumFaces; ++i)
-		{
-			if (mesh->mFaces[i].mNumIndices != 3)
-			{
-				_LOG(LOG_WARN, "WARNING, geometry face with != 3 indices!");
-			}
-			else
-			{
-				memcpy(&resMesh->indices[i * 3], mesh->mFaces[i].mIndices, sizeof(uint) * 3);
-			}
-		}
-		//_LOG(LOG_STD, "Mesh has %d indices.", resMesh->numIndices);
-	}
-	//----------------------------------------------
-
-	resMesh->numVertices = mesh->mNumVertices;
-	resMesh->vertices = new float[resMesh->numVertices * 3];
-	memcpy(resMesh->vertices, mesh->mVertices, sizeof(float) * resMesh->numVertices * 3);
-
-	//_LOG(LOG_STD, "Mesh has %d vertices.", resMesh->numVertices);
-
-	//----------------------------------------------
-
-	if (mesh->HasNormals())
-	{
-		resMesh->numNormals = resMesh->numVertices;
-		resMesh->normals = new float[resMesh->numNormals * 3];
-		memcpy(resMesh->normals, mesh->mNormals, sizeof(float) * resMesh->numNormals * 3);
-
-		//_LOG(LOG_STD, "Mesh has %d normals.", resMesh->numNormals);
-	}
-
-	//----------------------------------------------
-
-	if (mesh->HasTextureCoords(0))
-	{
-		resMesh->numTexCoords = resMesh->numVertices;
-		resMesh->texCoords = new float[resMesh->numTexCoords * 2];
-		aiVector3D* tmp = mesh->mTextureCoords[0];
-		for (uint i = 0; i < resMesh->numTexCoords * 2; i += 2)
-		{
-			resMesh->texCoords[i] = tmp->x;
-			resMesh->texCoords[i + 1] = tmp->y;
-			++tmp;
-		}
-
-		//_LOG(LOG_STD, "Mesh has %d UV's.", resMesh->numTexCoords);
-	}
-
-	resMesh->aabb.SetNegativeInfinity();
-	resMesh->aabb.Enclose((float3*)resMesh->vertices, resMesh->numVertices);
-
-	//----------------------------------------------
-#pragma endregion
-
-	//Now we have the resource filled lets create the file to store it
-
-	uint ranges[5] = {
-		resMesh->numIndices,
-		resMesh->numVertices,
-		(resMesh->normals) ? resMesh->numNormals : 0,
-		(resMesh->texCoords) ? resMesh->numTexCoords : 0,
-		0 //TODO: Colors
-	};
-
-	uint size = sizeof(ranges) + sizeof(uint) * resMesh->numIndices + sizeof(float) * resMesh->numVertices * 3;
-	if (resMesh->normals) size += sizeof(float) * resMesh->numNormals * 3;
-	if (resMesh->texCoords) size += sizeof(float) * resMesh->numTexCoords * 2;
-	//TODO: Colors
-	size += sizeof(AABB);
-
-	//Allocate memory
-	char* data = new char[size];
-	char* cursor = data;
-
-	//First store ranges
-	uint bytes = sizeof(ranges);
-	memcpy(cursor, ranges, bytes);
-
-	//Second store indices
-	cursor += bytes;
-	bytes = sizeof(uint) * resMesh->numIndices;
-	memcpy(cursor, resMesh->indices, bytes);
-
-	//Third store vertices
-	cursor += bytes;
-	bytes = sizeof(float) * resMesh->numVertices * 3;
-	memcpy(cursor, resMesh->vertices, bytes);
-
-	//Fourth store normals
-	if (resMesh->normals)
-	{
-		cursor += bytes;
-		bytes = sizeof(float) * resMesh->numNormals * 3;
-		memcpy(cursor, resMesh->normals, bytes);
-	}
-
-	//Fifth store uv's
-	if (resMesh->texCoords)
-	{
-		cursor += bytes;
-		bytes = sizeof(float) * resMesh->numTexCoords * 2;
-		memcpy(cursor, resMesh->texCoords, bytes);
-	}
-
-	//Sixth store colors //TODO
-
-	//Seventh store AABB
-	cursor += bytes;
-	bytes = sizeof(AABB);
-	memcpy(cursor, &resMesh->aabb.minPoint.x, bytes);
-
-	if (app->fs->Save(outName.c_str(), data, size) != size)
-		_LOG(LOG_ERROR, "ERROR saving the mesh.");
-
-	RELEASE_ARRAY(data);
-}
-
-
-//----------------
-
-bool ImporterMesh::LoadResource(Resource* resource)
-{
-	bool ret = false;
-
-	if (!resource)
-		return ret;
-
-	ResourceMesh* res = (ResourceMesh*)resource;
-
-	std::string path(PATH_LIBRARY_MESH);
-	path.append(resource->exportedFile.c_str());
-
-	_LOG(LOG_INFO, "Loading mesh resource from: '%s'.", path.c_str());
-
-	char* data = nullptr;
-	uint size = app->fs->Load(path.c_str(), &data); 
-
-	if (data && size > 0)
-	{
-		uint ranges[5];
-		char* cursor = data;
-		uint bytes = sizeof(ranges);
-
-		//Ranges
-		memcpy(ranges, cursor, bytes);
-
-		res->numIndices = ranges[0];
-		res->numVertices = ranges[1];
-		res->numNormals = ranges[2];
-		res->numTexCoords = ranges[3];
-
-		//Indices
-		cursor += bytes;
-		bytes = sizeof(uint) * res->numIndices;
-
-		res->indices = new uint[res->numIndices];
-		memcpy(res->indices, cursor, bytes);
-
-		//Vertices
-		cursor += bytes;
-		bytes = sizeof(float) * res->numVertices * 3;
-
-		res->vertices = new float[res->numVertices * 3];
-		memcpy(res->vertices, cursor, bytes);
-
-		//Normals
-		if (ranges[2] > 0)
-		{
-			cursor += bytes;
-			bytes = sizeof(float) * res->numNormals * 3;
-
-			res->normals = new float[res->numNormals * 3];
-			memcpy(res->normals, cursor, bytes);
-		}
-
-		//UV's
-		if (ranges[3] > 0)
-		{
-			cursor += bytes;
-			bytes = sizeof(float) * res->numTexCoords * 2;
-
-			res->texCoords = new float[res->numTexCoords * 2];
-			memcpy(res->texCoords, cursor, bytes);
-		}
-
-		//AABB
-		cursor += bytes;
-		bytes = sizeof(AABB);
-
-		memcpy(&res->aabb.minPoint.x, cursor, bytes);
-
-		RELEASE_ARRAY(data);
-
-		if (res->numVertices > 0 && res->numIndices > 0)
-		{
-			glGenBuffers(1, (GLuint*)&res->idVertices);
-			glGenBuffers(1, (GLuint*)&res->idIndices);
-
-			glBindBuffer(GL_ARRAY_BUFFER, res->idVertices);
-			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * res->numVertices * 3, res->vertices, GL_STATIC_DRAW);
-
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, res->idIndices);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(uint) * res->numIndices, res->indices, GL_STATIC_DRAW);
-
-			if (res->numNormals > 0)
-			{
-				glGenBuffers(1, (GLuint*)&res->idNormals);
-				glBindBuffer(GL_ARRAY_BUFFER, res->idNormals);
-				glBufferData(GL_ARRAY_BUFFER, sizeof(float) * res->numNormals * 3, res->normals, GL_STATIC_DRAW);
-			}
-
-			if (res->numTexCoords> 0)
-			{
-				glGenBuffers(1, (GLuint*)&res->idTexCoords);
-				glBindBuffer(GL_ARRAY_BUFFER, res->idTexCoords);
-				glBufferData(GL_ARRAY_BUFFER, sizeof(float) * res->numTexCoords * 2, res->texCoords, GL_STATIC_DRAW);
-			}
-
-			ret = true;
-		}
-	}
-
-	return ret;
-}

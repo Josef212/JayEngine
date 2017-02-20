@@ -32,12 +32,13 @@ public:
 	float* vertices = nullptr; //!NOTE: remember, the size of the buffer must be the number of vertices * 3
 
 	uint idNormals = 0;
-	uint numNormals = 0;
 	float* normals = nullptr; //!NOTE: remember, the size of the buffer must be the number of vertices * 3
 
 	uint idTexCoords = 0;
-	uint numTexCoords = 0;
 	float* texCoords = nullptr; //!NOTE: remember, the size of the buffer must be the number of vertices * 2
+
+	uint idColors = 0;
+	float* colors = nullptr; //!NOTE: remember, the size of the buffer must be the number of vertices * 3
 
 	//TODO: add vertex colors
 
