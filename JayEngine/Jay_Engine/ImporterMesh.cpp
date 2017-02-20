@@ -35,7 +35,7 @@ ImporterMesh::~ImporterMesh()
 
 //------------------------------------------------------------
 
-bool LoadResource(Resource* resource)
+bool ImporterMesh::LoadResource(Resource* resource)
 {
 	bool ret = false;
 
@@ -113,7 +113,7 @@ bool LoadResource(Resource* resource)
 	return ret;
 }
 
-bool Import(const aiMesh* mesh, std::string& output, UID& id)
+bool ImporterMesh::Import(const aiMesh* mesh, std::string& output, UID& id)
 {
 	bool ret = false;
 
@@ -254,7 +254,7 @@ bool Import(const aiMesh* mesh, std::string& output, UID& id)
 	return ret;
 }
 
-void GenBuffers(const ResourceMesh* resource)
+void ImporterMesh::GenBuffers(const ResourceMesh* resource)
 {
 	if (!resource)
 		return;
@@ -295,47 +295,134 @@ void GenBuffers(const ResourceMesh* resource)
 			glBufferData(GL_ARRAY_BUFFER, sizeof(float) * resource->numVertices * 2, resource->texCoords, GL_STATIC_DRAW);
 		}
 
+		//TODO: Adapt this to use shaders
+
 	}
 }
 
 //------------------------------------------------------------
 
-bool LoadCube(ResourceMesh* res)
+bool ImporterMesh::LoadCube(ResourceMesh* res)
+{
+	if (!res)
+		return false;
+
+	res->originalFile = "-Cube-";
+	res->exportedFile = "-Cube-";
+
+	//Indices
+	uint indices[6 * 6] = 
+	{
+		2, 7, 6, 2, 3, 7, // front
+		11, 9, 10, 11, 8, 9, // right
+		1, 4, 0, 1, 5, 4, // back
+		15, 13, 12, 15, 14, 13, // left
+		1, 3, 2, 1, 0, 3, // top
+		7, 5, 6, 7, 4, 5  // bottom
+	};
+
+	res->numIndices = 36;
+	uint bytes = sizeof(uint) * res->numIndices;
+	res->indices = new uint[res->numIndices];
+	memcpy(res->indices, indices, bytes);
+
+	//Vertices
+	float vertices[16 * 3] =
+	{
+		0.5f,  0.5f,  0.5f, // 0
+		-0.5f,  0.5f,  0.5f, // 1
+		-0.5f,  0.5f, -0.5f, // 2
+		0.5f,  0.5f, -0.5f, // 3
+
+		0.5f, -0.5f,  0.5f, // 4
+		-0.5f, -0.5f,  0.5f, // 5
+		-0.5f, -0.5f, -0.5f, // 6
+		0.5f, -0.5f, -0.5f, // 7
+
+		// add repeated vertices for proper texturing
+		0.5f,  0.5f,  0.5f,  // 8
+		0.5f, -0.5f,  0.5f,  // 9
+		0.5f, -0.5f, -0.5f,  //10
+		0.5f,  0.5f, -0.5f,  //11
+
+		-0.5f,  0.5f,  0.5f,  //12
+		-0.5f, -0.5f,  0.5f,  //13
+		-0.5f, -0.5f, -0.5f,  //14
+		-0.5f,  0.5f, -0.5f,  //15
+	};
+
+	res->numVertices = 16;
+	bytes = sizeof(float) * res->numVertices * 3;
+	res->vertices = new float[res->numVertices * 3];
+	memcpy(res->vertices, vertices, bytes);
+
+	//Texture coords
+	float textureCoords[16 * 3] =
+	{
+		1.f,  1.f,  0.f,
+		0.f,  1.f,  0.f,
+		0.f,  0.f,  0.f,
+		1.f,  0.f,  0.f,
+
+		1.f,  0.f,  0.f,
+		0.f,  0.f,  0.f,
+		0.f,  1.f,  0.f,
+		1.f,  1.f,  0.f,
+
+		// extra coords for left - right
+		1.f,  1.f,  0.f,
+		0.f,  1.f,  0.f,
+		0.f,  0.f,  0.f,
+		1.f,  0.f,  0.f,
+
+		0.f,  1.f,  0.f,
+		1.f,  1.f,  0.f,
+		1.f,  0.f,  0.f,
+		0.f,  0.f,  0.f,
+	};
+
+	res->texCoords = new float[res->numVertices * 3];
+	memcpy(res->texCoords, textureCoords, bytes);
+
+	//Normals
+	//TODO
+
+	res->aabb = AABB(float3(-0.5f, -0.5f, -0.5f), float3(0.5f, 0.5f, 0.5f));
+
+	GenBuffers(res);
+
+	return true;
+}
+
+bool ImporterMesh::LoadSphere(ResourceMesh* res)
 {
 	bool ret = false;
 
 	return ret;
 }
 
-bool LoadSphere(ResourceMesh* res)
+bool ImporterMesh::LoadCylinder(ResourceMesh* res)
 {
 	bool ret = false;
 
 	return ret;
 }
 
-bool LoadCylinder(ResourceMesh* res)
+bool ImporterMesh::LoadCone(ResourceMesh* res)
 {
 	bool ret = false;
 
 	return ret;
 }
 
-bool LoadCone(ResourceMesh* res)
+bool ImporterMesh::LoadPyramid(ResourceMesh* res)
 {
 	bool ret = false;
 
 	return ret;
 }
 
-bool LoadPyramid(ResourceMesh* res)
-{
-	bool ret = false;
-
-	return ret;
-}
-
-bool LoadTorus(ResourceMesh* res)
+bool ImporterMesh::LoadTorus(ResourceMesh* res)
 {
 	bool ret = false;
 

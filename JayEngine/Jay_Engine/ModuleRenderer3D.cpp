@@ -419,7 +419,7 @@ void ModuleRenderer3D::DrawGameObject(GameObject* obj)
 					glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
 
 						//UV's
-					if (resMesh->numTexCoords > 0)
+					if (resMesh->texCoords)
 					{
 						glEnableVertexAttribArray(1);
 						glBindBuffer(GL_ARRAY_BUFFER, resMesh->idTexCoords);
@@ -427,7 +427,7 @@ void ModuleRenderer3D::DrawGameObject(GameObject* obj)
 					}
 
 						//Normals
-					if (resMesh->numNormals > 0)
+					if (resMesh->normals)
 					{
 						glEnableVertexAttribArray(2);
 						glBindBuffer(GL_ARRAY_BUFFER, resMesh->idNormals);

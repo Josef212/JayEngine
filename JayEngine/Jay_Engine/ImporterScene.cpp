@@ -210,8 +210,7 @@ void ImporterScene::RecImport(const aiScene* scene, const aiNode* node, GameObje
 		else
 		{
 			//Need to import that mesh
-			ResourceMesh* resMesh = (ResourceMesh*)app->resourceManager->CreateNewResource(ResourceType::RESOURCE_MESH);
-			app->resourceManager->meshImporter->ImportMesh(mesh, resMesh);
+			ResourceMesh* resMesh = (ResourceMesh*)app->resourceManager->GetResourceFromUID(app->resourceManager->ImportBuffer((const void*)mesh, 0, RESOURCE_MESH, nullptr));
 			resMesh->originalFile.assign(file);
 			meshesImported.insert(std::pair<int, ResourceMesh*>(meshIndex, resMesh));
 			cmesh->meshResource = resMesh;

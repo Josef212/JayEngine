@@ -147,15 +147,11 @@ void UI_Inspector::DrawMesh(GameObject* selected, Mesh* mesh)
 
 	static uint nVertices = 0;
 	static uint nIndices = 0;
-	static uint nNormals = 0;
-	static uint nTexCoords = 0;
 
 	if (mesh->meshResource)
 	{
 		nVertices = mesh->meshResource->numVertices;
 		nIndices = mesh->meshResource->numIndices;
-		nNormals = mesh->meshResource->numNormals;
-		nTexCoords = mesh->meshResource->numTexCoords;
 
 		ImGui::Text("File: ");
 		ImGui::SameLine();
@@ -169,14 +165,6 @@ void UI_Inspector::DrawMesh(GameObject* selected, Mesh* mesh)
 	ImGui::Text("Number of indices: ");
 	ImGui::SameLine();
 	ImGui::TextColored(ImColor(255, 153, 51), "%d",nIndices);
-
-	ImGui::Text("Number of normals: ");
-	ImGui::SameLine();
-	ImGui::TextColored(ImColor(255, 153, 51), "%d", nNormals);
-
-	ImGui::Text("Number of texture coords: ");
-	ImGui::SameLine();
-	ImGui::TextColored(ImColor(255, 153, 51), "%d", nTexCoords);
 
 	bool wire = mesh->renderWireframe;
 	if (ImGui::Checkbox("Wireframe", &wire)) mesh->renderWireframe = wire;

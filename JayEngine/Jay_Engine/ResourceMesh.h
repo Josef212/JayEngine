@@ -10,15 +10,11 @@ public:
 	ResourceMesh(uint UID);
 	virtual ~ResourceMesh();
 
-	void LoadMeshResource(const char* fileName, const char* path = nullptr);
-
 	bool LoadInMemory()override;
 	bool RemoveFromMemory()override;
 
 	void Save(FileParser& file)override;
 	void Load(FileParser& file)override;
-
-	bool LoadInMemoryBuff();
 
 private:
 

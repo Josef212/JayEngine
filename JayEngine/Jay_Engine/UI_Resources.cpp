@@ -226,14 +226,6 @@ void UI_Resources::Meshes(std::vector<Resource*> meshes)
 							ImGui::SameLine();
 							ImGui::TextColored(ImVec4(1, 1, 0, 1), "%d.", res->numIndices);
 
-							ImGui::Text("Num normals:");
-							ImGui::SameLine();
-							ImGui::TextColored(ImVec4(1, 1, 0, 1), "%d.", res->numNormals);
-
-							ImGui::Text("Num tex coords:");
-							ImGui::SameLine();
-							ImGui::TextColored(ImVec4(1, 1, 0, 1), "%d.", res->numTexCoords);
-
 							ImGui::Separator();
 						}
 

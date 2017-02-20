@@ -37,7 +37,6 @@ void Mesh::ClearMesh()
 {
 	if (meshResource)
 	{
-		app->resourceManager->OnResourceRemove(meshResource);
 		meshResource = nullptr;
 	}
 }

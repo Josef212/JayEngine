@@ -203,7 +203,7 @@ UID ModuleResourceManager::ImportFile(const char* fileInAssets, bool checkFirst)
 		//TODO: Add more cases for new resources type.
 
 	case RESOURCE_TEXTURE:
-		succes = textureImporter->Import(file.c_str(), path.empty ? nullptr : path.c_str() , exportedFile, resUID); //If there is a path, import the texture from there, if not just pass null to easily control that.
+		succes = textureImporter->Import(file.c_str(), path.empty() ? nullptr : path.c_str() , exportedFile, resUID); //If there is a path, import the texture from there, if not just pass null to easily control that.
 		break;
 
 	case RESOURCE_SCENE:

@@ -108,7 +108,6 @@ void Material::ClearMaterial()
 {
 	if (textureResource)
 	{
-		app->resourceManager->OnResourceRemove(textureResource);
 		textureResource = nullptr;
 	}
 }
