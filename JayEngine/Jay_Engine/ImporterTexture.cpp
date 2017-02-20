@@ -41,9 +41,8 @@ bool ImporterTexture::Import(const char* originalFile, const char* path, std::st
 {
 	bool ret = false;
 
-	std::string file, ext, origin;
-	app->fs->SplitPath(originalFile, nullptr, &file, &ext);
-	origin.assign(PATH_ASSETS_TEXTURE + file);
+	std::string origin(path ? path : PATH_ASSETS_TEXTURE); //TODO: Test this, maybe "path" needs to add "/" dont know if splitpath returns with / or not
+	origin.append(originalFile);
 
 	char* buffer = nullptr;
 	uint size = app->fs->Load(origin.c_str(), &buffer);

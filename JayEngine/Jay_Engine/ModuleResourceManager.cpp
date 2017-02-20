@@ -203,7 +203,7 @@ UID ModuleResourceManager::ImportFile(const char* fileInAssets, bool checkFirst)
 		//TODO: Add more cases for new resources type.
 
 	case RESOURCE_TEXTURE:
-		succes = textureImporter->Import(file.c_str(), nullptr, exportedFile, resUID);
+		succes = textureImporter->Import(file.c_str(), path.empty ? nullptr : path.c_str() , exportedFile, resUID); //If there is a path, import the texture from there, if not just pass null to easily control that.
 		break;
 
 	case RESOURCE_SCENE:
@@ -240,6 +240,51 @@ UID ModuleResourceManager::ImportFile(const char* fileInAssets, bool checkFirst)
 	else
 	{
 		_LOG(LOG_ERROR, "FAILED importing '%s'.", fileInAssets);
+	}
+
+	return ret;
+}
+
+UID ModuleResourceManager::ImportBuffer(const void* buffer, uint size, ResourceType type, const char* sourceFile)
+{
+	UID ret = 0;
+
+	if (!buffer || size <= 0)
+		return ret;
+
+	bool succes = false;
+	std::string output;
+	UID resUID = 0;
+
+	switch (type)
+	{
+	case RESOURCE_MESH:
+		meshImporter->Import((const aiMesh*)buffer, output, resUID);
+		break;
+	case RESOURCE_TEXTURE:
+		textureImporter->ImportBuf(buffer, size, output, resUID);
+		break;
+	case RESOURCE_SHADER:
+		break;
+	case RESOURCE_SCENE:
+		break;
+	}
+
+	if (succes && resUID != 0)
+	{
+		Resource* res = CreateNewResource(type, resUID);
+		if (sourceFile)
+		{
+			res->originalFile = sourceFile;
+			app->fs->NormalizePath(res->originalFile);
+		}
+		res->exportedFile = output;
+		ret = resUID;
+		_LOG(LOG_INFO, "Imported successfully from buffer '%s' to '%s'.", res->originalFile.c_str(), res->exportedFile.c_str());
+	}
+	else
+	{
+		_LOG(LOG_ERROR, "Could not import the resource from buffer.");
 	}
 
 	return ret;
@@ -284,76 +329,6 @@ bool ModuleResourceManager::LoadResource(Resource* resource)
 
 	if(ret)
 		resource->AddInstance();
-
-	return ret;
-}
-
-void ModuleResourceManager::OnResourceRemove(Resource* resource)
-{
-	if (!resource)
-		return;
-
-	if (resource->CountReferences() <= 1)
-	{
-		//Current instances are 1 or less remove from memory.
-		resource->RemoveFromMemory();
-	}
-
-	resource->RemoveInstance();
-}
-
-bool ModuleResourceManager::AddResource(Resource* res, UID uuid)
-{
-	bool ret = true;
-
-	if (res && uuid != 0)
-	{
-		resources.insert(std::pair<UID, Resource*>(uuid, res)); //TODO: Check if resource already exist?
-	}
-	else
-		ret = false;
-
-	return ret;
-}
-
-bool ModuleResourceManager::RemoveResource(UID uuid)
-{
-	bool ret = false;
-
-	Resource* res = GetResourceFromUID(uuid);
-
-	if (res)
-	{
-		res->RemoveInstance();
-
-		if (res->CountReferences() <= 0)
-		{
-			//Must remove it from the map and clean the info
-			resources.erase(uuid);
-			res->RemoveFromMemory();
-			RELEASE(res);
-		}
-	}
-
-	return ret;
-}
-
-bool ModuleResourceManager::AddPrefab(const char* originalFile, const char* exportedFile)
-{
-	bool ret = true;
-
-	std::map<const char*, std::string>::iterator it = prefabs.find(originalFile);
-
-	if (it != prefabs.end())
-	{
-		_LOG(LOG_ERROR, "Prefab '%s' already imported to '%s'.", originalFile, (*it).second.c_str());
-		ret = false;
-	}
-	else
-	{
-		prefabs.insert(std::pair<const char*, std::string>(originalFile, exportedFile));
-		_LOG(LOG_INFO, "New prefab exported. Original: %s. Exported: %s.", originalFile, exportedFile);
-	}
 
 	return ret;
 }
