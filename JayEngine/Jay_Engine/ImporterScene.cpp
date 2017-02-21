@@ -131,6 +131,29 @@ void ImporterScene::RecImport(const aiScene* scene, const aiNode* node, GameObje
 	float3 scl(scaling.x, scaling.y, scaling.z);
 	Quat rot(rotation.x, rotation.y, rotation.z, rotation.w);
 
+	// Name analysis to handle FBX dummy nodes
+	// check bottom of http://g3d.cs.williams.edu/g3d/G3D10/assimp.lib/code/FBXImportSettings.h
+	static const char* dummies[5] = {
+		"$AssimpFbx$_PreRotation", "$AssimpFbx$_Rotation", "$AssimpFbx$_PostRotation",
+		"$AssimpFbx$_Scaling", "$AssimpFbx$_Translation" };
+
+	for (int i = 0; i < 5; ++i)
+	{
+		if (name.find(dummies[i]) != std::string::npos && node->mNumChildren == 1)
+		{
+			node = node->mChildren[0];
+
+			node->mTransformation.Decompose(scaling, rotation, translation);
+
+			pos += float3(translation.x, translation.y, translation.z);
+			scl += float3(scaling.x, scaling.y, scaling.z);
+			rot = rot * Quat(rotation.x, rotation.y, rotation.z, rotation.w);
+
+			name = node->mName.C_Str();
+			i = -1;
+		}
+	}
+
 	GameObject* go = parent->AddChild();
 	go->SetName(name.c_str());
 
@@ -144,8 +167,8 @@ void ImporterScene::RecImport(const aiScene* scene, const aiNode* node, GameObje
 
 	for (uint i = 0; i < node->mNumMeshes; ++i)
 	{
-		int meshIndex = node->mMeshes[i];
-		const aiMesh* mesh = scene->mMeshes[meshIndex];
+		//int meshIndex = node->mMeshes[i];
+		const aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
 
 		GameObject* childGO = nullptr;
 
@@ -161,7 +184,9 @@ void ImporterScene::RecImport(const aiScene* scene, const aiNode* node, GameObje
 			childGO->SetName(name.c_str());
 		}
 		else
+		{
 			childGO = go;
+		}
 
 		//TODO: Adapt this to material resource.
 
@@ -179,45 +204,43 @@ void ImporterScene::RecImport(const aiScene* scene, const aiNode* node, GameObje
 			aiString str;
 			material->GetTexture(aiTextureType_DIFFUSE, 0, &str);
 
-			if (str.length > 0)
+			if (str.data[0] == '*')
 			{
-				//Need to import that texture
-				std::string texPath(str.C_Str());
-				app->fs->NormalizePath(texPath);
+				uint n = atoi(&str.data[1]);
+				if (n < scene->mNumTextures)
+				{
+					aiTexture* tex = scene->mTextures[n];
+					UID id = app->resourceManager->ImportBuffer((const char*)tex->pcData,
+						(tex->mHeight == 0) ? tex->mWidth : tex->mHeight * tex->mWidth,
+						RESOURCE_TEXTURE);
 
-				//If exist import it. Might check if i should change the path before.
-				std::string texFile;
-				app->fs->SplitPath(texPath.c_str(), nullptr, &texFile);
-				
-				cMat->textureResource = (ResourceTexture*)app->resourceManager->GetResourceFromUID(app->resourceManager->ImportFile(texFile.c_str(), true));
-				cMat->textureResource->AddInstance();
+					cMat->SetResource(id);
+				}
 			}
+			else
+			{
+				std::string file(basePath);
+				file += str.C_Str();
+				if (!app->fs->Exist(file.c_str()))
+				{
+					std::string extracted;
+					app->fs->SplitPath(str.C_Str(), nullptr, &extracted);
+					file = basePath;
+					file += extracted;
+				}
 
-			//TODO:Check assimp for embedded textures... For now will normally import textures.
-			//Add texture
+				cMat->SetResource(app->resourceManager->ImportFile(file.c_str()));
+				Resource* tmp = (Resource*)cMat->GetResource();
+				if(tmp)tmp->RemoveInstance();
+			}
 		}
 
 
 		//Add mesh
 		Mesh* cmesh = (Mesh*)childGO->AddComponent(ComponentType::CMP_MESH);
-		//Will track of meshes already loaded in order to not import twice same meshes
-		std::map<int, ResourceMesh*>::iterator tmp = meshesImported.find(meshIndex);
-		if (tmp != meshesImported.end())
-		{
-			//Mesh finded
-			cmesh->meshResource = tmp->second;
-		}
-		else
-		{
-			//Need to import that mesh
-			ResourceMesh* resMesh = (ResourceMesh*)app->resourceManager->GetResourceFromUID(app->resourceManager->ImportBuffer((const void*)mesh, 0, RESOURCE_MESH, nullptr));
-			resMesh->originalFile.assign(file);
-			meshesImported.insert(std::pair<int, ResourceMesh*>(meshIndex, resMesh));
-			cmesh->meshResource = resMesh;
-			resMesh->AddInstance();
-		}
-
-
+		cmesh->SetResource(app->resourceManager->ImportBuffer(mesh, 0, RESOURCE_MESH, (basePath + file).c_str()));
+		Resource* tmp = (Resource*)cmesh->GetResource();
+		tmp->RemoveInstance();
 	}
 
 	//Recursive generate all childs GO

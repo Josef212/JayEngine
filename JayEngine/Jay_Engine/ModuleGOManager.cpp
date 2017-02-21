@@ -473,11 +473,11 @@ void ModuleGOManager::LoadSceneOrPrefabs(const FileParser& file)
 	Select(nullptr);
 
 	int goCount = file.GetArraySize("GameObjects");
-	GameObject* tmpRoot = new GameObject(nullptr, 0);
+	//GameObject* tmpRoot = new GameObject(nullptr, 0);
 	std::map<GameObject*, uint> relations;
 	for (uint i = 0; i < goCount; ++i)
 	{
-		GameObject* go = tmpRoot->AddChild();
+		GameObject* go = CreateGameObject();
 		go->LoadGO(&file.GetArray("GameObjects", i), relations);
 	}
 
@@ -488,7 +488,7 @@ void ModuleGOManager::LoadSceneOrPrefabs(const FileParser& file)
 
 		if (parentID > 0)
 		{
-			GameObject* parentGO = RecFindGO(parentID, tmpRoot);
+			GameObject* parentGO = GetGameObjectFromId(parentID);
 			if (parentGO)
 				go->SetNewParent(parentGO);
 		}
@@ -496,16 +496,17 @@ void ModuleGOManager::LoadSceneOrPrefabs(const FileParser& file)
 			go->SetNewParent(sceneRootObject);
 	}
 
-	for (uint i = 0; i < tmpRoot->childs.size(); ++i)
+	/*for (uint i = 0; i < tmpRoot->childs.size(); ++i)
 	{
 		if (tmpRoot->childs[i])
 			tmpRoot->childs[i]->SetNewParent(sceneRootObject);
-	}
+	}*/
 
 	sceneRootObject->RecCalcTransform(sceneRootObject->transform->GetLocalTransform(), true);
 	sceneRootObject->RecCalcBoxes();
 
-	//TODO: iterate all relations go->Init(); ???
+	for (std::map<GameObject*, uint>::iterator it = relations.begin(); it != relations.end(); ++it)
+		it->first->OnStart();
 }
 
 void ModuleGOManager::CleanRoot()

@@ -231,6 +231,28 @@ void UI_Resources::Meshes(std::vector<Resource*> meshes)
 
 						//-------------
 
+						ImGui::Text("Indices GL buffer id: ");
+						ImGui::SameLine();
+						ImGui::TextColored(ImVec4(1, 1, 0, 1), "%d.", res->idIndices);
+
+						ImGui::Text("Vertices GL buffer id: ");
+						ImGui::SameLine();
+						ImGui::TextColored(ImVec4(1, 1, 0, 1), "%d.", res->idVertices);
+
+						ImGui::Text("Normals GL buffer id: ");
+						ImGui::SameLine();
+						ImGui::TextColored(ImVec4(1, 1, 0, 1), "%d.", res->idNormals);
+
+						ImGui::Text("Colors GL buffer id: ");
+						ImGui::SameLine();
+						ImGui::TextColored(ImVec4(1, 1, 0, 1), "%d.", res->idColors);
+
+						ImGui::Text("Texture coords GL buffer id: ");
+						ImGui::SameLine();
+						ImGui::TextColored(ImVec4(1, 1, 0, 1), "%d.", res->idTexCoords);
+
+						//-------------
+
 						if (ImGui::Button("Attach mesh to..."))
 							ImGui::OpenPopup("meshes popup");
 
@@ -250,11 +272,12 @@ void UI_Resources::Meshes(std::vector<Resource*> meshes)
 								std::vector<Component*> cmp = selected->GetComponents(ComponentType::CMP_MESH);
 								for (uint j = 0; j < cmp.size(); ++j)
 								{
+									Mesh* m = (Mesh*)cmp[j];
 									if (cmp[j])
 									{
 										if (ImGui::MenuItem(cmp[j]->GetTypeStr()))
 										{
-											//cmp[j]->SetResource(res->GetUID());
+											m->SetResource(res->GetUID());
 										}
 									}
 								}
@@ -264,7 +287,7 @@ void UI_Resources::Meshes(std::vector<Resource*> meshes)
 									Mesh* m = (Mesh*)selected->AddComponent(ComponentType::CMP_MESH);
 									if (m)
 									{
-										//m->SetResource(res->GetUID());
+										m->SetResource(res->GetUID());
 									}
 								}
 
@@ -408,11 +431,12 @@ void UI_Resources::Textures(std::vector<Resource*> texs)
 								std::vector<Component*> cmp = selected->GetComponents(ComponentType::CMP_MATERIAL);
 								for (uint j = 0; j < cmp.size(); ++j)
 								{
+									Material* mat = (Material*)cmp[j];
 									if (cmp[j])
 									{
 										if (ImGui::MenuItem(cmp[j]->GetTypeStr()))
 										{
-											//cmp[j]->SetResource(res->GetUID());
+											mat->SetResource(res->GetUID());
 										}
 									}
 								}
@@ -422,7 +446,7 @@ void UI_Resources::Textures(std::vector<Resource*> texs)
 									Material* mat = (Material*)selected->AddComponent(ComponentType::CMP_MATERIAL);
 									if (mat)
 									{
-										//mat->SetResource(res->GetUID());
+										mat->SetResource(res->GetUID());
 									}
 								}
 							}

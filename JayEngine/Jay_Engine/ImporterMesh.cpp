@@ -194,7 +194,7 @@ bool ImporterMesh::Import(const aiMesh* mesh, std::string& output, UID& id)
 		+ sizeof(float) * m.numVertices * 3;
 	if (m.colors)sizeof(float) * m.numVertices * 3;
 	if (m.normals) size += sizeof(float) * m.numVertices * 3;
-	if (m.texCoords)sizeof(float) * m.numVertices * 3;
+	if (m.texCoords) size += sizeof(float) * m.numVertices * 2;
 	size += sizeof(AABB);
 
 	//Allocate memory
@@ -216,19 +216,26 @@ bool ImporterMesh::Import(const aiMesh* mesh, std::string& output, UID& id)
 	memcpy(cursor, m.vertices, bytes);
 
 	//Colors
-	cursor += bytes;
-	bytes = sizeof(float) * m.numVertices * 3;
-	memcpy(cursor, m.colors, bytes);
+	if (m.colors)
+	{
+		cursor += bytes;
+		memcpy(cursor, m.colors, bytes);
+	}
 
 	//Normals
-	cursor += bytes;
-	bytes = sizeof(float) * m.numVertices * 3;
-	memcpy(cursor, m.normals, bytes);
+	if (m.normals)
+	{
+		cursor += bytes;
+		memcpy(cursor, m.normals, bytes);
+	}
 
 	//Texture Coords
-	cursor += bytes;
-	bytes = sizeof(float) * m.numVertices * 2;
-	memcpy(cursor, m.texCoords, bytes);
+	if (m.texCoords)
+	{
+		cursor += bytes;
+		bytes = sizeof(float) * m.numVertices * 2;
+		memcpy(cursor, m.texCoords, bytes);
+	}
 
 	//AABB
 	cursor += bytes;
@@ -238,9 +245,10 @@ bool ImporterMesh::Import(const aiMesh* mesh, std::string& output, UID& id)
 	//Ready to save
 
 	id = app->resourceManager->GetNewUID();
-	output.assign(PATH_LIBRARY_MESH + std::to_string(id) + EXTENSION_MESH);
+	output.assign(std::to_string(id) + EXTENSION_MESH);
+	std::string fullPath(PATH_LIBRARY_MESH + output);
 
-	if (app->fs->Save(output.c_str(), data, size) != size)
+	if (app->fs->Save(fullPath.c_str(), data, size) != size)
 	{
 		_LOG(LOG_ERROR, "ERROR: Saving a mesh: %s.", output.c_str());
 	}
@@ -396,37 +404,127 @@ bool ImporterMesh::LoadCube(ResourceMesh* res)
 
 bool ImporterMesh::LoadSphere(ResourceMesh* res)
 {
-	bool ret = false;
+	if (!res)
+		return false;
 
-	return ret;
+	res->originalFile = "-Sphere-";
+	res->exportedFile = "-Sphere-";
+
+	std::vector<float3> vertices;
+	std::vector<float3> normals;
+	std::vector<float3> texCoords;
+	std::vector<uint> indices;
+
+	float latitudeBands = 20;
+	float longitudeBands = 20;
+	float radius = 1;
+
+	for (float latNumber = 0; latNumber <= latitudeBands; ++latNumber) 
+	{
+		float theta = latNumber * PI / latitudeBands;
+		float sinTheta = sin(theta);
+		float cosTheta = cos(theta);
+
+		for (float longNumber = 0; longNumber <= longitudeBands; ++longNumber) 
+		{
+			float phi = longNumber * 2 * PI / longitudeBands;
+			float sinPhi = sin(phi);
+			float cosPhi = cos(phi);
+
+			float3 normal, vertex, texCoord;
+
+			normal.x = cosPhi * sinTheta;   // x
+			normal.y = cosTheta;            // y
+			normal.z = sinPhi * sinTheta;   // z
+			texCoord.x = 1 - (longNumber / longitudeBands); // u
+			texCoord.y = 1 - (latNumber / latitudeBands);   // v
+			texCoord.z = 0.f;
+			vertex.x = radius * normal.x;
+			vertex.y = radius * normal.y;
+			vertex.z = radius * normal.z;
+
+			normals.push_back(normal);
+			texCoords.push_back(texCoord);
+			vertices.push_back(vertex);
+		}
+
+		for (int latNumber = 0; latNumber < latitudeBands; ++latNumber)
+		{
+			for (int longNumber = 0; longNumber < longitudeBands; ++longNumber)
+			{
+				uint first = (latNumber * ((uint)longitudeBands + 1)) + longNumber;
+				uint second = first + (uint)longitudeBands + 1;
+
+				indices.push_back(first);
+				indices.push_back(second);
+				indices.push_back(first + 1);
+
+				indices.push_back(second);
+				indices.push_back(second + 1);
+				indices.push_back(first + 1);
+
+			}
+		}
+	}
+
+	//Indices
+	res->numIndices = indices.size();
+	uint bytes = sizeof(uint) * res->numIndices;
+	res->indices = new uint[res->numIndices];
+	memcpy(res->indices, &indices[0], bytes);
+
+	//Vertices
+	res->numVertices = vertices.size();
+	bytes = sizeof(float) * res->numVertices * 3;
+	res->vertices = new float[res->numVertices * 3];
+	memcpy(res->vertices, &vertices[0], bytes);
+
+	//Normals
+	res->normals = new float[res->numVertices * 3];
+	memcpy(res->normals, &normals[0], bytes);
+
+	//Textrure Coords
+	res->texCoords = new float[res->numVertices * 3];
+	memcpy(res->texCoords, &texCoords[0], bytes);
+
+	//AABB
+	res->aabb = AABB(float3(-radius, -radius, -radius), float3(radius, radius, radius));
+
+	GenBuffers(res);
+	
+	return true;
 }
 
 bool ImporterMesh::LoadCylinder(ResourceMesh* res)
 {
-	bool ret = false;
+	if (!res)
+		return false;
 
-	return ret;
+	return true;
 }
 
 bool ImporterMesh::LoadCone(ResourceMesh* res)
 {
-	bool ret = false;
+	if (!res)
+		return false;
 
-	return ret;
+	return true;
 }
 
 bool ImporterMesh::LoadPyramid(ResourceMesh* res)
 {
-	bool ret = false;
+	if (!res)
+		return false;
 
-	return ret;
+	return true;
 }
 
 bool ImporterMesh::LoadTorus(ResourceMesh* res)
 {
-	bool ret = false;
+	if (!res)
+		return false;
 
-	return ret;
+	return true;
 }
 
 //------------------------------------------------------------

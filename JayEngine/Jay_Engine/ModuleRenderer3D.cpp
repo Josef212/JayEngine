@@ -222,7 +222,7 @@ update_status ModuleRenderer3D::PostUpdate(float dt)
 
 	app->goManager->Draw();
 
-	if (/*app->debug*/true) //TODO: change debug system
+	if (app->debug) //TODO: change debug system
 	{
 		BeginDebugDraw();
 		app->DrawDebug();
@@ -325,152 +325,82 @@ void ModuleRenderer3D::DrawGameObject(GameObject* obj)
 		return;
 
 	Transform* trans = obj->transform;
-	std::vector<Component*> meshes = obj->GetComponents(CMP_MESH);
-	std::vector<Component*> mats = obj->GetComponents(CMP_MATERIAL);
+	Mesh* mesh = (Mesh*)obj->GetComponent(CMP_MESH);
+	Material* mat = (Material*)obj->GetComponent(CMP_MATERIAL);
 
-	if (!meshes[0] || !trans)
+	if (!mesh || !trans)
 		return;
 
 	bool selected = (app->goManager->GetSelected() == obj);
+	bool texture = false;
 
-	//First push transform matrix, remember to pop it at end of draw
+	//Getting back to not using shaders
 	//----------------------
 	//SH
-	/*glPushMatrix();
-	glMultMatrixf(trans->getGlobalTransformGL());*/
+	glPushMatrix();
+	glMultMatrixf(trans->GetGlobalTransformGL());
 
 	//----------------------
 
-	//Iterate all meshes
-	for (uint i = 0; i < meshes.size(); ++i)
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	glEnable(GL_CULL_FACE);
+	glDisable(GL_BLEND);
+	glDisable(GL_LIGHTING);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	
+	if (mat)
 	{
-		Mesh* mesh = (Mesh*)meshes[i];
-		Material* mat = (Material*)mats[i];
-
-		if (mesh)
+		const ResourceTexture* tex = (const ResourceTexture*)mat->GetResource();
+		if (tex && tex->textureGlID > 0)
 		{
-			ResourceMesh* resMesh = mesh->meshResource;
-
-			if (resMesh)
-			{		
-				if (mesh->renderWireframe || selected)
-					;// drawWireframe(resMesh, selected);
-
-				if (!mesh->renderWireframe)
-				{
-					Color col = (mat) ? mat->color : Color(0.5f, 0.5f, 0.5f, 1.f);
-					glColor4f(col.r, col.g, col.b, col.a);
-
-					Camera* currentCam = (app->GetGameState() == gameState::EDITOR) ? app->camera->GetCamera() : GetActiveCamera();
-
-					uint shID = 0;
-					if (mat && mat->shaderResource && mat->shaderResource->shaderID > 0)
-						shID = mat->shaderResource->shaderID;
-					else
-						shID = app->resourceManager->GetDefaultShader()->shaderID;
-
-					glUseProgram(shID);
-
-					//----------------------------------
-					//Matrices.
-					GLuint model = glGetUniformLocation(shID, "model");
-					glUniformMatrix4fv(model, 1, GL_FALSE, trans->GetGlobalTransformGL()); //NOTE: Might not be the transposed one
-
-					GLuint view = glGetUniformLocation(shID, "view");
-					glUniformMatrix4fv(view, 1, GL_FALSE, currentCam->GetGLViewMatrix());
-
-					GLuint projection = glGetUniformLocation(shID, "projection");
-					glUniformMatrix4fv(projection, 1, GL_FALSE, currentCam->GetGLProjectMatrix());
-
-					//Color
-					GLint color = glGetUniformLocation(shID, "color");
-					if (color != -1)
-						glUniform3f(color, col.r, col.g, col.b);
-
-					//Time
-					GLuint t = glGetUniformLocation(shID, "time");
-					glUniform1f(t, time->ElapsedTime());
-
-					//DT
-					GLuint deltaTime = glGetUniformLocation(shID, "dt");
-					glUniform1f(deltaTime, time->EditorDT());
-
-					//----------------------------------
-					//Texture.
-					ResourceTexture* resTex = (mat) ? mat->textureResource : nullptr;
-					if (resTex)
-					{
-						GLint texture = glGetUniformLocation(shID, "ourTexture");
-						if (texture != -1)
-						{
-							glUniform1i(texture, 0);
-							glActiveTexture(GL_TEXTURE0);
-							glBindTexture(GL_TEXTURE_2D, resTex->textureGlID);
-						}
-					}
-
-					//----------------------------------
-					//Buffers
-					glEnableClientState(GL_VERTEX_ARRAY);
-
-						//Vertices.
-					glEnableVertexAttribArray(0);
-					glBindBuffer(GL_ARRAY_BUFFER, resMesh->idVertices);
-					glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
-
-						//UV's
-					if (resMesh->texCoords)
-					{
-						glEnableVertexAttribArray(1);
-						glBindBuffer(GL_ARRAY_BUFFER, resMesh->idTexCoords);
-						glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), (GLvoid*)0);
-					}
-
-						//Normals
-					if (resMesh->normals)
-					{
-						glEnableVertexAttribArray(2);
-						glBindBuffer(GL_ARRAY_BUFFER, resMesh->idNormals);
-						glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
-					}
-
-						//Indices
-					glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, resMesh->idIndices);
-
-					//----------------------------------
-
-					if (mesh->renderNormals)
-						DrawNormals(resMesh);
-
-					//----------------------------------
-
-					glDrawElements(GL_TRIANGLES, resMesh->numIndices, GL_UNSIGNED_INT, nullptr);
-
-					//----------------------------------
-
-					glDisableVertexAttribArray(0);
-					glDisableVertexAttribArray(1);
-					glDisableVertexAttribArray(2);
-				}
-
-				//Cleaning
-				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-				glBindBuffer(GL_ARRAY_BUFFER, 0);
-				glBindTexture(GL_TEXTURE_2D, 0);
-				//------
-				glDisableClientState(GL_NORMAL_ARRAY);
-				glDisableClientState(GL_COLOR_ARRAY);
-				glDisableClientState(GL_VERTEX_ARRAY);
-				glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-
-				//==============
-				glColor4f(1.f, 1.f, 1.f, 1.f);
-
-				glUseProgram(0);
-			}
+			glBindTexture(GL_TEXTURE_2D, tex->textureGlID);
+			texture = true;
 		}
 	}
 
+	const ResourceMesh* m = (const ResourceMesh*)mesh->GetResource();
+	if (m)
+	{
+		glColor4f(mesh->tint.r, mesh->tint.g, mesh->tint.b, mesh->tint.a);
+
+		if (m->idNormals > 0)
+		{
+			glEnable(GL_LIGHTING);
+			glEnableClientState(GL_NORMAL_ARRAY);
+			glBindBuffer(GL_ARRAY_BUFFER, m->idNormals);
+			glNormalPointer(GL_FLOAT, 0, nullptr);
+		}
+		else
+		{
+			glDisable(GL_LIGHTING);
+		}
+
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glBindBuffer(GL_ARRAY_BUFFER, m->idVertices);
+		glVertexPointer(3, GL_FLOAT, 0, NULL);
+
+		if (m->idTexCoords > 0)
+		{
+			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+			glBindBuffer(GL_ARRAY_BUFFER, m->idTexCoords);
+			glTexCoordPointer(3, GL_FLOAT, 0, NULL);
+		}
+
+		if (m->idColors > 0)
+		{
+			glEnableClientState(GL_COLOR_ARRAY);
+			glBindBuffer(GL_ARRAY_BUFFER, m->idColors);
+			glColorPointer(3, GL_FLOAT, 0, NULL);
+		}
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m->idIndices);
+		glDrawElements(GL_TRIANGLES, m->numIndices, GL_UNSIGNED_INT, NULL);
+
+		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+		glDisableClientState(GL_NORMAL_ARRAY);
+		glDisableClientState(GL_VERTEX_ARRAY);
+	}
+	
 	//----------------------
 
 	glPopMatrix();

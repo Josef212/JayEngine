@@ -22,6 +22,8 @@
 
 #include "StringTools.h"
 
+#define RESERVED_RESOURCES 7 //From 1 to 7. Cube-Sphere-Cylinder-Cone-Pyramid-Torus-Chequers
+
 
 ModuleResourceManager::ModuleResourceManager(bool startEnabled) : Module(startEnabled)
 {
@@ -60,8 +62,15 @@ bool ModuleResourceManager::Start()
 
 	LoadResources();
 	LoadBasicResources();
-	AutoImportFBX();
+	//AutoImportFBX();
 
+	ImportFile("Cube.fbx");
+	ImportFile("Lenna.png");
+
+	//ResourceScene tmp(1676680638);
+	//tmp.exportedFile = "1676680638.jayscene";
+	//LoadResource(&tmp);
+	
 	return true;
 }
 
@@ -249,7 +258,7 @@ UID ModuleResourceManager::ImportBuffer(const void* buffer, uint size, ResourceT
 {
 	UID ret = 0;
 
-	if (!buffer || size <= 0)
+	if (!buffer)
 		return ret;
 
 	bool succes = false;
@@ -259,7 +268,7 @@ UID ModuleResourceManager::ImportBuffer(const void* buffer, uint size, ResourceT
 	switch (type)
 	{
 	case RESOURCE_MESH:
-		meshImporter->Import((const aiMesh*)buffer, output, resUID);
+		succes = meshImporter->Import((const aiMesh*)buffer, output, resUID);
 		break;
 	case RESOURCE_TEXTURE:
 		textureImporter->ImportBuf(buffer, size, output, resUID);
@@ -380,19 +389,10 @@ bool ModuleResourceManager::LoadResources()
 				continue;
 
 			Resource* r = CreateNewResource(type, uid);
-			r->originalFile = res.GetString("original_file", "???");
-			r->exportedFile = res.GetString("exported_file", "???");
-
-			if (type == ResourceType::RESOURCE_SHADER)
-			{
-				ResourceShader* s = (ResourceShader*)r;
-				s->vertexFile = res.GetString("vertex_shader", "???");
-				s->fragtalFile = res.GetString("fragtal_shader", "???");
-				s->shaderName = res.GetString("sh_name", "???");
-				//Must compile the shader every time engine start
-				shaderImporter->CompileShader(s);
-			}
+			r->Load(res);
 		}
+
+		ret = true;
 	}
 
 	RELEASE_ARRAY(buffer);
@@ -410,22 +410,12 @@ bool ModuleResourceManager::SaveResources()
 
 	for (std::map<UID, Resource*>::const_iterator it = resources.begin(); it != resources.end(); ++it)
 	{
-		FileParser res;
-		//---
-		res.AddInt("UID", it->second->GetUID());
-		res.AddInt("type", it->second->GetType());
-		res.AddString("original_file", it->second->originalFile.c_str());
-		res.AddString("exported_file", it->second->exportedFile.c_str());
-		//---
-		if (it->second->GetType() == ResourceType::RESOURCE_SHADER)
+		if (it->first > RESERVED_RESOURCES)
 		{
-			ResourceShader* s = (ResourceShader*)it->second;
-			res.AddString("vertex_shader", s->vertexFile.c_str());
-			res.AddString("fragtal_shader", s->fragtalFile.c_str());
-			res.AddString("sh_name", s->shaderName.c_str());
+			FileParser res;
+			it->second->Save(res);
+			res.AddArrayEntry(res);
 		}
-		//---
-		save.AddArrayEntry(res);
 	}
 
 	char* buffer = nullptr;
@@ -453,10 +443,24 @@ void ModuleResourceManager::GetResourcesOfType(std::vector<Resource*>& res, Reso
 
 void ModuleResourceManager::LoadBasicResources()
 {
+	checkers = (ResourceTexture*)CreateNewResource(RESOURCE_TEXTURE, 1);
+	textureImporter->LoadChequers(checkers);
+	checkers->AddInstance();
+
+	ResourceMesh* cube = (ResourceMesh*)CreateNewResource(RESOURCE_MESH, 2);
+	meshImporter->LoadCube(cube);
+	cube->AddInstance();
+	primitives.push_back(cube);
+
+	ResourceMesh* sphere = (ResourceMesh*)CreateNewResource(RESOURCE_MESH, 3);
+	meshImporter->LoadSphere(sphere);
+	sphere->AddInstance();
+	primitives.push_back(sphere);
+
+	//TODO: Load more primitives and release them on stop
+
 	defaultShader = new ResourceShader(0);
 	shaderImporter->LoadDefaultShader(defaultShader);
-
-	//TODO: Load primitives and checkers.
 }
 
 ResourceShader* ModuleResourceManager::GetDefaultShader()const

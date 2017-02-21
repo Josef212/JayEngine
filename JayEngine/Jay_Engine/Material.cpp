@@ -23,39 +23,19 @@ Material::~Material()
 	ClearMaterial();
 }
 
-void Material::OnStart()
-{
-
-}
-
-void Material::OnUpdate(float dt)
-{
-
-}
-
-void Material::OnFinish()
-{
-
-}
-
 bool Material::SaveCMP(FileParser& sect)const
 {
 	bool ret = true;
 
-	sect.AddInt("comp_type", (int)type);
-	sect.AddBool("active", selfActive);
-	sect.AddInt("go_UUID", object->GetGOId());
-	sect.AddColor("mat_col", color);
-
-	if (textureResource)
+	if (resource)
 	{
 		sect.AddBool("have_res", true);
-		sect.AddInt("resource_id", textureResource->GetUID());
-		sect.AddString("resource_exported_file", textureResource->exportedFile.c_str());
-		sect.AddString("resource_original_file", textureResource->originalFile.c_str());
+		ComponentResource::OnSaveRes(sect);
 	}
 	else
+	{
 		sect.AddBool("have_res", false);
+	}
 
 	return ret;
 }
@@ -66,12 +46,8 @@ bool Material::LoadCMP(FileParser* sect)
 
 	selfActive = sect->GetBool("active", true);
 
-	color = sect->GetColor("mat_col", Yellow);
-
 	if (sect->GetBool("have_res", false))
-	{
-		//SetResource(sect.GetInt("resource_id", 0));
-	}
+		ComponentResource::OnLoadRes(sect);
 
 	return ret;
 }
@@ -79,35 +55,35 @@ bool Material::LoadCMP(FileParser* sect)
 
 //-------------------------------------
 
-/*void Material::SetResource(UID resUID)
+bool Material::SetResource(UID resUID)
 {
-	ResourceTexture* res = (ResourceTexture*)app->resourceManager->GetResourceFromUID(resUID);
+	bool ret = false;
 
-	if (res)
+	if (resUID != 0)
 	{
-		if (!res->IsInMemory())
+		Resource* res = app->resourceManager->GetResourceFromUID(resUID);
+		if (res && res->GetType() == RESOURCE_TEXTURE)
 		{
-			//If is not in memory load it.
-			if (!app->resourceManager->LoadResource(res))
+			if (res->LoadToMemory())
 			{
-				_LOG(LOG_ERROR, "Error loading resource '%s'.", res->exportedFile.c_str());
-			}
-			else
-			{
-				_LOG(LOG_STD, "Just loaded resource '%s'.", res->exportedFile.c_str());
+				resource = (ResourceTexture*)res;
+				ret = true;
 			}
 		}
-		else
-			res->AddInstance();
-
-		textureResource = res;
 	}
-}*/
+
+	return ret;
+}
+
+
+
+
+
 
 void Material::ClearMaterial()
 {
-	if (textureResource)
+	if (resource)
 	{
-		textureResource = nullptr;
+		resource = nullptr;
 	}
 }

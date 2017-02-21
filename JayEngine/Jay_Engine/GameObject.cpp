@@ -495,10 +495,15 @@ bool GameObject::SaveGO(FileParser& file, std::map<uint, uint>* duplicate)const
 
 	for (uint i = 0; i < components.size(); ++i)
 	{
-		if (components[i])
+		Component* c = components[i];
+		if (c)
 		{
 			FileParser cmp;
-			components[i]->SaveCMP(cmp);
+			cmp.AddInt("cmp_type", (int)c->GetType());
+			cmp.AddBool("active", c->IsActive());
+			cmp.AddInt("go_UID", c->GetGameObject()->GetGOId());
+
+			c->SaveCMP(cmp);
 			f.AddArrayEntry(cmp);
 		}
 	}
@@ -526,7 +531,7 @@ bool GameObject::LoadGO(FileParser* file, std::map<GameObject*, uint>& relations
 	for (uint i = 0; i < cmpCount; ++i)
 	{
 		FileParser cmp(file->GetArray("components", i));
-		ComponentType type = (ComponentType)cmp.GetInt("comp_type", -1);
+		ComponentType type = (ComponentType)cmp.GetInt("cmp_type", -1);
 		if (type != CMP_UNKNOWN)
 		{
 			if (type == CMP_TRANSFORMATION)

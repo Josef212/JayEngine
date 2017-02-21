@@ -34,7 +34,7 @@ public:
 	*/
 	UID ImportFile(const char* fileInAssets, bool checkFirst = false);
 
-	UID ImportBuffer(const void* buffer, uint size, ResourceType type, const char* sourceFile);
+	UID ImportBuffer(const void* buffer, uint size, ResourceType type, const char* sourceFile = nullptr);
 
 	/**
 		Load a resource.

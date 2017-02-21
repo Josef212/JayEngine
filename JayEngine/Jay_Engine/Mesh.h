@@ -2,20 +2,20 @@
 #define __MESH__
 
 #include "Component.h"
+#include "ComponentResource.h"
 #include "Math.h"
+#include "Color.h"
 
 class ResourceMesh;
 class FileParser;
 
-class Mesh : public Component
+class Mesh : public Component, public ComponentResource
 {
 public:
 	Mesh(GameObject* gObj);
 	virtual ~Mesh();
 
 	void OnStart()override;
-	void OnUpdate(float dt)override;
-	void OnFinish()override;
 
 	void GetBox(AABB& box)const override;
 
@@ -24,15 +24,15 @@ public:
 	bool SaveCMP(FileParser& sect)const override;
 	bool LoadCMP(FileParser* sect)override;
 
-	//void SetResource(UID resUID)override;
+	bool SetResource(UID resUID)override;
 
 private:
 
 public:
-	ResourceMesh* meshResource = NULL;
-
 	bool renderWireframe = false;
 	bool renderNormals = false;
+
+	Color tint = White;
 
 private:
 	bool onVRAM = false;

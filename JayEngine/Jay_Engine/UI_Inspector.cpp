@@ -137,7 +137,7 @@ void UI_Inspector::DrawMesh(GameObject* selected, Mesh* mesh)
 {
 
 	//Active
-	bool meshActive = mesh->IsActive();
+	/*bool meshActive = mesh->IsActive();
 	if (ImGui::Checkbox("Mesh:", &meshActive))
 		mesh->SwitchActive();
 
@@ -148,14 +148,16 @@ void UI_Inspector::DrawMesh(GameObject* selected, Mesh* mesh)
 	static uint nVertices = 0;
 	static uint nIndices = 0;
 
-	if (mesh->meshResource)
+	ImGui::ColorEdit4("Color:", (float*)&mesh->tint, false);
+
+	if (mesh->GetResource())
 	{
-		nVertices = mesh->meshResource->numVertices;
-		nIndices = mesh->meshResource->numIndices;
+		nVertices = mesh->GetResource()->numVertices;
+		nIndices = mesh->GetResource()->numIndices;
 
 		ImGui::Text("File: ");
 		ImGui::SameLine();
-		ImGui::TextColored(ImColor(255, 153, 51), "%s.", mesh->meshResource->exportedFile.c_str());
+		ImGui::TextColored(ImColor(255, 153, 51), "%s.", mesh->GetResource()->exportedFile.c_str());
 	}
 
 	ImGui::Text("Number of vertices: ");
@@ -172,7 +174,7 @@ void UI_Inspector::DrawMesh(GameObject* selected, Mesh* mesh)
 	bool normals = mesh->renderNormals;
 	if (ImGui::Checkbox("Normals", &normals)) mesh->renderNormals = normals;
 
-	ImGui::Separator();
+	ImGui::Separator();*/
 }
 
 void UI_Inspector::DrawMaterial(GameObject* selected, Material* mat)

@@ -23,47 +23,32 @@ void Mesh::OnStart()
 	
 }
 
-void Mesh::OnUpdate(float dt)
-{
-
-}
-
-void Mesh::OnFinish()
-{
-	
-}
-
 void Mesh::ClearMesh()
 {
-	if (meshResource)
-	{
-		meshResource = nullptr;
-	}
 }
 
 void Mesh::GetBox(AABB& box)const
 {
-	if (meshResource)
-		box.Enclose(meshResource->aabb);
+	ResourceMesh* r = (ResourceMesh*)resource;
+	if (resource)
+		box.Enclose(r->aabb);
 }
 
 bool Mesh::SaveCMP(FileParser& sect)const
 {
 	bool ret = true;
 
-	sect.AddInt("comp_type", (int)type);
-	sect.AddBool("active", selfActive);
-	sect.AddInt("go_UUID", object->GetGOId());
-
-	if (meshResource)
+	if (resource)
 	{
 		sect.AddBool("have_res", true);
-		sect.AddInt("resource_id", meshResource->GetUID());
-		sect.AddString("resource_exported_file", meshResource->exportedFile.c_str());
-		sect.AddString("resource_original_file", meshResource->originalFile.c_str());
+		ComponentResource::OnSaveRes(sect);
 	}
 	else
+	{
 		sect.AddBool("have_res", false);
+	}
+
+	sect.AddColor("tint", tint);
 
 	sect.AddBool("wireframe", renderWireframe);
 	sect.AddBool("normals", renderNormals);
@@ -78,9 +63,9 @@ bool Mesh::LoadCMP(FileParser* sect)
 	selfActive = sect->GetBool("active", true);
 
 	if (sect->GetBool("have_res", false))
-	{
-		//SetResource(sect.GetInt("resource_id", 0));
-	}
+		ComponentResource::OnLoadRes(sect);
+
+	tint = sect->GetColor("tint", White);
 
 	renderWireframe = sect->GetBool("wireframe", false);
 	renderNormals = sect->GetBool("normals", false);
@@ -91,30 +76,23 @@ bool Mesh::LoadCMP(FileParser* sect)
 
 //--------------------------
 
-/*void Mesh::SetResource(UID resUID)
+bool Mesh::SetResource(UID resUID)
 {
-	//TODO: if there is already a resource, notify to manager and check if there are no more instances to remove from memory
+	bool ret = false;
 
-	ResourceMesh* res = (ResourceMesh*)app->resourceManager->GetResourceFromUID(resUID);
-
-	if (res)
+	if (resUID != 0)
 	{
-		if (!res->IsInMemory())
+		Resource* res = app->resourceManager->GetResourceFromUID(resUID);
+		if (res && res->GetType() == RESOURCE_MESH)
 		{
-			//If is not in memory load it.
-			if (!app->resourceManager->LoadResource(res))
+			if (res->LoadToMemory())
 			{
-				_LOG(LOG_ERROR, "Error loading resource '%s'.", res->exportedFile.c_str());
-			}
-			else
-			{
-				_LOG(LOG_STD, "Just loaded resource '%s'.", res->exportedFile.c_str());
+				resource = res;
+				object->RecalcBox();
+				ret = true;
 			}
 		}
-		else
-			res->AddInstance();
-
-		meshResource = res;
 	}
 
-}*/
+	return ret;
+}
