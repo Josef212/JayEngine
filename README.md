@@ -40,7 +40,7 @@ Resource management makes only load once any texture or mesh.
 
 ·Move the camera with WASD RF.
 ·Rotate the camera using mouse right click and drag.
-·Orbit using mouse right click and drag + L_ALT(This is a bit strange and must be inproved).
+·Orbit using mouse right click and drag + ALT(This is a bit strange and must be inproved).
 
 ·Press F1 to see some debug info such as frustum from the camera(Also able to active on the checkbox next to play button).
 
