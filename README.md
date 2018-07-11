@@ -7,45 +7,45 @@ GitHub: https://github.com/Josef212/JayEngine
 Releases: https://github.com/Josef212/JayEngine/releases
 Web: https://josef212.github.io/JayEngine/
 
-Assignment 3 instructions:
-    ·Before running the engine check "Data/Library/..." to see folders are empty and check again after running the engine to see how fbx have been imported.
-    ·Some more fbx will be in Assets folder to see that engine can import many fbx.
-    ·Run the engine and all fbx will be imported to the proper format.
-    ·Hierarchy should be seen on left and inspector on right, if not check on "View" to see how to open those 
-    windows.
-    ·Move around hierarchy menu and try inspector options, try moving scaling and rotating, etc.
-    ·Engine create a default camera called "main camera" and is the active camera by default so on play this will be the used camera.
-    ·Click on "Play" to start and then click "Pause" or "Stop" to recover the editing status.
-    ·On "View"->"Scene tree" then "Show"->"Show tree" to display the scene octree. Do the same again to stop showing it.
-    ·On left under hierarchy there's a window will all resources. Click on them and then click to attach to attach resource to game objects. Try different ways.
+Assignment 3 instructions:   
+    · Before running the engine check "Data/Library/..." to see folders are empty and check again after running the engine to see how fbx have been imported.   
+    · Some more fbx will be in Assets folder to see that engine can import many fbx.   
+    · Run the engine and all fbx will be imported to the proper format.   
+    · Hierarchy should be seen on left and inspector on right, if not check on "View" to see how to open those 
+    windows.   
+    · Move around hierarchy menu and try inspector options, try moving scaling and rotating, etc.   
+    · Engine create a default camera called "main camera" and is the active camera by default so on play this will be the used camera.   
+    · Click on "Play" to start and then click "Pause" or "Stop" to recover the editing status.   
+    · On "View"->"Scene tree" then "Show"->"Show tree" to display the scene octree. Do the same again to stop showing it.   
+    · On left under hierarchy there's a window will all resources. Click on them and then click to attach to attach resource to game objects. Try different ways.   
    
-    ·All drawed geometry is rendered using a default shader. 
-    ·You can create new shaders and edit them from outside the engine. (Working on still so may be some errors.)
-    ·You can attach new shaders to materials and then  force default shader again.
+    · All drawed geometry is rendered using a default shader.    
+    · You can create new shaders and edit them from outside the engine. (Working on still so may be some errors.)   
+    · You can attach new shaders to materials and then  force default shader again.   
 
-    ·Video: https://www.youtube.com/watch?v=hS8AymfBZvU&feature=youtu.be
+    · Video: https://www.youtube.com/watch?v=hS8AymfBZvU&feature=youtu.be   
 
 
 -Instalation:
-    ·Download latest release, extract files and run Jay_Engine.exe.
-        or
-    ·Download latest source code version and complie it by yourself.
+    · Download latest release, extract files and run Jay_Engine.exe.   
+        or   
+    · Download latest source code version and complie it by yourself.   
 
--How to use it:
+- How to use it:   
 On the latest version of the engine all fbx on "Data/Assets/fbx/" are imported to own format (json, binary meshes and dds), 
 you can load the prefabs already imported to the scene. Scene can be serielized into json. You can play and stop the engine.
-Camera can cull optimitzated by an octree.
-
-Resource management makes only load once any texture or mesh.
-
-·Move the camera with WASD RF.
-·Rotate the camera using mouse right click and drag.
-·Orbit using mouse right click and drag + ALT(This is a bit strange and must be inproved).
-
-·Press F1 to see some debug info such as frustum from the camera(Also able to active on the checkbox next to play button).
-
+Camera can cull optimitzated by an octree.   
+   
+Resource management makes only load once any texture or mesh.   
+   
+· Move the camera with WASD RF.   
+· Rotate the camera using mouse right click and drag.   
+· Orbit using mouse right click and drag + ALT(This is a bit strange and must be inproved).   
+   
+· Press F1 to see some debug info such as frustum from the camera(Also able to active on the checkbox next to play button).   
+   
 ## Menus
-
+   
 ### File
     ·TMP: Save scene: Manually saves the scene into "Data/Scenes/scene.json"
     ·TMP: Load scene: Manually load the scene from "Data/Scenes/scene.json"
